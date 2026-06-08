@@ -2071,6 +2071,98 @@ const EXERCISE_DEMOS = {
   },
 };
 
+// ─────────────────────────────────────────
+// YOUTUBE VIDEO LINKS (for exercises without SVG demos)
+// ─────────────────────────────────────────
+const YOUTUBE_LINKS = {
+  'barbell row': {
+    url: 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ',
+    title: 'Barbell Row — Alan Thrall',
+    cues: ['Hinge to ~45° torso angle, bar hangs below chest','Drive elbows back and up — pull bar to lower chest/navel','Squeeze shoulder blades at the top','Lower with control — don\'t let the bar crash down']
+  },
+  'calf raise': {
+    url: 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
+    title: 'Loaded Calf Raise — Jeff Nippard',
+    cues: ['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']
+  },
+  'loaded calf raise': {
+    url: 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
+    title: 'Loaded Calf Raise — Jeff Nippard',
+    cues: ['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']
+  },
+  'hang power clean': {
+    url: 'https://www.youtube.com/watch?v=0Guz3bZFHaI',
+    title: 'Hang Power Clean — Catalyst Athletics',
+    cues: ['Start with bar at mid-thigh, hips hinged, lats engaged','Explosively extend hips and shrug — elbows follow high','Drop under the bar quickly, catch in quarter-squat position','Rack across front delts — elbows high, core tight']
+  },
+  'kb around the world': {
+    url: 'https://www.youtube.com/watch?v=Q2fN2XWYjrU',
+    title: 'KB Around the World — StrongFirst',
+    cues: ['Stand tall, pass KB around your body in a circle','Keep the core braced — resist rotation of the torso','Control the weight, smooth handoff between hands','Alternate direction each set']
+  },
+  'kb single-arm carry': {
+    url: 'https://www.youtube.com/watch?v=1wTLRCVwCkA',
+    title: 'KB Single-Arm Farmer Carry — Dan John',
+    cues: ['Hold KB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the KB','Core resists lateral tilt the entire carry']
+  },
+  'suitcase carry': {
+    url: 'https://www.youtube.com/watch?v=1wTLRCVwCkA',
+    title: 'Suitcase Carry — Dan John',
+    cues: ['Hold KB/DB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the weight','Core resists lateral tilt the entire carry']
+  },
+  'kb windmill': {
+    url: 'https://www.youtube.com/watch?v=oHTcImIfl6I',
+    title: 'KB Windmill — StrongFirst',
+    cues: ['KB pressed overhead, push hip out to the side of the weight','Hinge down toward your foot — eyes on the KB','Trail hand slides down inner leg for guidance','Drive hip back in to return to standing — KB stays locked up']
+  },
+  'pull-ups': {
+    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+    title: 'Pull-Ups — Calisthenicmovement',
+    cues: ['Dead hang to start, full arm extension','Initiate by depressing shoulder blades, then pull elbows to hips','Chin clears the bar at the top','Lower under control — 2–3 seconds down']
+  },
+  'weighted pull-ups': {
+    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+    title: 'Weighted Pull-Ups — Calisthenicmovement',
+    cues: ['Load via belt or DB between feet — start from dead hang','Initiate by depressing shoulder blades, then pull elbows to hips','Chin clears the bar at the top','Lower under control — 2–3 seconds down']
+  },
+  'pull-ups / ring rows': {
+    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
+    title: 'Pull-Ups / Ring Rows — Calisthenicmovement',
+    cues: ['Choose pull-ups or ring rows based on current strength level','For ring rows: body at an angle, pull chest to hands','Full arm extension at the bottom each rep','Squeeze shoulder blades together at the top']
+  },
+  'push press': {
+    url: 'https://www.youtube.com/watch?v=X6-DMh-t4nQ',
+    title: 'Push Press — Alan Thrall',
+    cues: ['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']
+  },
+  'push press (barbell)': {
+    url: 'https://www.youtube.com/watch?v=X6-DMh-t4nQ',
+    title: 'Barbell Push Press — Alan Thrall',
+    cues: ['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']
+  },
+  'single-leg rdl': {
+    url: 'https://www.youtube.com/watch?v=2cYbXGlg6bA',
+    title: 'Single-Leg RDL — Jeff Nippard',
+    cues: ['Stand on one leg, slight bend in the knee','Hinge at the hip, rear leg floats back for balance','Keep back flat, feel the hamstring load — don\'t let hips rotate','Drive the hip forward to return, squeeze glute at the top']
+  },
+  'step-ups': {
+    url: 'https://www.youtube.com/watch?v=MRhOLYSxnAc',
+    title: 'Step-Ups — Jeremy Ethier',
+    cues: ['Step fully onto the box/bench, drive through the heel','Stand tall at the top — don\'t use the trailing leg to push','Lower the trailing leg slowly back to the floor','Keep torso upright throughout, add load as needed']
+  },
+  'weighted ring rows': {
+    url: 'https://www.youtube.com/watch?v=XBuHGNSqpA4',
+    title: 'Ring Rows — Calisthenicmovement',
+    cues: ['Adjust body angle for difficulty — more horizontal = harder','Add a weight vest or plate for extra load','Pull chest to rings, elbows travel back at ~45°','Straight body from head to heels throughout']
+  },
+};
+
+function getYouTubeKey(key){
+  if(YOUTUBE_LINKS[key]) return key;
+  const ytKeys = Object.keys(YOUTUBE_LINKS);
+  return ytKeys.find(k => key.includes(k) || k.includes(key.split(' ').slice(0,2).join(' '))) || null;
+}
+
 function normalizeExName(name){
   return name.toLowerCase()
     .replace(/\s*[-–—]\s*(deload|eccentric|slow|light|heavier|add.*|same.*|drop.*)$/i,'')
@@ -2095,8 +2187,24 @@ function showExDemo(name, detail){
       `<li class="demo-cue"><span class="demo-cue-num">${i+1}</span><span>${c}</span></li>`
     ).join('');
   } else {
-    document.getElementById('demo-anim').innerHTML = `<div style="padding:40px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">Animation coming soon</div>`;
-    document.getElementById('demo-cues').innerHTML = `<li class="demo-cue"><span class="demo-cue-num">→</span><span>Focus on controlled movement, maintain neutral spine, and breathe steadily throughout the exercise.</span></li>`;
+    const ytKey = getYouTubeKey(key);
+    const yt = ytKey ? YOUTUBE_LINKS[ytKey] : null;
+    if(yt){
+      document.getElementById('demo-anim').innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;gap:16px;text-align:center">
+          <div style="font-size:36px">▶️</div>
+          <a href="${yt.url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.04em">
+            <span style="font-size:16px">▶</span> WATCH ON YOUTUBE
+          </a>
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5">${yt.title}</div>
+        </div>`;
+      document.getElementById('demo-cues').innerHTML = yt.cues.map((c,i)=>
+        `<li class="demo-cue"><span class="demo-cue-num">${i+1}</span><span>${c}</span></li>`
+      ).join('');
+    } else {
+      document.getElementById('demo-anim').innerHTML = `<div style="padding:40px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">Animation coming soon</div>`;
+      document.getElementById('demo-cues').innerHTML = `<li class="demo-cue"><span class="demo-cue-num">→</span><span>Focus on controlled movement, maintain neutral spine, and breathe steadily throughout the exercise.</span></li>`;
+    }
   }
   overlay.classList.add('open');
 }
