@@ -194,6 +194,51 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .demo-cue{display:flex;gap:10px;padding:9px 0;border-top:1px solid var(--border);font-size:13px;color:var(--text2);line-height:1.4}
 .demo-cue:first-child{border-top:none}
 .demo-cue-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);line-height:1;flex-shrink:0;width:18px}
+
+/* DEMO VIDEO EMBED */
+.demo-anim-wrap{padding:0;min-height:0;background:transparent;display:block}
+.demo-video{position:relative;width:100%;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000}
+.demo-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.demo-vid-cap{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);margin:8px 0 10px;letter-spacing:.03em}
+.demo-links{display:flex;gap:8px;margin-bottom:14px}
+.demo-link{flex:1;text-align:center;padding:10px;border-radius:10px;text-decoration:none;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.03em;transition:opacity .15s}
+.demo-link.yt{background:#ff0000;color:#fff}
+.demo-link.alt{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+.demo-link:active{opacity:.8}
+.demo-searchcard{display:flex;flex-direction:column;align-items:center;gap:8px;padding:30px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;text-decoration:none;margin-bottom:14px;transition:border-color .15s}
+.demo-searchcard:active{border-color:var(--accent2)}
+.demo-play{width:54px;height:54px;border-radius:50%;background:#ff0000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;padding-left:4px}
+.demo-search-txt{font-size:14px;font-weight:500;color:var(--text)}
+.demo-search-sub{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)}
+
+/* DURATION BADGE */
+.dur-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:3px 7px;border-radius:99px;letter-spacing:.03em;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.dur-badge.wk{padding:2px 6px;font-size:9px}
+
+/* OPTIONAL ROWS */
+.opt-lbl{display:flex;align-items:center;gap:8px;color:var(--accent3)}
+.opt-count{font-size:9px;color:var(--text3);background:var(--surface2);border-radius:99px;padding:1px 7px}
+.ex-row.opt-row{background:rgba(255,107,71,.03)}
+
+/* SEARCH */
+.hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.hdr-search-btn:active{background:var(--surface2)}
+.search-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:150;flex-direction:column;align-items:center}
+.search-overlay.open{display:flex}
+.search-panel{background:var(--surface);width:100%;max-width:430px;height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,44px)}
+.search-bar-row{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
+.search-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:15px;font-family:'DM Sans',sans-serif;outline:none}
+.search-input:focus{border-color:var(--accent2)}
+.search-cancel{background:transparent;border:none;color:var(--text2);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer}
+.search-results{flex:1;overflow-y:auto;padding:8px 16px calc(20px + var(--safe));scrollbar-width:none}
+.search-results::-webkit-scrollbar{display:none}
+.srch-cat{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:14px 0 6px}
+.srch-item{display:flex;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px solid rgba(42,42,56,.5);cursor:pointer}
+.srch-item:active{background:var(--surface2)}
+.srch-ico{font-size:18px;flex-shrink:0;width:22px;text-align:center}
+.srch-name{font-size:14px;font-weight:500}
+.srch-sub{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:1px}
+.srch-hint{padding:30px 10px;text-align:center;color:var(--text3);font-size:13px;font-family:'DM Mono',monospace;line-height:1.6}
 </style>
 </head>
 <body>
@@ -204,9 +249,12 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
     </div>
-    <div style="text-align:right">
-      <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text2)">PROGRESS</div>
-      <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--accent)" id="hdr-progress">0 / 84 sessions</div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="text-align:right">
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text2)">PROGRESS</div>
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--accent)" id="hdr-progress">0 / 84 sessions</div>
+      </div>
+      <button class="hdr-search-btn" onclick="openSearch()" aria-label="Search">🔍</button>
     </div>
   </div>
   <div class="race-countdown" id="countdown-bar">
@@ -271,6 +319,17 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
     <div class="demo-detail-lbl" id="demo-detail"></div>
     <div class="demo-anim-wrap" id="demo-anim"></div>
     <ul class="demo-cues" id="demo-cues"></ul>
+  </div>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay" onclick="closeSearch(event)">
+  <div class="search-panel" onclick="event.stopPropagation()">
+    <div class="search-bar-row">
+      <input class="search-input" id="search-input" type="text" placeholder="Search exercises or weeks…" oninput="runSearch(this.value)" autocomplete="off">
+      <button class="search-cancel" onclick="closeSearch()">Cancel</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
   </div>
 </div>
 
@@ -857,16 +916,19 @@ function renderSessionCard(s,interactive){
   const done=STATE.completedSessions[key];
   const totalEx=s.exercises.length;
   const doneEx=s.exercises.filter(e=>STATE.completedExercises[e.id]).length;
+  const dur=estimateDuration(s);
   return `<div class="session-card" id="card-${key}">
     <div class="session-hdr" onclick="toggleSession('${key}')">
       <div class="session-dot ${dotClass(s.type)}"></div>
       <div class="session-name">${s.name}</div>
+      <span class="dur-badge">⏱ ${dur} min</span>
       <span class="session-type ${typeClass(s.type)}">${typeLabel(s.type)}</span>
       <div class="chev" id="chev-${key}">›</div>
     </div>
     ${done?`<div class="session-completed-banner">✓ COMPLETED · ${doneEx}/${totalEx} exercises logged</div>`:''}
     <div class="session-body" id="body-${key}">
       ${renderExercises(s,interactive)}
+      ${s.type!=='rest'?renderOptional(s):''}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="session-footer">
         <textarea class="session-note-area" placeholder="Session notes…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
@@ -976,6 +1038,7 @@ function renderWeek(){
         <span class="wdr-day">${dayLabel} ${dateNum}</span>
         <span class="wdr-dot ${dotClass(s.type)}"></span>
         <span class="wdr-name">${s.name}</span>
+        <span class="dur-badge wk">⏱ ${estimateDuration(s)}m</span>
         <span class="wdr-status ${done?'status-done':isToday?'status-today':'status-upcoming'}">${done?'✓ done':isToday?'today':'—'}</span>
       </div>`;
     });
@@ -1014,6 +1077,7 @@ function renderProgram(phase){
         <div class="session-dot ${dotClass(s.type)}" style="width:8px;height:8px"></div>
         <div style="font-size:12px;font-family:'DM Mono',monospace;color:var(--text3);min-width:26px">${s.day}</div>
         <div style="font-size:13px;font-weight:500;flex:1">${s.name}</div>
+        <span class="dur-badge wk">⏱ ${estimateDuration(s)}m</span>
         ${done?`<span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--green)">✓</span>`:''}
         <div class="chev" id="chev-prog-${key}" style="font-size:16px;color:var(--text3);transition:transform .2s">›</div>
       </div>
@@ -1022,6 +1086,7 @@ function renderProgram(phase){
           <div class="prog-bullet ${e.cat==='run'?'run':e.cat==='core'?'core':''}"></div>
           <div><div style="font-size:12px;font-weight:500">${e.name}</div><div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:1px">${e.detail}</div></div>
         </div>`).join('')}
+        ${s.type!=='rest'?`<div class="prog-ex-row" style="border-top:1px solid rgba(42,42,56,.5)"><div class="prog-bullet" style="background:var(--accent3)"></div><div><div style="font-size:11px;font-weight:500;color:var(--accent3);font-family:'DM Mono',monospace">OPTIONAL +2</div>${getOptionalExercises(s).map(o=>`<div style="font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:2px">${o.name} · ${o.detail}</div>`).join('')}</div></div>`:''}
         ${s.note?`<div class="note-note" style="margin:10px 14px 12px">${s.note}</div>`:''}
         <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px">
           <button onclick="openDaySession('${key}')" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;cursor:pointer">Log this session ↗</button>
@@ -1140,1085 +1205,302 @@ function renderStats(){
 }
 
 // ─────────────────────────────────────────
-// EXERCISE DEMO LIBRARY
+// EXERCISE VIDEO LIBRARY (embedded YouTube + guaranteed fallback)
 // ─────────────────────────────────────────
-const EXERCISE_DEMOS = {
-  // ── LOWER BODY ──
-  'back squat': {
-    cues: ['Stand with bar across upper traps, feet shoulder-width apart','Brace core, chest up, take a big breath','Push knees out as you descend until thighs are parallel','Drive through heels to stand, exhale at top'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes squat{0%,100%{transform:translateY(0)}50%{transform:translateY(28px)}}
-        @keyframes kneeOut{0%,100%{transform:rotate(0deg)}50%{transform:rotate(8deg)}}
-        .body-grp{animation:squat 2s ease-in-out infinite;transform-origin:150px 100px}
-      </style>
-      <!-- ground -->
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- animated group -->
-      <g class="body-grp">
-        <!-- bar -->
-        <line class="bar" x1="90" y1="88" x2="210" y2="88"/>
-        <!-- torso -->
-        <line class="fig" x1="150" y1="88" x2="150" y2="130"/>
-        <!-- head -->
-        <circle class="fig" cx="150" cy="76" r="11" fill="none"/>
-        <!-- upper arms -->
-        <line class="fig" x1="150" y1="95" x2="110" y2="88"/>
-        <line class="fig" x1="150" y1="95" x2="190" y2="88"/>
-        <!-- hips -->
-        <line class="fig" x1="138" y1="130" x2="162" y2="130"/>
-        <!-- thighs -->
-        <line class="fig" x1="138" y1="130" x2="122" y2="162"/>
-        <line class="fig" x1="162" y1="130" x2="178" y2="162"/>
-        <!-- shins -->
-        <line class="fig" x1="122" y1="162" x2="118" y2="192"/>
-        <line class="fig" x1="178" y1="162" x2="182" y2="192"/>
-        <!-- feet -->
-        <line class="fig" x1="108" y1="192" x2="128" y2="192"/>
-        <line class="fig" x1="172" y1="192" x2="192" y2="192"/>
-      </g>
-      <!-- label -->
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BACK SQUAT</text>
-    </svg>`
-  },
-  'romanian deadlift': {
-    cues: ['Hinge at hips, soft bend in knees, bar close to legs','Push hips back until you feel a hamstring stretch','Drive hips forward to stand tall, squeeze glutes at top','Keep back flat throughout — no rounding'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes rdl{0%,100%{transform:rotate(0deg) translateY(0)}50%{transform:rotate(35deg) translateY(10px)}}
-        .torso-grp{animation:rdl 2.2s ease-in-out infinite;transform-origin:150px 148px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- legs static -->
-      <line class="fig" x1="138" y1="148" x2="130" y2="192"/>
-      <line class="fig" x1="162" y1="148" x2="170" y2="192"/>
-      <line class="fig" x1="120" y1="192" x2="140" y2="192"/>
-      <line class="fig" x1="160" y1="192" x2="180" y2="192"/>
-      <!-- hips -->
-      <line class="fig" x1="138" y1="148" x2="162" y2="148"/>
-      <!-- torso group rotates -->
-      <g class="torso-grp">
-        <line class="fig" x1="150" y1="148" x2="150" y2="100"/>
-        <circle class="fig" cx="150" cy="88" r="11"/>
-        <!-- arms/bar -->
-        <line class="fig" x1="150" y1="115" x2="128" y2="148"/>
-        <line class="fig" x1="150" y1="115" x2="172" y2="148"/>
-        <line class="bar" x1="112" y1="148" x2="188" y2="148"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">ROMANIAN DEADLIFT</text>
-    </svg>`
-  },
-  'conventional deadlift': {
-    cues: ['Bar over mid-foot, hip-width stance, grip just outside legs','Big breath, brace core, chest up before you pull','Push floor away — legs and back rise together','Lock hips out at top, bar stays close to body all the way'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        .plate{fill:#1c1c26;stroke:#e8ff47;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes dl{0%{transform:translateY(30px) rotate(25deg)}50%,100%{transform:translateY(0px) rotate(0deg)}}
-        .lift-grp{animation:dl 2.4s ease-in-out infinite;transform-origin:150px 155px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- plates on floor -->
-      <rect class="plate" x="96" y="178" width="10" height="18" rx="2"/>
-      <rect class="plate" x="194" y="178" width="10" height="18" rx="2"/>
-      <g class="lift-grp">
-        <!-- bar -->
-        <line class="bar" x1="106" y1="187" x2="194" y2="187"/>
-        <!-- figure -->
-        <line class="fig" x1="150" y1="187" x2="148" y2="155"/>
-        <line class="fig" x1="148" y1="155" x2="150" y2="110"/>
-        <circle class="fig" cx="150" cy="98" r="11"/>
-        <line class="fig" x1="150" y1="120" x2="128" y2="155"/>
-        <line class="fig" x1="150" y1="120" x2="172" y2="155"/>
-        <line class="fig" x1="128" y1="155" x2="124" y2="187"/>
-        <line class="fig" x1="172" y1="155" x2="176" y2="187"/>
-        <line class="fig" x1="114" y1="187" x2="134" y2="187"/>
-        <line class="fig" x1="166" y1="187" x2="186" y2="187"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">CONVENTIONAL DEADLIFT</text>
-    </svg>`
-  },
-  'walking lunges': {
-    cues: ['Step forward, lower back knee toward floor','Front shin stays vertical, knee tracks over toes','Push through front heel to rise and step forward','Keep torso upright throughout'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes lunge{0%,100%{transform:translateY(0)}50%{transform:translateY(18px)}}
-        .lunge-grp{animation:lunge 1.8s ease-in-out infinite;transform-origin:150px 120px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <g class="lunge-grp">
-        <circle class="fig" cx="150" cy="78" r="11"/>
-        <line class="fig" x1="150" y1="89" x2="150" y2="128"/>
-        <line class="fig" x1="140" y1="100" x2="118" y2="112"/>
-        <line class="fig" x1="160" y1="100" x2="182" y2="112"/>
-        <!-- front leg -->
-        <line class="fig" x1="144" y1="128" x2="120" y2="162"/>
-        <line class="fig" x1="120" y1="162" x2="110" y2="192"/>
-        <line class="fig" x1="100" y1="192" x2="120" y2="192"/>
-        <!-- back leg -->
-        <line class="fig" x1="156" y1="128" x2="174" y2="155"/>
-        <line class="fig" x1="174" y1="155" x2="185" y2="192"/>
-        <line class="fig" x1="175" y1="192" x2="195" y2="192"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">WALKING LUNGE</text>
-    </svg>`
-  },
-  'bulgarian split squat (db)': {
-    cues: ['Rear foot on bench, front foot ~60–70cm forward','Lower straight down, back knee toward floor','Front knee tracks over toes — don\'t let it cave','Drive through front heel to return to start'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .eq{fill:#1c1c26;stroke:#47a8ff;stroke-width:2}
-        .bench{fill:#1c1c26;stroke:#2a2a38;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes bss{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
-        .bss-grp{animation:bss 2s ease-in-out infinite;transform-origin:148px 128px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- bench -->
-      <rect class="bench" x="168" y="168" width="54" height="12" rx="4"/>
-      <line class="bench" x1="174" y1="180" x2="174" y2="195"/>
-      <line class="bench" x1="216" y1="180" x2="216" y2="195"/>
-      <g class="bss-grp">
-        <circle class="fig" cx="148" cy="76" r="11"/>
-        <line class="fig" x1="148" y1="87" x2="148" y2="128"/>
-        <!-- DBs -->
-        <rect class="eq" x="126" y="110" width="14" height="8" rx="3"/>
-        <rect class="eq" x="160" y="110" width="14" height="8" rx="3"/>
-        <!-- arms -->
-        <line class="fig" x1="140" y1="100" x2="133" y2="118"/>
-        <line class="fig" x1="156" y1="100" x2="167" y2="118"/>
-        <!-- front leg -->
-        <line class="fig" x1="142" y1="128" x2="118" y2="165"/>
-        <line class="fig" x1="118" y1="165" x2="108" y2="192"/>
-        <line class="fig" x1="98" y1="192" x2="120" y2="192"/>
-        <!-- back leg on bench -->
-        <line class="fig" x1="154" y1="128" x2="175" y2="162"/>
-        <line class="fig" x1="175" y1="162" x2="185" y2="168"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BULGARIAN SPLIT SQUAT</text>
-    </svg>`
-  },
-  'single-leg calf raise': {
-    cues: ['Stand on one foot on edge of step or flat floor','Lower heel as far as comfortable, pause','Rise up onto toes as high as possible','Control the descent — 2 seconds down'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes calf{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-        .calf-grp{animation:calf 1.6s ease-in-out infinite;transform-origin:150px 192px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <g class="calf-grp">
-        <circle class="fig" cx="150" cy="72" r="11"/>
-        <line class="fig" x1="150" y1="83" x2="150" y2="128"/>
-        <line class="fig" x1="142" y1="96" x2="122" y2="108"/>
-        <line class="fig" x1="158" y1="96" x2="178" y2="108"/>
-        <line class="fig" x1="144" y1="128" x2="148" y2="165"/>
-        <line class="fig" x1="156" y1="128" x2="158" y2="165"/>
-        <line class="fig" x1="148" y1="165" x2="152" y2="192"/>
-        <!-- raised other leg -->
-        <line class="fig" x1="158" y1="165" x2="168" y2="148"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">SINGLE-LEG CALF RAISE</text>
-    </svg>`
-  },
-  'box jumps': {
-    cues: ['Stand arm\'s length from box, feet hip-width','Swing arms back, dip into quarter squat','Explode up — drive arms overhead as you jump','Land softly with knees bent, step down (don\'t jump down)'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .box{fill:#1c1c26;stroke:#e8ff47;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-55px)}60%,80%{transform:translateY(-42px)}}
-        .jump-grp{animation:jump 2s ease-in-out infinite;transform-origin:150px 192px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <rect class="box" x="118" y="152" width="64" height="43" rx="4"/>
-      <g class="jump-grp">
-        <circle class="fig" cx="150" cy="145" r="11"/>
-        <line class="fig" x1="150" y1="156" x2="150" y2="180"/>
-        <line class="fig" x1="140" y1="162" x2="118" y2="148"/>
-        <line class="fig" x1="160" y1="162" x2="182" y2="148"/>
-        <line class="fig" x1="144" y1="180" x2="140" y2="195"/>
-        <line class="fig" x1="156" y1="180" x2="160" y2="195"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BOX JUMP</text>
-    </svg>`
-  },
-  // ── UPPER BODY ──
-  'barbell bench press': {
-    cues: ['Lie flat, eyes under bar, grip slightly wider than shoulders','Arch naturally, feet flat on floor, retract scapula','Lower bar to lower chest with control — elbows ~45°','Press up and slightly back, lock out at top'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        .bench{fill:#1c1c26;stroke:#2a2a38;stroke-width:2}
-        @keyframes press{0%,100%{transform:translateY(0)}50%{transform:translateY(20px)}}
-        .arms-grp{animation:press 2s ease-in-out infinite;transform-origin:150px 130px}
-      </style>
-      <!-- bench -->
-      <rect class="bench" x="80" y="138" width="140" height="16" rx="6"/>
-      <line class="bench" x1="96" y1="154" x2="96" y2="190"/>
-      <line class="bench" x1="204" y1="154" x2="204" y2="190"/>
-      <!-- lying figure -->
-      <circle class="fig" cx="84" cy="130" r="11"/>
-      <line class="fig" x1="95" y1="130" x2="210" y2="130"/>
-      <!-- legs -->
-      <line class="fig" x1="196" y1="130" x2="210" y2="155"/>
-      <line class="fig" x1="210" y1="155" x2="210" y2="190"/>
-      <!-- animated arms + bar -->
-      <g class="arms-grp">
-        <line class="fig" x1="130" y1="130" x2="110" y2="112"/>
-        <line class="fig" x1="170" y1="130" x2="190" y2="112"/>
-        <line class="bar" x1="90" y1="112" x2="210" y2="112"/>
-      </g>
-      <text x="150" y="210" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BARBELL BENCH PRESS</text>
-    </svg>`
-  },
-  'barbell bent-over row': {
-    cues: ['Hinge to ~45°, bar hanging at arms length','Pull bar to lower chest, lead with elbows','Squeeze shoulder blades together at top','Lower with control, keep back flat throughout'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes row{0%,100%{transform:translateY(8px)}50%{transform:translateY(-4px)}}
-        .arms-grp{animation:row 1.8s ease-in-out infinite;transform-origin:150px 130px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- torso hinge -->
-      <line class="fig" x1="150" y1="90" x2="165" y2="130"/>
-      <circle class="fig" cx="143" cy="80" r="11"/>
-      <!-- legs -->
-      <line class="fig" x1="165" y1="130" x2="155" y2="165"/>
-      <line class="fig" x1="165" y1="130" x2="178" y2="165"/>
-      <line class="fig" x1="155" y1="165" x2="150" y2="192"/>
-      <line class="fig" x1="178" y1="165" x2="182" y2="192"/>
-      <line class="fig" x1="140" y1="192" x2="160" y2="192"/>
-      <line class="fig" x1="172" y1="192" x2="192" y2="192"/>
-      <!-- animated arms + bar -->
-      <g class="arms-grp">
-        <line class="fig" x1="155" y1="108" x2="130" y2="130"/>
-        <line class="fig" x1="155" y1="108" x2="176" y2="122"/>
-        <line class="bar" x1="110" y1="138" x2="196" y2="130"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BENT-OVER ROW</text>
-    </svg>`
-  },
-  'db overhead press': {
-    cues: ['Sit or stand, dumbbells at shoulder height, palms forward','Press straight up until arms are fully extended','Don\'t flare elbows too wide — keep ~45° angle','Lower slowly back to shoulders'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .db{fill:#1c1c26;stroke:#47a8ff;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes ohp{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
-        .arms-grp{animation:ohp 2s ease-in-out infinite;transform-origin:150px 105px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <circle class="fig" cx="150" cy="72" r="11"/>
-      <line class="fig" x1="150" y1="83" x2="150" y2="132"/>
-      <line class="fig" x1="144" y1="132" x2="138" y2="165"/>
-      <line class="fig" x1="156" y1="132" x2="162" y2="165"/>
-      <line class="fig" x1="138" y1="165" x2="134" y2="192"/>
-      <line class="fig" x1="162" y1="165" x2="166" y2="192"/>
-      <line class="fig" x1="124" y1="192" x2="144" y2="192"/>
-      <line class="fig" x1="156" y1="192" x2="176" y2="192"/>
-      <g class="arms-grp">
-        <line class="fig" x1="150" y1="97" x2="118" y2="105"/>
-        <line class="fig" x1="150" y1="97" x2="182" y2="105"/>
-        <rect class="db" x="106" y="98" width="14" height="8" rx="3"/>
-        <rect class="db" x="180" y="98" width="14" height="8" rx="3"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">DB OVERHEAD PRESS</text>
-    </svg>`
-  },
-  'ring rows': {
-    cues: ['Hang under rings, body straight like a plank','Pull chest to rings, elbows go back (not out)','Squeeze shoulder blades hard at top','Lower slowly — fight the descent'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ring{fill:none;stroke:#e8ff47;stroke-width:3}
-        .strap{stroke:#2a2a38;stroke-width:2;fill:none}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes rrow{0%,100%{transform:translateY(16px) rotate(-15deg)}50%{transform:translateY(0px) rotate(-5deg)}}
-        .body-grp{animation:rrow 2s ease-in-out infinite;transform-origin:150px 150px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- straps from ceiling -->
-      <line class="strap" x1="116" y1="20" x2="116" y2="72"/>
-      <line class="strap" x1="184" y1="20" x2="184" y2="72"/>
-      <circle class="ring" cx="116" cy="80" r="10"/>
-      <circle class="ring" cx="184" cy="80" r="10"/>
-      <g class="body-grp">
-        <circle class="fig" cx="206" cy="130" r="11"/>
-        <line class="fig" x1="195" y1="130" x2="100" y2="142"/>
-        <line class="fig" x1="185" y1="115" x2="184" y2="80"/>
-        <line class="fig" x1="128" y1="135" x2="116" y2="80"/>
-        <line class="fig" x1="100" y1="142" x2="92" y2="172"/>
-        <line class="fig" x1="100" y1="142" x2="105" y2="172"/>
-        <line class="fig" x1="82" y1="172" x2="102" y2="172"/>
-        <line class="fig" x1="95" y1="172" x2="115" y2="172"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">RING ROWS</text>
-    </svg>`
-  },
-  'ring push-ups': {
-    cues: ['Hands in rings, body in plank position','Lower chest to ring height, elbows ~45°','Press up to full extension — rings will wobble (that\'s the point)','Keep core tight — don\'t let hips sag'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ring{fill:none;stroke:#e8ff47;stroke-width:3}
-        .strap{stroke:#2a2a38;stroke-width:2;fill:none}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes rpu{0%,100%{transform:translateY(0)}50%{transform:translateY(18px)}}
-        .arms-grp{animation:rpu 2s ease-in-out infinite;transform-origin:150px 150px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <line class="strap" x1="110" y1="20" x2="110" y2="140"/>
-      <line class="strap" x1="190" y1="20" x2="190" y2="140"/>
-      <!-- body plank -->
-      <circle class="fig" cx="82" cy="130" r="11"/>
-      <line class="fig" x1="93" y1="130" x2="210" y2="148"/>
-      <line class="fig" x1="190" y1="145" x2="204" y2="170"/>
-      <line class="fig" x1="204" y1="170" x2="208" y2="192"/>
-      <line class="fig" x1="196" y1="192" x2="216" y2="192"/>
-      <g class="arms-grp">
-        <line class="fig" x1="120" y1="133" x2="110" y2="148"/>
-        <line class="fig" x1="160" y1="140" x2="190" y2="148"/>
-        <circle class="ring" cx="110" cy="148" r="8"/>
-        <circle class="ring" cx="190" cy="148" r="8"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">RING PUSH-UPS</text>
-    </svg>`
-  },
-  'dead hang': {
-    cues: ['Hang from bar with full grip, arms straight','Let shoulders decompress — don\'t shrug them up','Breathe steadily, engage core lightly','Hold for target time, step down safely'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bar{fill:none;stroke:#e8ff47;stroke-width:5;stroke-linecap:round}
-        @keyframes sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
-        .hang-grp{animation:sway 3s ease-in-out infinite;transform-origin:150px 52px}
-      </style>
-      <!-- bar -->
-      <line class="bar" x1="60" y1="50" x2="240" y2="50"/>
-      <g class="hang-grp">
-        <!-- arms up -->
-        <line class="fig" x1="150" y1="50" x2="130" y2="78"/>
-        <line class="fig" x1="150" y1="50" x2="170" y2="78"/>
-        <!-- torso -->
-        <line class="fig" x1="130" y1="78" x2="170" y2="78"/>
-        <line class="fig" x1="150" y1="78" x2="150" y2="128"/>
-        <!-- head -->
-        <circle class="fig" cx="150" cy="90" r="11"/>
-        <!-- legs -->
-        <line class="fig" x1="144" y1="128" x2="140" y2="165"/>
-        <line class="fig" x1="156" y1="128" x2="160" y2="165"/>
-        <line class="fig" x1="140" y1="165" x2="138" y2="192"/>
-        <line class="fig" x1="160" y1="165" x2="162" y2="192"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">DEAD HANG</text>
-    </svg>`
-  },
-  // ── CORE ──
-  'kb swings': {
-    cues: ['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .kb{fill:#1c1c26;stroke:#e8ff47;stroke-width:2.5}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes swing{0%,100%{transform:rotate(-30deg) translateY(5px)}50%{transform:rotate(30deg) translateY(-10px)}}
-        .kb-grp{animation:swing 1.4s ease-in-out infinite;transform-origin:150px 135px}
-        @keyframes hinge{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-5deg)}}
-        .body-grp{animation:hinge 1.4s ease-in-out infinite;transform-origin:150px 148px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <g class="body-grp">
-        <circle class="fig" cx="148" cy="88" r="11"/>
-        <line class="fig" x1="148" y1="99" x2="152" y2="148"/>
-        <line class="fig" x1="145" y1="148" x2="135" y2="192"/>
-        <line class="fig" x1="159" y1="148" x2="168" y2="192"/>
-        <line class="fig" x1="125" y1="192" x2="145" y2="192"/>
-        <line class="fig" x1="158" y1="192" x2="178" y2="192"/>
-        <line class="fig" x1="148" y1="115" x2="128" y2="135"/>
-        <line class="fig" x1="148" y1="115" x2="168" y2="135"/>
-      </g>
-      <g class="kb-grp">
-        <rect class="kb" x="136" y="140" width="28" height="24" rx="5"/>
-        <path class="kb" d="M143 140 Q150 128 157 140" fill="none"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">KB SWINGS</text>
-    </svg>`
-  },
-  'dead bug': {
-    cues: ['Lie on back, arms up, knees bent 90° in the air','Press lower back firmly into the floor — keep it there','Slowly lower opposite arm and leg toward floor','Return to start, switch sides — don\'t hold your breath'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        @keyframes db1{0%,100%{transform:rotate(0deg)}50%{transform:rotate(55deg)}}
-        @keyframes db2{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-55deg)}}
-        .arm-r{animation:db1 2s ease-in-out infinite;transform-origin:156px 112px}
-        .leg-l{animation:db2 2s ease-in-out infinite;transform-origin:138px 140px}
-      </style>
-      <!-- lying body -->
-      <circle class="fig" cx="80" cy="125" r="11"/>
-      <line class="fig" x1="91" y1="125" x2="220" y2="125"/>
-      <!-- static arm left -->
-      <line class="fig" x1="130" y1="125" x2="118" y2="98"/>
-      <!-- animated arm right -->
-      <g class="arm-r"><line class="fig" x1="156" y1="112" x2="168" y2="88"/></g>
-      <!-- static leg right -->
-      <line class="fig" x1="185" y1="125" x2="196" y2="148"/>
-      <line class="fig" x1="196" y1="148" x2="210" y2="148"/>
-      <!-- animated leg left -->
-      <g class="leg-l">
-        <line class="fig" x1="138" y1="125" x2="128" y2="148"/>
-        <line class="fig" x1="128" y1="148" x2="112" y2="148"/>
-      </g>
-      <text x="150" y="185" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">DEAD BUG</text>
-    </svg>`
-  },
-  'plank': {
-    cues: ['Forearms on floor, elbows under shoulders','Body in straight line from head to heels','Squeeze glutes, brace abs, breathe steadily','Don\'t let hips rise or sag — if form breaks, stop'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes breathe{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.04)}}
-        .plank-grp{animation:breathe 2.5s ease-in-out infinite;transform-origin:150px 155px}
-      </style>
-      <line class="ground" x1="60" y1="188" x2="240" y2="188"/>
-      <g class="plank-grp">
-        <!-- forearms -->
-        <line class="fig" x1="100" y1="165" x2="108" y2="188"/>
-        <line class="fig" x1="165" y1="158" x2="170" y2="188"/>
-        <!-- body -->
-        <line class="fig" x1="86" y1="158" x2="210" y2="155"/>
-        <!-- head -->
-        <circle class="fig" cx="78" cy="152" r="11"/>
-        <!-- legs -->
-        <line class="fig" x1="200" y1="155" x2="218" y2="180"/>
-        <line class="fig" x1="210" y1="155" x2="224" y2="180"/>
-        <line class="fig" x1="208" y1="180" x2="228" y2="188"/>
-        <line class="fig" x1="214" y1="180" x2="234" y2="188"/>
-      </g>
-      <text x="150" y="210" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">PLANK</text>
-    </svg>`
-  },
-  'side plank': {
-    cues: ['Lie on side, elbow under shoulder, feet stacked','Lift hips until body forms a straight line','Hold — don\'t let hips drop or rotate forward','Breathe normally, keep neck neutral'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes sp{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-        .sp-grp{animation:sp 2.5s ease-in-out infinite;transform-origin:150px 160px}
-      </style>
-      <line class="ground" x1="60" y1="188" x2="240" y2="188"/>
-      <g class="sp-grp">
-        <!-- elbow support -->
-        <line class="fig" x1="90" y1="165" x2="100" y2="188"/>
-        <!-- body diagonal -->
-        <line class="fig" x1="80" y1="158" x2="218" y2="168"/>
-        <!-- head -->
-        <circle class="fig" cx="72" cy="150" r="11"/>
-        <!-- top arm raised -->
-        <line class="fig" x1="130" y1="155" x2="128" y2="128"/>
-        <!-- feet -->
-        <line class="fig" x1="208" y1="167" x2="218" y2="188"/>
-        <line class="fig" x1="214" y1="167" x2="226" y2="188"/>
-      </g>
-      <text x="150" y="210" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">SIDE PLANK</text>
-    </svg>`
-  },
-  'bird dog': {
-    cues: ['On hands and knees, wrists under shoulders, hips over knees','Extend opposite arm and leg simultaneously','Hold 1–2 sec at top — keep hips level (no rotation)','Return slowly, repeat other side'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes bd{0%,100%{transform:rotate(0deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-6px)}}
-        .ext-grp{animation:bd 2s ease-in-out infinite;transform-origin:150px 148px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <!-- static: right arm down, left leg down -->
-      <line class="fig" x1="130" y1="132" x2="118" y2="162"/>
-      <line class="fig" x1="165" y1="148" x2="172" y2="175"/>
-      <line class="fig" x1="172" y1="175" x2="175" y2="192"/>
-      <!-- body -->
-      <line class="fig" x1="118" y1="132" x2="188" y2="148"/>
-      <circle class="fig" cx="108" cy="126" r="11"/>
-      <!-- animated: left arm + right leg extend -->
-      <g class="ext-grp">
-        <line class="fig" x1="118" y1="132" x2="88" y2="118"/>
-        <line class="fig" x1="188" y1="148" x2="218" y2="138"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BIRD DOG</text>
-    </svg>`
-  },
-  'pallof press': {
-    cues: ['Stand side-on to cable/band anchor, feet shoulder-width','Hold handle at chest, elbows in','Press straight out — resist the rotation pull','Hold 1 sec extended, return to chest slowly'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .band{stroke:#e8ff47;stroke-width:2.5;fill:none;stroke-dasharray:6,3}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes pp{0%,100%{transform:translateX(0)}50%{transform:translateX(22px)}}
-        .arms-grp{animation:pp 2s ease-in-out infinite;transform-origin:150px 115px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <circle class="fig" cx="150" cy="78" r="11"/>
-      <line class="fig" x1="150" y1="89" x2="150" y2="140"/>
-      <line class="fig" x1="144" y1="140" x2="138" y2="170"/>
-      <line class="fig" x1="156" y1="140" x2="162" y2="170"/>
-      <line class="fig" x1="128" y1="170" x2="148" y2="170"/>
-      <line class="fig" x1="152" y1="170" x2="172" y2="170"/>
-      <line class="fig" x1="138" y1="170" x2="134" y2="192"/>
-      <line class="fig" x1="162" y1="170" x2="166" y2="192"/>
-      <!-- band anchor -->
-      <line class="band" x1="60" y1="115" x2="140" y2="115"/>
-      <g class="arms-grp">
-        <line class="fig" x1="150" y1="105" x2="126" y2="115"/>
-        <line class="fig" x1="150" y1="105" x2="140" y2="115"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">PALLOF PRESS</text>
-    </svg>`
-  },
-  'hollow body hold': {
-    cues: ['Lie on back, press lower back into floor','Arms overhead, legs straight and raised ~30°','Create a banana/bowl shape with your body','If lower back lifts, raise legs higher or bend knees'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        @keyframes hbh{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.03)}}
-        .hb-grp{animation:hbh 3s ease-in-out infinite;transform-origin:150px 140px}
-      </style>
-      <g class="hb-grp">
-        <circle class="fig" cx="232" cy="132" r="11"/>
-        <line class="fig" x1="221" y1="132" x2="80" y2="148"/>
-        <!-- arms overhead -->
-        <line class="fig" x1="218" y1="122" x2="240" y2="100"/>
-        <line class="fig" x1="225" y1="122" x2="248" y2="100"/>
-        <!-- legs raised -->
-        <line class="fig" x1="88" y1="148" x2="66" y2="128"/>
-        <line class="fig" x1="80" y1="148" x2="58" y2="126"/>
-      </g>
-      <text x="150" y="185" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">HOLLOW BODY HOLD</text>
-    </svg>`
-  },
-  'turkish get-up (kb)': {
-    cues: ['Lie on back, KB pressed up in one hand, arm locked','Roll to elbow, then hand, sweep leg through to kneel','Stand up tall — KB stays locked overhead throughout','Reverse each step to return to floor'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .kb{fill:#1c1c26;stroke:#e8ff47;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes tgu{0%{transform:rotate(60deg) translateY(20px)}60%,100%{transform:rotate(0deg) translateY(0)}}
-        .rise-grp{animation:tgu 3s ease-in-out infinite;transform-origin:150px 155px}
-      </style>
-      <line class="ground" x1="60" y1="195" x2="240" y2="195"/>
-      <g class="rise-grp">
-        <circle class="fig" cx="150" cy="78" r="11"/>
-        <line class="fig" x1="150" y1="89" x2="150" y2="140"/>
-        <!-- KB arm up -->
-        <line class="fig" x1="156" y1="100" x2="162" y2="68"/>
-        <rect class="kb" x="154" y="52" width="18" height="16" rx="4"/>
-        <path class="kb" d="M159 52 Q163 44 167 52" fill="none"/>
-        <!-- other arm -->
-        <line class="fig" x1="144" y1="102" x2="124" y2="118"/>
-        <!-- legs -->
-        <line class="fig" x1="144" y1="140" x2="128" y2="172"/>
-        <line class="fig" x1="156" y1="140" x2="168" y2="165"/>
-        <line class="fig" x1="128" y1="172" x2="118" y2="192"/>
-        <line class="fig" x1="168" y1="165" x2="175" y2="192"/>
-        <line class="fig" x1="108" y1="192" x2="128" y2="192"/>
-        <line class="fig" x1="165" y1="192" x2="185" y2="192"/>
-      </g>
-      <text x="150" y="214" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">TURKISH GET-UP</text>
-    </svg>`
-  },
-  // ── RUNNING ──
-  'easy run': {
-    cues: ['Conversational pace — you should be able to speak full sentences','Land with foot under your hip, not in front','Relax shoulders, slight forward lean from ankles','Breathing rhythm: 3 steps in, 2 steps out'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47ffa0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes run{0%{transform:translateX(-30px)}100%{transform:translateX(30px)}}
-        @keyframes legf{0%,100%{transform:rotate(-25deg)}50%{transform:rotate(25deg)}}
-        @keyframes legb{0%,100%{transform:rotate(25deg)}50%{transform:rotate(-25deg)}}
-        @keyframes armf{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-20deg)}}
-        @keyframes armb{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
-        .run-grp{animation:run 0.8s ease-in-out infinite alternate}
-        .lf{animation:legf 0.4s ease-in-out infinite;transform-origin:150px 148px}
-        .lb{animation:legb 0.4s ease-in-out infinite;transform-origin:150px 148px}
-        .af{animation:armf 0.4s ease-in-out infinite;transform-origin:150px 110px}
-        .ab{animation:armb 0.4s ease-in-out infinite;transform-origin:150px 110px}
-      </style>
-      <line class="ground" x1="40" y1="192" x2="260" y2="192"/>
-      <g class="run-grp">
-        <circle class="fig" cx="150" cy="80" r="11"/>
-        <line class="fig" x1="150" y1="91" x2="150" y2="148"/>
-        <g class="lf"><line class="fig" x1="150" y1="148" x2="138" y2="175"/><line class="fig" x1="138" y1="175" x2="128" y2="192"/></g>
-        <g class="lb"><line class="fig" x1="150" y1="148" x2="162" y2="172"/><line class="fig" x1="162" y1="172" x2="174" y2="185"/></g>
-        <g class="af"><line class="fig" x1="150" y1="108" x2="126" y2="128"/></g>
-        <g class="ab"><line class="fig" x1="150" y1="108" x2="174" y2="128"/></g>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">EASY RUN — ZONE 2</text>
-    </svg>`
-  },
-  'tempo': {
-    cues: ['Comfortably hard — 7/10 effort, breathing controlled','Slightly shorter stride than easy pace, quicker turnover','Aim for ~180 steps/min cadence','If you can\'t maintain form, slow down — quality over speed'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47ffa0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes trun{0%{transform:translateX(-20px)}100%{transform:translateX(20px)}}
-        @keyframes tlegf{0%,100%{transform:rotate(-35deg)}50%{transform:rotate(35deg)}}
-        @keyframes tlegb{0%,100%{transform:rotate(35deg)}50%{transform:rotate(-35deg)}}
-        @keyframes tarmf{0%,100%{transform:rotate(30deg)}50%{transform:rotate(-30deg)}}
-        @keyframes tarmb{0%,100%{transform:rotate(-30deg)}50%{transform:rotate(30deg)}}
-        .trun-grp{animation:trun 0.5s ease-in-out infinite alternate}
-        .tlf{animation:tlegf 0.28s ease-in-out infinite;transform-origin:150px 148px}
-        .tlb{animation:tlegb 0.28s ease-in-out infinite;transform-origin:150px 148px}
-        .taf{animation:tarmf 0.28s ease-in-out infinite;transform-origin:150px 108px}
-        .tab{animation:tarmb 0.28s ease-in-out infinite;transform-origin:150px 108px}
-      </style>
-      <line class="ground" x1="40" y1="192" x2="260" y2="192"/>
-      <g class="trun-grp">
-        <circle class="fig" cx="150" cy="78" r="11"/>
-        <line class="fig" x1="150" y1="89" x2="152" y2="148"/>
-        <g class="tlf"><line class="fig" x1="150" y1="148" x2="136" y2="173"/><line class="fig" x1="136" y1="173" x2="124" y2="192"/></g>
-        <g class="tlb"><line class="fig" x1="150" y1="148" x2="164" y2="170"/><line class="fig" x1="164" y1="170" x2="176" y2="182"/></g>
-        <g class="taf"><line class="fig" x1="152" y1="106" x2="126" y2="122"/></g>
-        <g class="tab"><line class="fig" x1="152" y1="106" x2="178" y2="122"/></g>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">TEMPO RUN — ZONE 3–4</text>
-    </svg>`
-  },
-  'long run': {
-    cues: ['Start slower than you think you need to — it\'s a long effort','Fuel every 45–60 min with a gel or real food','Run/walk strategy is fine — keep heart rate in zone 2','Focus on time on feet, not pace'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47ffa0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .path{stroke:#2a2a38;stroke-width:2;fill:none;stroke-dasharray:8,5}
-        @keyframes lr{0%{transform:translateX(-40px)}100%{transform:translateX(40px)}}
-        @keyframes lrlf{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}
-        @keyframes lrlb{0%,100%{transform:rotate(22deg)}50%{transform:rotate(-22deg)}}
-        @keyframes lraf{0%,100%{transform:rotate(18deg)}50%{transform:rotate(-18deg)}}
-        @keyframes lrab{0%,100%{transform:rotate(-18deg)}50%{transform:rotate(18deg)}}
-        .lr-grp{animation:lr 1.1s ease-in-out infinite alternate}
-        .lrlf{animation:lrlf 0.55s ease-in-out infinite;transform-origin:150px 148px}
-        .lrlb{animation:lrlb 0.55s ease-in-out infinite;transform-origin:150px 148px}
-        .lraf{animation:lraf 0.55s ease-in-out infinite;transform-origin:150px 110px}
-        .lrab{animation:lrab 0.55s ease-in-out infinite;transform-origin:150px 110px}
-      </style>
-      <path class="path" d="M40 175 Q100 155 150 170 Q200 185 260 165"/>
-      <g class="lr-grp">
-        <circle class="fig" cx="150" cy="82" r="11"/>
-        <line class="fig" x1="150" y1="93" x2="150" y2="148"/>
-        <g class="lrlf"><line class="fig" x1="150" y1="148" x2="138" y2="175"/><line class="fig" x1="138" y1="175" x2="130" y2="192"/></g>
-        <g class="lrlb"><line class="fig" x1="150" y1="148" x2="162" y2="172"/><line class="fig" x1="162" y1="172" x2="172" y2="185"/></g>
-        <g class="lraf"><line class="fig" x1="150" y1="110" x2="128" y2="128"/></g>
-        <g class="lrab"><line class="fig" x1="150" y1="110" x2="172" y2="128"/></g>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">LONG RUN — ZONE 2</text>
-    </svg>`
-  },
-  'foam roll': {
-    cues: ['Roll slowly — 1–2 inches per second','When you find a tender spot, pause and breathe for 5 sec','Avoid rolling directly on joints or the lower spine','Apply moderate pressure — uncomfortable but not painful'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .roller{fill:#1c1c26;stroke:#ff6b47;stroke-width:2.5}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes roll{0%,100%{transform:translateX(-15px)}50%{transform:translateX(15px)}}
-        .roll-grp{animation:roll 2s ease-in-out infinite}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <!-- body lying -->
-      <circle class="fig" cx="80" cy="140" r="11"/>
-      <line class="fig" x1="91" y1="140" x2="220" y2="140"/>
-      <!-- arms propping up -->
-      <line class="fig" x1="108" y1="140" x2="94" y2="162"/>
-      <line class="fig" x1="130" y1="140" x2="122" y2="162"/>
-      <!-- legs -->
-      <line class="fig" x1="200" y1="140" x2="210" y2="165"/>
-      <line class="fig" x1="210" y1="140" x2="218" y2="165"/>
-      <g class="roll-grp">
-        <ellipse class="roller" cx="162" cy="162" rx="22" ry="18"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">FOAM ROLLING</text>
-    </svg>`
-  },
-  'nordic curl (eccentric)': {
-    cues: ['Kneel with ankles secured under a bar or partner','Cross arms over chest or keep hands ready to catch','Lower your body toward floor as slowly as possible','Use hands to push back up — focus is the descent only'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .anchor{fill:#1c1c26;stroke:#2a2a38;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes nc{0%,100%{transform:rotate(0deg)}60%{transform:rotate(60deg)}}
-        .nc-grp{animation:nc 3s ease-in-out infinite;transform-origin:168px 175px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <rect class="anchor" x="148" y="178" width="40" height="14" rx="4"/>
-      <g class="nc-grp">
-        <circle class="fig" cx="168" cy="88" r="11"/>
-        <line class="fig" x1="168" y1="99" x2="168" y2="148"/>
-        <line class="fig" x1="158" y1="115" x2="138" y2="128"/>
-        <line class="fig" x1="178" y1="115" x2="198" y2="128"/>
-        <line class="fig" x1="162" y1="148" x2="158" y2="175"/>
-        <line class="fig" x1="174" y1="148" x2="178" y2="175"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">NORDIC CURL</text>
-    </svg>`
-  },
-  'banded hip abduction': {
-    cues: ['Band just above knees, stand tall or seated','Push knees outward against band resistance','Hold 1 sec at peak abduction — feel the glute med work','Control the return — don\'t let band snap knees in'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .band{stroke:#e8ff47;stroke-width:3;fill:none}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes abd{0%,100%{transform:rotate(0deg)}50%{transform:rotate(14deg)}}
-        @keyframes abd2{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-14deg)}}
-        .leg-l{animation:abd 1.8s ease-in-out infinite;transform-origin:144px 140px}
-        .leg-r{animation:abd2 1.8s ease-in-out infinite;transform-origin:156px 140px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <circle class="fig" cx="150" cy="78" r="11"/>
-      <line class="fig" x1="150" y1="89" x2="150" y2="140"/>
-      <line class="fig" x1="140" y1="102" x2="118" y2="118"/>
-      <line class="fig" x1="160" y1="102" x2="182" y2="118"/>
-      <g class="leg-l">
-        <line class="fig" x1="144" y1="140" x2="136" y2="170"/>
-        <line class="fig" x1="136" y1="170" x2="130" y2="192"/>
-        <line class="fig" x1="120" y1="192" x2="140" y2="192"/>
-      </g>
-      <g class="leg-r">
-        <line class="fig" x1="156" y1="140" x2="164" y2="170"/>
-        <line class="fig" x1="164" y1="170" x2="170" y2="192"/>
-        <line class="fig" x1="160" y1="192" x2="180" y2="192"/>
-      </g>
-      <path class="band" d="M130 158 Q150 152 170 158" fill="none"/>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">BANDED HIP ABDUCTION</text>
-    </svg>`
-  },
-  'ring face pulls': {
-    cues: ['Set rings at face height, lean back slightly','Pull rings to face, elbows flare high and wide','At end position: hands by ears, elbows above shoulders','Squeeze rear delts and rotator cuff, slow return'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ring{fill:none;stroke:#e8ff47;stroke-width:3}
-        .strap{stroke:#2a2a38;stroke-width:2;fill:none}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes fp{0%,100%{transform:translateX(18px)}50%{transform:translateX(-4px)}}
-        .arms-grp{animation:fp 2s ease-in-out infinite;transform-origin:150px 105px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <line class="strap" x1="118" y1="20" x2="118" y2="80"/>
-      <line class="strap" x1="182" y1="20" x2="182" y2="80"/>
-      <circle class="ring" cx="118" cy="88" r="9"/>
-      <circle class="ring" cx="182" cy="88" r="9"/>
-      <circle class="fig" cx="150" cy="80" r="11"/>
-      <line class="fig" x1="150" y1="91" x2="152" y2="148"/>
-      <line class="fig" x1="144" y1="148" x2="138" y2="175"/>
-      <line class="fig" x1="158" y1="148" x2="164" y2="175"/>
-      <line class="fig" x1="128" y1="175" x2="148" y2="192"/>
-      <line class="fig" x1="154" y1="175" x2="174" y2="192"/>
-      <g class="arms-grp">
-        <line class="fig" x1="150" y1="102" x2="118" y2="88"/>
-        <line class="fig" x1="150" y1="102" x2="182" y2="88"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">RING FACE PULLS</text>
-    </svg>`
-  },
-  'goblet squat (kb)': {
-    cues: ['Hold KB at chest with both hands (like a goblet)','Feet slightly wider than shoulder-width, toes out','Squat deep — elbows track inside knees at bottom','Drive through heels, keep chest tall throughout'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .kb{fill:#1c1c26;stroke:#e8ff47;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes gs{0%,100%{transform:translateY(0)}50%{transform:translateY(26px)}}
-        .gs-grp{animation:gs 2s ease-in-out infinite;transform-origin:150px 110px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <g class="gs-grp">
-        <circle class="fig" cx="150" cy="76" r="11"/>
-        <line class="fig" x1="150" y1="87" x2="150" y2="130"/>
-        <rect class="kb" x="136" y="100" width="28" height="22" rx="5"/>
-        <path class="kb" d="M142 100 Q150 90 158 100" fill="none"/>
-        <line class="fig" x1="144" y1="107" x2="136" y2="112"/>
-        <line class="fig" x1="156" y1="107" x2="164" y2="112"/>
-        <line class="fig" x1="144" y1="130" x2="126" y2="162"/>
-        <line class="fig" x1="156" y1="130" x2="174" y2="162"/>
-        <line class="fig" x1="126" y1="162" x2="116" y2="192"/>
-        <line class="fig" x1="174" y1="162" x2="184" y2="192"/>
-        <line class="fig" x1="106" y1="192" x2="126" y2="192"/>
-        <line class="fig" x1="174" y1="192" x2="194" y2="192"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">GOBLET SQUAT</text>
-    </svg>`
-  },
-  'farmer carry (dbs)': {
-    cues: ['Pick up heavy DBs, stand tall, shoulders back','Walk with purpose — short, controlled steps','Keep core braced, don\'t let shoulders shrug','Breathe continuously — this is also cardio'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .db{fill:#1c1c26;stroke:#47a8ff;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes fc{0%{transform:translateX(-10px)}100%{transform:translateX(10px)}}
-        @keyframes fca{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
-        @keyframes fcb{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-        .fc-grp{animation:fc 0.8s ease-in-out infinite alternate}
-        .fca{animation:fca 0.8s ease-in-out infinite;transform-origin:150px 110px}
-        .fcb{animation:fcb 0.8s ease-in-out infinite;transform-origin:150px 110px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <g class="fc-grp">
-        <circle class="fig" cx="150" cy="72" r="11"/>
-        <line class="fig" x1="150" y1="83" x2="150" y2="138"/>
-        <g class="fca">
-          <line class="fig" x1="150" y1="100" x2="122" y2="118"/>
-          <rect class="db" x="108" y="112" width="16" height="8" rx="3"/>
-        </g>
-        <g class="fcb">
-          <line class="fig" x1="150" y1="100" x2="178" y2="118"/>
-          <rect class="db" x="176" y="112" width="16" height="8" rx="3"/>
-        </g>
-        <line class="fig" x1="144" y1="138" x2="136" y2="168"/>
-        <line class="fig" x1="156" y1="138" x2="162" y2="168"/>
-        <line class="fig" x1="136" y1="168" x2="126" y2="192"/>
-        <line class="fig" x1="162" y1="168" x2="172" y2="192"/>
-        <line class="fig" x1="116" y1="192" x2="136" y2="192"/>
-        <line class="fig" x1="162" y1="192" x2="182" y2="192"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">FARMER CARRY</text>
-    </svg>`
-  },
-  'copenhagen plank': {
-    cues: ['Lie on side, top foot on a bench, bottom leg free','Lift hips — body forms a straight diagonal line','Hold — squeeze inner thigh of top leg','Keep hips level and spine neutral throughout'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .bench{fill:#1c1c26;stroke:#2a2a38;stroke-width:2}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes cp{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-        .cp-grp{animation:cp 2.5s ease-in-out infinite;transform-origin:150px 148px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <rect class="bench" x="170" y="155" width="60" height="12" rx="4"/>
-      <line class="bench" x1="176" y1="167" x2="176" y2="192"/>
-      <line class="bench" x1="224" y1="167" x2="224" y2="192"/>
-      <g class="cp-grp">
-        <circle class="fig" cx="72" cy="132" r="11"/>
-        <line class="fig" x1="83" y1="132" x2="210" y2="148"/>
-        <!-- elbow support -->
-        <line class="fig" x1="100" y1="135" x2="94" y2="162"/>
-        <!-- top leg on bench -->
-        <line class="fig" x1="196" y1="147" x2="200" y2="155"/>
-        <!-- bottom leg hanging -->
-        <line class="fig" x1="192" y1="148" x2="195" y2="172"/>
-        <!-- top arm -->
-        <line class="fig" x1="120" y1="133" x2="118" y2="108"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">COPENHAGEN PLANK</text>
-    </svg>`
-  },
-  'ring fallout': {
-    cues: ['Rings low, start standing with rings in front of you','Keep arms straight as you lean forward/down','Core braces to stop lower back arching','Pull back to start using your abs, not your arms'],
-    svg: `<svg viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .fig{fill:none;stroke:#47a8ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .ring{fill:none;stroke:#e8ff47;stroke-width:3}
-        .strap{stroke:#2a2a38;stroke-width:2;fill:none}
-        .ground{stroke:#2a2a38;stroke-width:2;fill:none}
-        @keyframes rfo{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-30deg)}}
-        .rfo-grp{animation:rfo 2.5s ease-in-out infinite;transform-origin:188px 175px}
-      </style>
-      <line class="ground" x1="60" y1="192" x2="240" y2="192"/>
-      <line class="strap" x1="100" y1="20" x2="100" y2="110"/>
-      <line class="strap" x1="140" y1="20" x2="140" y2="110"/>
-      <circle class="ring" cx="100" cy="118" r="9"/>
-      <circle class="ring" cx="140" cy="118" r="9"/>
-      <g class="rfo-grp">
-        <circle class="fig" cx="188" cy="112" r="11"/>
-        <line class="fig" x1="188" y1="123" x2="188" y2="175"/>
-        <line class="fig" x1="180" y1="145" x2="165" y2="155"/>
-        <line class="fig" x1="196" y1="145" x2="208" y2="155"/>
-        <line class="fig" x1="182" y1="175" x2="175" y2="192"/>
-        <line class="fig" x1="194" y1="175" x2="200" y2="192"/>
-        <!-- arms to rings -->
-        <line class="fig" x1="178" y1="130" x2="140" y2="118"/>
-        <line class="fig" x1="172" y1="130" x2="100" y2="118"/>
-      </g>
-      <text x="150" y="212" text-anchor="middle" font-family="DM Mono,monospace" font-size="10" fill="#8888a0">RING FALLOUT</text>
-    </svg>`
-  },
+const EXERCISE_VIDEOS = {
+  'back squat':{id:'bEv6CCg2BC8',title:'How To Squat With Perfect Form — Jeff Nippard',cues:['Stand with bar across upper traps, feet shoulder-width apart','Brace core, chest up, take a big breath','Push knees out as you descend until thighs are parallel','Drive through heels to stand, exhale at top']},
+  'romanian deadlift':{id:'uhghy9pFIPY',title:'Perfect Romanian Deadlift — E3 Rehab',cues:['Hinge at hips, soft bend in knees, bar close to legs','Push hips back until you feel a hamstring stretch','Drive hips forward to stand tall, squeeze glutes at top','Keep back flat throughout — no rounding']},
+  'conventional deadlift':{id:'wYREQkVtvEc',title:'How To Deadlift — Alan Thrall',cues:['Bar over mid-foot, hip-width stance, grip just outside legs','Big breath, brace core, chest up before you pull','Push floor away — legs and back rise together','Lock hips out at top, bar stays close to body all the way']},
+  'barbell bench press':{id:'vcBig73ojpE',title:'Perfect Bench Press — Jeff Nippard',cues:['Lie flat, eyes under bar, grip slightly wider than shoulders','Arch naturally, feet flat on floor, retract scapula','Lower bar to lower chest with control — elbows ~45°','Press up and slightly back, lock out at top']},
+  'barbell bent-over row':{id:'FWJR5Ve8bnQ',title:'Barbell Row — Jeff Nippard',cues:['Hinge to ~45°, bar hanging at arms length','Pull bar to lower chest, lead with elbows','Squeeze shoulder blades together at top','Lower with control, keep back flat throughout']},
+  'db overhead press':{id:'Did01dFR3Lk',title:'Dumbbell Overhead Press — Men’s Health',cues:['Sit or stand, dumbbells at shoulder height, palms forward','Press straight up until arms are fully extended','Don\'t flare elbows too wide — keep ~45° angle','Lower slowly back to shoulders']},
+  'walking lunges':{id:'vYfp2t4XgqQ',title:'Walking Lunge Tutorial — Runna',cues:['Step forward, lower back knee toward floor','Front shin stays vertical, knee tracks over toes','Push through front heel to rise and step forward','Keep torso upright throughout']},
+  'bulgarian split squat':{id:null,title:'Bulgarian Split Squat',cues:['Rear foot on bench, front foot ~60–70cm forward','Lower straight down, back knee toward floor','Front knee tracks over toes — don\'t let it cave','Drive through front heel to return to start']},
+  'single-leg calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on one foot on edge of step or flat floor','Lower heel as far as comfortable, pause','Rise up onto toes as high as possible','Control the descent — 2 seconds down']},
+  'calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']},
+  'box jumps':{id:'G-bxQY57mKc',title:'Box Jump Tutorial — Runna',cues:['Stand arm\'s length from box, feet hip-width','Swing arms back, dip into quarter squat','Explode up — drive arms overhead as you jump','Land softly with knees bent, step down (don\'t jump down)']},
+  'ring rows':{id:'XBuHGNSqpA4',title:'Ring Rows — Calisthenicmovement',cues:['Hang under rings, body straight like a plank','Pull chest to rings, elbows go back (not out)','Squeeze shoulder blades hard at top','Lower slowly — fight the descent']},
+  'ring push-ups':{id:null,title:'Ring Push-Ups',cues:['Hands in rings, body in plank position','Lower chest to ring height, elbows ~45°','Press up to full extension — rings will wobble (that\'s the point)','Keep core tight — don\'t let hips sag']},
+  'dead hang':{id:null,title:'Dead Hang',cues:['Hang from bar with full grip, arms straight','Let shoulders decompress — don\'t shrug them up','Breathe steadily, engage core lightly','Hold for target time, step down safely']},
+  'kb swings':{id:'sSQfBfBgELI',title:'Kettlebell Swing — StrongFirst',cues:['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat']},
+  'dead bug':{id:null,title:'Dead Bug',cues:['Lie on back, arms up, knees bent 90° in the air','Press lower back firmly into the floor — keep it there','Slowly lower opposite arm and leg toward floor','Return to start, switch sides — don\'t hold your breath']},
+  'plank':{id:null,title:'Plank',cues:['Forearms on floor, elbows under shoulders','Body in straight line from head to heels','Squeeze glutes, brace abs, breathe steadily','Don\'t let hips rise or sag — if form breaks, stop']},
+  'side plank':{id:null,title:'Side Plank',cues:['Lie on side, elbow under shoulder, feet stacked','Lift hips until body forms a straight line','Hold — don\'t let hips drop or rotate forward','Breathe normally, keep neck neutral']},
+  'bird dog':{id:null,title:'Bird Dog',cues:['On hands and knees, wrists under shoulders, hips over knees','Extend opposite arm and leg simultaneously','Hold 1–2 sec at top — keep hips level (no rotation)','Return slowly, repeat other side']},
+  'pallof press':{id:null,title:'Pallof Press',cues:['Stand side-on to cable/band anchor, feet shoulder-width','Hold handle at chest, elbows in','Press straight out — resist the rotation pull','Hold 1 sec extended, return to chest slowly']},
+  'hollow body hold':{id:null,title:'Hollow Body Hold',cues:['Lie on back, press lower back into floor','Arms overhead, legs straight and raised ~30°','Create a banana/bowl shape with your body','If lower back lifts, raise legs higher or bend knees']},
+  'turkish get-up':{id:null,title:'Turkish Get-Up',cues:['Lie on back, KB pressed up in one hand, arm locked','Roll to elbow, then hand, sweep leg through to kneel','Stand up tall — KB stays locked overhead throughout','Reverse each step to return to floor']},
+  'easy run':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Conversational pace — you should be able to speak full sentences','Land with foot under your hip, not in front','Relax shoulders, slight forward lean from ankles','Breathing rhythm: 3 steps in, 2 steps out']},
+  'tempo':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Comfortably hard — 7/10 effort, breathing controlled','Slightly shorter stride than easy pace, quicker turnover','Aim for ~180 steps/min cadence','If you can\'t maintain form, slow down — quality over speed']},
+  'long run':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Start slower than you think you need to — it\'s a long effort','Fuel every 45–60 min with a gel or real food','Run/walk strategy is fine — keep heart rate in zone 2','Focus on time on feet, not pace']},
+  'foam roll':{id:null,title:'Foam Roll',cues:['Roll slowly — 1–2 inches per second','When you find a tender spot, pause and breathe for 5 sec','Avoid rolling directly on joints or the lower spine','Apply moderate pressure — uncomfortable but not painful']},
+  'nordic curl':{id:'_e9vFU9-tkc',title:'Nordic Hamstring Curls — E3 Rehab',cues:['Kneel with ankles secured under a bar or partner','Cross arms over chest or keep hands ready to catch','Lower your body toward floor as slowly as possible','Use hands to push back up — focus is the descent only']},
+  'banded hip abduction':{id:null,title:'Banded Hip Abduction',cues:['Band just above knees, stand tall or seated','Push knees outward against band resistance','Hold 1 sec at peak abduction — feel the glute med work','Control the return — don\'t let band snap knees in']},
+  'ring face pulls':{id:null,title:'Ring Face Pulls',cues:['Set rings at face height, lean back slightly','Pull rings to face, elbows flare high and wide','At end position: hands by ears, elbows above shoulders','Squeeze rear delts and rotator cuff, slow return']},
+  'goblet squat':{id:null,title:'Goblet Squat',cues:['Hold KB at chest with both hands (like a goblet)','Feet slightly wider than shoulder-width, toes out','Squat deep — elbows track inside knees at bottom','Drive through heels, keep chest tall throughout']},
+  'farmer carry':{id:'1wTLRCVwCkA',title:'Loaded Carry — Dan John',cues:['Pick up heavy DBs, stand tall, shoulders back','Walk with purpose — short, controlled steps','Keep core braced, don\'t let shoulders shrug','Breathe continuously — this is also cardio']},
+  'copenhagen plank':{id:null,title:'Copenhagen Plank',cues:['Lie on side, top foot on a bench, bottom leg free','Lift hips — body forms a straight diagonal line','Hold — squeeze inner thigh of top leg','Keep hips level and spine neutral throughout']},
+  'ring fallout':{id:null,title:'Ring Fallout',cues:['Rings low, start standing with rings in front of you','Keep arms straight as you lean forward/down','Core braces to stop lower back arching','Pull back to start using your abs, not your arms']},
+  'barbell row':{id:'FWJR5Ve8bnQ',title:'Barbell Row — Jeff Nippard',cues:['Hinge to ~45° torso angle, bar hangs below chest','Drive elbows back and up — pull bar to lower chest/navel','Squeeze shoulder blades at the top','Lower with control — don\'t let the bar crash down']},
+  'hang power clean':{id:'0Guz3bZFHaI',title:'Hang Power Clean — Catalyst Athletics',cues:['Start with bar at mid-thigh, hips hinged, lats engaged','Explosively extend hips and shrug — elbows follow high','Drop under the bar quickly, catch in quarter-squat position','Rack across front delts — elbows high, core tight']},
+  'kb around the world':{id:'Q2fN2XWYjrU',title:'KB Around The World',cues:['Stand tall, pass KB around your body in a circle','Keep the core braced — resist rotation of the torso','Control the weight, smooth handoff between hands','Alternate direction each set']},
+  'kb single-arm carry':{id:'1wTLRCVwCkA',title:'Loaded Carry — Dan John',cues:['Hold KB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the KB','Core resists lateral tilt the entire carry']},
+  'suitcase carry':{id:'1wTLRCVwCkA',title:'Loaded Carry — Dan John',cues:['Hold KB/DB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the weight','Core resists lateral tilt the entire carry']},
+  'kb windmill':{id:'oHTcImIfl6I',title:'KB Windmill — StrongFirst',cues:['KB pressed overhead, push hip out to the side of the weight','Hinge down toward your foot — eyes on the KB','Trail hand slides down inner leg for guidance','Drive hip back in to return to standing — KB stays locked up']},
+  'pull-ups':{id:'eGo4IYlbE5g',title:'Pull-Ups — Calisthenicmovement',cues:['Dead hang to start, full arm extension','Initiate by depressing shoulder blades, then pull elbows to hips','Chin clears the bar at the top','Lower under control — 2–3 seconds down']},
+  'push press':{id:'X6-DMh-t4nQ',title:'Push Press — Alan Thrall',cues:['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']},
+  'single-leg rdl':{id:'2cYbXGlg6bA',title:'Single-Leg RDL — Jeff Nippard',cues:['Stand on one leg, slight bend in the knee','Hinge at the hip, rear leg floats back for balance','Keep back flat, feel the hamstring load — don\'t let hips rotate','Drive the hip forward to return, squeeze glute at the top']},
+  'step-ups':{id:'MRhOLYSxnAc',title:'Step-Ups — Jeremy Ethier',cues:['Step fully onto the box/bench, drive through the heel','Stand tall at the top — don\'t use the trailing leg to push','Lower the trailing leg slowly back to the floor','Keep torso upright throughout, add load as needed']},
+  'mobility flow':{id:null,title:'Mobility Flow',cues:['Move slowly through each position, breathing deeply','Spend ~30–60 sec per area — hips, t-spine, ankles','Never force a stretch — ease into end range','Use this to prime movement, not to fatigue']},
+  'foam roll + mobility':{id:null,title:'Foam Roll + Mobility',cues:['Roll each muscle group slowly for 30–45 sec','Pause and breathe on tender spots','Follow with gentle dynamic mobility','Hydrate — this is recovery work, keep it easy']},
 };
-
-// ─────────────────────────────────────────
-// YOUTUBE VIDEO LINKS (for exercises without SVG demos)
-// ─────────────────────────────────────────
-const YOUTUBE_LINKS = {
-  'kb swings': {
-    url: 'https://www.youtube.com/watch?v=sSQfBfBgELI',
-    title: 'KB Swing — StrongFirst',
-    cues: ['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat']
-  },
-  'barbell row': {
-    url: 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ',
-    title: 'Barbell Row — Alan Thrall',
-    cues: ['Hinge to ~45° torso angle, bar hangs below chest','Drive elbows back and up — pull bar to lower chest/navel','Squeeze shoulder blades at the top','Lower with control — don\'t let the bar crash down']
-  },
-  'calf raise': {
-    url: 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
-    title: 'Loaded Calf Raise — Jeff Nippard',
-    cues: ['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']
-  },
-  'loaded calf raise': {
-    url: 'https://www.youtube.com/watch?v=gwLzBJYoWlI',
-    title: 'Loaded Calf Raise — Jeff Nippard',
-    cues: ['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']
-  },
-  'hang power clean': {
-    url: 'https://www.youtube.com/watch?v=0Guz3bZFHaI',
-    title: 'Hang Power Clean — Catalyst Athletics',
-    cues: ['Start with bar at mid-thigh, hips hinged, lats engaged','Explosively extend hips and shrug — elbows follow high','Drop under the bar quickly, catch in quarter-squat position','Rack across front delts — elbows high, core tight']
-  },
-  'kb around the world': {
-    url: 'https://www.youtube.com/watch?v=Q2fN2XWYjrU',
-    title: 'KB Around the World — StrongFirst',
-    cues: ['Stand tall, pass KB around your body in a circle','Keep the core braced — resist rotation of the torso','Control the weight, smooth handoff between hands','Alternate direction each set']
-  },
-  'kb single-arm carry': {
-    url: 'https://www.youtube.com/watch?v=1wTLRCVwCkA',
-    title: 'KB Single-Arm Farmer Carry — Dan John',
-    cues: ['Hold KB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the KB','Core resists lateral tilt the entire carry']
-  },
-  'suitcase carry': {
-    url: 'https://www.youtube.com/watch?v=1wTLRCVwCkA',
-    title: 'Suitcase Carry — Dan John',
-    cues: ['Hold KB/DB in one hand at your side — stand tall','Pack the loaded shoulder down and back','Walk with even strides — don\'t lean toward the weight','Core resists lateral tilt the entire carry']
-  },
-  'kb windmill': {
-    url: 'https://www.youtube.com/watch?v=oHTcImIfl6I',
-    title: 'KB Windmill — StrongFirst',
-    cues: ['KB pressed overhead, push hip out to the side of the weight','Hinge down toward your foot — eyes on the KB','Trail hand slides down inner leg for guidance','Drive hip back in to return to standing — KB stays locked up']
-  },
-  'pull-ups': {
-    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
-    title: 'Pull-Ups — Calisthenicmovement',
-    cues: ['Dead hang to start, full arm extension','Initiate by depressing shoulder blades, then pull elbows to hips','Chin clears the bar at the top','Lower under control — 2–3 seconds down']
-  },
-  'weighted pull-ups': {
-    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
-    title: 'Weighted Pull-Ups — Calisthenicmovement',
-    cues: ['Load via belt or DB between feet — start from dead hang','Initiate by depressing shoulder blades, then pull elbows to hips','Chin clears the bar at the top','Lower under control — 2–3 seconds down']
-  },
-  'pull-ups / ring rows': {
-    url: 'https://www.youtube.com/watch?v=eGo4IYlbE5g',
-    title: 'Pull-Ups / Ring Rows — Calisthenicmovement',
-    cues: ['Choose pull-ups or ring rows based on current strength level','For ring rows: body at an angle, pull chest to hands','Full arm extension at the bottom each rep','Squeeze shoulder blades together at the top']
-  },
-  'push press': {
-    url: 'https://www.youtube.com/watch?v=X6-DMh-t4nQ',
-    title: 'Push Press — Alan Thrall',
-    cues: ['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']
-  },
-  'push press (barbell)': {
-    url: 'https://www.youtube.com/watch?v=X6-DMh-t4nQ',
-    title: 'Barbell Push Press — Alan Thrall',
-    cues: ['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']
-  },
-  'single-leg rdl': {
-    url: 'https://www.youtube.com/watch?v=2cYbXGlg6bA',
-    title: 'Single-Leg RDL — Jeff Nippard',
-    cues: ['Stand on one leg, slight bend in the knee','Hinge at the hip, rear leg floats back for balance','Keep back flat, feel the hamstring load — don\'t let hips rotate','Drive the hip forward to return, squeeze glute at the top']
-  },
-  'step-ups': {
-    url: 'https://www.youtube.com/watch?v=MRhOLYSxnAc',
-    title: 'Step-Ups — Jeremy Ethier',
-    cues: ['Step fully onto the box/bench, drive through the heel','Stand tall at the top — don\'t use the trailing leg to push','Lower the trailing leg slowly back to the floor','Keep torso upright throughout, add load as needed']
-  },
-  'weighted ring rows': {
-    url: 'https://www.youtube.com/watch?v=XBuHGNSqpA4',
-    title: 'Ring Rows — Calisthenicmovement',
-    cues: ['Adjust body angle for difficulty — more horizontal = harder','Add a weight vest or plate for extra load','Pull chest to rings, elbows travel back at ~45°','Straight body from head to heels throughout']
-  },
+// Map any program exercise name -> canonical video key (or null for non-movement items)
+const VIDEO_ALIASES = {
+  'squat':'back squat','deadlift':'conventional deadlift','bench press':'barbell bench press',
+  'bent-over row':'barbell bent-over row','barbell row':'barbell bent-over row',
+  'bulgarian split squat':'bulgarian split squat','bulgarian split squat (db)':'bulgarian split squat',
+  'single-leg calf raise (box)':'single-leg calf raise','loaded calf raise':'calf raise','calf raise — loaded':'calf raise',
+  'box jumps (max height)':'box jumps','farmer carry (dbs)':'farmer carry',
+  'suitcase carry (kb)':'suitcase carry','turkish get-up (kb)':'turkish get-up',
+  'nordic curl (eccentric)':'nordic curl','goblet squat (kb)':'goblet squat',
+  'dead bug — slow':'dead bug','kb swings — heavy':'kb swings','hollow body → v-up':'hollow body hold',
+  'weighted pull-ups':'pull-ups','pull-ups / ring rows':'pull-ups','optional ring skill work':'pull-ups',
+  'weighted ring rows':'ring rows','push press (barbell)':'push press',
+  'single-leg rdl (db)':'single-leg rdl','step-ups (box)':'step-ups',
+  'full rest + mobility':'mobility flow','full rest + mobility flow':'mobility flow',
+  'rest + mobility':'mobility flow','walk + mobility flow':'mobility flow','foam roll + mobility':'foam roll + mobility'
 };
+const RUN_WORDS = ['easy run','easy jog','very easy jog','start easy','easy bookend','strides','long run','tempo','threshold','interval run','race-pace','race-pace segments','warm-up','cool-down'];
+// items that are guidance only (no demo video makes sense)
+const NO_VIDEO = ['complete rest','active recovery','walk','gentle walk','fuel early','trust your training','rest + mobility'];
 
-function getYouTubeKey(key){
-  if(YOUTUBE_LINKS[key]) return key;
-  const ytKeys = Object.keys(YOUTUBE_LINKS);
-  return ytKeys.find(k => key.includes(k) || k.includes(key.split(' ').slice(0,2).join(' '))) || null;
-}
-
-function normalizeExName(name){
+function normExName(name){
   return name.toLowerCase()
-    .replace(/\s*[-–—]\s*(deload|eccentric|slow|light|heavy|heavier|add.*|same.*|drop.*)$/i,'')
+    .replace(/\s*[-–—]\s*(deload|eccentric|slow|light|heavy|heavier|loaded|max height|add.*|same.*|drop.*)$/i,'')
     .replace(/\s+/g,' ').trim();
+}
+function resolveVideoKey(name){
+  let n = normExName(name);
+  if(EXERCISE_VIDEOS[n]) return n;
+  if(VIDEO_ALIASES[n]) return VIDEO_ALIASES[n];
+  // running family
+  if(n==='long run') return 'long run';
+  if(RUN_WORDS.includes(n)){
+    if(['tempo','threshold','interval run','race-pace','race-pace segments'].includes(n)) return 'tempo';
+    return 'easy run';
+  }
+  if(NO_VIDEO.includes(n)) return null;
+  // strip parenthetical and retry
+  const stripped = n.replace(/\s*\([^)]*\)/g,'').trim();
+  if(EXERCISE_VIDEOS[stripped]) return stripped;
+  if(VIDEO_ALIASES[stripped]) return VIDEO_ALIASES[stripped];
+  // substring match against canonical keys
+  const keys = Object.keys(EXERCISE_VIDEOS);
+  const hit = keys.find(k => stripped.includes(k) || k.includes(stripped.split(' ').slice(0,2).join(' ')));
+  return hit || null;
+}
+function ytSearchUrl(name){
+  return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' exercise proper form technique');
 }
 
 function showExDemo(name, detail){
-  const key = normalizeExName(name);
-  // Try exact match first, then partial
-  let demo = EXERCISE_DEMOS[key];
-  if(!demo){
-    const keys = Object.keys(EXERCISE_DEMOS);
-    const partial = keys.find(k => key.includes(k) || k.includes(key.split(' ').slice(0,2).join(' ')));
-    if(partial) demo = EXERCISE_DEMOS[partial];
-  }
-  const overlay = document.getElementById('demo-overlay');
+  const key = resolveVideoKey(name);
+  const data = key ? EXERCISE_VIDEOS[key] : null;
   document.getElementById('demo-title').textContent = name.toUpperCase();
-  document.getElementById('demo-detail').textContent = detail;
-  if(demo){
-    document.getElementById('demo-anim').innerHTML = demo.svg;
-    document.getElementById('demo-cues').innerHTML = demo.cues.map((c,i)=>
-      `<li class="demo-cue"><span class="demo-cue-num">${i+1}</span><span>${c}</span></li>`
-    ).join('');
+  document.getElementById('demo-detail').textContent = detail || '';
+  const animEl = document.getElementById('demo-anim');
+  const searchUrl = ytSearchUrl(name);
+  let cues;
+  if(data && data.id){
+    // Embedded YouTube player + watch + search fallback links
+    animEl.innerHTML =
+      '<div class="demo-video">'
+      + '<iframe src="https://www.youtube-nocookie.com/embed/'+data.id+'?rel=0&modestbranding=1" '
+      + 'title="'+data.title.replace(/"/g,'&quot;')+'" frameborder="0" '
+      + 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
+      + 'allowfullscreen loading="lazy"></iframe>'
+      + '</div>'
+      + '<div class="demo-vid-cap">'+data.title+'</div>'
+      + '<div class="demo-links">'
+      + '<a class="demo-link yt" href="https://www.youtube.com/watch?v='+data.id+'" target="_blank" rel="noopener">▶ Watch on YouTube</a>'
+      + '<a class="demo-link alt" href="'+searchUrl+'" target="_blank" rel="noopener">🔍 More demos</a>'
+      + '</div>';
+    cues = data.cues;
   } else {
-    const ytKey = getYouTubeKey(key);
-    const yt = ytKey ? YOUTUBE_LINKS[ytKey] : null;
-    if(yt){
-      document.getElementById('demo-anim').innerHTML = `
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 20px;gap:16px;text-align:center">
-          <div style="font-size:36px">▶️</div>
-          <a href="${yt.url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.04em">
-            <span style="font-size:16px">▶</span> WATCH ON YOUTUBE
-          </a>
-          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5">${yt.title}</div>
-        </div>`;
-      document.getElementById('demo-cues').innerHTML = yt.cues.map((c,i)=>
-        `<li class="demo-cue"><span class="demo-cue-num">${i+1}</span><span>${c}</span></li>`
-      ).join('');
-    } else {
-      document.getElementById('demo-anim').innerHTML = `<div style="padding:40px;text-align:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--text3)">Animation coming soon</div>`;
-      document.getElementById('demo-cues').innerHTML = `<li class="demo-cue"><span class="demo-cue-num">→</span><span>Focus on controlled movement, maintain neutral spine, and breathe steadily throughout the exercise.</span></li>`;
-    }
+    // No embedded clip — guaranteed-working video search card (always resolves to current demos)
+    animEl.innerHTML =
+      '<a class="demo-searchcard" href="'+searchUrl+'" target="_blank" rel="noopener">'
+      + '<div class="demo-play">▶</div>'
+      + '<div class="demo-search-txt">Watch demonstration videos</div>'
+      + '<div class="demo-search-sub">Opens YouTube · "'+name+'"</div>'
+      + '</a>';
+    cues = (data && data.cues) ? data.cues : ['Move with control through a full range of motion','Brace your core and keep a neutral, tall spine','Match tempo to the prescription — quality over speed','Breathe steadily — exhale on the effort'];
   }
-  overlay.classList.add('open');
+  document.getElementById('demo-cues').innerHTML = cues.map((c,i)=>
+    '<li class="demo-cue"><span class="demo-cue-num">'+(i+1)+'</span><span>'+c+'</span></li>'
+  ).join('');
+  document.getElementById('demo-overlay').classList.add('open');
 }
-
 function closeDemoModal(e){
   if(!e || e.target === document.getElementById('demo-overlay')){
-    document.getElementById('demo-overlay').classList.remove('open');
+    const overlay = document.getElementById('demo-overlay');
+    overlay.classList.remove('open');
+    document.getElementById('demo-anim').innerHTML = ''; // stop video playback
   }
 }
+
+
+// ─────────────────────────────────────────
+// SESSION DURATION ESTIMATE (clamped 40–80 min)
+// ─────────────────────────────────────────
+function runMinutes(detail){
+  const m = (detail||'').match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*km/i);
+  if(m){ const km = m[2]?parseInt(m[2]):parseInt(m[1]); return Math.round(km*6.5); }
+  const d=(detail||'').toLowerCase();
+  if(d.includes('tempo')||d.includes('threshold')) return 25;
+  if(d.includes('interval')||d.includes('race-pace')) return 30;
+  if(d.includes('warm')||d.includes('cool')) return 12;
+  return 15;
+}
+function estimateDuration(s){
+  let mins = 10; // warm-up + mobility baseline
+  s.exercises.forEach(e=>{
+    if(e.cat==='run') mins += runMinutes(e.detail);
+    else if(e.cat==='core') mins += 4;
+    else if(e.cat==='rest') mins += 8;
+    else mins += 6; // strength
+  });
+  mins = Math.round(mins/5)*5;
+  return Math.max(40, Math.min(80, mins));
+}
+
+// ─────────────────────────────────────────
+// OPTIONAL EXERCISES (2 per session)
+// ─────────────────────────────────────────
+function exPrefix(s){
+  const first = s.exercises[0] && s.exercises[0].id || sessionKey(s);
+  return first.replace(/\d+$/,'');
+}
+function getOptionalExercises(s){
+  const t=s.type, n=s.name.toLowerCase();
+  let pool;
+  if(t==='strength'&&n.includes('lower')) pool=[['Copenhagen plank','2 × 20 sec/side · hip adductor','core'],['Hollow body hold','2 × 25 sec · anterior core','core']];
+  else if(t==='strength'&&n.includes('upper')) pool=[['Pallof press','2 × 10/side · anti-rotation','core'],['Suitcase carry','2 × 30m/side · anti-lateral-flexion','strength']];
+  else if(t==='strength') pool=[['Farmer carry','2 × 30m · grip + brace','strength'],['Plank','2 × 45 sec · squeeze glutes','core']];
+  else if(t==='combo') pool=[['Side plank','2 × 30 sec/side · lateral core','core'],['Bird dog','2 × 8/side · lumbar stability','core']];
+  else if(t==='run') pool=[['Single-leg calf raise','2 × 15/leg · achilles resilience','strength'],['Side plank','2 × 30 sec/side · running core','core']];
+  else pool=[['Bird dog','2 × 8/side · spinal control','core'],['Dead bug','2 × 8/side · deep core','core']];
+  const pre = exPrefix(s);
+  return pool.map((p,i)=>({id:pre+'opt'+(i+1), name:p[0], detail:p[1], cat:p[2], optional:true}));
+}
+function renderOptional(s){
+  const opts=getOptionalExercises(s);
+  const doneCount=opts.filter(e=>STATE.completedExercises[e.id]).length;
+  return '<div class="ex-section-lbl opt-lbl">Optional finishers · +2 '
+    + '<span class="opt-count">'+doneCount+'/2</span></div>'
+    + opts.map(e=>{
+      const done=STATE.completedExercises[e.id];
+      return '<div class="ex-row opt-row">'
+        + '<div class="ex-check '+(done?'done':'')+'" onclick="toggleExercise(\''+e.id+'\',\''+sessionKey(s)+'\')"></div>'
+        + '<div class="ex-info">'
+        + '<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
+        + '<div class="ex-detail">'+e.detail+'</div>'
+        + '<input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="'+(STATE.exerciseNotes[e.id]||'')+'" oninput="saveExNote(\''+e.id+'\',this.value)">'
+        + '</div>'
+        + '<button class="ex-info-btn" onclick="showExDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">ⓘ</button>'
+        + '</div>';
+    }).join('');
+}
+
+// ─────────────────────────────────────────
+// SEARCH (exercises + weeks/sessions)
+// ─────────────────────────────────────────
+function openSearch(){
+  document.getElementById('search-overlay').classList.add('open');
+  const inp=document.getElementById('search-input');
+  inp.value=''; runSearch('');
+  setTimeout(()=>inp.focus(),50);
+}
+function closeSearch(e){
+  if(!e || e.target===document.getElementById('search-overlay')){
+    document.getElementById('search-overlay').classList.remove('open');
+  }
+}
+function buildExerciseIndex(){
+  const seen={}, list=[];
+  PROGRAM.forEach(s=>{
+    s.exercises.forEach(e=>{
+      const k=e.name.toLowerCase();
+      if(!seen[k]){ seen[k]=1; list.push({name:e.name, detail:e.detail, cat:e.cat}); }
+    });
+  });
+  return list;
+}
+let EX_INDEX=null;
+function runSearch(q){
+  if(!EX_INDEX) EX_INDEX=buildExerciseIndex();
+  q=(q||'').trim().toLowerCase();
+  const res=document.getElementById('search-results');
+  // Week / phase matches
+  let weekHtml='';
+  const phaseNames={1:'Foundation',2:'Build',3:'Peak',4:'Taper'};
+  const wkMatch = q.match(/(?:week|wk|w)\s*(\d{1,2})/);
+  let weeks=[];
+  if(wkMatch){ const w=parseInt(wkMatch[1]); if(w>=1&&w<=12) weeks=[w]; }
+  else if(/phase|foundation|build|peak|taper/.test(q)){
+    [1,2,3,4].forEach(p=>{ if(q.includes('phase '+p)||q.includes(phaseNames[p].toLowerCase())) {PROGRAM.filter(s=>s.phase===p).forEach(s=>{if(!weeks.includes(s.week))weeks.push(s.week);});} });
+  }
+  if(weeks.length){
+    weekHtml='<div class="srch-cat">Program weeks</div>'+weeks.slice(0,4).map(w=>{
+      const s=PROGRAM.find(x=>x.week===w);
+      const phase=s?s.phase:1;
+      return '<div class="srch-item" onclick="gotoWeek('+w+')"><span class="srch-ico">📅</span>'
+        +'<div><div class="srch-name">Week '+w+'</div><div class="srch-sub">Phase '+phase+' — '+phaseNames[phase]+'</div></div></div>';
+    }).join('');
+  }
+  // Exercise matches
+  let exHtml='';
+  if(q.length>=1){
+    const matches=EX_INDEX.filter(e=>e.name.toLowerCase().includes(q)).slice(0,20);
+    if(matches.length){
+      exHtml='<div class="srch-cat">Exercises</div>'+matches.map(e=>{
+        const ico=e.cat==='run'?'🏃':e.cat==='core'?'🌀':e.cat==='rest'?'🧘':'🏋️';
+        return '<div class="srch-item" onclick="searchOpenDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">'
+          +'<span class="srch-ico">'+ico+'</span>'
+          +'<div><div class="srch-name">'+e.name+'</div><div class="srch-sub">'+e.detail+'</div></div></div>';
+      }).join('');
+    }
+  }
+  if(!q && !weekHtml){
+    res.innerHTML='<div class="srch-hint">Type an exercise name (e.g. "squat", "plank") or a week (e.g. "week 5").</div>';
+    return;
+  }
+  if(!weekHtml && !exHtml){
+    res.innerHTML='<div class="srch-hint">No matches for “'+q+'”. Try a different term.</div>';
+    return;
+  }
+  res.innerHTML=weekHtml+exHtml;
+}
+function searchOpenDemo(name,detail){
+  document.getElementById('search-overlay').classList.remove('open');
+  showExDemo(name,detail);
+}
+function gotoWeek(w){
+  document.getElementById('search-overlay').classList.remove('open');
+  const s=PROGRAM.find(x=>x.week===w);
+  if(!s) return;
+  showSection('program',null);
+  renderProgram(s.phase);
+  setTimeout(()=>{
+    const first=PROGRAM.find(x=>x.week===w);
+    const key=sessionKey(first);
+    const row=document.getElementById('prog-'+key);
+    const hdr=document.querySelector('[onclick="toggleProgDay(\'prog-'+key+'\')"]');
+    if(hdr) hdr.scrollIntoView({behavior:'smooth',block:'center'});
+    if(row && !row.classList.contains('open')) toggleProgDay('prog-'+key);
+  },120);
+}
+
 
 window.onload=function(){
   updateCountdown();
