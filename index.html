@@ -1219,7 +1219,7 @@ const EXERCISE_VIDEOS = {
   'single-leg calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on one foot on edge of step or flat floor','Lower heel as far as comfortable, pause','Rise up onto toes as high as possible','Control the descent — 2 seconds down']},
   'calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']},
   'box jumps':{id:'G-bxQY57mKc',title:'Box Jump Tutorial — Runna',cues:['Stand arm\'s length from box, feet hip-width','Swing arms back, dip into quarter squat','Explode up — drive arms overhead as you jump','Land softly with knees bent, step down (don\'t jump down)']},
-  'ring rows':{id:'XBuHGNSqpA4',title:'Ring Rows — Calisthenicmovement',cues:['Hang under rings, body straight like a plank','Pull chest to rings, elbows go back (not out)','Squeeze shoulder blades hard at top','Lower slowly — fight the descent']},
+  'ring rows':{id:'-SE-yLq8kFI',title:'Ring Row — Catalyst Athletics',cues:['Hang under rings, body straight like a plank','Pull chest to rings, elbows go back (not out)','Squeeze shoulder blades hard at top','Lower slowly — fight the descent']},
   'ring push-ups':{id:null,title:'Ring Push-Ups',cues:['Hands in rings, body in plank position','Lower chest to ring height, elbows ~45°','Press up to full extension — rings will wobble (that\'s the point)','Keep core tight — don\'t let hips sag']},
   'dead hang':{id:null,title:'Dead Hang',cues:['Hang from bar with full grip, arms straight','Let shoulders decompress — don\'t shrug them up','Breathe steadily, engage core lightly','Hold for target time, step down safely']},
   'kb swings':{id:'sSQfBfBgELI',title:'Kettlebell Swing — StrongFirst',cues:['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat']},
@@ -1303,39 +1303,107 @@ function ytSearchUrl(name){
   return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' exercise proper form technique');
 }
 
+// ── YouTube IFrame Player API loader (loaded once, on demand) ──
+// Using the Player API (not a bare iframe) lets us catch onError events for
+// videos that are removed, private, or have embedding disabled, and fall back
+// to the guaranteed search card. This is what makes "every link works" true.
+let _ytApiState = 'none'; // none | loading | ready | failed
+const _ytApiQueue = [];
+function loadYTApi(){
+  if(_ytApiState === 'ready' || _ytApiState === 'loading') return;
+  _ytApiState = 'loading';
+  const prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = function(){
+    if(typeof prev === 'function'){ try{ prev(); }catch(e){} }
+    _ytApiState = 'ready';
+    _ytApiQueue.splice(0).forEach(fn=>{ try{ fn(); }catch(e){} });
+  };
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  tag.onerror = function(){ _ytApiState = 'failed'; _ytApiQueue.splice(0).forEach(fn=>{ try{ fn(); }catch(e){} }); };
+  document.head.appendChild(tag);
+  // safety net: if the API never signals ready, treat as failed so we can
+  // still fall back to a plain iframe rather than hanging.
+  setTimeout(function(){ if(_ytApiState === 'loading'){ _ytApiState='failed'; _ytApiQueue.splice(0).forEach(fn=>{ try{ fn(); }catch(e){} }); } }, 6000);
+}
+function whenYTApi(cb){
+  if(_ytApiState === 'ready' || _ytApiState === 'failed'){ cb(); return; }
+  _ytApiQueue.push(cb); loadYTApi();
+}
+
+// Caption + always-present working links shown beneath every embed
+function demoLinksHTML(data, searchUrl){
+  return '<div class="demo-vid-cap">'+data.title+'</div>'
+    + '<div class="demo-links">'
+    + '<a class="demo-link yt" href="https://www.youtube.com/watch?v='+data.id+'" target="_blank" rel="noopener">▶ Watch on YouTube</a>'
+    + '<a class="demo-link alt" href="'+searchUrl+'" target="_blank" rel="noopener">🔍 More demos</a>'
+    + '</div>';
+}
+// Plain-iframe fallback (used only if the Player API can't load, e.g. offline)
+function demoIframeHTML(data, searchUrl){
+  return '<div class="demo-video">'
+    + '<iframe src="https://www.youtube-nocookie.com/embed/'+data.id+'?rel=0&modestbranding=1" '
+    + 'title="'+data.title.replace(/"/g,'&quot;')+'" frameborder="0" '
+    + 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
+    + 'allowfullscreen loading="lazy"></iframe>'
+    + '</div>' + demoLinksHTML(data, searchUrl);
+}
+// Guaranteed-working fallback: a YouTube search card that always resolves to current demos
+function demoSearchCardHTML(name, searchUrl){
+  return '<a class="demo-searchcard" href="'+searchUrl+'" target="_blank" rel="noopener">'
+    + '<div class="demo-play">▶</div>'
+    + '<div class="demo-search-txt">Watch demonstration videos</div>'
+    + '<div class="demo-search-sub">Opens YouTube · "'+name+'"</div>'
+    + '</a>';
+}
+let _demoToken = 0;   // guards against rapid re-opens overwriting each other
+let _demoPlayer = null;
+function destroyDemoPlayer(){
+  if(_demoPlayer){ try{ _demoPlayer.destroy(); }catch(e){} _demoPlayer = null; }
+}
 function showExDemo(name, detail){
+  const token = ++_demoToken;
+  destroyDemoPlayer();
   const key = resolveVideoKey(name);
   const data = key ? EXERCISE_VIDEOS[key] : null;
   document.getElementById('demo-title').textContent = name.toUpperCase();
   document.getElementById('demo-detail').textContent = detail || '';
   const animEl = document.getElementById('demo-anim');
   const searchUrl = ytSearchUrl(name);
-  let cues;
+  // Start from the guaranteed-working search card; upgrade to an embedded
+  // player only once the API confirms the specific video actually plays.
+  animEl.innerHTML = demoSearchCardHTML(name, searchUrl);
+
   if(data && data.id){
-    // Embedded YouTube player + watch + search fallback links
-    animEl.innerHTML =
-      '<div class="demo-video">'
-      + '<iframe src="https://www.youtube-nocookie.com/embed/'+data.id+'?rel=0&modestbranding=1" '
-      + 'title="'+data.title.replace(/"/g,'&quot;')+'" frameborder="0" '
-      + 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
-      + 'allowfullscreen loading="lazy"></iframe>'
-      + '</div>'
-      + '<div class="demo-vid-cap">'+data.title+'</div>'
-      + '<div class="demo-links">'
-      + '<a class="demo-link yt" href="https://www.youtube.com/watch?v='+data.id+'" target="_blank" rel="noopener">▶ Watch on YouTube</a>'
-      + '<a class="demo-link alt" href="'+searchUrl+'" target="_blank" rel="noopener">🔍 More demos</a>'
-      + '</div>';
-    cues = data.cues;
-  } else {
-    // No embedded clip — guaranteed-working video search card (always resolves to current demos)
-    animEl.innerHTML =
-      '<a class="demo-searchcard" href="'+searchUrl+'" target="_blank" rel="noopener">'
-      + '<div class="demo-play">▶</div>'
-      + '<div class="demo-search-txt">Watch demonstration videos</div>'
-      + '<div class="demo-search-sub">Opens YouTube · "'+name+'"</div>'
-      + '</a>';
-    cues = (data && data.cues) ? data.cues : ['Move with control through a full range of motion','Brace your core and keep a neutral, tall spine','Match tempo to the prescription — quality over speed','Breathe steadily — exhale on the effort'];
+    whenYTApi(function(){
+      if(token !== _demoToken) return;            // modal moved on
+      if(_ytApiState === 'failed' || !(window.YT && window.YT.Player)){
+        // API unavailable — best-effort plain iframe, links still work
+        animEl.innerHTML = demoIframeHTML(data, searchUrl);
+        return;
+      }
+      // Build the player container, then instantiate with error handling
+      animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(data, searchUrl);
+      const fallToSearch = function(){
+        if(token !== _demoToken) return;
+        destroyDemoPlayer();
+        animEl.innerHTML = demoSearchCardHTML(name, searchUrl);
+      };
+      try{
+        _demoPlayer = new YT.Player('demo-yt-mount', {
+          videoId: data.id,
+          host: 'https://www.youtube-nocookie.com',
+          playerVars: { rel:0, modestbranding:1, playsinline:1 },
+          events: {
+            // 2 invalid id · 5 html5 error · 100 removed/private · 101/150 embedding disabled
+            onError: function(){ fallToSearch(); }
+          }
+        });
+      }catch(e){ fallToSearch(); }
+    });
   }
+
+  const cues = (data && data.cues) ? data.cues : ['Move with control through a full range of motion','Brace your core and keep a neutral, tall spine','Match tempo to the prescription — quality over speed','Breathe steadily — exhale on the effort'];
   document.getElementById('demo-cues').innerHTML = cues.map((c,i)=>
     '<li class="demo-cue"><span class="demo-cue-num">'+(i+1)+'</span><span>'+c+'</span></li>'
   ).join('');
@@ -1343,6 +1411,8 @@ function showExDemo(name, detail){
 }
 function closeDemoModal(e){
   if(!e || e.target === document.getElementById('demo-overlay')){
+    _demoToken++;            // invalidate any in-flight player builds
+    destroyDemoPlayer();
     const overlay = document.getElementById('demo-overlay');
     overlay.classList.remove('open');
     document.getElementById('demo-anim').innerHTML = ''; // stop video playback
