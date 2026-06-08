@@ -2075,6 +2075,11 @@ const EXERCISE_DEMOS = {
 // YOUTUBE VIDEO LINKS (for exercises without SVG demos)
 // ─────────────────────────────────────────
 const YOUTUBE_LINKS = {
+  'kb swings': {
+    url: 'https://www.youtube.com/watch?v=sSQfBfBgELI',
+    title: 'KB Swing — StrongFirst',
+    cues: ['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat']
+  },
   'barbell row': {
     url: 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ',
     title: 'Barbell Row — Alan Thrall',
@@ -2165,7 +2170,7 @@ function getYouTubeKey(key){
 
 function normalizeExName(name){
   return name.toLowerCase()
-    .replace(/\s*[-–—]\s*(deload|eccentric|slow|light|heavier|add.*|same.*|drop.*)$/i,'')
+    .replace(/\s*[-–—]\s*(deload|eccentric|slow|light|heavy|heavier|add.*|same.*|drop.*)$/i,'')
     .replace(/\s+/g,' ').trim();
 }
 
