@@ -140,10 +140,10 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:10px 0;padding-bottom:calc(10px + var(--safe));z-index:20;display:flex;justify-content:space-around}
-.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
-.bnav-icon{font-size:22px;line-height:1}
-.bnav-lbl{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.bnav-icon{font-size:19px;line-height:1}
+.bnav-lbl{font-size:8px;font-family:'DM Mono',monospace;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
@@ -348,6 +348,29 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .pc-line .k{color:var(--text2);font-family:'DM Mono',monospace;font-size:12px}
 .pc-line .v{font-family:'DM Mono',monospace;color:var(--text)}
 .pc-note{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5;margin-top:10px}
+/* Strength/run inline logging + progress */
+.wt-wrap{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
+.wt-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;min-width:30px}
+.wt-inp{width:94px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:13px;font-family:'DM Mono',monospace}
+.wt-inp:focus{outline:none;border-color:var(--accent)}
+.e1rm-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--accent2);white-space:nowrap}
+.setw-row{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
+.setw{display:flex;flex-direction:column;align-items:center;gap:2px}
+.setw-lbl{font-size:8px;font-family:'DM Mono',monospace;color:var(--text3);letter-spacing:.04em}
+.setw-inp{width:52px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 4px;font-size:13px;font-family:'DM Mono',monospace;text-align:center}
+.setw-inp:focus{outline:none;border-color:var(--accent)}
+.prog-legend{display:flex;flex-wrap:wrap;margin-top:8px}
+.rec-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px}
+.rec-hd{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.rec-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(42,42,56,.5);cursor:pointer}
+.rec-item:last-child{border-bottom:none}
+.rec-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent}
+.rec-check.on{background:var(--green);border-color:var(--green);color:#04101d}
+.rec-txt{font-size:13px;color:var(--text)}
+.rec-tip{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.55;margin-top:10px}
+.tool-divider{height:1px;background:var(--border);margin:22px 0 16px}
+.tool-h{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.tool-sub{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);margin-bottom:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -381,7 +404,8 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
     <button class="nav-btn" onclick="showSection('program',this)">Program</button>
     <button class="nav-btn" onclick="showSection('history',this)">History</button>
     <button class="nav-btn" onclick="showSection('stats',this)">Stats</button>
-    <button class="nav-btn" onclick="showSection('pace',this)">Pace</button>
+    <button class="nav-btn" onclick="showSection('pace',this)">Tools</button>
+    <button class="nav-btn" onclick="showSection('progress',this)">Progress</button>
   </div>
 </div>
 
@@ -426,7 +450,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 
 <!-- PACE CALCULATOR -->
 <div class="section" id="section-pace">
-  <div class="section-title">TREADMILL PACE</div>
+  <div class="section-title">TRAINING TOOLS</div>
+  <div class="tool-h">Treadmill pace</div>
+  <div class="tool-sub">Convert speed ⇄ pace, adjust for incline, project splits.</div>
   <div class="pc-toggle">
     <button class="pc-tg-btn active" id="pc-metric" onclick="pcSetUnit('metric')">km · min/km</button>
     <button class="pc-tg-btn" id="pc-imperial" onclick="pcSetUnit('imperial')">mi · min/mi</button>
@@ -441,7 +467,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
   <div class="pc-field">
     <label id="pc-pace-lbl">Pace (min/km) — or type a target here</label>
     <div class="pc-input-row">
-      <input id="pc-pace" type="text" inputmode="numeric" oninput="pcEditPace()" placeholder="6:00">
+      <input id="pc-pace" type="text" inputmode="decimal" oninput="pcEditPace()" placeholder="5:30 or 5.5">
       <span class="pc-unit" id="pc-pace-unit">min/km</span>
     </div>
   </div>
@@ -460,6 +486,42 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
     </div>
   </div>
   <div id="pc-results"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Heart-rate training zones</div>
+  <div class="tool-sub">Find your aerobic base, threshold and VO₂max zones.</div>
+  <div class="pc-field">
+    <label>Age (years)</label>
+    <div class="pc-input-row"><input id="hr-age" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="32"><span class="pc-unit">yrs</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Resting HR — optional, for sharper zones (bpm)</label>
+    <div class="pc-input-row"><input id="hr-rest" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="—"><span class="pc-unit">bpm</span></div>
+  </div>
+  <div id="hr-results"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Daily fuel &amp; hydration</div>
+  <div class="tool-sub">Rough daily calories, protein, carbs, fat and fluids for your goal.</div>
+  <div class="pc-field">
+    <label>Body weight (kg)</label>
+    <div class="pc-input-row"><input id="mac-weight" type="number" inputmode="decimal" step="0.5" oninput="renderMacros()" placeholder="—"><span class="pc-unit">kg</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Goal</label>
+    <div class="pc-input-row"><select id="mac-goal" onchange="renderMacros()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:15px;font-family:'DM Mono',monospace;-webkit-appearance:none;appearance:none">
+      <option value="performance">Performance — heavy training</option>
+      <option value="maintenance">Maintenance</option>
+      <option value="recomp">Body recomposition</option>
+    </select></div>
+  </div>
+  <div id="mac-results"></div>
+</div>
+
+<!-- PROGRESS -->
+<div class="section" id="section-progress">
+  <div class="section-title">PROGRESS</div>
+  <div id="progress-view"></div>
 </div>
 
 </div>
@@ -509,7 +571,10 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
     <div class="bnav-icon">🏃</div><div class="bnav-lbl">Stats</div>
   </button>
   <button class="bnav-btn" onclick="showSection('pace',null,'pace-btn')" id="bn-pace">
-    <div class="bnav-icon">⏱️</div><div class="bnav-lbl">Pace</div>
+    <div class="bnav-icon">🛠️</div><div class="bnav-lbl">Tools</div>
+  </button>
+  <button class="bnav-btn" onclick="showSection('progress',null,'progress-btn')" id="bn-progress">
+    <div class="bnav-icon">📈</div><div class="bnav-lbl">Progress</div>
   </button>
 </div>
 
@@ -1025,6 +1090,22 @@ if(!STATE.exerciseRPE) STATE.exerciseRPE={};
 // "done", and those ticks were saved. Clear them once so exercise checks reflect only
 // your own taps from now on. Session "done" status and notes/RPE are preserved.
 if(!STATE.autoTickCleared){ STATE.completedExercises={}; STATE.autoTickCleared=true; saveState(STATE); }
+if(!STATE.exerciseWeight) STATE.exerciseWeight={};
+if(!STATE.exerciseSets) STATE.exerciseSets={};
+// Migrate older single-load entries into per-set arrays so nothing is lost
+if(!STATE.setsMigrated){
+  Object.keys(STATE.exerciseWeight).forEach(id=>{
+    const w=STATE.exerciseWeight[id];
+    if(w>0 && !STATE.exerciseSets[id]){
+      const p=exPrescriptionById(id); const n=p?p.sets:1;
+      STATE.exerciseSets[id]=Array(n).fill(w);
+    }
+  });
+  STATE.setsMigrated=true; saveState(STATE);
+}
+if(!STATE.runLog) STATE.runLog={};
+if(!STATE.recovery) STATE.recovery={};
+if(!STATE.profile) STATE.profile={};
 
 // ─────────────────────────────────────────
 // HELPERS
@@ -1088,10 +1169,10 @@ function showSection(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace'};
+  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace',progress:'bn-progress'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['today','week','calendar','program','history','stats','pace'];
+  const order=['today','week','calendar','program','history','stats','pace','progress'];
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
@@ -1101,6 +1182,7 @@ function showSection(id,btn){
   else if(id==='history') renderHistory();
   else if(id==='stats') renderStats();
   else if(id==='pace') pcEnsureInit();
+  else if(id==='progress') renderProgress();
 }
 
 // ─────────────────────────────────────────
@@ -1112,10 +1194,12 @@ function renderToday(){
   const sessions=getSessionsForDate(today);
   const container=document.getElementById('today-sessions');
   if(sessions.length===0){
-    container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`;
+    container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+recoveryPanelHTML(today);
     return;
   }
-  container.innerHTML=sessions.map(s=>renderSessionCard(s,true)).join('');
+  let out=sessions.map(s=>renderSessionCard(s,true)).join('');
+  if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
+  container.innerHTML=out;
 }
 
 function renderSessionCard(s,interactive){
@@ -1165,6 +1249,8 @@ function renderExercises(s,interactive){
         <div class="ex-detail">${e.detail}</div>
         <input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
         ${rpeControlHTML(e.id, sessionKey(s))}
+        ${weightControlHTML(e, sessionKey(s))}
+        ${runControlHTML(e, sessionKey(s))}
       </div>
       <button class="ex-info-btn" onclick="showExDemo('${e.name.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
     </div>`;
@@ -1523,6 +1609,179 @@ function trainingLoadCardHTML(){
     + '<div class="tl-bars">'+bars+'</div>'
     + '<div class="tl-method">Load = session&nbsp;RPE × duration (Foster, AU). Acute = 7-day sum; chronic = 28-day ÷ 4. ACWR sweet-spot ≈ 0.8–1.3; &gt;1.5 = elevated injury risk (Gabbett). Monotony = mean ÷ SD of daily load; keep &lt; 2 (Foster). Strain = weekly load × monotony.</div>';
   return wrap(inner);
+}
+// ═══════════════════════════════════════════
+// STRENGTH LOGGING · VOLUME · ESTIMATED 1RM
+// ═══════════════════════════════════════════
+const COMPOUND_LIFTS=['back squat','front squat','goblet squat','bulgarian split squat','bench press','overhead press','db overhead press','dumbbell overhead press','push press','deadlift','romanian deadlift','single-leg rdl','barbell row','pull-ups','hang power clean','landmine press','half-kneeling landmine press','landmine row','landmine squat','landmine reverse lunge','walking lunges','step-ups'];
+function parsePrescription(detail){ const m=String(detail||'').match(/(\d+)\s*[x×]\s*(\d+)/i); return m?{sets:+m[1],reps:+m[2]}:null; }
+function isLoggableLift(e){ return e.cat==='strength' && !!parsePrescription(e.detail); }
+function exPrescriptionById(exId){ for(const s of PROGRAM){ const e=s.exercises.find(x=>x.id===exId); if(e) return parsePrescription(e.detail); } return null; }
+function epley1RM(w,reps){ return w*(1+reps/30); }
+function exSetList(exId){ return (STATE.exerciseSets[exId]||[]).map(x=>parseFloat(x)).filter(x=>!isNaN(x)&&x>0); }
+function exE1RM(exId){ const p=exPrescriptionById(exId); if(!p) return null; const sets=exSetList(exId); if(!sets.length) return null; return Math.round(epley1RM(Math.max.apply(null,sets), p.reps)); }
+function exVolume(exId){ const p=exPrescriptionById(exId); if(!p) return 0; const sets=exSetList(exId); if(!sets.length) return 0; return p.reps*sets.reduce((a,b)=>a+b,0); }
+function setSetWeight(exId,sessKey,idx,val){
+  if(!STATE.exerciseSets[exId]) STATE.exerciseSets[exId]=[];
+  const w=parseFloat(String(val).replace(',','.'));
+  STATE.exerciseSets[exId][idx]=(isNaN(w)||w<=0)?'':w;
+  saveState(STATE);
+  const badge=document.getElementById('e1rm-'+exId);
+  if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
+  refreshLoadStrip(sessKey);
+}
+function setRunSpeed(exId,sessKey,val){
+  const v=parseFloat(String(val).replace(',','.'));
+  if(isNaN(v)||v<=0) delete STATE.runLog[exId]; else STATE.runLog[exId]=v;
+  saveState(STATE);
+  const b=document.getElementById('rpace-'+exId);
+  if(b) b.textContent=STATE.runLog[exId]?(fmtPaceSec(3600/STATE.runLog[exId])+' /km'):'';
+}
+function weightControlHTML(e,sessKey){
+  if(!isLoggableLift(e)) return '';
+  const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
+  const arr=STATE.exerciseSets[e.id]||[];
+  let inputs='';
+  for(let i=0;i<n;i++){
+    const v=(arr[i]!=null&&arr[i]!=='')?arr[i]:'';
+    inputs+='<div class="setw"><span class="setw-lbl">S'+(i+1)+'</span>'
+      +'<input class="setw-inp" type="number" inputmode="decimal" step="0.5" value="'+v+'" placeholder="kg" oninput="setSetWeight(\''+e.id+'\',\''+sessKey+'\','+i+',this.value)"></div>';
+  }
+  const isComp=COMPOUND_LIFTS.includes(e.name.toLowerCase());
+  const e1=exE1RM(e.id);
+  return '<div class="wt-wrap"><span class="wt-lbl">Load · '+p.reps+' reps</span><div class="setw-row">'+inputs+'</div>'
+    +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
+}
+function runControlHTML(e,sessKey){
+  if(e.cat!=='run') return '';
+  const v=STATE.runLog[e.id]||'';
+  return '<div class="wt-wrap"><span class="wt-lbl">km/h</span>'
+    +'<input class="wt-inp" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg speed" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
+    +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>';
+}
+function weeklyStrengthVolume(){ const byWeek={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; })); return byWeek; }
+function liftSeries(){
+  const map={};
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(!COMPOUND_LIFTS.includes(e.name.toLowerCase())) return; const e1=exE1RM(e.id); if(e1){ (map[e.name]=map[e.name]||[]).push({week:s.week,e1rm:e1}); } }));
+  Object.keys(map).forEach(k=>{ const byW={}; map[k].forEach(p=>byW[p.week]=Math.max(byW[p.week]||0,p.e1rm)); map[k]=Object.keys(byW).map(w=>({week:+w,e1rm:byW[w]})).sort((a,b)=>a.week-b.week); });
+  return map;
+}
+function runSpeedSeries(){ const byWeek={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat!=='run') return; const v=STATE.runLog[e.id]; if(v) (byWeek[s.week]=byWeek[s.week]||[]).push(v); })); const out={}; Object.keys(byWeek).forEach(w=>{const a=byWeek[w];out[w]=a.reduce((x,y)=>x+y,0)/a.length;}); return out; }
+// ── SVG charts ──
+function svgBars(weekMap){
+  const W=340,H=170,padL=40,padR=12,padT=12,padB=26;
+  const vals=[]; for(let w=1;w<=12;w++) vals.push(weekMap[w]||0);
+  const max=Math.max(1,...vals); const bw=(W-padL-padR)/12; let bars='',xl='';
+  vals.forEach((v,i)=>{ const x=padL+i*bw+2; const h=(v/max)*(H-padT-padB); const y=H-padB-h;
+    bars+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw-4).toFixed(1)+'" height="'+Math.max(0,h).toFixed(1)+'" rx="2" fill="'+(v>0?'var(--accent)':'var(--surface3)')+'"></rect>';
+    if(i===0||(i+1)%2===0) xl+='<text x="'+(x+(bw-4)/2).toFixed(1)+'" y="'+(H-8)+'" fill="var(--text3)" font-size="9" text-anchor="middle" font-family="DM Mono,monospace">'+(i+1)+'</text>'; });
+  const yA='<text x="'+(padL-6)+'" y="'+(padT+8)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="DM Mono,monospace">'+Math.round(max).toLocaleString()+'</text><text x="'+(padL-6)+'" y="'+(H-padB)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="DM Mono,monospace">0</text>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">'+bars+xl+yA+'<text x="'+(W/2)+'" y="'+(H-0.5)+'" fill="var(--text3)" font-size="8" text-anchor="middle" font-family="DM Mono,monospace">week</text></svg>';
+}
+function svgLines(series){
+  const W=340,H=180,padL=42,padR=12,padT=14,padB=26; const xmin=1,xmax=12;
+  let ymin=Infinity,ymax=-Infinity; series.forEach(s=>s.points.forEach(p=>{ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y);}));
+  if(!isFinite(ymin)){ymin=0;ymax=1;} if(ymin===ymax){ymin-=1;ymax+=1;} const pad=(ymax-ymin)*0.12||1; ymin-=pad; ymax+=pad;
+  const X=w=>padL+((w-xmin)/(xmax-xmin))*(W-padL-padR); const Y=v=>padT+(1-(v-ymin)/(ymax-ymin))*(H-padT-padB);
+  let paths='',dots='';
+  series.forEach(s=>{ if(!s.points.length) return; const d=s.points.map((p,i)=>(i?'L':'M')+X(p.week).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
+    paths+='<path d="'+d+'" fill="none" stroke="'+s.color+'" stroke-width="2" stroke-linejoin="round"></path>';
+    s.points.forEach(p=>dots+='<circle cx="'+X(p.week).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="2.6" fill="'+s.color+'"></circle>'); });
+  let xl=''; for(let w=1;w<=12;w+=2) xl+='<text x="'+X(w).toFixed(1)+'" y="'+(H-8)+'" fill="var(--text3)" font-size="9" text-anchor="middle" font-family="DM Mono,monospace">'+w+'</text>';
+  const yl='<text x="'+(padL-6)+'" y="'+(padT+4)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="DM Mono,monospace">'+Math.round(ymax)+'</text><text x="'+(padL-6)+'" y="'+(H-padB)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="DM Mono,monospace">'+Math.round(ymin)+'</text>';
+  return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">'+yl+xl+paths+dots+'</svg>';
+}
+function _pcard(title,inner){ return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">'+title+'</div>'+inner+'</div>'; }
+function renderProgress(){
+  const c=document.getElementById('progress-view'); if(!c) return;
+  let html='';
+  const volMap=weeklyStrengthVolume(); const vWeeks=Object.keys(volMap).map(Number).sort((a,b)=>a-b);
+  if(vWeeks.length){
+    const last=vWeeks[vWeeks.length-1], prev=vWeeks.length>1?vWeeks[vWeeks.length-2]:null;
+    const lastV=Math.round(volMap[last]), prevV=prev!=null?Math.round(volMap[prev]):null;
+    const delta=prevV?((lastV-prevV)/prevV*100):null;
+    const verdict = delta==null?'First week logged' : delta>2?'Progressing ↑' : delta<-2?'Volume dropped ↓' : 'Holding steady';
+    html+=_pcard('PROGRESSIVE OVERLOAD · WEEKLY VOLUME',
+      '<div class="tl-grid"><div class="tl-card"><div class="tl-val">'+lastV.toLocaleString()+'</div><div class="tl-lbl">Latest week volume (kg)</div>'+(delta!=null?'<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text3);margin-top:4px">'+(delta>=0?'+':'')+Math.round(delta)+'% vs prev week</div>':'')+'</div>'
+      +'<div class="tl-card"><div class="tl-val" style="font-size:19px;line-height:1.15">'+verdict+'</div><div class="tl-lbl">Overload trend</div></div></div>'
+      +svgBars(volMap)
+      +'<div class="tl-method">Volume = sets × reps × load, summed each week from your logged weights. Gradually nudging it upward (≈10%/week) is the core of progressive overload.</div>');
+  } else {
+    html+=_pcard('PROGRESSIVE OVERLOAD · WEEKLY VOLUME','<div class="ls-hint">Log the load (kg) on your strength exercises and your weekly training volume will chart here.</div>');
+  }
+  const ls=liftSeries(); const names=Object.keys(ls).filter(k=>ls[k].length);
+  if(names.length){
+    const pal=['#c2d680','#47a8ff','#ff6b47','#47ffa0','#b48bff','#ffb43c'];
+    const series=names.slice(0,6).map((n,i)=>({name:n,color:pal[i%pal.length],points:ls[n].map(p=>({week:p.week,y:p.e1rm}))}));
+    const legend=series.map(s=>'<span style="display:inline-flex;align-items:center;gap:4px;margin:0 10px 4px 0;font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:'+s.color+'"></span>'+s.name+'</span>').join('');
+    html+=_pcard('ESTIMATED 1RM · STRENGTH PROGRESS', svgLines(series)+'<div class="prog-legend">'+legend+'</div><div class="tl-method">Estimated 1-rep max via the Epley formula: load × (1 + reps ÷ 30), using your logged weight at the prescribed reps. A rising line means strength gains without testing a true max.</div>');
+  }
+  const rs=runSpeedSeries(); const rWeeks=Object.keys(rs).map(Number).sort((a,b)=>a-b);
+  if(rWeeks.length){
+    const pts=rWeeks.map(w=>({week:w,y:rs[w]}));
+    html+=_pcard('RUN PACE PROGRESS', svgLines([{name:'speed',color:'#47a8ff',points:pts}])+'<div class="tl-method">Average logged run speed (km/h) per week — a rising line is faster running. Log "avg speed" on your run sessions to fill this in.</div>');
+  }
+  c.innerHTML=html||'<div class="ls-hint">Start logging weights and run speeds to see your progress here.</div>';
+}
+// ═══════════════════════════════════════════
+// HEART-RATE ZONES · MACROS · PACING · RECOVERY
+// ═══════════════════════════════════════════
+function renderHRZones(){
+  const ageEl=document.getElementById('hr-age'), restEl=document.getElementById('hr-rest'), el=document.getElementById('hr-results');
+  if(!el) return;
+  const age=parseFloat(ageEl.value), rest=parseFloat(restEl.value);
+  if(ageEl.value) STATE.profile.age=age; if(restEl.value) STATE.profile.restHR=rest; saveState(STATE);
+  if(!age||age<=0||age>120){ el.innerHTML='<div class="ls-hint">Enter your age to see your personal heart-rate training zones.</div>'; return; }
+  const hrmax=Math.round(208-0.7*age);
+  const useHRR=rest>0&&rest<hrmax;
+  const bpm=f=> useHRR?Math.round((hrmax-rest)*f+rest):Math.round(hrmax*f);
+  const zones=[['Zone 1 · Recovery',.5,.6],['Zone 2 · Aerobic base',.6,.7],['Zone 3 · Tempo',.7,.8],['Zone 4 · Threshold',.8,.9],['Zone 5 · VO₂max',.9,1]];
+  const rows=zones.map(z=>'<div class="pc-line"><span class="k">'+z[0]+'</span><span class="v">'+bpm(z[1])+'–'+bpm(z[2])+' bpm</span></div>').join('');
+  el.innerHTML='<div class="pc-res"><div class="pc-res-hd">Max HR ≈ '+hrmax+' bpm'+(useHRR?(' · resting '+rest):'')+'</div>'+rows
+    +'<div class="pc-note">Max HR via Tanaka (208 − 0.7 × age). '+(useHRR?'Zones use the Karvonen heart-rate-reserve method with your resting HR — more individualised.':'Add resting HR for individualised zones (Karvonen method).')+' For marathon base-building, keep most easy runs in Zone 2.</div></div>';
+}
+function renderMacros(){
+  const wEl=document.getElementById('mac-weight'), gEl=document.getElementById('mac-goal'), el=document.getElementById('mac-results');
+  if(!el) return;
+  const wt=parseFloat(wEl.value), goal=gEl.value;
+  if(wEl.value) STATE.profile.weight=wt; STATE.profile.goal=goal; saveState(STATE);
+  if(!wt||wt<=0||wt>300){ el.innerHTML='<div class="ls-hint">Enter your body weight to estimate daily fuel needs.</div>'; return; }
+  const cfg={performance:{kcal:38,pro:2.0,cho:6,lbl:'Performance (heavy training)'},maintenance:{kcal:33,pro:1.8,cho:4.5,lbl:'Maintenance'},recomp:{kcal:28,pro:2.2,cho:3.5,lbl:'Body recomposition (slight deficit)'}}[goal];
+  const kcal=Math.round(wt*cfg.kcal), pro=Math.round(wt*cfg.pro), cho=Math.round(wt*cfg.cho);
+  const proKcal=pro*4, choKcal=cho*4, fatKcal=Math.max(0,kcal-proKcal-choKcal), fat=Math.round(fatKcal/9);
+  const water=(wt*0.035).toFixed(1);
+  el.innerHTML='<div class="pc-res"><div class="pc-res-hd">'+cfg.lbl+'</div>'
+    +'<div class="pc-big"><div class="pc-big-card"><div class="pc-big-v">'+kcal.toLocaleString()+'</div><div class="pc-big-l">kcal / day</div></div>'
+    +'<div class="pc-big-card"><div class="pc-big-v">'+pro+'</div><div class="pc-big-l">g protein</div></div></div>'
+    +'<div class="pc-line"><span class="k">Carbohydrate</span><span class="v">'+cho+' g ('+Math.round(choKcal)+' kcal)</span></div>'
+    +'<div class="pc-line"><span class="k">Protein</span><span class="v">'+pro+' g ('+proKcal+' kcal)</span></div>'
+    +'<div class="pc-line"><span class="k">Fat</span><span class="v">'+fat+' g ('+Math.round(fatKcal)+' kcal)</span></div>'
+    +'<div class="pc-line"><span class="k">Baseline hydration</span><span class="v">≈ '+water+' L/day</span></div>'
+    +'<div class="pc-note">Rough estimates from body weight (≈'+cfg.kcal+' kcal/kg, '+cfg.pro+' g/kg protein, '+cfg.cho+' g/kg carbs for endurance). Add ~0.5 L fluid per hour of training. Not a substitute for a registered dietitian — adjust to hunger, energy and the scale over 2–3 weeks.</div></div>';
+}
+function pcPacingRecHTML(){
+  const perKm=3600/pcSpeedKmh; const m=perKm/60;
+  let band,advice;
+  if(m>7){ band='Recovery / very easy'; advice='Conversational effort — ideal for warm-ups, cool-downs and recovery days. Should feel almost too easy.'; }
+  else if(m>6){ band='Easy aerobic (Zone 2)'; advice='Your bread-and-butter marathon base pace. Stay nasal-breathing/chatty; this builds aerobic engine and fat-burning.'; }
+  else if(m>5.25){ band='Steady / marathon pace'; advice='Goal-race rhythm. Practise fuelling and form here; controlled but purposeful. Limit to your long-run segments.'; }
+  else if(m>4.66){ band='Tempo / threshold (Zone 4)'; advice='Comfortably-hard, ~20–40 min sustainable. Warm up well first; great for lifting lactate threshold. Don\'t do this daily.'; }
+  else { band='Interval / VO₂max'; advice='Hard. Use for short reps (2–5 min) with recoveries, not continuous running. Always warm up and cool down.'; }
+  return _pcard('PACING RECOMMENDATION', '<div style="font-size:15px;font-weight:600;color:var(--accent);margin-bottom:6px">'+band+'</div><div style="font-size:13px;color:var(--text);line-height:1.5">'+advice+'</div><div class="pc-note">Based on '+pcSpeedKmh.toFixed(1)+' km/h ('+fmtPaceSec(perKm)+' /km). On a treadmill, set ~1% incline to better mimic outdoor effort.</div>');
+}
+function recoveryPanelHTML(date){
+  const ymd=_ymd(date); const r=STATE.recovery[ymd]||{};
+  const items=[['sleep','7–9 h of quality sleep — your biggest recovery lever'],['hydrate','Hydrate well across the day (~35 ml/kg)'],['mobility','10 min easy mobility / stretching (hips & hamstrings)'],['walk','Optional easy walk — gentle blood flow, no intensity'],['fuel','Eat enough protein to repair (≈1.8–2.2 g/kg)']];
+  const rows=items.map(it=>'<div class="rec-item" onclick="toggleRecovery(\''+ymd+'\',\''+it[0]+'\')"><div class="rec-check'+(r[it[0]]?' on':'')+'" id="rec-'+ymd+'-'+it[0]+'">✓</div><div class="rec-txt">'+it[1]+'</div></div>').join('');
+  return '<div class="rec-panel"><div class="rec-hd">REST &amp; RECOVERY CHECKLIST</div>'+rows
+    +'<div class="rec-tip">Rest days are when adaptation actually happens. Prioritise sleep and food over "doing more" — chasing extra sessions when tired is how overtraining starts. Keep any movement genuinely easy.</div></div>';
+}
+function toggleRecovery(ymd,key){
+  if(!STATE.recovery[ymd]) STATE.recovery[ymd]={};
+  STATE.recovery[ymd][key]=!STATE.recovery[ymd][key];
+  saveState(STATE);
+  const el=document.getElementById('rec-'+ymd+'-'+key);
+  if(el) el.classList.toggle('on',!!STATE.recovery[ymd][key]);
 }
 function renderStats(){
   const done=totalCompleted();
@@ -2259,6 +2518,13 @@ let pcInited = false;
 function pcEnsureInit(){
   if(pcInited) return; pcInited=true;
   pcSyncFields(); pcOutputs();
+  // restore saved profile inputs
+  const p=STATE.profile||{};
+  if(p.age){ const a=document.getElementById('hr-age'); if(a) a.value=p.age; }
+  if(p.restHR){ const r=document.getElementById('hr-rest'); if(r) r.value=p.restHR; }
+  if(p.weight){ const w=document.getElementById('mac-weight'); if(w) w.value=p.weight; }
+  if(p.goal){ const g=document.getElementById('mac-goal'); if(g) g.value=p.goal; }
+  renderHRZones(); renderMacros();
 }
 function fmtPaceSec(sec){
   if(!isFinite(sec)||sec<=0) return '–';
@@ -2273,10 +2539,10 @@ function fmtClock(totalSec){
     + (h>0? ':'+String(s).padStart(2,'0') : '');
 }
 function parsePaceInput(str){
-  str=String(str).trim();
+  str=String(str).trim().replace(',','.');
   const m=str.match(/^(\d+):([0-5]?\d)$/);
-  if(m) return (+m[1])*60+(+m[2]);
-  const f=parseFloat(str); return isNaN(f)?null:f*60; // bare number = minutes
+  if(m) return (+m[1])*60+(+m[2]);            // mm:ss
+  const f=parseFloat(str); return isNaN(f)?null:f*60; // decimal minutes, e.g. 5.5 = 5:30
 }
 function pcPerUnitSec(){ // seconds per km (metric) or per mile (imperial) at current speed
   const perKm=3600/pcSpeedKmh;
@@ -2360,7 +2626,8 @@ function pcOutputs(){
     + '<div class="pc-res-hd">Time on the belt</div>'
     + splitRows
     + '<div class="pc-note">Distances are belt distance at '+pcSpeedKmh.toFixed(1)+' km/h. Tip: type a goal pace in the pace box to get the speed to set the treadmill.</div>'
-    + '</div>';
+    + '</div>'
+    + pcPacingRecHTML();
 }
 
 window.onload=function(){
