@@ -1738,7 +1738,20 @@ function renderDemoAnimView(){
     + '</div>'
     + '<div class="demo-anim-note">Animated guide · tap “Watch video demo” for real footage</div>';
 }
-// BACKUP view: the real YouTube clip (self-healing — falls back to a search if the video won't play)
+// FALLBACK view: when a clip can't play in-app, show the animated guide + an opt-in link out to YouTube
+function fallToAnim(note){
+  if(!_demoCtx) return;
+  destroyDemoPlayer();
+  const c = _demoCtx;
+  const ytUrl = (c.data && c.data.id) ? 'https://www.youtube.com/watch?v='+c.data.id : c.searchUrl;
+  document.getElementById('demo-anim').innerHTML =
+    '<div class="demo-figure">'+buildAnim(c.name)+'</div>'
+    + '<div class="demo-actions">'
+    + '<a class="demo-act ghost" href="'+ytUrl+'" target="_blank" rel="noopener">▶ Open on YouTube</a>'
+    + '</div>'
+    + '<div class="demo-anim-note">'+(note||'Showing the animated guide — tap “Open on YouTube” to watch the footage.')+'</div>';
+}
+// BACKUP view: the real YouTube clip, played INSIDE the app — falls back to the animation if it can't embed
 function playExVideo(){
   if(!_demoCtx) return;
   const token = ++_demoToken;
@@ -1746,8 +1759,7 @@ function playExVideo(){
   const animEl = document.getElementById('demo-anim');
   const back = '<button class="demo-back" onclick="renderDemoAnimView()">↺ Back to animation</button>';
   if(!(c.data && c.data.id)){
-    // No specific clip — go straight to the guaranteed-working search card
-    animEl.innerHTML = demoSearchCardHTML(c.name, c.searchUrl) + back;
+    fallToAnim('No clip linked for this one — showing the animated guide. Use “Open on YouTube” to search demos.');
     return;
   }
   animEl.innerHTML = '<div class="demo-loading">Loading video…</div>' + back;
@@ -1758,19 +1770,18 @@ function playExVideo(){
       return;
     }
     animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(c.data, c.searchUrl) + back;
-    const fallToSearch = function(){
+    const onPlayFail = function(){
       if(token !== _demoToken) return;
-      destroyDemoPlayer();
-      animEl.innerHTML = demoSearchCardHTML(c.name, c.searchUrl) + back;
+      fallToAnim('This clip can’t play inside the app — here’s the animated guide. Tap “Open on YouTube” to watch the footage.');
     };
     try{
       _demoPlayer = new YT.Player('demo-yt-mount', {
         videoId: c.data.id,
         host: 'https://www.youtube-nocookie.com',
-        playerVars: { rel:0, modestbranding:1, playsinline:1 },
-        events: { onError: function(){ fallToSearch(); } } // removed / private / embedding disabled
+        playerVars: { rel:0, modestbranding:1, playsinline:1, autoplay:1 },
+        events: { onError: function(){ onPlayFail(); } } // removed / private / embedding disabled
       });
-    }catch(e){ fallToSearch(); }
+    }catch(e){ onPlayFail(); }
   });
 }
 function showExDemo(name, detail){
