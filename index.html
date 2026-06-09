@@ -16,12 +16,12 @@
   --surface2: #1c1c26;
   --surface3: #252533;
   --border: #2a2a38;
-  --accent: #e8ff47;
+  --accent: #c2d680;
   --accent2: #47a8ff;
   --accent3: #ff6b47;
   --text: #f0f0f8;
-  --text2: #8888a0;
-  --text3: #55556a;
+  --text2: #b4b8cc;
+  --text3: #8b90a8;
   --green: #47ffa0;
   --safe: env(safe-area-inset-bottom, 0px);
 }
@@ -67,7 +67,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .session-type{font-size:10px;font-family:'DM Mono',monospace;padding:3px 8px;border-radius:99px;letter-spacing:.04em}
 .type-strength{background:rgba(71,168,255,.15);color:var(--accent2)}
 .type-run{background:rgba(71,255,160,.15);color:var(--green)}
-.type-combo{background:rgba(232,255,71,.15);color:var(--accent)}
+.type-combo{background:rgba(194,214,128,.15);color:var(--accent)}
 .type-rest{background:rgba(85,85,106,.2);color:var(--text3)}
 .chev{font-size:18px;color:var(--text3);transition:transform .2s}
 .session-body{display:none;border-top:1px solid var(--border)}
@@ -94,15 +94,16 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 /* WEEK VIEW */
 .week-grid{display:grid;gap:8px;margin-bottom:16px}
 .week-day-row{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .15s}
-.week-day-row.completed{border-color:rgba(71,255,160,.3);background:rgba(71,255,160,.04)}
-.week-day-row.today-row{border-color:var(--accent);background:rgba(232,255,71,.04)}
-.wdr-day{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);min-width:26px;letter-spacing:.04em}
+.week-day-row.completed{border-color:var(--green);background:var(--surface);box-shadow:inset 3px 0 0 0 var(--green)}
+.week-day-row.today-row{border-color:var(--accent);background:var(--surface);box-shadow:inset 3px 0 0 0 var(--accent)}
+.week-day-row.today-row .wdr-name{font-weight:700}
+.wdr-day{font-family:'DM Mono',monospace;font-size:10px;color:var(--text2);min-width:26px;letter-spacing:.04em}
 .wdr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .wdr-name{font-size:13px;font-weight:500;flex:1}
-.wdr-status{font-size:10px;font-family:'DM Mono',monospace}
-.status-done{color:var(--green)}
-.status-today{color:var(--accent)}
-.status-upcoming{color:var(--text3)}
+.wdr-status{font-size:10px;font-family:'DM Mono',monospace;font-weight:600;flex-shrink:0}
+.status-done{color:#0a0a0f;background:var(--green);padding:2px 8px;border-radius:99px}
+.status-today{color:#0a0a0f;background:var(--accent);padding:2px 8px;border-radius:99px}
+.status-upcoming{color:var(--text2);font-weight:400}
 
 /* HISTORY */
 .hist-entry{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
@@ -139,7 +140,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:10px 0;padding-bottom:calc(10px + var(--safe));z-index:20;display:flex;justify-content:space-around}
-.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 14px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s}
 .bnav-btn.active{color:var(--accent)}
 .bnav-icon{font-size:22px;line-height:1}
 .bnav-lbl{font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
@@ -173,7 +174,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .badge{font-size:10px;padding:2px 8px;border-radius:99px;font-family:'DM Mono',monospace;letter-spacing:.03em}
 .badge-str{background:rgba(71,168,255,.15);color:var(--accent2)}
 .badge-run{background:rgba(71,255,160,.15);color:var(--green)}
-.badge-core{background:rgba(232,255,71,.15);color:var(--accent)}
+.badge-core{background:rgba(194,214,128,.15);color:var(--accent)}
 .badge-mob{background:rgba(255,107,71,.15);color:var(--accent3)}
 
 .note-note{font-size:12px;color:var(--text2);background:var(--surface2);border-radius:8px;padding:8px 10px;line-height:1.55;margin:10px 16px 12px;border-left:2px solid var(--accent2)}
@@ -210,6 +211,66 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .demo-play{width:54px;height:54px;border-radius:50%;background:#ff0000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;padding-left:4px}
 .demo-search-txt{font-size:14px;font-weight:500;color:var(--text)}
 .demo-search-sub{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3)}
+/* EXERCISE ANIMATION (primary visual) */
+.demo-figure{width:100%;aspect-ratio:11/10;background:radial-gradient(circle at 50% 42%,rgba(71,168,255,0.10),rgba(194,214,128,0.04) 55%,transparent 72%);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.demo-figure svg{width:100%;height:100%;display:block}
+.demo-actions{display:flex;gap:8px;margin-top:10px}
+.demo-act{flex:1;padding:12px;border-radius:10px;border:none;background:var(--accent);color:#0a0a0f;font-weight:700;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:center;text-decoration:none;letter-spacing:.01em}
+.demo-act.ghost{flex:0 0 auto;background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-weight:500}
+.demo-act:active{opacity:.82}
+.demo-anim-note{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-align:center;margin:9px 0 12px;letter-spacing:.02em}
+.demo-back{width:100%;margin-bottom:14px;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;cursor:pointer}
+.demo-back:active{border-color:var(--accent2)}
+.demo-loading{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#000;border-radius:14px;color:var(--text3);font-family:'DM Mono',monospace;font-size:12px}
+
+/* CALENDAR */
+.cal-summary{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:6px}
+.cal-sum-row{display:flex;align-items:flex-end;justify-content:space-between}
+.cal-sum-big{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:.9;color:var(--accent)}
+.cal-sum-big span{font-size:20px;color:var(--text2)}
+.cal-today-btn{padding:7px 12px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.04em;cursor:pointer}
+.cal-today-btn:active{border-color:var(--accent);color:var(--accent)}
+.cal-sum-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.cal-sum-bar{height:6px;background:rgba(255,255,255,.07);border-radius:99px;margin-top:10px;overflow:hidden}
+.cal-sum-bar div{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .4s ease}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:16px 2px 12px}
+.cal-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text)}
+.cal-nav{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:18px;cursor:pointer;line-height:1}
+.cal-nav:active{border-color:var(--accent)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-dow{margin-bottom:6px}
+.cal-dow-cell{text-align:center;font-size:10px;font-family:'DM Mono',monospace;color:var(--text2)}
+.cal-cell{position:relative;aspect-ratio:1;border-radius:9px;border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.cal-cell.noplan{background:transparent;border-color:transparent}
+.cal-cell.out{opacity:.32}
+.cal-num{font-size:13px;font-family:'DM Mono',monospace;color:var(--text2);line-height:1}
+.cal-cell.noplan .cal-num{color:var(--text3)}
+.cal-dot{width:6px;height:6px;border-radius:50%}
+.cal-mark{font-size:11px;font-weight:700;line-height:1}
+.cal-cell.s-done{background:var(--accent2);border-color:var(--accent2)}
+.cal-cell.s-done .cal-num{color:#04101d;font-weight:700}
+.cal-cell.s-done .cal-mark{color:#04101d}
+.cal-cell.s-missed{background:rgba(255,107,71,.12);border-color:rgba(255,107,71,.45)}
+.cal-cell.s-missed .cal-num{color:#ff9b80;font-weight:600}
+.cal-cell.s-missed .cal-mark.miss{color:#ff9b80}
+.cal-cell.s-rest{background:var(--surface);border-color:var(--border)}
+.cal-cell.s-rest .cal-num{color:var(--text2)}
+.cal-cell.s-future .cal-num{color:var(--text)}
+.cal-cell.today-ring{box-shadow:0 0 0 2px var(--accent)}
+.cal-cell.today-ring .cal-num{font-weight:700}
+.cal-cell.partial::after{content:'';position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 1.5px var(--bg)}
+.cal-cell.sel{outline:2px solid var(--accent);outline-offset:1px}
+.cal-cell[onclick]{cursor:pointer}
+.cal-legend{display:flex;flex-wrap:wrap;gap:9px 14px;margin:16px 2px 4px}
+.cal-leg{display:flex;align-items:center;gap:5px;font-size:10px;font-family:'DM Mono',monospace;color:var(--text2)}
+.cal-leg i.lg{width:12px;height:12px;border-radius:3px;display:inline-block}
+.lg.done{background:var(--accent2)}
+.lg.today{box-shadow:inset 0 0 0 2px var(--accent)}
+.lg.missed{background:rgba(255,107,71,.18);box-shadow:inset 0 0 0 1px var(--accent3)}
+.lg.future{background:rgba(255,255,255,.10)}
+.lg.rest{box-shadow:inset 0 0 0 1px var(--border)}
+.cal-detail{margin-top:20px}
+.cal-detail-date{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);letter-spacing:.06em;margin-bottom:10px}
 
 /* DURATION BADGE */
 .dur-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);background:var(--surface2);border:1px solid var(--border);padding:3px 7px;border-radius:99px;letter-spacing:.03em;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
@@ -268,6 +329,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
   <div class="nav" id="main-nav">
     <button class="nav-btn active" onclick="showSection('today',this)">Today</button>
     <button class="nav-btn" onclick="showSection('week',this)">This week</button>
+    <button class="nav-btn" onclick="showSection('calendar',this)">Calendar</button>
     <button class="nav-btn" onclick="showSection('program',this)">Program</button>
     <button class="nav-btn" onclick="showSection('history',this)">History</button>
     <button class="nav-btn" onclick="showSection('stats',this)">Stats</button>
@@ -286,6 +348,12 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 <div class="section" id="section-week">
   <div class="section-title">THIS WEEK</div>
   <div id="week-view"></div>
+</div>
+
+<!-- CALENDAR -->
+<div class="section" id="section-calendar">
+  <div class="section-title">CALENDAR</div>
+  <div id="calendar-view"></div>
 </div>
 
 <!-- PROGRAM -->
@@ -341,6 +409,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
   <button class="bnav-btn" onclick="showSection('week',null,'week-btn')" id="bn-week">
     <div class="bnav-icon">📅</div><div class="bnav-lbl">Week</div>
   </button>
+  <button class="bnav-btn" onclick="showSection('calendar',null,'cal-btn')" id="bn-calendar">
+    <div class="bnav-icon">🗓️</div><div class="bnav-lbl">Calendar</div>
+  </button>
   <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
     <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
   </button>
@@ -370,7 +441,8 @@ const PROGRAM = [
     {id:'p1w1mon6',name:'KB swings',detail:'3 × 15 · core braces at top',cat:'core'},
     {id:'p1w1mon7',name:'Dead bug',detail:'3 × 8/side · press back into floor',cat:'core'},
     {id:'p1w1mon8',name:'Plank',detail:'3 × 40 sec · squeeze glutes',cat:'core'},
-  ],note:'10 min hip flexor + hamstring mobility after'},
+  
+    {id:'p1w1monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min hip flexor + hamstring mobility after'},
   {phase:1,week:1,day:'Tue',name:'Easy run + upper pull',type:'combo',exercises:[
     {id:'p1w1tue1',name:'Easy run',detail:'6–8km @ conversational pace · zone 2',cat:'run'},
     {id:'p1w1tue2',name:'Ring rows',detail:'3 × 10 · horizontal pull',cat:'strength'},
@@ -378,7 +450,8 @@ const PROGRAM = [
     {id:'p1w1tue4',name:'Dead hang',detail:'3 × 30 sec · shoulder decompression',cat:'strength'},
     {id:'p1w1tue5',name:'KB windmill',detail:'2 × 6/side · obliques + hip mobility',cat:'core'},
     {id:'p1w1tue6',name:'Side plank',detail:'2 × 30 sec/side',cat:'core'},
-  ],note:'5 min hamstring stretch before lifting'},
+  
+    {id:'p1w1tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},],note:'5 min hamstring stretch before lifting'},
   {phase:1,week:1,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
     {id:'p1w1wed1',name:'Barbell bench press',detail:'4 × 8 @ 65% · full range',cat:'strength'},
     {id:'p1w1wed2',name:'Barbell bent-over row',detail:'4 × 8 · hip hinge throughout',cat:'strength'},
@@ -387,7 +460,8 @@ const PROGRAM = [
     {id:'p1w1wed5',name:'Farmer carry (DBs)',detail:'3 × 30m · brace under load',cat:'strength'},
     {id:'p1w1wed6',name:'Turkish get-up (KB)',detail:'3 × 3/side · light, slow, deliberate',cat:'core'},
     {id:'p1w1wed7',name:'Hollow body hold',detail:'3 × 25 sec · anterior core',cat:'core'},
-  ],note:''},
+  
+    {id:'p1w1wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:1,week:1,day:'Thu',name:'Tempo run + core',type:'run',exercises:[
     {id:'p1w1thu1',name:'Warm-up',detail:'2km easy jog',cat:'run'},
     {id:'p1w1thu2',name:'Tempo',detail:'4km @ comfortably hard (zone 3–4)',cat:'run'},
@@ -404,7 +478,8 @@ const PROGRAM = [
     {id:'p1w1fri6',name:'KB around the world',detail:'3 × 8/direction · rotational control',cat:'core'},
     {id:'p1w1fri7',name:'Copenhagen plank',detail:'3 × 20 sec/side · hip adductor',cat:'core'},
     {id:'p1w1fri8',name:'Ring fallout',detail:'3 × 8 · anti-extension',cat:'core'},
-  ],note:'10 min full lower body mobility after'},
+  
+    {id:'p1w1frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min full lower body mobility after'},
   {phase:1,week:1,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p1w1sat1',name:'Long run',detail:'14–16km · easy zone 2',cat:'run'},
     {id:'p1w1sat2',name:'Foam roll',detail:'15 min · glutes, hamstrings, calves',cat:'core'},
@@ -424,14 +499,16 @@ const PROGRAM = [
     {id:'p1w2mon6',name:'KB swings',detail:'4 × 15 · one extra set from week 1',cat:'core'},
     {id:'p1w2mon7',name:'Dead bug — slow',detail:'3 × 8/side · 4-sec hold each rep',cat:'core'},
     {id:'p1w2mon8',name:'Plank',detail:'3 × 45 sec',cat:'core'},
-  ],note:'10 min hip flexor + hamstring mobility after'},
+  
+    {id:'p1w2monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min hip flexor + hamstring mobility after'},
   {phase:1,week:2,day:'Tue',name:'Easy run + upper pull',type:'combo',exercises:[
     {id:'p1w2tue1',name:'Easy run',detail:'7–9km @ zone 2',cat:'run'},
     {id:'p1w2tue2',name:'Ring rows',detail:'3 × 10 · add tempo',cat:'strength'},
     {id:'p1w2tue3',name:'Ring push-ups',detail:'3 × 12',cat:'strength'},
     {id:'p1w2tue4',name:'KB windmill',detail:'3 × 6/side · slightly heavier',cat:'core'},
     {id:'p1w2tue5',name:'Side plank',detail:'3 × 30 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p1w2tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},],note:''},
   {phase:1,week:2,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
     {id:'p1w2wed1',name:'Barbell bench press',detail:'4 × 8 · add 2.5kg',cat:'strength'},
     {id:'p1w2wed2',name:'Barbell bent-over row',detail:'4 × 8 · add 2.5kg',cat:'strength'},
@@ -440,7 +517,8 @@ const PROGRAM = [
     {id:'p1w2wed5',name:'Farmer carry',detail:'3 × 35m · heavier DBs',cat:'strength'},
     {id:'p1w2wed6',name:'Turkish get-up',detail:'3 × 4/side · add 1 rep from wk 1',cat:'core'},
     {id:'p1w2wed7',name:'Hollow body hold',detail:'3 × 30 sec',cat:'core'},
-  ],note:''},
+  
+    {id:'p1w2wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:1,week:2,day:'Thu',name:'Tempo run + core',type:'run',exercises:[
     {id:'p1w2thu1',name:'Warm-up',detail:'2km easy',cat:'run'},
     {id:'p1w2thu2',name:'Tempo',detail:'5km @ zone 3–4 · +1km from week 1',cat:'run'},
@@ -456,7 +534,8 @@ const PROGRAM = [
     {id:'p1w2fri5',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
     {id:'p1w2fri6',name:'Copenhagen plank',detail:'3 × 25 sec/side',cat:'core'},
     {id:'p1w2fri7',name:'Ring fallout',detail:'3 × 10',cat:'core'},
-  ],note:'10 min lower body mobility after'},
+  
+    {id:'p1w2frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min lower body mobility after'},
   {phase:1,week:2,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p1w2sat1',name:'Long run',detail:'16–18km · easy zone 2',cat:'run'},
     {id:'p1w2sat2',name:'Foam roll',detail:'15 min',cat:'core'},
@@ -472,7 +551,8 @@ const PROGRAM = [
     {id:'p1w3mon4',name:'Calf raise',detail:'2 × 12/leg',cat:'strength'},
     {id:'p1w3mon5',name:'KB swings',detail:'2 × 12 · focus on quality',cat:'core'},
     {id:'p1w3mon6',name:'Dead bug',detail:'2 × 6/side',cat:'core'},
-  ],note:'Deload — keep weights, reduce sets. More time for sleep + mobility.'},
+  
+    {id:'p1w3monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'Deload — keep weights, reduce sets. More time for sleep + mobility.'},
   {phase:1,week:3,day:'Tue',name:'Easy run',type:'run',exercises:[
     {id:'p1w3tue1',name:'Easy run',detail:'5–6km · easy zone 2',cat:'run'},
   ],note:'No hard running this week — deload'},
@@ -481,7 +561,8 @@ const PROGRAM = [
     {id:'p1w3wed2',name:'Bent-over row',detail:'3 × 8',cat:'strength'},
     {id:'p1w3wed3',name:'Ring face pulls',detail:'2 × 12',cat:'strength'},
     {id:'p1w3wed4',name:'Turkish get-up',detail:'2 × 3/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p1w3wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:1,week:3,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p1w3thu1',name:'Easy run',detail:'5km easy',cat:'run'},
   ],note:''},
@@ -490,7 +571,8 @@ const PROGRAM = [
     {id:'p1w3fri2',name:'Box jumps',detail:'3 × 4',cat:'strength'},
     {id:'p1w3fri3',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
     {id:'p1w3fri4',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
-  ],note:'10 min mobility'},
+  
+    {id:'p1w3frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min mobility'},
   {phase:1,week:3,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p1w3sat1',name:'Long run',detail:'12–14km · reduce 20% from week 2',cat:'run'},
   ],note:''},
@@ -507,14 +589,16 @@ const PROGRAM = [
     {id:'p2w4mon6',name:'KB swings — heavy',detail:'4 × 12 · hip power',cat:'core'},
     {id:'p2w4mon7',name:'Suitcase carry (KB)',detail:'3 × 30m/side · anti-lateral flexion',cat:'core'},
     {id:'p2w4mon8',name:'Ring fallout',detail:'3 × 10 · anti-extension',cat:'core'},
-  ],note:'10 min hip + hamstring mobility — non-negotiable'},
+  
+    {id:'p2w4monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min hip + hamstring mobility — non-negotiable'},
   {phase:2,week:4,day:'Tue',name:'Intervals + upper pull',type:'combo',exercises:[
     {id:'p2w4tue1',name:'Interval run',detail:'6 × 800m @ 5km pace · 90 sec jog recovery',cat:'run'},
     {id:'p2w4tue2',name:'Weighted ring rows',detail:'3 × 6 · add load',cat:'strength'},
     {id:'p2w4tue3',name:'Barbell row',detail:'3 × 6 @ 75%',cat:'strength'},
     {id:'p2w4tue4',name:'Pallof press',detail:'3 × 10/side · heavier than phase 1',cat:'core'},
     {id:'p2w4tue5',name:'KB windmill',detail:'3 × 6/side',cat:'core'},
-  ],note:'5 min hip flexor stretch post-run'},
+  
+    {id:'p2w4tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},],note:'5 min hip flexor stretch post-run'},
   {phase:2,week:4,day:'Wed',name:'Upper body B — strength phase',type:'strength',exercises:[
     {id:'p2w4wed1',name:'Bench press',detail:'4 × 5 @ 80%',cat:'strength'},
     {id:'p2w4wed2',name:'Weighted pull-ups',detail:'4 × 5 · add weight or use ring rows',cat:'strength'},
@@ -522,7 +606,8 @@ const PROGRAM = [
     {id:'p2w4wed4',name:'Ring face pulls',detail:'3 × 15',cat:'strength'},
     {id:'p2w4wed5',name:'Turkish get-up',detail:'3 × 4/side · heavier KB',cat:'core'},
     {id:'p2w4wed6',name:'Hollow body → V-up',detail:'3 × 10',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w4wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:4,day:'Thu',name:'Threshold run',type:'run',exercises:[
     {id:'p2w4thu1',name:'Warm-up',detail:'2km easy',cat:'run'},
     {id:'p2w4thu2',name:'Threshold',detail:'6km @ marathon pace + 10–15 sec/km',cat:'run'},
@@ -538,7 +623,8 @@ const PROGRAM = [
     {id:'p2w4fri5',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
     {id:'p2w4fri6',name:'Copenhagen plank',detail:'3 × 25 sec/side',cat:'core'},
     {id:'p2w4fri7',name:'KB single-arm carry',detail:'3 × 30m/side · anti-lateral',cat:'core'},
-  ],note:'10 min full lower body mobility'},
+  
+    {id:'p2w4frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min full lower body mobility'},
   {phase:2,week:4,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p2w4sat1',name:'Long run',detail:'22–24km · easy zone 2',cat:'run'},
     {id:'p2w4sat2',name:'Foam roll + mobility',detail:'15 min · within 1 hour of finishing',cat:'core'},
@@ -556,19 +642,22 @@ const PROGRAM = [
     {id:'p2w5mon5',name:'KB swings',detail:'4 × 15',cat:'core'},
     {id:'p2w5mon6',name:'Suitcase carry',detail:'3 × 30m/side',cat:'core'},
     {id:'p2w5mon7',name:'Ring fallout',detail:'3 × 10',cat:'core'},
-  ],note:'10 min mobility after'},
+  
+    {id:'p2w5monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min mobility after'},
   {phase:2,week:5,day:'Tue',name:'Intervals + upper',type:'combo',exercises:[
     {id:'p2w5tue1',name:'Interval run',detail:'6 × 800m @ 5km pace + optional 7th rep if feeling strong',cat:'run'},
     {id:'p2w5tue2',name:'Weighted ring rows',detail:'3 × 6',cat:'strength'},
     {id:'p2w5tue3',name:'Pallof press',detail:'3 × 10/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w5tuelm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:5,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
     {id:'p2w5wed1',name:'Bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w5wed2',name:'Weighted pull-ups',detail:'4 × 5',cat:'strength'},
     {id:'p2w5wed3',name:'Push press',detail:'3 × 6',cat:'strength'},
     {id:'p2w5wed4',name:'Ring face pulls',detail:'3 × 15',cat:'strength'},
     {id:'p2w5wed5',name:'Turkish get-up',detail:'3 × 4/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w5wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:5,day:'Thu',name:'Threshold run',type:'run',exercises:[
     {id:'p2w5thu1',name:'Threshold',detail:'2km easy + 7km threshold + 2km easy',cat:'run'},
   ],note:''},
@@ -578,7 +667,8 @@ const PROGRAM = [
     {id:'p2w5fri3',name:'Bulgarian split squat',detail:'3 × 6/leg · heavier',cat:'strength'},
     {id:'p2w5fri4',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
     {id:'p2w5fri5',name:'Copenhagen plank',detail:'3 × 30 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w5frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:2,week:5,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p2w5sat1',name:'Long run',detail:'24–26km',cat:'run'},
   ],note:''},
@@ -592,19 +682,22 @@ const PROGRAM = [
     {id:'p2w6mon4',name:'Loaded calf raise',detail:'4 × 12/leg',cat:'strength'},
     {id:'p2w6mon5',name:'KB swings',detail:'4 × 15',cat:'core'},
     {id:'p2w6mon6',name:'Suitcase carry',detail:'3 × 35m/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w6monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:2,week:6,day:'Tue',name:'Intervals + upper',type:'combo',exercises:[
     {id:'p2w6tue1',name:'Interval run',detail:'8 × 600m @ 5km pace · 75 sec recovery',cat:'run'},
     {id:'p2w6tue2',name:'Weighted pull-ups',detail:'3 × 6',cat:'strength'},
     {id:'p2w6tue3',name:'Pallof press',detail:'3 × 12/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w6tuelm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:6,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
     {id:'p2w6wed1',name:'Bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w6wed2',name:'Push press',detail:'3 × 6',cat:'strength'},
     {id:'p2w6wed3',name:'Ring face pulls',detail:'3 × 15',cat:'strength'},
     {id:'p2w6wed4',name:'Turkish get-up',detail:'3 × 5/side',cat:'core'},
     {id:'p2w6wed5',name:'Ring fallout',detail:'3 × 10',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w6wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:6,day:'Thu',name:'Threshold run',type:'run',exercises:[
     {id:'p2w6thu1',name:'Threshold',detail:'2km easy + 7km threshold + 2km easy',cat:'run'},
   ],note:''},
@@ -614,7 +707,8 @@ const PROGRAM = [
     {id:'p2w6fri3',name:'Box jumps',detail:'4 × 5',cat:'strength'},
     {id:'p2w6fri4',name:'Copenhagen plank',detail:'3 × 30 sec/side',cat:'core'},
     {id:'p2w6fri5',name:'KB single-arm carry',detail:'3 × 35m/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w6frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:2,week:6,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p2w6sat1',name:'Long run',detail:'26–28km',cat:'run'},
   ],note:''},
@@ -627,7 +721,8 @@ const PROGRAM = [
     {id:'p2w7mon3',name:'Nordic curl',detail:'2 × 6',cat:'strength'},
     {id:'p2w7mon4',name:'KB swings',detail:'2 × 12',cat:'core'},
     {id:'p2w7mon5',name:'Dead bug',detail:'2 × 6/side',cat:'core'},
-  ],note:'Phase 2 deload — recover before peak phase'},
+  
+    {id:'p2w7monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'Phase 2 deload — recover before peak phase'},
   {phase:2,week:7,day:'Tue',name:'Easy run',type:'run',exercises:[
     {id:'p2w7tue1',name:'Easy run',detail:'6km easy zone 2',cat:'run'},
   ],note:''},
@@ -635,7 +730,8 @@ const PROGRAM = [
     {id:'p2w7wed1',name:'Bench press',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7wed2',name:'Pull-ups / ring rows',detail:'3 × 5',cat:'strength'},
     {id:'p2w7wed3',name:'Ring face pulls',detail:'2 × 12',cat:'strength'},
-  ],note:''},
+  
+    {id:'p2w7wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:2,week:7,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p2w7thu1',name:'Easy run',detail:'5km easy',cat:'run'},
   ],note:''},
@@ -643,7 +739,8 @@ const PROGRAM = [
     {id:'p2w7fri1',name:'Deadlift',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7fri2',name:'Box jumps',detail:'3 × 4',cat:'strength'},
     {id:'p2w7fri3',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p2w7frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:2,week:7,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p2w7sat1',name:'Long run',detail:'18–20km · reduce for deload',cat:'run'},
   ],note:''},
@@ -659,7 +756,8 @@ const PROGRAM = [
     {id:'p3w8mon5',name:'KB swings',detail:'3 × 12',cat:'core'},
     {id:'p3w8mon6',name:'Dead bug',detail:'3 × 8/side',cat:'core'},
     {id:'p3w8mon7',name:'Suitcase carry',detail:'2 × 30m/side',cat:'core'},
-  ],note:'10 min hip + hamstring mobility'},
+  
+    {id:'p3w8monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min hip + hamstring mobility'},
   {phase:3,week:8,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w8tue1',name:'Warm-up',detail:'2km easy',cat:'run'},
     {id:'p3w8tue2',name:'Race-pace segments',detail:'3 × 2km @ goal marathon pace · 2 min easy between',cat:'run'},
@@ -673,7 +771,8 @@ const PROGRAM = [
     {id:'p3w8wed3',name:'Ring face pulls',detail:'2 × 15',cat:'strength'},
     {id:'p3w8wed4',name:'Turkish get-up',detail:'2 × 4/side · keep the skill sharp',cat:'core'},
     {id:'p3w8wed5',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p3w8wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:3,week:8,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p3w8thu1',name:'Easy run',detail:'8–10km @ zone 2 · should feel effortless',cat:'run'},
     {id:'p3w8thu2',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
@@ -684,7 +783,8 @@ const PROGRAM = [
     {id:'p3w8fri3',name:'Single-leg calf raise',detail:'3 × 15/leg',cat:'strength'},
     {id:'p3w8fri4',name:'KB around the world',detail:'2 × 8/direction',cat:'core'},
     {id:'p3w8fri5',name:'Copenhagen plank',detail:'2 × 25 sec/side',cat:'core'},
-  ],note:'10 min full lower body mobility'},
+  
+    {id:'p3w8frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min full lower body mobility'},
   {phase:3,week:8,day:'Sat',name:'Long run — PEAK',type:'run',exercises:[
     {id:'p3w8sat1',name:'Long run',detail:'28–30km · easy zone 2 throughout',cat:'run'},
     {id:'p3w8sat2',name:'Foam roll',detail:'20 min minimum · mandatory',cat:'core'},
@@ -698,7 +798,8 @@ const PROGRAM = [
     {id:'p3w9mon3',name:'Loaded calf raise',detail:'3 × 12/leg',cat:'strength'},
     {id:'p3w9mon4',name:'KB swings',detail:'3 × 12',cat:'core'},
     {id:'p3w9mon5',name:'Dead bug',detail:'2 × 8/side',cat:'core'},
-  ],note:'10 min mobility'},
+  
+    {id:'p3w9monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min mobility'},
   {phase:3,week:9,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w9tue1',name:'Race-pace',detail:'2km + 3 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
@@ -707,7 +808,8 @@ const PROGRAM = [
     {id:'p3w9wed2',name:'Weighted pull-ups',detail:'3 × 5',cat:'strength'},
     {id:'p3w9wed3',name:'Ring face pulls',detail:'2 × 15',cat:'strength'},
     {id:'p3w9wed4',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p3w9wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:3,week:9,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p3w9thu1',name:'Easy run',detail:'8km easy',cat:'run'},
   ],note:''},
@@ -715,7 +817,8 @@ const PROGRAM = [
     {id:'p3w9fri1',name:'Deadlift',detail:'3 × 5 @ 80%',cat:'strength'},
     {id:'p3w9fri2',name:'Box jumps',detail:'3 × 5',cat:'strength'},
     {id:'p3w9fri3',name:'Copenhagen plank',detail:'2 × 25 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p3w9frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:3,week:9,day:'Sat',name:'Long run — PEAK',type:'run',exercises:[
     {id:'p3w9sat1',name:'Long run',detail:'30–32km · your longest run · ceiling is 32km',cat:'run'},
     {id:'p3w9sat2',name:'Foam roll',detail:'20 min minimum',cat:'core'},
@@ -727,7 +830,8 @@ const PROGRAM = [
     {id:'p3w10mon1',name:'Back squat',detail:'3 × 5 @ 80%',cat:'strength'},
     {id:'p3w10mon2',name:'Nordic curl',detail:'3 × 6',cat:'strength'},
     {id:'p3w10mon3',name:'KB swings',detail:'3 × 12',cat:'core'},
-  ],note:'Begin taper — week 10 long run reduces'},
+  
+    {id:'p3w10monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'Begin taper — week 10 long run reduces'},
   {phase:3,week:10,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w10tue1',name:'Race-pace',detail:'2km + 2 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
@@ -735,7 +839,8 @@ const PROGRAM = [
     {id:'p3w10wed1',name:'Bench press',detail:'3 × 5',cat:'strength'},
     {id:'p3w10wed2',name:'Pull-ups',detail:'3 × 5',cat:'strength'},
     {id:'p3w10wed3',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p3w10wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:3,week:10,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p3w10thu1',name:'Easy run',detail:'6km easy',cat:'run'},
   ],note:''},
@@ -743,7 +848,8 @@ const PROGRAM = [
     {id:'p3w10fri1',name:'Deadlift',detail:'3 × 5',cat:'strength'},
     {id:'p3w10fri2',name:'Box jumps',detail:'3 × 4',cat:'strength'},
     {id:'p3w10fri3',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p3w10frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:3,week:10,day:'Sat',name:'Long run — begin taper',type:'run',exercises:[
     {id:'p3w10sat1',name:'Long run',detail:'20–22km · begin pulling back',cat:'run'},
   ],note:''},
@@ -757,7 +863,8 @@ const PROGRAM = [
     {id:'p4w11mon3',name:'Calf raise',detail:'2 × 12/leg',cat:'strength'},
     {id:'p4w11mon4',name:'KB swings',detail:'2 × 12',cat:'core'},
     {id:'p4w11mon5',name:'Dead bug',detail:'2 × 6/side',cat:'core'},
-  ],note:'10 min mobility — keep this every session through taper'},
+  
+    {id:'p4w11monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min mobility — keep this every session through taper'},
   {phase:4,week:11,day:'Tue',name:'Easy run + strides',type:'run',exercises:[
     {id:'p4w11tue1',name:'Easy run',detail:'5km easy',cat:'run'},
     {id:'p4w11tue2',name:'Strides',detail:'4 × 20 sec surges @ 5km pace · keeps legs sharp',cat:'run'},
@@ -767,7 +874,8 @@ const PROGRAM = [
     {id:'p4w11wed2',name:'Ring rows',detail:'2 × 10',cat:'strength'},
     {id:'p4w11wed3',name:'Ring face pulls',detail:'2 × 12',cat:'strength'},
     {id:'p4w11wed4',name:'Turkish get-up',detail:'2 × 3/side · skill maintenance',cat:'core'},
-  ],note:''},
+  
+    {id:'p4w11wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
   {phase:4,week:11,day:'Thu',name:'Race-pace run (short)',type:'run',exercises:[
     {id:'p4w11thu1',name:'Easy bookend',detail:'2km easy',cat:'run'},
     {id:'p4w11thu2',name:'Race-pace',detail:'2 × 1km @ goal marathon pace',cat:'run'},
@@ -777,7 +885,8 @@ const PROGRAM = [
     {id:'p4w11fri1',name:'Deadlift',detail:'2 × 5 @ 70%',cat:'strength'},
     {id:'p4w11fri2',name:'Box jumps',detail:'2 × 3 · minimal, neurological priming only',cat:'strength'},
     {id:'p4w11fri3',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-  ],note:''},
+  
+    {id:'p4w11frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:''},
   {phase:4,week:11,day:'Sat',name:'Last medium long run',type:'run',exercises:[
     {id:'p4w11sat1',name:'Long run',detail:'14–16km easy · last long run',cat:'run'},
   ],note:'Full foam roll + mobility after'},
@@ -793,7 +902,8 @@ const PROGRAM = [
     {id:'p4w12tue1',name:'Squat',detail:'2 × 5 @ 65% · stimulus only, no fatigue',cat:'strength'},
     {id:'p4w12tue2',name:'Deadlift',detail:'2 × 5 @ 65%',cat:'strength'},
     {id:'p4w12tue3',name:'Dead bug',detail:'2 × 6/side',cat:'core'},
-  ],note:'Do NOT go heavier — neurological priming, not training'},
+  
+    {id:'p4w12tuelm',name:'Landmine press',detail:'3 × 8/side · brace, press up and slightly forward',cat:'strength'},],note:'Do NOT go heavier — neurological priming, not training'},
   {phase:4,week:12,day:'Wed',name:'Rest',type:'rest',exercises:[
     {id:'p4w12wed1',name:'Gentle walk',detail:'20–25 min only',cat:'rest'},
   ],note:'Stay off your feet otherwise'},
@@ -883,15 +993,16 @@ function showSection(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  const bnMap={today:'bn-today',week:'bn-week',program:'bn-program',history:'bn-history',stats:'bn-stats'};
+  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['today','week','program','history','stats'];
+  const order=['today','week','calendar','program','history','stats'];
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
   if(id==='today') renderToday();
   else if(id==='week') renderWeek();
+  else if(id==='calendar') renderCalendar();
   else if(id==='history') renderHistory();
   else if(id==='stats') renderStats();
 }
@@ -1003,6 +1114,7 @@ function toggleSessionComplete(key){
   saveState(STATE);
   updateCountdown();
   if(currentSection==='today') renderToday();
+  else if(currentSection==='calendar') renderCalendar();
   else renderHistory();
 }
 function saveSessionNote(key,val){STATE.sessionNotes[key]=val;saveState(STATE);}
@@ -1025,9 +1137,9 @@ function renderWeek(){
     if(wd.sessions.length===0){
       html+=`<div class="week-day-row ${isToday?'today-row':''}">
         <span class="wdr-day">${dayLabel} ${dateNum}</span>
-        <span class="wdr-dot" style="background:var(--text3)"></span>
-        <span class="wdr-name" style="color:var(--text3)">Rest</span>
-        <span class="wdr-status status-upcoming">—</span>
+        <span class="wdr-dot" style="background:var(--text2)"></span>
+        <span class="wdr-name" style="color:var(--text2)">Rest</span>
+        <span class="wdr-status ${isToday?'status-today':'status-upcoming'}">${isToday?'today':'—'}</span>
       </div>`;
       return;
     }
@@ -1205,6 +1317,111 @@ function renderStats(){
 }
 
 // ─────────────────────────────────────────
+// CALENDAR — month overview of completed / missed / upcoming sessions
+// ─────────────────────────────────────────
+let calMonth = null;      // Date pinned to the 1st of the displayed month
+let calSelected = null;   // 'YYYY-MM-DD' of the tapped day (detail panel)
+function _ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function _sameDay(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function calInitMonth(){
+  if(calMonth) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const ps=new Date(PLAN_START); ps.setHours(0,0,0,0);
+  const base = today<ps ? ps : today;
+  calMonth = new Date(base.getFullYear(), base.getMonth(), 1);
+}
+function calShift(delta){ calInitMonth(); calMonth=new Date(calMonth.getFullYear(), calMonth.getMonth()+delta, 1); renderCalendar(); }
+function calPrev(){ calShift(-1); }
+function calNext(){ calShift(1); }
+function calJumpToday(){ calMonth=null; calSelected=_ymd(new Date()); calInitMonth(); renderCalendar(); }
+function calSelect(iso){ calSelected = (calSelected===iso ? null : iso); renderCalendar(); }
+function calDayStatus(date){
+  const sessions=getSessionsForDate(date);
+  if(sessions.length===0) return {inPlan:false};
+  const today=new Date(); today.setHours(0,0,0,0);
+  const dd=new Date(date); dd.setHours(0,0,0,0);
+  const doneCount=sessions.filter(s=>STATE.completedSessions[sessionKey(s)]).length;
+  const complete=doneCount===sessions.length;
+  const partial=doneCount>0 && !complete;
+  const allRest=sessions.every(s=>s.type==='rest');
+  const isToday=_sameDay(dd,today);
+  const isPast=dd<today;
+  let status;
+  if(complete) status='done';
+  else if(allRest) status='rest';
+  else if(isPast) status='missed';
+  else status='future';
+  const main=sessions.find(s=>s.type!=='rest')||sessions[0];
+  return {inPlan:true, sessions, status, partial, isToday, type:main.type};
+}
+function renderCalendar(){
+  calInitMonth();
+  const view=document.getElementById('calendar-view');
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const y=calMonth.getFullYear(), mo=calMonth.getMonth();
+  const totalDone=totalCompleted();
+  let html='';
+  html+='<div class="cal-summary">'
+    + '<div class="cal-sum-row"><div class="cal-sum-big">'+totalDone+'<span>/84</span></div>'
+    + '<button class="cal-today-btn" onclick="calJumpToday()">Jump to today</button></div>'
+    + '<div class="cal-sum-lbl">sessions completed</div>'
+    + '<div class="cal-sum-bar"><div style="width:'+Math.round(totalDone/84*100)+'%"></div></div>'
+    + '</div>';
+  html+='<div class="cal-head">'
+    + '<button class="cal-nav" onclick="calPrev()" aria-label="Previous month">‹</button>'
+    + '<div class="cal-title">'+months[mo]+' '+y+'</div>'
+    + '<button class="cal-nav" onclick="calNext()" aria-label="Next month">›</button>'
+    + '</div>';
+  html+='<div class="cal-grid cal-dow">'+['M','T','W','T','F','S','S'].map(d=>'<div class="cal-dow-cell">'+d+'</div>').join('')+'</div>';
+  const first=new Date(y,mo,1);
+  const startOffset=(first.getDay()+6)%7;       // 0 = Monday
+  const gridStart=new Date(y,mo,1-startOffset);
+  let cells='';
+  for(let i=0;i<42;i++){
+    const d=new Date(gridStart); d.setDate(gridStart.getDate()+i);
+    const inMonth=d.getMonth()===mo;
+    const st=calDayStatus(d);
+    const iso=_ymd(d);
+    let cls='cal-cell';
+    if(!inMonth) cls+=' out';
+    if(st.inPlan){
+      cls+=' s-'+st.status;
+      if(st.partial) cls+=' partial';
+      if(st.isToday) cls+=' today-ring';
+      if(calSelected===iso) cls+=' sel';
+    } else { cls+=' noplan'; }
+    let inner='<div class="cal-num">'+d.getDate()+'</div>';
+    if(st.inPlan){
+      if(st.status==='done') inner+='<div class="cal-mark">✓</div>';
+      else if(st.status==='missed') inner+='<div class="cal-mark miss">!</div>';
+      else if(st.status==='rest') inner+='<div class="cal-dot dot-rest"></div>';
+      else inner+='<div class="cal-dot '+dotClass(st.type)+'"></div>';
+    }
+    const click=st.inPlan?(' onclick="calSelect(\''+iso+'\')"'):'';
+    cells+='<div class="'+cls+'"'+click+'>'+inner+'</div>';
+  }
+  html+='<div class="cal-grid cal-days">'+cells+'</div>';
+  html+='<div class="cal-legend">'
+    + '<span class="cal-leg"><i class="lg done"></i>Done</span>'
+    + '<span class="cal-leg"><i class="lg today"></i>Today</span>'
+    + '<span class="cal-leg"><i class="lg missed"></i>Missed</span>'
+    + '<span class="cal-leg"><i class="lg future"></i>Upcoming</span>'
+    + '<span class="cal-leg"><i class="lg rest"></i>Rest</span>'
+    + '</div>';
+  if(calSelected){
+    const p=calSelected.split('-').map(Number);
+    const sd=new Date(p[0],p[1]-1,p[2]);
+    const ss=getSessionsForDate(sd);
+    if(ss.length){
+      html+='<div class="cal-detail"><div class="cal-detail-date">'+formatDate(sd).toUpperCase()+'</div>'
+        + ss.map(s=>renderSessionCard(s,true)).join('')
+        + '</div>';
+    }
+  }
+  view.innerHTML=html;
+}
+
+// ─────────────────────────────────────────
 // EXERCISE VIDEO LIBRARY (embedded YouTube + guaranteed fallback)
 // ─────────────────────────────────────────
 const EXERCISE_VIDEOS = {
@@ -1215,32 +1432,32 @@ const EXERCISE_VIDEOS = {
   'barbell bent-over row':{id:'FWJR5Ve8bnQ',title:'Barbell Row — Jeff Nippard',cues:['Hinge to ~45°, bar hanging at arms length','Pull bar to lower chest, lead with elbows','Squeeze shoulder blades together at top','Lower with control, keep back flat throughout']},
   'db overhead press':{id:'Did01dFR3Lk',title:'Dumbbell Overhead Press — Men’s Health',cues:['Sit or stand, dumbbells at shoulder height, palms forward','Press straight up until arms are fully extended','Don\'t flare elbows too wide — keep ~45° angle','Lower slowly back to shoulders']},
   'walking lunges':{id:'vYfp2t4XgqQ',title:'Walking Lunge Tutorial — Runna',cues:['Step forward, lower back knee toward floor','Front shin stays vertical, knee tracks over toes','Push through front heel to rise and step forward','Keep torso upright throughout']},
-  'bulgarian split squat':{id:null,title:'Bulgarian Split Squat',cues:['Rear foot on bench, front foot ~60–70cm forward','Lower straight down, back knee toward floor','Front knee tracks over toes — don\'t let it cave','Drive through front heel to return to start']},
+  'bulgarian split squat':{id:'bwhl_9jN_3o',title:'Bulgarian Split Squat',cues:['Rear foot on bench, front foot ~60–70cm forward','Lower straight down, back knee toward floor','Front knee tracks over toes — don\'t let it cave','Drive through front heel to return to start']},
   'single-leg calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on one foot on edge of step or flat floor','Lower heel as far as comfortable, pause','Rise up onto toes as high as possible','Control the descent — 2 seconds down']},
   'calf raise':{id:'gwLzBJYoWlI',title:'Calf Raise — Jeff Nippard',cues:['Stand on edge of step or flat floor, add load (DB or machine)','Lower heel below step level for full range','Rise onto toes as high as possible — pause at top','Control the descent: 2–3 seconds down for max benefit']},
   'box jumps':{id:'G-bxQY57mKc',title:'Box Jump Tutorial — Runna',cues:['Stand arm\'s length from box, feet hip-width','Swing arms back, dip into quarter squat','Explode up — drive arms overhead as you jump','Land softly with knees bent, step down (don\'t jump down)']},
   'ring rows':{id:'-SE-yLq8kFI',title:'Ring Row — Catalyst Athletics',cues:['Hang under rings, body straight like a plank','Pull chest to rings, elbows go back (not out)','Squeeze shoulder blades hard at top','Lower slowly — fight the descent']},
-  'ring push-ups':{id:null,title:'Ring Push-Ups',cues:['Hands in rings, body in plank position','Lower chest to ring height, elbows ~45°','Press up to full extension — rings will wobble (that\'s the point)','Keep core tight — don\'t let hips sag']},
-  'dead hang':{id:null,title:'Dead Hang',cues:['Hang from bar with full grip, arms straight','Let shoulders decompress — don\'t shrug them up','Breathe steadily, engage core lightly','Hold for target time, step down safely']},
+  'ring push-ups':{id:'7FRwuB1_l7U',title:'Ring Push-Ups',cues:['Hands in rings, body in plank position','Lower chest to ring height, elbows ~45°','Press up to full extension — rings will wobble (that\'s the point)','Keep core tight — don\'t let hips sag']},
+  'dead hang':{id:'5FQJJvUAYx4',title:'Dead Hang',cues:['Hang from bar with full grip, arms straight','Let shoulders decompress — don\'t shrug them up','Breathe steadily, engage core lightly','Hold for target time, step down safely']},
   'kb swings':{id:'sSQfBfBgELI',title:'Kettlebell Swing — StrongFirst',cues:['Hinge at hips, swing KB back between legs','Drive hips forward explosively — arms are just a pendulum','KB floats to shoulder height on the hip pop','Let it swing back and hinge again — don\'t squat']},
-  'dead bug':{id:null,title:'Dead Bug',cues:['Lie on back, arms up, knees bent 90° in the air','Press lower back firmly into the floor — keep it there','Slowly lower opposite arm and leg toward floor','Return to start, switch sides — don\'t hold your breath']},
-  'plank':{id:null,title:'Plank',cues:['Forearms on floor, elbows under shoulders','Body in straight line from head to heels','Squeeze glutes, brace abs, breathe steadily','Don\'t let hips rise or sag — if form breaks, stop']},
-  'side plank':{id:null,title:'Side Plank',cues:['Lie on side, elbow under shoulder, feet stacked','Lift hips until body forms a straight line','Hold — don\'t let hips drop or rotate forward','Breathe normally, keep neck neutral']},
-  'bird dog':{id:null,title:'Bird Dog',cues:['On hands and knees, wrists under shoulders, hips over knees','Extend opposite arm and leg simultaneously','Hold 1–2 sec at top — keep hips level (no rotation)','Return slowly, repeat other side']},
-  'pallof press':{id:null,title:'Pallof Press',cues:['Stand side-on to cable/band anchor, feet shoulder-width','Hold handle at chest, elbows in','Press straight out — resist the rotation pull','Hold 1 sec extended, return to chest slowly']},
-  'hollow body hold':{id:null,title:'Hollow Body Hold',cues:['Lie on back, press lower back into floor','Arms overhead, legs straight and raised ~30°','Create a banana/bowl shape with your body','If lower back lifts, raise legs higher or bend knees']},
-  'turkish get-up':{id:null,title:'Turkish Get-Up',cues:['Lie on back, KB pressed up in one hand, arm locked','Roll to elbow, then hand, sweep leg through to kneel','Stand up tall — KB stays locked overhead throughout','Reverse each step to return to floor']},
+  'dead bug':{id:'bxn9FBrt4-A',title:'Dead Bug',cues:['Lie on back, arms up, knees bent 90° in the air','Press lower back firmly into the floor — keep it there','Slowly lower opposite arm and leg toward floor','Return to start, switch sides — don\'t hold your breath']},
+  'plank':{id:'A2b2EmIg0dA',title:'Plank',cues:['Forearms on floor, elbows under shoulders','Body in straight line from head to heels','Squeeze glutes, brace abs, breathe steadily','Don\'t let hips rise or sag — if form breaks, stop']},
+  'side plank':{id:'iNbH7_edNI8',title:'Side Plank',cues:['Lie on side, elbow under shoulder, feet stacked','Lift hips until body forms a straight line','Hold — don\'t let hips drop or rotate forward','Breathe normally, keep neck neutral']},
+  'bird dog':{id:'ZdAHe9_HeEw',title:'Bird Dog',cues:['On hands and knees, wrists under shoulders, hips over knees','Extend opposite arm and leg simultaneously','Hold 1–2 sec at top — keep hips level (no rotation)','Return slowly, repeat other side']},
+  'pallof press':{id:'P16SQlmWj1o',title:'Pallof Press',cues:['Stand side-on to cable/band anchor, feet shoulder-width','Hold handle at chest, elbows in','Press straight out — resist the rotation pull','Hold 1 sec extended, return to chest slowly']},
+  'hollow body hold':{id:'0yPin8hSc8o',title:'Hollow Body Hold',cues:['Lie on back, press lower back into floor','Arms overhead, legs straight and raised ~30°','Create a banana/bowl shape with your body','If lower back lifts, raise legs higher or bend knees']},
+  'turkish get-up':{id:'JFrItinMcyQ',title:'Turkish Get-Up',cues:['Lie on back, KB pressed up in one hand, arm locked','Roll to elbow, then hand, sweep leg through to kneel','Stand up tall — KB stays locked overhead throughout','Reverse each step to return to floor']},
   'easy run':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Conversational pace — you should be able to speak full sentences','Land with foot under your hip, not in front','Relax shoulders, slight forward lean from ankles','Breathing rhythm: 3 steps in, 2 steps out']},
   'tempo':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Comfortably hard — 7/10 effort, breathing controlled','Slightly shorter stride than easy pace, quicker turnover','Aim for ~180 steps/min cadence','If you can\'t maintain form, slow down — quality over speed']},
   'long run':{id:'gsUL3a1CxUQ',title:'Proper Running Form — The Run Experience',cues:['Start slower than you think you need to — it\'s a long effort','Fuel every 45–60 min with a gel or real food','Run/walk strategy is fine — keep heart rate in zone 2','Focus on time on feet, not pace']},
-  'foam roll':{id:null,title:'Foam Roll',cues:['Roll slowly — 1–2 inches per second','When you find a tender spot, pause and breathe for 5 sec','Avoid rolling directly on joints or the lower spine','Apply moderate pressure — uncomfortable but not painful']},
+  'foam roll':{id:'HXqQ7KPqUYw',title:'Foam Roll',cues:['Roll slowly — 1–2 inches per second','When you find a tender spot, pause and breathe for 5 sec','Avoid rolling directly on joints or the lower spine','Apply moderate pressure — uncomfortable but not painful']},
   'nordic curl':{id:'_e9vFU9-tkc',title:'Nordic Hamstring Curls — E3 Rehab',cues:['Kneel with ankles secured under a bar or partner','Cross arms over chest or keep hands ready to catch','Lower your body toward floor as slowly as possible','Use hands to push back up — focus is the descent only']},
-  'banded hip abduction':{id:null,title:'Banded Hip Abduction',cues:['Band just above knees, stand tall or seated','Push knees outward against band resistance','Hold 1 sec at peak abduction — feel the glute med work','Control the return — don\'t let band snap knees in']},
-  'ring face pulls':{id:null,title:'Ring Face Pulls',cues:['Set rings at face height, lean back slightly','Pull rings to face, elbows flare high and wide','At end position: hands by ears, elbows above shoulders','Squeeze rear delts and rotator cuff, slow return']},
-  'goblet squat':{id:null,title:'Goblet Squat',cues:['Hold KB at chest with both hands (like a goblet)','Feet slightly wider than shoulder-width, toes out','Squat deep — elbows track inside knees at bottom','Drive through heels, keep chest tall throughout']},
+  'banded hip abduction':{id:'aQqOrUmh0e8',title:'Banded Hip Abduction',cues:['Band just above knees, stand tall or seated','Push knees outward against band resistance','Hold 1 sec at peak abduction — feel the glute med work','Control the return — don\'t let band snap knees in']},
+  'ring face pulls':{id:'eTCBSFlCJ_s',title:'Ring Face Pulls',cues:['Set rings at face height, lean back slightly','Pull rings to face, elbows flare high and wide','At end position: hands by ears, elbows above shoulders','Squeeze rear delts and rotator cuff, slow return']},
+  'goblet squat':{id:'6mf0oa2GGUc',title:'Goblet Squat',cues:['Hold KB at chest with both hands (like a goblet)','Feet slightly wider than shoulder-width, toes out','Squat deep — elbows track inside knees at bottom','Drive through heels, keep chest tall throughout']},
   'farmer carry':{id:'1wTLRCVwCkA',title:'Loaded Carry — Dan John',cues:['Pick up heavy DBs, stand tall, shoulders back','Walk with purpose — short, controlled steps','Keep core braced, don\'t let shoulders shrug','Breathe continuously — this is also cardio']},
-  'copenhagen plank':{id:null,title:'Copenhagen Plank',cues:['Lie on side, top foot on a bench, bottom leg free','Lift hips — body forms a straight diagonal line','Hold — squeeze inner thigh of top leg','Keep hips level and spine neutral throughout']},
-  'ring fallout':{id:null,title:'Ring Fallout',cues:['Rings low, start standing with rings in front of you','Keep arms straight as you lean forward/down','Core braces to stop lower back arching','Pull back to start using your abs, not your arms']},
+  'copenhagen plank':{id:'kD1t1hWzIDE',title:'Copenhagen Plank',cues:['Lie on side, top foot on a bench, bottom leg free','Lift hips — body forms a straight diagonal line','Hold — squeeze inner thigh of top leg','Keep hips level and spine neutral throughout']},
+  'ring fallout':{id:'Ge2_tJizWrc',title:'Ring Fallout',cues:['Rings low, start standing with rings in front of you','Keep arms straight as you lean forward/down','Core braces to stop lower back arching','Pull back to start using your abs, not your arms']},
   'barbell row':{id:'FWJR5Ve8bnQ',title:'Barbell Row — Jeff Nippard',cues:['Hinge to ~45° torso angle, bar hangs below chest','Drive elbows back and up — pull bar to lower chest/navel','Squeeze shoulder blades at the top','Lower with control — don\'t let the bar crash down']},
   'hang power clean':{id:'0Guz3bZFHaI',title:'Hang Power Clean — Catalyst Athletics',cues:['Start with bar at mid-thigh, hips hinged, lats engaged','Explosively extend hips and shrug — elbows follow high','Drop under the bar quickly, catch in quarter-squat position','Rack across front delts — elbows high, core tight']},
   'kb around the world':{id:'Q2fN2XWYjrU',title:'KB Around The World',cues:['Stand tall, pass KB around your body in a circle','Keep the core braced — resist rotation of the torso','Control the weight, smooth handoff between hands','Alternate direction each set']},
@@ -1251,8 +1468,29 @@ const EXERCISE_VIDEOS = {
   'push press':{id:'X6-DMh-t4nQ',title:'Push Press — Alan Thrall',cues:['Bar on front delts, elbows slightly forward','Dip with a quick knee bend — stay upright, don\'t hinge','Drive legs hard, then press bar overhead as you extend','Lock out arms fully at the top, bar over mid-foot']},
   'single-leg rdl':{id:'2cYbXGlg6bA',title:'Single-Leg RDL — Jeff Nippard',cues:['Stand on one leg, slight bend in the knee','Hinge at the hip, rear leg floats back for balance','Keep back flat, feel the hamstring load — don\'t let hips rotate','Drive the hip forward to return, squeeze glute at the top']},
   'step-ups':{id:'MRhOLYSxnAc',title:'Step-Ups — Jeremy Ethier',cues:['Step fully onto the box/bench, drive through the heel','Stand tall at the top — don\'t use the trailing leg to push','Lower the trailing leg slowly back to the floor','Keep torso upright throughout, add load as needed']},
-  'mobility flow':{id:null,title:'Mobility Flow',cues:['Move slowly through each position, breathing deeply','Spend ~30–60 sec per area — hips, t-spine, ankles','Never force a stretch — ease into end range','Use this to prime movement, not to fatigue']},
-  'foam roll + mobility':{id:null,title:'Foam Roll + Mobility',cues:['Roll each muscle group slowly for 30–45 sec','Pause and breathe on tender spots','Follow with gentle dynamic mobility','Hydrate — this is recovery work, keep it easy']},
+  'mobility flow':{id:'ddlULhzLbPU',title:'Mobility Flow',cues:['Move slowly through each position, breathing deeply','Spend ~30–60 sec per area — hips, t-spine, ankles','Never force a stretch — ease into end range','Use this to prime movement, not to fatigue']},
+  'foam roll + mobility':{id:'HXqQ7KPqUYw',title:'Foam Roll + Mobility',cues:['Roll each muscle group slowly for 30–45 sec','Pause and breathe on tender spots','Follow with gentle dynamic mobility','Hydrate — this is recovery work, keep it easy']},
+  // ── Landmine work (added) — joint-friendly pressing, pulling & loading ──
+  'landmine press':{id:'9OW4SONxuGI',title:'Landmine Press — Onnit / Sean Hyson',cues:['Half-split or hip-width stance, bar end in one hand at the shoulder','Brace core and glutes — ribs stay down, don\'t lean back','Press up and slightly forward, let the shoulder blade rotate upward','Lower under control · easier on the shoulder than a strict overhead press']},
+  'half-kneeling landmine press':{id:'BQE4_5yTVf8',title:'Half-Kneeling Landmine Press — How To',cues:['Down knee under hip, tall spine, bar in the opposite hand','Squeeze the down-side glute to lock the pelvis','Press up letting the shoulder blade glide and rotate up','No rib flare — the core resists the bar pulling you back']},
+  'landmine row':{id:'G-jU1aPVhnY',title:'Meadows / Landmine Row — John Meadows',cues:['Stagger your stance and hinge over the bar end','Let the shoulder blade reach forward at the bottom','Drive the elbow back and up — lead with the elbow','Squeeze the shoulder blade at the top, lower slowly']},
+  'landmine reverse lunge':{id:'jnOljeWtimQ',title:'Landmine Reverse Lunge',cues:['Hold the bar end at your chest, brace tall','Step back into a lunge — front knee tracks over the toes','Lower until the back knee nearly touches the floor','Drive through the FRONT heel to stand · knee-friendly leg strength']},
+  'landmine squat':{id:'SdSyl59auck',title:'Landmine Squat',cues:['Cradle the bar end at your chest like a goblet','Feet shoulder-width, sit straight down between the hips','Knees travel forward and out, heels stay planted','Stand tall — the bar\'s arc keeps you upright and the knees happy']},
+  'landmine rdl':{id:'59YRCxCtJ_s',title:'Landmine RDL',cues:['Hold the bar end low, soft knees, tall chest','Push the hips back — the bar travels down the thighs','Feel the hamstrings load, back stays flat','Drive the hips forward to stand, squeeze the glutes']},
+  // ── Knee health (added) — tendon & VMO resilience for stronger lifting ──
+  'spanish squat':{id:'hgFxm5KIF7M',title:'Spanish Squat (band)',cues:['Loop a strong band behind the knees, anchored in front','Sit straight down — shins stay vertical, weight in the heels','Drive the knees into the band the entire time','Pause low, then stand · builds quad + patellar-tendon resilience']},
+  'tibialis raise':{id:'RXC7tE6IQcc',title:'Tibialis Raise',cues:['Heels on a low plate, back to a wall for support','Pull the toes up toward the shins as high as possible','Pause at the top — feel the front of the shin work','Lower slowly · a strong tibialis improves knee tracking & landings']},
+  'atg split squat':{id:'qfpkwZlG-cs',title:'ATG Split Squat',cues:['Long split stance, torso upright, hold a support if needed','Lower the back knee down and forward — front heel stays down','Let the front knee travel past the toes through a pain-free range','Push back to the start · deep, resilient knee strength']},
+  'terminal knee extension':{id:'7xG3MeoLjC0',title:'Terminal Knee Extension (band)',cues:['Band around the back of one knee, anchored in front','Start with a soft knee bend, foot flat','Straighten the knee fully against the band — squeeze the quad','Control the return · targets the VMO around the kneecap']},
+  'eccentric step-down':{id:'Or4C-UQ63Xc',title:'Eccentric Step-Down',cues:['Stand tall on a low box on one leg','Slowly lower the other heel toward the floor (3 seconds)','Keep the standing knee tracking over the toes — no caving in','Lightly tap and drive back up · builds knee control']},
+  'poliquin step-up':{id:'rQW-RzAOOzw',title:'Poliquin / Peterson Step-Up',cues:['Small step, lean slightly forward, weight on the ball of the foot','Press up using only the working leg — slow and deliberate','Focus on the teardrop quad (VMO) by the knee','Lower under control · knee tracking and tendon health']},
+  // ── Scapular health (added) — control & strength for efficient pressing/pulling ──
+  'band pull-apart':{id:'hcCoJNq2tIk',title:'Band Pull-Apart — Tutorial',cues:['Hold a band at shoulder height, arms long, light tension','Lead with the shoulder blades — pull them together','Open the arms to a T, keep the elbows mostly straight','Slow return · the daily driver for scapular retraction strength']},
+  'face pull':{id:'eTCBSFlCJ_s',title:'Face Pull',cues:['Band or cable at face height, arms extended','Pull toward the forehead, elbows high and wide','Finish in a double-biceps pose — knuckles by the ears','Squeeze the rear delts + rotator cuff, slow return']},
+  'wall slide':{id:'BiREOSisYWU',title:'Scapular Wall Slide',cues:['Back, head and forearms on a wall, ribs pulled down','Slide the arms overhead keeping contact with the wall','Reach tall at the top — let the shoulder blades rotate up','Slide down, driving the elbows toward your back pockets']},
+  'serratus wall slide':{id:'SRrshDCecHY',title:'Serratus Wall Slide',cues:['Forearms on the wall, gently push the wall away','Slide up while pressing — protract (reach) at the very top','Feel the serratus under the armpit switch on','Lower slowly · the muscle that powers and protects pressing']},
+  'scapular pull-up':{id:'-ZIpSoTRsuE',title:'Scapular Pull-Up',cues:['Dead hang from the bar, arms fully straight','Without bending the elbows, pull the shoulders down and back','Lift the body a few inches using only the shoulder blades','Lower to a full hang · the missing link for healthy pull-ups']},
+  'prone y-t-w raise':{id:'CFt3WjCBbpc',title:'Prone Y-T-W Raise',cues:['Lie face-down, thumbs up, light or no weight','Raise the arms into a Y, then a T, then a W','Lead with the shoulder blades — keep the neck relaxed','Lower slowly · wakes up the lower traps for shoulder health']},
 };
 // Map any program exercise name -> canonical video key (or null for non-movement items)
 const VIDEO_ALIASES = {
@@ -1268,7 +1506,9 @@ const VIDEO_ALIASES = {
   'weighted ring rows':'ring rows','push press (barbell)':'push press',
   'single-leg rdl (db)':'single-leg rdl','step-ups (box)':'step-ups',
   'full rest + mobility':'mobility flow','full rest + mobility flow':'mobility flow',
-  'rest + mobility':'mobility flow','walk + mobility flow':'mobility flow','foam roll + mobility':'foam roll + mobility'
+  'rest + mobility':'mobility flow','walk + mobility flow':'mobility flow','foam roll + mobility':'foam roll + mobility',
+  'tibialis raises':'tibialis raise','landmine goblet squat':'landmine squat','half kneeling landmine press':'half-kneeling landmine press',
+  'y-t-w raise':'prone y-t-w raise','ytw raise':'prone y-t-w raise','spanish squat (band)':'spanish squat','wall slide (scapular)':'wall slide'
 };
 const RUN_WORDS = ['easy run','easy jog','very easy jog','start easy','easy bookend','strides','long run','tempo','threshold','interval run','race-pace','race-pace segments','warm-up','cool-down'];
 // items that are guidance only (no demo video makes sense)
@@ -1302,6 +1542,128 @@ function resolveVideoKey(name){
 function ytSearchUrl(name){
   return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(name + ' exercise proper form technique');
 }
+
+// ─────────────────────────────────────────
+// EXERCISE ANIMATIONS — primary visual
+// Self-contained SVG figures that morph between a start and end pose using
+// SMIL (no network, no external libraries). Schematic, but clearly readable.
+// Each pattern covers a movement family; resolveAnimKey() maps any exercise
+// (including the new landmine / knee / scapular work) onto the closest one.
+// ─────────────────────────────────────────
+const ANIM_BONES = [['sh','hip'],['hip','knee'],['knee','ankle'],['ankle','toe'],['sh','elb'],['elb','hand'],['hip','kneeB'],['kneeB','ankleB'],['ankleB','toeB']];
+function _animTag(attr,a,b,dur){
+  return '<animate attributeName="'+attr+'" values="'+a+';'+b+';'+a+'" dur="'+dur+'s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"/>';
+}
+function _bone(p,q,A,B,dur){
+  if(!A[p]||!A[q]||!B[p]||!B[q]) return '';
+  const arm = (p==='sh'&&q==='elb')||(p==='elb'&&q==='hand');
+  const col = arm ? 'var(--accent)' : 'var(--accent2)';
+  return '<line x1="'+A[p][0]+'" y1="'+A[p][1]+'" x2="'+A[q][0]+'" y2="'+A[q][1]+'" stroke="'+col+'" stroke-width="5" stroke-linecap="round">'
+    + _animTag('x1',A[p][0],B[p][0],dur)+_animTag('y1',A[p][1],B[p][1],dur)
+    + _animTag('x2',A[q][0],B[q][0],dur)+_animTag('y2',A[q][1],B[q][1],dur)+'</line>';
+}
+function _joint(name,A,B,r,dur,fill){
+  if(!A[name]||!B[name]) return '';
+  return '<circle cx="'+A[name][0]+'" cy="'+A[name][1]+'" r="'+r+'" fill="'+(fill||'var(--accent2)')+'">'
+    + _animTag('cx',A[name][0],B[name][0],dur)+_animTag('cy',A[name][1],B[name][1],dur)+'</circle>';
+}
+function buildFigure(A,B,opts){
+  opts=opts||{};
+  const dur=opts.dur||2.2;
+  let s='<svg viewBox="0 0 220 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true">';
+  s+='<line x1="10" y1="184" x2="210" y2="184" stroke="rgba(255,255,255,0.13)" stroke-width="3" stroke-linecap="round"/>';
+  if(opts.bar) s+='<line x1="58" y1="28" x2="152" y2="28" stroke="rgba(255,255,255,0.32)" stroke-width="5" stroke-linecap="round"/>';
+  if(opts.box) s+='<rect x="100" y="150" width="44" height="34" rx="3" fill="rgba(194,214,128,0.08)" stroke="rgba(194,214,128,0.28)" stroke-width="2"/>';
+  if(opts.band){
+    s+='<line x1="'+A.hand[0]+'" y1="'+A.hand[1]+'" x2="198" y2="'+(opts.bandY!=null?opts.bandY:A.hand[1])+'" stroke="rgba(255,107,71,0.75)" stroke-width="3" stroke-dasharray="5 5" stroke-linecap="round">'
+      +_animTag('x1',A.hand[0],B.hand[0],dur)+_animTag('y1',A.hand[1],B.hand[1],dur)+'</line>';
+  }
+  ANIM_BONES.forEach(b=> s+=_bone(b[0],b[1],A,B,dur));
+  s+=_joint('head',A,B,9,dur);
+  if(opts.load) s+=_joint('hand',A,B,5.5,dur,'var(--accent3)');
+  s+='</svg>';
+  return s;
+}
+
+// Two poses [A,B] (+ options) per movement family. Coords in a 0–220 × 0–200 box, figure faces right, ground at y≈184.
+const ANIM_POSES = {
+  squat: [{toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,64],head:[100,48],elb:[96,86],hand:[96,98]},
+          {toe:[120,180],ankle:[112,176],knee:[128,150],hip:[96,142],sh:[88,104],head:[85,89],elb:[82,118],hand:[88,122]},{load:'db'}],
+  hinge: [{toe:[120,180],ankle:[112,176],knee:[110,142],hip:[106,106],sh:[102,66],head:[100,50],elb:[104,92],hand:[104,118]},
+          {toe:[120,180],ankle:[112,176],knee:[114,144],hip:[124,120],sh:[152,98],head:[162,88],elb:[150,118],hand:[150,142]},{load:'db'}],
+  lunge: [{toe:[122,180],ankle:[116,176],knee:[114,140],hip:[106,104],sh:[102,66],head:[100,50],elb:[100,90],hand:[102,112],kneeB:[92,150],ankleB:[78,176],toeB:[70,180]},
+          {toe:[126,180],ankle:[120,176],knee:[130,150],hip:[110,138],sh:[106,100],head:[104,84],elb:[104,124],hand:[106,140],kneeB:[96,168],ankleB:[80,176],toeB:[72,180]}],
+  press: [{toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,64],head:[100,48],elb:[114,76],hand:[108,58]},
+          {toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,64],head:[100,48],elb:[104,42],hand:[104,18]},{load:'bar'}],
+  pushup:[{toe:[150,180],ankle:[150,174],knee:[130,168],hip:[110,162],sh:[78,150],head:[64,146],elb:[74,164],hand:[70,178]},
+          {toe:[150,180],ankle:[150,176],knee:[130,172],hip:[108,168],sh:[78,166],head:[64,162],elb:[80,172],hand:[70,178]}],
+  row:   [{toe:[120,180],ankle:[112,176],knee:[112,146],hip:[120,120],sh:[150,98],head:[160,88],elb:[150,128],hand:[150,152]},
+          {toe:[120,180],ankle:[112,176],knee:[112,146],hip:[120,120],sh:[150,98],head:[160,88],elb:[160,102],hand:[138,118]},{load:'db'}],
+  pull:  [{toe:[118,182],ankle:[110,178],knee:[108,156],hip:[106,120],sh:[106,82],head:[104,72],elb:[106,56],hand:[106,30]},
+          {toe:[118,158],ankle:[110,154],knee:[108,132],hip:[106,96],sh:[106,58],head:[104,46],elb:[116,44],hand:[106,30]},{bar:true}],
+  calf:  [{toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,66],head:[100,50],elb:[100,90],hand:[102,112]},
+          {toe:[120,180],ankle:[115,170],knee:[112,132],hip:[108,96],sh:[104,58],head:[102,42],elb:[102,82],hand:[104,104]}],
+  core:  [{toe:[182,180],ankle:[172,176],knee:[148,162],hip:[120,150],sh:[64,154],head:[52,150],elb:[60,176],hand:[40,176]},
+          {toe:[182,178],ankle:[172,174],knee:[148,158],hip:[120,144],sh:[64,150],head:[52,146],elb:[60,176],hand:[40,176]},{dur:2.6}],
+  carry: [{toe:[128,180],ankle:[122,176],knee:[118,140],hip:[108,104],sh:[104,64],head:[102,48],elb:[100,92],hand:[100,116],kneeB:[98,140],ankleB:[92,176],toeB:[86,180]},
+          {toe:[92,180],ankle:[88,176],knee:[96,140],hip:[108,104],sh:[104,66],head:[102,50],elb:[100,92],hand:[100,116],kneeB:[120,140],ankleB:[126,176],toeB:[132,180]},{load:'db',dur:1.4}],
+  jump:  [{toe:[120,180],ankle:[112,176],knee:[116,150],hip:[104,128],sh:[100,92],head:[98,76],elb:[88,108],hand:[80,124]},
+          {toe:[120,168],ankle:[112,164],knee:[110,128],hip:[106,92],sh:[102,56],head:[100,40],elb:[110,40],hand:[114,20]},{dur:1.5}],
+  run:   [{toe:[142,178],ankle:[136,170],knee:[128,150],hip:[108,118],sh:[100,84],head:[98,68],elb:[112,96],hand:[124,90],kneeB:[96,150],ankleB:[84,168],toeB:[78,176]},
+          {toe:[96,176],ankle:[92,168],knee:[96,148],hip:[108,118],sh:[100,84],head:[98,68],elb:[90,98],hand:[80,92],kneeB:[124,150],ankleB:[136,162],toeB:[142,170]},{dur:1.0}],
+  scap:  [{toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,72],head:[100,52],elb:[128,76],hand:[152,78]},
+          {toe:[120,180],ankle:[112,176],knee:[110,140],hip:[106,104],sh:[102,72],head:[100,52],elb:[120,56],hand:[112,60]},{band:true,bandY:78}],
+  knee:  [{toe:[120,150],ankle:[114,146],knee:[112,116],hip:[108,84],sh:[104,48],head:[102,32],elb:[104,72],hand:[106,92],kneeB:[96,120],ankleB:[92,150],toeB:[86,152]},
+          {toe:[120,150],ankle:[114,146],knee:[120,128],hip:[104,100],sh:[100,64],head:[98,48],elb:[100,88],hand:[102,108],kneeB:[96,140],ankleB:[92,176],toeB:[86,180]},{box:true,dur:2.6}],
+  generic:[{toe:[120,180],ankle:[112,176],knee:[110,142],hip:[106,106],sh:[102,66],head:[100,50],elb:[100,92],hand:[102,114]},
+           {toe:[120,180],ankle:[112,176],knee:[116,148],hip:[104,124],sh:[100,86],head:[98,70],elb:[112,76],hand:[120,60]},{dur:2.6}]
+};
+
+// canonical video key  ->  animation family
+const ANIM_MAP = {
+  'back squat':'squat','goblet squat':'squat','spanish squat':'squat','landmine squat':'squat',
+  'romanian deadlift':'hinge','conventional deadlift':'hinge','single-leg rdl':'hinge','landmine rdl':'hinge','nordic curl':'hinge',
+  'walking lunges':'lunge','step-ups':'lunge','bulgarian split squat':'lunge','landmine reverse lunge':'lunge','atg split squat':'lunge','poliquin step-up':'lunge',
+  'db overhead press':'press','push press':'press','landmine press':'press','half-kneeling landmine press':'press','hang power clean':'press',
+  'barbell bench press':'pushup','ring push-ups':'pushup',
+  'barbell bent-over row':'row','barbell row':'row','ring rows':'row','landmine row':'row',
+  'pull-ups':'pull','dead hang':'pull','scapular pull-up':'pull',
+  'single-leg calf raise':'calf','calf raise':'calf','tibialis raise':'calf',
+  'plank':'core','side plank':'core','hollow body hold':'core','dead bug':'core','bird dog':'core','pallof press':'core','copenhagen plank':'core','ring fallout':'core','turkish get-up':'core','banded hip abduction':'core',
+  'farmer carry':'carry','suitcase carry':'carry','kb single-arm carry':'carry',
+  'box jumps':'jump',
+  'easy run':'run','tempo':'run','long run':'run',
+  'band pull-apart':'scap','face pull':'scap','ring face pulls':'scap','wall slide':'scap','serratus wall slide':'scap','prone y-t-w raise':'scap',
+  'terminal knee extension':'knee','eccentric step-down':'knee',
+  'kb swings':'hinge',
+  'kb around the world':'generic','kb windmill':'generic','mobility flow':'generic','foam roll':'generic','foam roll + mobility':'generic'
+};
+function resolveAnimKey(name){
+  const key = resolveVideoKey(name);
+  if(key && ANIM_MAP[key]) return ANIM_MAP[key];
+  const n = (name||'').toLowerCase();
+  if(/lunge|split squat|step-?up/.test(n)) return 'lunge';
+  if(/squat/.test(n)) return 'squat';
+  if(/deadlift|rdl|hinge|swing|hip hinge|nordic/.test(n)) return 'hinge';
+  if(/press|push press|overhead|clean/.test(n)) return 'press';
+  if(/bench|push-?up/.test(n)) return 'pushup';
+  if(/row/.test(n)) return 'row';
+  if(/pull-?up|chin|hang/.test(n)) return 'pull';
+  if(/calf|tibial/.test(n)) return 'calf';
+  if(/carry|farmer|suitcase/.test(n)) return 'carry';
+  if(/jump|plyo|box/.test(n)) return 'jump';
+  if(/run|jog|tempo|threshold|interval|stride|race/.test(n)) return 'run';
+  if(/pull-?apart|face pull|wall slide|serratus|y-t-w|ytw|scap|rear delt/.test(n)) return 'scap';
+  if(/knee extension|step-?down|tke|spanish/.test(n)) return 'knee';
+  if(/plank|dead bug|bird dog|hollow|pallof|fallout|copenhagen|core|get-?up|abduction/.test(n)) return 'core';
+  return 'generic';
+}
+function buildAnim(name){
+  const fam = resolveAnimKey(name);
+  const p = ANIM_POSES[fam] || ANIM_POSES.generic;
+  return buildFigure(p[0], p[1], p[2]||{});
+}
+
 
 // ── YouTube IFrame Player API loader (loaded once, on demand) ──
 // Using the Player API (not a bare iframe) lets us catch onError events for
@@ -1358,51 +1720,68 @@ function demoSearchCardHTML(name, searchUrl){
 }
 let _demoToken = 0;   // guards against rapid re-opens overwriting each other
 let _demoPlayer = null;
+let _demoCtx = null;
 function destroyDemoPlayer(){
   if(_demoPlayer){ try{ _demoPlayer.destroy(); }catch(e){} _demoPlayer = null; }
 }
-function showExDemo(name, detail){
+// PRIMARY view: the self-contained SVG animation + a button to switch to video
+function renderDemoAnimView(){
+  if(!_demoCtx) return;
+  destroyDemoPlayer();
+  const c = _demoCtx;
+  const hasVid = !!(c.data && c.data.id);
+  document.getElementById('demo-anim').innerHTML =
+    '<div class="demo-figure">'+buildAnim(c.name)+'</div>'
+    + '<div class="demo-actions">'
+    + '<button class="demo-act" onclick="playExVideo()">▶ '+(hasVid?'Watch video demo':'Find video demo')+'</button>'
+    + '<a class="demo-act ghost" href="'+c.searchUrl+'" target="_blank" rel="noopener">🔍 YouTube</a>'
+    + '</div>'
+    + '<div class="demo-anim-note">Animated guide · tap “Watch video demo” for real footage</div>';
+}
+// BACKUP view: the real YouTube clip (self-healing — falls back to a search if the video won't play)
+function playExVideo(){
+  if(!_demoCtx) return;
   const token = ++_demoToken;
+  const c = _demoCtx;
+  const animEl = document.getElementById('demo-anim');
+  const back = '<button class="demo-back" onclick="renderDemoAnimView()">↺ Back to animation</button>';
+  if(!(c.data && c.data.id)){
+    // No specific clip — go straight to the guaranteed-working search card
+    animEl.innerHTML = demoSearchCardHTML(c.name, c.searchUrl) + back;
+    return;
+  }
+  animEl.innerHTML = '<div class="demo-loading">Loading video…</div>' + back;
+  whenYTApi(function(){
+    if(token !== _demoToken) return;
+    if(_ytApiState === 'failed' || !(window.YT && window.YT.Player)){
+      animEl.innerHTML = demoIframeHTML(c.data, c.searchUrl) + back; // best effort, links still work
+      return;
+    }
+    animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(c.data, c.searchUrl) + back;
+    const fallToSearch = function(){
+      if(token !== _demoToken) return;
+      destroyDemoPlayer();
+      animEl.innerHTML = demoSearchCardHTML(c.name, c.searchUrl) + back;
+    };
+    try{
+      _demoPlayer = new YT.Player('demo-yt-mount', {
+        videoId: c.data.id,
+        host: 'https://www.youtube-nocookie.com',
+        playerVars: { rel:0, modestbranding:1, playsinline:1 },
+        events: { onError: function(){ fallToSearch(); } } // removed / private / embedding disabled
+      });
+    }catch(e){ fallToSearch(); }
+  });
+}
+function showExDemo(name, detail){
+  ++_demoToken;
   destroyDemoPlayer();
   const key = resolveVideoKey(name);
   const data = key ? EXERCISE_VIDEOS[key] : null;
+  _demoCtx = { name:name, detail:detail, key:key, data:data, searchUrl:ytSearchUrl(name) };
   document.getElementById('demo-title').textContent = name.toUpperCase();
   document.getElementById('demo-detail').textContent = detail || '';
-  const animEl = document.getElementById('demo-anim');
-  const searchUrl = ytSearchUrl(name);
-  // Start from the guaranteed-working search card; upgrade to an embedded
-  // player only once the API confirms the specific video actually plays.
-  animEl.innerHTML = demoSearchCardHTML(name, searchUrl);
-
-  if(data && data.id){
-    whenYTApi(function(){
-      if(token !== _demoToken) return;            // modal moved on
-      if(_ytApiState === 'failed' || !(window.YT && window.YT.Player)){
-        // API unavailable — best-effort plain iframe, links still work
-        animEl.innerHTML = demoIframeHTML(data, searchUrl);
-        return;
-      }
-      // Build the player container, then instantiate with error handling
-      animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(data, searchUrl);
-      const fallToSearch = function(){
-        if(token !== _demoToken) return;
-        destroyDemoPlayer();
-        animEl.innerHTML = demoSearchCardHTML(name, searchUrl);
-      };
-      try{
-        _demoPlayer = new YT.Player('demo-yt-mount', {
-          videoId: data.id,
-          host: 'https://www.youtube-nocookie.com',
-          playerVars: { rel:0, modestbranding:1, playsinline:1 },
-          events: {
-            // 2 invalid id · 5 html5 error · 100 removed/private · 101/150 embedding disabled
-            onError: function(){ fallToSearch(); }
-          }
-        });
-      }catch(e){ fallToSearch(); }
-    });
-  }
-
+  renderDemoAnimView();   // animation is the primary visual
   const cues = (data && data.cues) ? data.cues : ['Move with control through a full range of motion','Brace your core and keep a neutral, tall spine','Match tempo to the prescription — quality over speed','Breathe steadily — exhale on the effort'];
   document.getElementById('demo-cues').innerHTML = cues.map((c,i)=>
     '<li class="demo-cue"><span class="demo-cue-num">'+(i+1)+'</span><span>'+c+'</span></li>'
@@ -1451,22 +1830,39 @@ function exPrefix(s){
   const first = s.exercises[0] && s.exercises[0].id || sessionKey(s);
   return first.replace(/\d+$/,'');
 }
+// Prehab finishers: every training session gets one knee-health + one shoulder
+// (scapular) accessory — chosen per-session for variety, stable across reloads.
+const KNEE_POOL = [
+  ['Spanish squat (band)','2 × 12 · 3-sec hold, knees forward','strength'],
+  ['ATG split squat','2 × 8/leg · deep, controlled, pain-free range','strength'],
+  ['Tibialis raises','2 × 20 · toes up, control the lower','strength'],
+  ['Terminal knee extension','2 × 15/leg · band, lock the knee out','strength'],
+  ['Eccentric step-down','2 × 10/leg · 3-sec lower, knee tracks toes','strength'],
+  ['Poliquin step-up','2 × 10/leg · VMO + knee tracking','strength']
+];
+const SCAP_POOL = [
+  ['Band pull-apart','2 × 20 · squeeze the shoulder blades together','strength'],
+  ['Face pull','2 × 15 · elbows high, finish with external rotation','strength'],
+  ['Scapular wall slide','2 × 12 · ribs down, blades rotate up','strength'],
+  ['Serratus wall slide','2 × 12 · protract & reach at the top','strength'],
+  ['Scapular pull-up','2 × 10 · depress the blades, arms straight','strength'],
+  ['Prone Y-T-W raise','2 × 8 each · lower-trap activation','strength']
+];
+function _hash(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))|0; } return Math.abs(h); }
 function getOptionalExercises(s){
-  const t=s.type, n=s.name.toLowerCase();
-  let pool;
-  if(t==='strength'&&n.includes('lower')) pool=[['Copenhagen plank','2 × 20 sec/side · hip adductor','core'],['Hollow body hold','2 × 25 sec · anterior core','core']];
-  else if(t==='strength'&&n.includes('upper')) pool=[['Pallof press','2 × 10/side · anti-rotation','core'],['Suitcase carry','2 × 30m/side · anti-lateral-flexion','strength']];
-  else if(t==='strength') pool=[['Farmer carry','2 × 30m · grip + brace','strength'],['Plank','2 × 45 sec · squeeze glutes','core']];
-  else if(t==='combo') pool=[['Side plank','2 × 30 sec/side · lateral core','core'],['Bird dog','2 × 8/side · lumbar stability','core']];
-  else if(t==='run') pool=[['Single-leg calf raise','2 × 15/leg · achilles resilience','strength'],['Side plank','2 × 30 sec/side · running core','core']];
-  else pool=[['Bird dog','2 × 8/side · spinal control','core'],['Dead bug','2 × 8/side · deep core','core']];
   const pre = exPrefix(s);
-  return pool.map((p,i)=>({id:pre+'opt'+(i+1), name:p[0], detail:p[1], cat:p[2], optional:true}));
+  const h = _hash(pre);
+  const knee = KNEE_POOL[h % KNEE_POOL.length];
+  const scap = SCAP_POOL[(Math.floor(h/7)) % SCAP_POOL.length];
+  return [
+    {id:pre+'opt1', name:knee[0], detail:knee[1], cat:knee[2], optional:true},
+    {id:pre+'opt2', name:scap[0], detail:scap[1], cat:scap[2], optional:true}
+  ];
 }
 function renderOptional(s){
   const opts=getOptionalExercises(s);
   const doneCount=opts.filter(e=>STATE.completedExercises[e.id]).length;
-  return '<div class="ex-section-lbl opt-lbl">Optional finishers · +2 '
+  return '<div class="ex-section-lbl opt-lbl">Prehab finishers · knee + shoulder '
     + '<span class="opt-count">'+doneCount+'/2</span></div>'
     + opts.map(e=>{
       const done=STATE.completedExercises[e.id];
