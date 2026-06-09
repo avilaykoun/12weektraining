@@ -300,6 +300,54 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .srch-name{font-size:14px;font-weight:500}
 .srch-sub{font-size:11px;color:var(--text2);font-family:'DM Mono',monospace;margin-top:1px}
 .srch-hint{padding:30px 10px;text-align:center;color:var(--text3);font-size:13px;font-family:'DM Mono',monospace;line-height:1.6}
+/* RPE control */
+.rpe-wrap{display:flex;align-items:center;gap:6px;margin-top:6px}
+.rpe-lbl{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.rpe-sel{flex:1;min-width:0;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:12px;font-family:'DM Mono',monospace;-webkit-appearance:none;appearance:none}
+.rpe-sel.set{border-color:var(--accent);color:var(--accent)}
+.rpe-sel:focus{outline:none;border-color:var(--accent)}
+/* Session load strip */
+.load-strip{margin-top:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.load-strip .ls-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.load-strip .ls-k{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em}
+.load-strip .ls-v{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);line-height:1}
+.load-strip .ls-sub{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);margin-top:4px;line-height:1.4}
+.load-strip .ls-hint{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5}
+/* Training-load analytics */
+.tl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tl-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px}
+.tl-val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;color:var(--text)}
+.tl-lbl{font-size:9.5px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.tl-band{display:inline-block;font-size:9px;font-family:'DM Mono',monospace;padding:2px 6px;border-radius:99px;margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.tl-ok{background:rgba(71,255,160,.14);color:var(--green)}
+.tl-warn{background:rgba(255,180,60,.16);color:#ffb43c}
+.tl-bad{background:rgba(255,107,71,.16);color:var(--accent3)}
+.tl-low{background:rgba(71,168,255,.16);color:var(--accent2)}
+.tl-bars{display:flex;align-items:flex-end;gap:3px;height:54px;margin-top:6px}
+.tl-bar{flex:1;background:var(--accent);border-radius:3px 3px 0 0;min-height:2px;opacity:.85}
+.tl-bar.today{background:var(--accent2)}
+.tl-method{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5;margin-top:10px}
+/* Pace calculator */
+.pc-toggle{display:flex;gap:6px;margin-bottom:14px}
+.pc-tg-btn{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:10px;padding:9px;font-size:12px;font-family:'DM Mono',monospace;cursor:pointer}
+.pc-tg-btn.active{background:var(--accent);color:#0a0a0f;border-color:var(--accent);font-weight:600}
+.pc-field{margin-bottom:12px}
+.pc-field label{display:block;font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.pc-input-row{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.pc-input-row input{flex:1;min-width:0;background:transparent;border:none;color:var(--text);padding:12px;font-size:18px;font-family:'Bebas Neue',sans-serif;letter-spacing:.02em}
+.pc-input-row input:focus{outline:none}
+.pc-unit{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);padding:0 12px;flex-shrink:0}
+.pc-res{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.pc-res-hd{font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.pc-big{display:flex;gap:10px;margin-bottom:12px}
+.pc-big-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.pc-big-v{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--accent);line-height:1}
+.pc-big-l{font-size:9px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.pc-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(42,42,56,.6);font-size:13px}
+.pc-line:last-child{border-bottom:none}
+.pc-line .k{color:var(--text2);font-family:'DM Mono',monospace;font-size:12px}
+.pc-line .v{font-family:'DM Mono',monospace;color:var(--text)}
+.pc-note{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);line-height:1.5;margin-top:10px}
 </style>
 </head>
 <body>
@@ -333,6 +381,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
     <button class="nav-btn" onclick="showSection('program',this)">Program</button>
     <button class="nav-btn" onclick="showSection('history',this)">History</button>
     <button class="nav-btn" onclick="showSection('stats',this)">Stats</button>
+    <button class="nav-btn" onclick="showSection('pace',this)">Pace</button>
   </div>
 </div>
 
@@ -373,6 +422,44 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 <div class="section" id="section-stats">
   <div class="section-title">YOUR STATS</div>
   <div id="stats-view"></div>
+</div>
+
+<!-- PACE CALCULATOR -->
+<div class="section" id="section-pace">
+  <div class="section-title">TREADMILL PACE</div>
+  <div class="pc-toggle">
+    <button class="pc-tg-btn active" id="pc-metric" onclick="pcSetUnit('metric')">km · min/km</button>
+    <button class="pc-tg-btn" id="pc-imperial" onclick="pcSetUnit('imperial')">mi · min/mi</button>
+  </div>
+  <div class="pc-field">
+    <label id="pc-speed-lbl">Treadmill speed (km/h)</label>
+    <div class="pc-input-row">
+      <input id="pc-speed" type="number" inputmode="decimal" step="0.1" oninput="pcEditSpeed()" placeholder="10.0">
+      <span class="pc-unit" id="pc-speed-unit">km/h</span>
+    </div>
+  </div>
+  <div class="pc-field">
+    <label id="pc-pace-lbl">Pace (min/km) — or type a target here</label>
+    <div class="pc-input-row">
+      <input id="pc-pace" type="text" inputmode="numeric" oninput="pcEditPace()" placeholder="6:00">
+      <span class="pc-unit" id="pc-pace-unit">min/km</span>
+    </div>
+  </div>
+  <div class="pc-field">
+    <label>Incline / grade (%)</label>
+    <div class="pc-input-row">
+      <input id="pc-incline" type="number" inputmode="decimal" step="0.5" value="0" oninput="pcOutputs()" placeholder="0">
+      <span class="pc-unit">%</span>
+    </div>
+  </div>
+  <div class="pc-field">
+    <label>Body weight — optional, for calories (kg)</label>
+    <div class="pc-input-row">
+      <input id="pc-weight" type="number" inputmode="decimal" step="1" oninput="pcOutputs()" placeholder="—">
+      <span class="pc-unit">kg</span>
+    </div>
+  </div>
+  <div id="pc-results"></div>
 </div>
 
 </div>
@@ -420,6 +507,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
   </button>
   <button class="bnav-btn" onclick="showSection('stats',null,'stats-btn')" id="bn-stats">
     <div class="bnav-icon">🏃</div><div class="bnav-lbl">Stats</div>
+  </button>
+  <button class="bnav-btn" onclick="showSection('pace',null,'pace-btn')" id="bn-pace">
+    <div class="bnav-icon">⏱️</div><div class="bnav-lbl">Pace</div>
   </button>
 </div>
 
@@ -930,6 +1020,7 @@ if(!STATE.completedExercises) STATE.completedExercises={};
 if(!STATE.completedSessions) STATE.completedSessions={};
 if(!STATE.sessionNotes) STATE.sessionNotes={};
 if(!STATE.exerciseNotes) STATE.exerciseNotes={};
+if(!STATE.exerciseRPE) STATE.exerciseRPE={};
 
 // ─────────────────────────────────────────
 // HELPERS
@@ -993,10 +1084,10 @@ function showSection(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats'};
+  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['today','week','calendar','program','history','stats'];
+  const order=['today','week','calendar','program','history','stats','pace'];
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
@@ -1005,6 +1096,7 @@ function showSection(id,btn){
   else if(id==='calendar') renderCalendar();
   else if(id==='history') renderHistory();
   else if(id==='stats') renderStats();
+  else if(id==='pace') pcEnsureInit();
 }
 
 // ─────────────────────────────────────────
@@ -1042,6 +1134,7 @@ function renderSessionCard(s,interactive){
       ${s.type!=='rest'?renderOptional(s):''}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="session-footer">
+        <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
         <textarea class="session-note-area" placeholder="Session notes…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
         <button class="btn-complete ${done?'done':'pending'}" id="cbtn-${key}" onclick="toggleSessionComplete('${key}')">${done?'DONE ✓':'MARK DONE'}</button>
       </div>
@@ -1067,6 +1160,7 @@ function renderExercises(s,interactive){
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${e.name}</div>
         <div class="ex-detail">${e.detail}</div>
         <input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
+        ${rpeControlHTML(e.id, sessionKey(s))}
       </div>
       <button class="ex-info-btn" onclick="showExDemo('${e.name.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
     </div>`;
@@ -1119,6 +1213,52 @@ function toggleSessionComplete(key){
 }
 function saveSessionNote(key,val){STATE.sessionNotes[key]=val;saveState(STATE);}
 function saveExNote(exId,val){STATE.exerciseNotes[exId]=val;saveState(STATE);}
+
+// ─────────────────────────────────────────
+// RPE (CR-10 / Reps-in-Reserve) + SESSION-RPE TRAINING LOAD (Foster's method)
+// ─────────────────────────────────────────
+const RPE_OPTS = [
+  [10,'10 · Max — 0 reps left'],[9,'9 · 1 rep in reserve'],[8,'8 · 2 in reserve'],
+  [7,'7 · 3 in reserve — very hard'],[6,'6 · 4 in reserve'],[5,'5 · hard'],
+  [4,'4 · somewhat hard'],[3,'3 · moderate'],[2,'2 · easy'],[1,'1 · very easy']
+];
+function rpeControlHTML(exId, sessKey){
+  const cur = STATE.exerciseRPE[exId];
+  const opts = '<option value="">RPE –</option>' + RPE_OPTS.map(o=>
+    '<option value="'+o[0]+'"'+(cur===o[0]?' selected':'')+'>'+o[1]+'</option>').join('');
+  return '<div class="rpe-wrap"><span class="rpe-lbl">RPE</span>'
+    + '<select class="rpe-sel'+(typeof cur==='number'?' set':'')+'" onchange="setRPE(\''+exId+'\',\''+sessKey+'\',this.value)">'
+    + opts + '</select></div>';
+}
+function setRPE(exId, sessKey, val){
+  if(val==='') delete STATE.exerciseRPE[exId];
+  else STATE.exerciseRPE[exId]=Number(val);
+  saveState(STATE);
+  const sel=document.querySelector('.rpe-sel[onchange*="\''+exId+'\'"]');
+  if(sel) sel.classList.toggle('set', val!=='');
+  refreshLoadStrip(sessKey);
+}
+// exercises that count toward session intensity (base + prehab finishers)
+function sessionAllEx(s){
+  return s.exercises.concat(s.type!=='rest'? getOptionalExercises(s) : []);
+}
+function loggedRPEs(s){
+  return sessionAllEx(s).map(e=>STATE.exerciseRPE[e.id]).filter(v=>typeof v==='number'&&v>0);
+}
+function sessionRPEval(s){ const v=loggedRPEs(s); if(!v.length) return null; return v.reduce((a,b)=>a+b,0)/v.length; }
+function sessionLoad(s){ const r=sessionRPEval(s); return r==null?0:Math.round(r*estimateDuration(s)); }
+function loadStripInner(s){
+  const r=sessionRPEval(s), n=loggedRPEs(s).length;
+  if(r==null) return '<div class="ls-hint">Rate each exercise\u2019s RPE above to track session load (RPE \u00d7 minutes).</div>';
+  const load=sessionLoad(s);
+  return '<div class="ls-row"><div><div class="ls-k">Session RPE</div><div class="ls-v">'+r.toFixed(1)+'</div></div>'
+    + '<div style="text-align:right"><div class="ls-k">Training load</div><div class="ls-v">'+load+' <span style="font-size:12px;color:var(--text2)">AU</span></div></div></div>'
+    + '<div class="ls-sub">Avg of '+n+' rated exercise'+(n>1?'s':'')+' \u00d7 '+estimateDuration(s)+' min (Foster session-RPE). See Stats for weekly load, monotony & ACWR.</div>';
+}
+function refreshLoadStrip(key){
+  const s=PROGRAM.find(x=>sessionKey(x)===key); if(!s) return;
+  const el=document.getElementById('load-'+key); if(el) el.innerHTML=loadStripInner(s);
+}
 
 // ─────────────────────────────────────────
 // RENDER WEEK
@@ -1256,6 +1396,69 @@ function renderHistory(){
 // ─────────────────────────────────────────
 // RENDER STATS
 // ─────────────────────────────────────────
+// Training-load analytics — Foster session-RPE load + Gabbett acute:chronic workload ratio
+function sessionDate(s){
+  const dayIdx={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6}[s.day];
+  const dt=new Date(PLAN_START); dt.setHours(0,0,0,0);
+  dt.setDate(dt.getDate()+(s.week-1)*7+dayIdx);
+  return dt;
+}
+function dailyLoadMap(){
+  const m={};
+  PROGRAM.forEach(s=>{ const L=sessionLoad(s); if(L>0){ const k=_ymd(sessionDate(s)); m[k]=(m[k]||0)+L; } });
+  return m;
+}
+function loadWindow(days){
+  const m=dailyLoadMap(); const end=new Date(); end.setHours(0,0,0,0);
+  const arr=[];
+  for(let i=days-1;i>=0;i--){ const d=new Date(end); d.setDate(end.getDate()-i); arr.push({d:new Date(d), load:m[_ymd(d)]||0}); }
+  return arr;
+}
+function _sd(arr){ if(arr.length<1) return 0; const m=arr.reduce((a,b)=>a+b,0)/arr.length; const v=arr.reduce((a,b)=>a+(b-m)*(b-m),0)/arr.length; return Math.sqrt(v); }
+function trainingLoadCardHTML(){
+  const map=dailyLoadMap();
+  const dayKeys=Object.keys(map);
+  const wrap=(inner)=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">'
+    +'<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">TRAINING LOAD · SESSION-RPE</div>'+inner+'</div>';
+  if(dayKeys.length===0){
+    return wrap('<div class="ls-hint">Rate your exercises by RPE on each session to unlock weekly load, monotony, strain and your acute:chronic workload ratio.</div>');
+  }
+  const w7=loadWindow(7), w14=loadWindow(14), w28=loadWindow(28);
+  const acute=w7.reduce((a,b)=>a+b.load,0);
+  const chronic=w28.reduce((a,b)=>a+b.load,0)/4;
+  const dailies7=w7.map(x=>x.load), mean7=acute/7, sd7=_sd(dailies7);
+  const monotony = sd7>0 ? mean7/sd7 : null;
+  const strain = monotony!=null ? Math.round(acute*monotony) : null;
+  const earliest=new Date(dayKeys.sort()[0]); const today0=new Date(); today0.setHours(0,0,0,0);
+  const spanDays=Math.round((today0-earliest)/864e5);
+  const acwrReady = spanDays>=14 && chronic>0;
+  const acwr = acwrReady ? acute/chronic : null;
+  // bands
+  let acwrBand;
+  if(!acwrReady) acwrBand=['tl-low','Building baseline'];
+  else if(acwr<0.8) acwrBand=['tl-low','Detraining'];
+  else if(acwr<=1.3) acwrBand=['tl-ok','Sweet spot'];
+  else if(acwr<=1.5) acwrBand=['tl-warn','Caution'];
+  else acwrBand=['tl-bad','Spike risk'];
+  let monBand = monotony==null?['tl-low','—'] : monotony<1.5?['tl-ok','Good variety'] : monotony<=2?['tl-warn','Moderate'] : ['tl-bad','Too steady'];
+  const maxL=Math.max(1,...w14.map(x=>x.load));
+  const bars=w14.map(x=>{
+    const h=Math.round((x.load/maxL)*100);
+    const isToday=_sameDay(x.d, today0);
+    return '<div class="tl-bar'+(isToday?' today':'')+'" style="height:'+Math.max(2,h)+'%" title="'+x.d.getDate()+': '+x.load+' AU"></div>';
+  }).join('');
+  const inner =
+    '<div class="tl-grid">'
+    + '<div class="tl-card"><div class="tl-val">'+acute+'</div><div class="tl-lbl">This week load (AU)</div></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(acwr!=null?acwr.toFixed(2):'—')+'</div><div class="tl-lbl">ACWR (7d ÷ 28d)</div><span class="tl-band '+acwrBand[0]+'">'+acwrBand[1]+'</span></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(monotony!=null?monotony.toFixed(2):'—')+'</div><div class="tl-lbl">Monotony</div><span class="tl-band '+monBand[0]+'">'+monBand[1]+'</span></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(strain!=null?strain:'—')+'</div><div class="tl-lbl">Strain (AU)</div></div>'
+    + '</div>'
+    + '<div style="font-size:9.5px;font-family:\'DM Mono\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:4px 0 2px">Daily load · last 14 days</div>'
+    + '<div class="tl-bars">'+bars+'</div>'
+    + '<div class="tl-method">Load = session&nbsp;RPE × duration (Foster, AU). Acute = 7-day sum; chronic = 28-day ÷ 4. ACWR sweet-spot ≈ 0.8–1.3; &gt;1.5 = elevated injury risk (Gabbett). Monotony = mean ÷ SD of daily load; keep &lt; 2 (Foster). Strain = weekly load × monotony.</div>';
+  return wrap(inner);
+}
 function renderStats(){
   const done=totalCompleted();
   const pct=Math.round((done/84)*100);
@@ -1280,6 +1483,7 @@ function renderStats(){
       <div class="stat-card"><div class="stat-val">${strengthDone}</div><div class="stat-lbl">Strength sessions</div></div>
       <div class="stat-card"><div class="stat-val">${runDone}</div><div class="stat-lbl">Run sessions</div></div>
     </div>
+    ${trainingLoadCardHTML()}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">LAST 14 DAYS</div>
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
@@ -1883,6 +2087,7 @@ function renderOptional(s){
         + '<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
         + '<div class="ex-detail">'+e.detail+'</div>'
         + '<input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="'+(STATE.exerciseNotes[e.id]||'')+'" oninput="saveExNote(\''+e.id+'\',this.value)">'
+        + rpeControlHTML(e.id, sessionKey(s))
         + '</div>'
         + '<button class="ex-info-btn" onclick="showExDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">ⓘ</button>'
         + '</div>';
@@ -1978,6 +2183,120 @@ function gotoWeek(w){
   },120);
 }
 
+
+// ─────────────────────────────────────────
+// TREADMILL PACE CALCULATOR (ACSM metabolic equations for grade)
+// ─────────────────────────────────────────
+const MI_KM = 1.609344;
+let pcUnit = 'metric';   // 'metric' | 'imperial'
+let pcSpeedKmh = 10;     // canonical belt speed
+let pcInited = false;
+function pcEnsureInit(){
+  if(pcInited) return; pcInited=true;
+  pcSyncFields(); pcOutputs();
+}
+function fmtPaceSec(sec){
+  if(!isFinite(sec)||sec<=0) return '–';
+  const m=Math.floor(sec/60), s=Math.round(sec%60);
+  return (s===60? (m+1)+':00' : m+':'+String(s).padStart(2,'0'));
+}
+function fmtClock(totalSec){
+  if(!isFinite(totalSec)||totalSec<=0) return '–';
+  totalSec=Math.round(totalSec);
+  const h=Math.floor(totalSec/3600), m=Math.floor((totalSec%3600)/60), s=totalSec%60;
+  return (h>0? h+':'+String(m).padStart(2,'0') : m+':'+String(s).padStart(2,'0'))
+    + (h>0? ':'+String(s).padStart(2,'0') : '');
+}
+function parsePaceInput(str){
+  str=String(str).trim();
+  const m=str.match(/^(\d+):([0-5]?\d)$/);
+  if(m) return (+m[1])*60+(+m[2]);
+  const f=parseFloat(str); return isNaN(f)?null:f*60; // bare number = minutes
+}
+function pcPerUnitSec(){ // seconds per km (metric) or per mile (imperial) at current speed
+  const perKm=3600/pcSpeedKmh;
+  return pcUnit==='metric'? perKm : perKm*MI_KM;
+}
+function pcSyncFields(){
+  const sp=document.getElementById('pc-speed'), pa=document.getElementById('pc-pace');
+  if(sp) sp.value=(pcUnit==='metric'? pcSpeedKmh : pcSpeedKmh/MI_KM).toFixed(1);
+  if(pa) pa.value=fmtPaceSec(pcPerUnitSec());
+}
+function pcSetUnit(u){
+  pcUnit=u; pcInited=true;
+  document.getElementById('pc-metric').classList.toggle('active',u==='metric');
+  document.getElementById('pc-imperial').classList.toggle('active',u==='imperial');
+  const sU=u==='metric'?'km/h':'mph', pU=u==='metric'?'min/km':'min/mi';
+  document.getElementById('pc-speed-unit').textContent=sU;
+  document.getElementById('pc-pace-unit').textContent=pU;
+  document.getElementById('pc-speed-lbl').textContent='Treadmill speed ('+sU+')';
+  document.getElementById('pc-pace-lbl').textContent='Pace ('+pU+') — or type a target here';
+  pcSyncFields(); pcOutputs();
+}
+function pcEditSpeed(){
+  const v=parseFloat(document.getElementById('pc-speed').value);
+  if(isNaN(v)||v<=0) return;
+  pcSpeedKmh = pcUnit==='metric'? v : v*MI_KM;
+  const pa=document.getElementById('pc-pace'); if(pa) pa.value=fmtPaceSec(pcPerUnitSec());
+  pcOutputs();
+}
+function pcEditPace(){
+  const sec=parsePaceInput(document.getElementById('pc-pace').value);
+  if(!sec) return;
+  const perKmSec = pcUnit==='metric'? sec : sec/MI_KM;
+  pcSpeedKmh = 3600/perKmSec;
+  const sp=document.getElementById('pc-speed'); if(sp) sp.value=(pcUnit==='metric'? pcSpeedKmh : pcSpeedKmh/MI_KM).toFixed(1);
+  pcOutputs();
+}
+function acsmVO2(kmh, gradePct){           // mL O2 / kg / min
+  const S=kmh*1000/60, g=gradePct/100;     // S in m/min
+  return kmh>=8 ? (0.2*S + 0.9*S*g + 3.5)  // running eq
+               : (0.1*S + 1.8*S*g + 3.5);  // walking eq
+}
+function pcGapKmh(kmh, gradePct){          // grade-adjusted equivalent flat speed
+  if(!gradePct) return kmh;
+  const vo2=acsmVO2(kmh,gradePct);
+  const Sflat = kmh>=8 ? (vo2-3.5)/0.2 : (vo2-3.5)/0.1; // m/min
+  return Math.max(0, Sflat*60/1000);
+}
+function pcOutputs(){
+  const el=document.getElementById('pc-results'); if(!el) return;
+  const grade=parseFloat(document.getElementById('pc-incline').value)||0;
+  const wt=parseFloat(document.getElementById('pc-weight').value);
+  const perKm=3600/pcSpeedKmh, perMi=perKm*MI_KM;
+  const gapKmh=pcGapKmh(pcSpeedKmh,grade);
+  const gapPerKm = gapKmh>0?3600/gapKmh:0, gapPerMi=gapPerKm*MI_KM;
+  const vo2=acsmVO2(pcSpeedKmh,grade);
+  const mets=vo2/3.5;
+  const dists=[['1 km',1],['1 mile',MI_KM],['5K',5],['10K',10],['Half',21.0975],['Marathon',42.195]];
+  const splitRows=dists.map(d=>{
+    const t=(d[1]/pcSpeedKmh)*3600;
+    return '<div class="pc-line"><span class="k">'+d[0]+'</span><span class="v">'+fmtClock(t)+'</span></div>';
+  }).join('');
+  let calRows='';
+  if(!isNaN(wt)&&wt>0){
+    const kcalMin = vo2*wt/1000*5;
+    calRows='<div class="pc-line"><span class="k">Energy</span><span class="v">'+Math.round(kcalMin*60)+' kcal/h · '+Math.round(kcalMin*30)+' / 30 min</span></div>';
+  }
+  el.innerHTML =
+    '<div class="pc-res">'
+    + '<div class="pc-res-hd">At '+pcSpeedKmh.toFixed(1)+' km/h'+(grade?(' · '+grade+'% incline'):'')+'</div>'
+    + '<div class="pc-big">'
+    + '<div class="pc-big-card"><div class="pc-big-v">'+fmtPaceSec(perKm)+'</div><div class="pc-big-l">min / km</div></div>'
+    + '<div class="pc-big-card"><div class="pc-big-v">'+fmtPaceSec(perMi)+'</div><div class="pc-big-l">min / mile</div></div>'
+    + '</div>'
+    + (grade? '<div class="pc-line"><span class="k">Effort-equiv. flat pace</span><span class="v">'+fmtPaceSec(gapPerKm)+' /km · '+fmtPaceSec(gapPerMi)+' /mi</span></div>'
+            + '<div class="pc-line"><span class="k">Flat-equivalent speed</span><span class="v">'+gapKmh.toFixed(1)+' km/h</span></div>' : '')
+    + '<div class="pc-line"><span class="k">Est. VO₂ / intensity</span><span class="v">'+vo2.toFixed(1)+' ml/kg/min · '+mets.toFixed(1)+' METs</span></div>'
+    + calRows
+    + '<div class="pc-note">Incline maths uses the ACSM walking/running metabolic equations. "Effort-equivalent flat pace" is the flat speed that costs the same oxygen as running this grade.</div>'
+    + '</div>'
+    + '<div class="pc-res">'
+    + '<div class="pc-res-hd">Time on the belt</div>'
+    + splitRows
+    + '<div class="pc-note">Distances are belt distance at '+pcSpeedKmh.toFixed(1)+' km/h. Tip: type a goal pace in the pace box to get the speed to set the treadmill.</div>'
+    + '</div>';
+}
 
 window.onload=function(){
   updateCountdown();
