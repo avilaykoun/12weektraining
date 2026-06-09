@@ -86,7 +86,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .session-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center}
 .session-note-area{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 10px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;resize:none;outline:none;min-height:50px}
 .session-note-area:focus{border-color:var(--accent2)}
-.btn-complete{padding:8px 16px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;transition:all .15s;font-weight:500}
+.btn-complete{padding:10px 18px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;transition:all .15s;font-weight:500;flex-shrink:0;white-space:nowrap}
 .btn-complete.done{background:var(--green);color:#000}
 .btn-complete.pending{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
 .session-completed-banner{padding:10px 16px;background:rgba(71,255,160,.08);border-top:1px solid rgba(71,255,160,.2);font-size:12px;color:var(--green);font-family:'DM Mono',monospace;display:flex;align-items:center;gap:6px}
@@ -1133,8 +1133,8 @@ function renderSessionCard(s,interactive){
       ${renderExercises(s,interactive)}
       ${s.type!=='rest'?renderOptional(s):''}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
+      <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
       <div class="session-footer">
-        <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
         <textarea class="session-note-area" placeholder="Session notes…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
         <button class="btn-complete ${done?'done':'pending'}" id="cbtn-${key}" onclick="toggleSessionComplete('${key}')">${done?'DONE ✓':'MARK DONE'}</button>
       </div>
@@ -1200,15 +1200,13 @@ function toggleExercise(exId,sessKey){
 }
 function toggleSessionComplete(key){
   STATE.completedSessions[key]=!STATE.completedSessions[key];
-  if(STATE.completedSessions[key]){
-    // Find session and mark all exercises done
-    const s=PROGRAM.find(x=>sessionKey(x)===key);
-    if(s) s.exercises.forEach(e=>{STATE.completedExercises[e.id]=true;});
-  }
+  // Note: marking a session done records it as complete but leaves each
+  // exercise's tick exactly as the user set it (no auto-ticking).
   saveState(STATE);
   updateCountdown();
   if(currentSection==='today') renderToday();
   else if(currentSection==='calendar') renderCalendar();
+  else if(currentSection==='week') renderWeek();
   else renderHistory();
 }
 function saveSessionNote(key,val){STATE.sessionNotes[key]=val;saveState(STATE);}
@@ -1263,6 +1261,67 @@ function refreshLoadStrip(key){
 // ─────────────────────────────────────────
 // RENDER WEEK
 // ─────────────────────────────────────────
+// End-of-week load monitor: totals session-RPE load for the displayed week and flags overtraining risk
+function _weekLoadSum(monday){
+  const m=dailyLoadMap(); let sum=0; const days=[];
+  for(let i=0;i<7;i++){ const d=new Date(monday); d.setDate(monday.getDate()+i); const L=m[_ymd(d)]||0; sum+=L; days.push(L); }
+  return {sum, days};
+}
+function weekMonitorHTML(monday){
+  const cur=_weekLoadSum(monday);
+  const sunday=new Date(monday); sunday.setDate(monday.getDate()+6);
+  const range=monday.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][monday.getMonth()]
+            +' – '+sunday.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][sunday.getMonth()];
+  const wrap=(inner)=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">'
+    +'<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em">WEEK LOAD · OVERTRAINING MONITOR</div>'
+    +'<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text3)">'+range+'</div></div>'+inner+'</div>';
+  if(cur.sum===0){
+    return wrap('<div class="ls-hint">No training load logged for this week yet. Add an RPE to each exercise and the weekly total, ramp and overtraining risk will appear here.</div>');
+  }
+  // prior up to 4 weeks for chronic baseline & week-over-week
+  const prevSums=[];
+  for(let w=1;w<=4;w++){ const pm=new Date(monday); pm.setDate(monday.getDate()-7*w); prevSums.push(_weekLoadSum(pm).sum); }
+  const lastWk=prevSums[0];
+  const priorNZ=prevSums.filter(v=>v>0);
+  const chronicAvg=priorNZ.length? priorNZ.reduce((a,b)=>a+b,0)/priorNZ.length : 0;
+  const ratio = chronicAvg>0 ? cur.sum/chronicAvg : null;     // weekly acute:chronic
+  const wow = lastWk>0 ? (cur.sum-lastWk)/lastWk*100 : null;   // week-over-week %
+  const mean=cur.sum/7, sd=_sd(cur.days);
+  const monotony = (sd>0) ? mean/sd : null;
+  const strain = monotony!=null ? Math.round(cur.sum*monotony) : null;
+  // risk assessment
+  let level=0; const reasons=[];
+  if(ratio!=null){
+    if(ratio>1.5){ level=2; reasons.push('load ratio '+ratio.toFixed(2)+' vs 4-wk avg (&gt;1.5)'); }
+    else if(ratio>1.3){ level=Math.max(level,1); reasons.push('load ratio '+ratio.toFixed(2)+' (1.3–1.5)'); }
+  }
+  if(wow!=null && wow>10){ level=Math.max(level,1); reasons.push('+'+Math.round(wow)+'% vs last week (&gt;10% jump)'); }
+  if(monotony!=null && monotony>2){ level=Math.max(level,1); reasons.push('monotony '+monotony.toFixed(1)+' (&gt;2 — too even)'); }
+  let banner;
+  if(ratio==null && level===0){
+    banner=['tl-low','Building baseline','Keep logging — a few weeks of data lets the acute:chronic ratio flag spikes.'];
+  } else if(level===2){
+    banner=['tl-bad','High overtraining risk','Your load has spiked well above recent weeks. Consider an easier day, more recovery, or trimming volume.'];
+  } else if(level===1){
+    banner=['tl-warn','Caution','Load is climbing faster than ideal. Hold steady or add variety rather than pushing harder this week.'];
+  } else {
+    banner=['tl-ok','Sustainable','Load is progressing within a safe range. Keep it gradual (≈10%/week).'];
+  }
+  const wowTxt = wow!=null ? ((wow>=0?'+':'')+Math.round(wow)+'% vs last week') : 'first logged week';
+  const rows='<div class="tl-grid">'
+    + '<div class="tl-card"><div class="tl-val">'+cur.sum+'</div><div class="tl-lbl">Total week load (AU)</div><div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text3);margin-top:4px">'+wowTxt+'</div></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(ratio!=null?ratio.toFixed(2):'—')+'</div><div class="tl-lbl">Load ratio vs 4-wk avg</div></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(monotony!=null?monotony.toFixed(2):'—')+'</div><div class="tl-lbl">Monotony</div></div>'
+    + '<div class="tl-card"><div class="tl-val">'+(strain!=null?strain:'—')+'</div><div class="tl-lbl">Strain (AU)</div></div>'
+    + '</div>';
+  const reasonTxt = reasons.length? '<div style="font-size:10px;font-family:\'DM Mono\',monospace;color:var(--text2);margin-top:6px">Flags: '+reasons.join(' · ')+'</div>' : '';
+  const status='<div style="margin-top:4px;padding:11px 12px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)">'
+    + '<span class="tl-band '+banner[0]+'">'+banner[1]+'</span>'
+    + '<div style="font-size:12px;color:var(--text);margin-top:7px;line-height:1.5">'+banner[2]+'</div>'
+    + reasonTxt + '</div>';
+  return wrap(rows+status);
+}
 function renderWeek(){
   const today=new Date();
   const weekSessions=getWeekSessions(today);
@@ -1295,7 +1354,7 @@ function renderWeek(){
       </div>`;
     });
   });
-  container.innerHTML='<div class="week-grid">'+html+'</div>';
+  container.innerHTML=weekMonitorHTML(weekSessions[0].date)+'<div class="week-grid">'+html+'</div>';
 }
 function openDaySession(key){
   const s=PROGRAM.find(x=>sessionKey(x)===key);
@@ -1398,9 +1457,11 @@ function renderHistory(){
 // ─────────────────────────────────────────
 // Training-load analytics — Foster session-RPE load + Gabbett acute:chronic workload ratio
 function sessionDate(s){
-  const dayIdx={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6}[s.day];
-  const dt=new Date(PLAN_START); dt.setHours(0,0,0,0);
-  dt.setDate(dt.getDate()+(s.week-1)*7+dayIdx);
+  const dow={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[s.day];
+  const start=new Date(PLAN_START); start.setHours(0,0,0,0);
+  const offsetInBlock=(dow - start.getDay() + 7)%7;   // align to real calendar weekday within the week-block
+  const dt=new Date(start);
+  dt.setDate(start.getDate() + (s.week-1)*7 + offsetInBlock);
   return dt;
 }
 function dailyLoadMap(){
