@@ -1021,6 +1021,10 @@ if(!STATE.completedSessions) STATE.completedSessions={};
 if(!STATE.sessionNotes) STATE.sessionNotes={};
 if(!STATE.exerciseNotes) STATE.exerciseNotes={};
 if(!STATE.exerciseRPE) STATE.exerciseRPE={};
+// One-time cleanup: older builds auto-ticked every exercise when a session was marked
+// "done", and those ticks were saved. Clear them once so exercise checks reflect only
+// your own taps from now on. Session "done" status and notes/RPE are preserved.
+if(!STATE.autoTickCleared){ STATE.completedExercises={}; STATE.autoTickCleared=true; saveState(STATE); }
 
 // ─────────────────────────────────────────
 // HELPERS
