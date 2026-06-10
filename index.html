@@ -35,6 +35,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .hdr-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px}
 .hdr-title{font-family:'Aptos',sans-serif;font-size:28px;letter-spacing:2px;color:var(--accent)}
 .hdr-sub{font-size:11px;color:var(--text2);font-family:'Aptos',monospace;letter-spacing:.05em}
+.hdr-build{font-size:9px;color:var(--text3);font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:2px;opacity:.8}
 .race-countdown{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .countdown-num{font-family:'Aptos',sans-serif;font-size:32px;color:var(--accent);line-height:1}
 .countdown-lbl{font-size:10px;color:var(--text2);font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
@@ -50,7 +51,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;overflow-y:auto;padding:0 20px;padding-bottom:calc(80px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
+.content{flex:1;overflow-y:auto;padding:0 20px;padding-bottom:84px;scrollbar-width:none;background:#11203a;background:var(--bg)}
 .content::-webkit-scrollbar{display:none}
 .section{display:none}
 .section.active{display:block}
@@ -140,7 +141,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 0;padding-bottom:calc(4px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 0;padding-bottom:calc(6px + var(--safe));z-index:20;display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
 .bnav-icon{font-size:19px;line-height:1}
@@ -383,7 +384,13 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .stp-b:active{background:var(--accent);color:#0a0a0f}
 .setw-inp{width:46px}
 /* Floating timer widget */
-.fab{position:fixed;right:14px;bottom:calc(80px + var(--safe));width:50px;height:50px;border-radius:50%;background:var(--accent);color:#0a0a0f;border:none;font-size:22px;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.45);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fab{position:absolute;right:14px;bottom:calc(70px + var(--safe));width:50px;height:50px;border-radius:50%;background:var(--accent);color:#0a0a0f;border:none;font-size:22px;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.45);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.restore-banner{margin:14px 0 4px;padding:14px;border:1px solid var(--accent);border-radius:14px;background:var(--surface2);display:flex;flex-direction:column;gap:10px}
+.rb-txt{font-size:13px;color:var(--text2);line-height:1.5}
+.rb-txt strong{color:var(--text)}
+.rb-actions{display:flex;gap:8px}
+.rb-restore{flex:1;padding:12px;border:none;border-radius:10px;background:var(--accent);color:#0a0a0f;font-family:'Aptos',monospace;font-size:14px;font-weight:600;cursor:pointer}
+.rb-dismiss{padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text3);font-family:'Aptos',monospace;font-size:14px;cursor:pointer}
 .fab.running{background:var(--accent3);color:#fff;animation:fabpulse 1s infinite}
 @keyframes fabpulse{0%,100%{box-shadow:0 6px 20px rgba(255,107,71,.35)}50%{box-shadow:0 6px 28px rgba(255,107,71,.7)}}
 .timer-sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(120%);bottom:0;width:100%;max-width:430px;background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--border);padding:18px 18px calc(18px + var(--safe));z-index:41;transition:transform .25s ease}
@@ -468,6 +475,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
+      <div class="hdr-build">Build 2026-06-10 · v9</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -498,6 +506,14 @@ input[type=number]{-moz-appearance:textfield}
 </div>
 
 <div class="content">
+
+<div id="restore-banner" class="restore-banner" style="display:none">
+  <div class="rb-txt"><strong>Just updated or switched devices?</strong> Restore your last backup so you keep all your logged sessions.</div>
+  <div class="rb-actions">
+    <button class="rb-restore" onclick="restoreFromBanner()">⬆︎ Restore backup</button>
+    <button class="rb-dismiss" onclick="dismissRestoreBanner()">Start fresh</button>
+  </div>
+</div>
 
 <!-- TODAY -->
 <div class="section active" id="section-today">
@@ -3118,13 +3134,26 @@ function exportData(){
     const m=document.getElementById('data-msg'); if(m) m.textContent='Backup downloaded.';
   }catch(e){ const m=document.getElementById('data-msg'); if(m) m.textContent='Export failed on this browser.'; }
 }
+function hasTrainingData(){
+  try{
+    const n=k=>(STATE[k]&&Object.keys(STATE[k]).length)||0;
+    return (n('completedSessions')+n('completedExercises')+n('exerciseSets')+n('exerciseReps')+n('runLog')+n('exerciseRPE'))>0;
+  }catch(e){ return true; }
+}
+function showRestoreBannerIfEmpty(){
+  const el=document.getElementById('restore-banner'); if(!el) return;
+  el.style.display=(!hasTrainingData() && !STATE.restoreDismissed) ? 'flex' : 'none';
+}
+function restoreFromBanner(){ const inp=document.getElementById('import-file'); if(inp) inp.click(); }
+function hideRestoreBanner(){ const el=document.getElementById('restore-banner'); if(el) el.style.display='none'; }
+function dismissRestoreBanner(){ hideRestoreBanner(); STATE.restoreDismissed=true; saveState(STATE); }
 function importData(input){
   const f=input.files&&input.files[0]; if(!f) return;
   const r=new FileReader();
   r.onload=function(){ const m=document.getElementById('data-msg');
     try{ const obj=JSON.parse(r.result);
       if(obj&&typeof obj==='object'){ STATE=Object.assign(STATE,obj); saveState(STATE);
-        if(m) m.textContent='Backup restored ✓'; renderToday(); if(currentSection==='stats') renderStats(); if(currentSection==='progress') renderProgress(); }
+        if(m) m.textContent='Backup restored ✓'; hideRestoreBanner(); if(typeof appToast==='function') appToast('Backup restored — your sessions are back ✓'); renderToday(); if(currentSection==='stats') renderStats(); if(currentSection==='progress') renderProgress(); }
       else { if(m) m.textContent='That file did not contain valid data.'; }
     }catch(e){ if(m) m.textContent='Could not read that file.'; } };
   r.readAsText(f); input.value='';
@@ -3464,6 +3493,7 @@ function appToast(m){
 window.onload=function(){
   initPWA();
   initSwipe();
+  showRestoreBannerIfEmpty();
   timerRender();
   updateCountdown();
   renderToday();
