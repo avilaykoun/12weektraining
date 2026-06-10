@@ -28,7 +28,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#11203a;background:var(--bg);color:#f4f1e6;color:var(--text);font-family:'Aptos','Aptos Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:17px;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative}
+body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:relative;height:100vh;height:100dvh}
 
 /* HEADER */
 .hdr{padding:env(safe-area-inset-top,44px) 20px 0;background:var(--bg);flex-shrink:0;z-index:10}
@@ -140,7 +140,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:10px 0;padding-bottom:calc(10px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 0;padding-bottom:calc(4px + var(--safe));z-index:20;display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
 .bnav-icon{font-size:19px;line-height:1}
@@ -359,6 +359,11 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .setw{display:flex;flex-direction:column;align-items:center;gap:2px}
 .setw-lbl{font-size:8px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.04em}
 .setw-inp{width:52px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 4px;font-size:13px;font-family:'Aptos',monospace;text-align:center}
+.setw-repwrap{display:flex;align-items:center;gap:2px}
+.setw-x{font-size:11px;color:var(--text3);font-family:'Aptos',monospace}
+.setw-reps{width:34px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 2px;font-size:13px;font-family:'Aptos',monospace;text-align:center;-webkit-appearance:none;appearance:none}
+.setw-reps:focus{border-color:var(--accent);outline:none}
+.setw-reps.miss{border-color:var(--accent3);color:var(--accent3)}
 .setw-inp:focus{outline:none;border-color:var(--accent)}
 .prog-legend{display:flex;flex-wrap:wrap;margin-top:8px}
 .rec-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px}
@@ -1331,6 +1336,7 @@ if(!STATE.setsMigrated){
 }
 if(!STATE.runLog) STATE.runLog={};
 if(!STATE.runTarget) STATE.runTarget={};
+if(!STATE.exerciseReps) STATE.exerciseReps={};
 if(!STATE.recovery) STATE.recovery={};
 if(!STATE.profile) STATE.profile={};
 
@@ -1903,13 +1909,28 @@ function isLoggableLift(e){ return e.cat==='strength' && !!parsePrescription(e.d
 function exPrescriptionById(exId){ for(const s of PROGRAM){ const e=s.exercises.find(x=>x.id===exId); if(e) return parsePrescription(e.detail); } return null; }
 function epley1RM(w,reps){ return w*(1+reps/30); }
 function exSetList(exId){ return (STATE.exerciseSets[exId]||[]).map(x=>parseFloat(x)).filter(x=>!isNaN(x)&&x>0); }
-function exE1RM(exId){ const p=exPrescriptionById(exId); if(!p) return null; const sets=exSetList(exId); if(!sets.length) return null; return Math.round(epley1RM(Math.max.apply(null,sets), p.reps)); }
-function exVolume(exId){ const p=exPrescriptionById(exId); if(!p) return 0; const sets=exSetList(exId); if(!sets.length) return 0; return p.reps*sets.reduce((a,b)=>a+b,0); }
+function exReps(exId,idx,fallback){ const a=STATE.exerciseReps&&STATE.exerciseReps[exId]; const r=a?parseInt(a[idx],10):NaN; return (r>0)?r:fallback; }
+function exSetPairs(exId){ const p=exPrescriptionById(exId); if(!p) return []; const ws=STATE.exerciseSets[exId]||[]; const out=[]; for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; out.push({w,reps:exReps(exId,i,p.reps)}); } return out; }
+function exE1RM(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return null; return Math.round(Math.max.apply(null,pairs.map(s=>epley1RM(s.w,s.reps)))); }
+function exVolume(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return 0; return pairs.reduce((a,s)=>a+s.reps*s.w,0); }
 function setSetWeight(exId,sessKey,idx,val){
   if(!STATE.exerciseSets[exId]) STATE.exerciseSets[exId]=[];
   const w=parseFloat(String(val).replace(',','.'));
   STATE.exerciseSets[exId][idx]=(isNaN(w)||w<=0)?'':w;
   saveState(STATE);
+  const badge=document.getElementById('e1rm-'+exId);
+  if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
+  refreshLoadStrip(sessKey);
+}
+function setSetReps(exId,sessKey,idx,val){
+  if(!STATE.exerciseReps) STATE.exerciseReps={};
+  if(!STATE.exerciseReps[exId]) STATE.exerciseReps[exId]=[];
+  const r=parseInt(val,10);
+  STATE.exerciseReps[exId][idx]=(isNaN(r)||r<=0)?'':r;
+  saveState(STATE);
+  const p=exPrescriptionById(exId);
+  const inp=document.getElementById('setr-'+exId+'-'+idx);
+  if(inp&&p) inp.classList.toggle('miss', r>0 && r<p.reps);   // flag a missed-goal set
   const badge=document.getElementById('e1rm-'+exId);
   if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
   refreshLoadStrip(sessKey);
@@ -1925,17 +1946,25 @@ function weightControlHTML(e,sessKey){
   if(!isLoggableLift(e)) return '';
   const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
   const arr=STATE.exerciseSets[e.id]||[];
+  const reparr=(STATE.exerciseReps&&STATE.exerciseReps[e.id])||[];
   let inputs='';
   for(let i=0;i<n;i++){
     const v=(arr[i]!=null&&arr[i]!=='')?arr[i]:'';
+    const storedR=(reparr[i]!=null&&reparr[i]!=='')?parseInt(reparr[i],10):null;
+    const rdisp=(storedR!=null)?storedR:p.reps;          // pre-filled to the rep goal
+    const miss=(rdisp<p.reps)?' miss':'';
     inputs+='<div class="setw"><span class="setw-lbl">S'+(i+1)+'</span><div class="stp">'
       +'<button class="stp-b" onclick="stepSet(\''+e.id+'\',\''+sessKey+'\','+i+',-2.5)">−</button>'
       +'<input class="setw-inp" id="setw-'+e.id+'-'+i+'" type="number" inputmode="decimal" step="0.5" value="'+v+'" placeholder="kg" oninput="setSetWeight(\''+e.id+'\',\''+sessKey+'\','+i+',this.value)">'
-      +'<button class="stp-b" onclick="stepSet(\''+e.id+'\',\''+sessKey+'\','+i+',2.5)">+</button></div></div>';
+      +'<button class="stp-b" onclick="stepSet(\''+e.id+'\',\''+sessKey+'\','+i+',2.5)">+</button></div>'
+      +'<span class="setw-lbl" style="margin-top:3px">reps</span><div class="stp">'
+      +'<button class="stp-b" onclick="stepReps(\''+e.id+'\',\''+sessKey+'\','+i+',-1)">−</button>'
+      +'<input class="setw-reps'+miss+'" id="setr-'+e.id+'-'+i+'" type="number" inputmode="numeric" value="'+rdisp+'" oninput="setSetReps(\''+e.id+'\',\''+sessKey+'\','+i+',this.value)">'
+      +'<button class="stp-b" onclick="stepReps(\''+e.id+'\',\''+sessKey+'\','+i+',1)">+</button></div></div>';
   }
   const isComp=COMPOUND_LIFTS.includes(e.name.toLowerCase());
   const e1=exE1RM(e.id);
-  return '<div class="wt-wrap"><span class="wt-lbl">Load · '+p.reps+' reps</span><div class="setw-row">'+inputs+'</div>'
+  return '<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
 }
 function runControlHTML(e,sessKey){
@@ -1948,6 +1977,14 @@ function runControlHTML(e,sessKey){
     +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg speed" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',0.1)">+</button></div>'
     +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>';
+}
+function stepReps(exId,sessKey,idx,delta){
+  const p=exPrescriptionById(exId); const goal=p?p.reps:1;
+  const a=(STATE.exerciseReps&&STATE.exerciseReps[exId])||[];
+  let cur=parseInt(a[idx],10); if(isNaN(cur)) cur=goal;
+  let next=Math.max(1,Math.min(99,cur+delta));
+  setSetReps(exId,sessKey,idx,next);
+  const inp=document.getElementById('setr-'+exId+'-'+idx); if(inp) inp.value=next;
 }
 function stepSet(exId,sessKey,idx,delta){
   const arr=STATE.exerciseSets[exId]||[]; let cur=parseFloat(arr[idx]); if(isNaN(cur)) cur=0;
@@ -2100,13 +2137,12 @@ function computePRs(){
   const strength={};
   Object.keys(STATE.exerciseSets||{}).forEach(id=>{
     const info=meta[id]; if(!info||info.cat!=='strength') return;
-    const sets=(STATE.exerciseSets[id]||[]).map(parseFloat).filter(v=>v>0);
-    if(!sets.length) return;
-    const top=Math.max(...sets);
-    const pres=parsePrescription(info.detail); const reps=pres?pres.reps:1;
-    const e1=epley1RM(top,reps);
+    const pres=parsePrescription(info.detail); const fb=pres?pres.reps:1;
+    const ws=STATE.exerciseSets[id]||[]; let top=0,best=0;
+    for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; const reps=exReps(id,i,fb); top=Math.max(top,w); best=Math.max(best,epley1RM(w,reps)); }
+    if(top<=0) return;
     const cur=strength[info.name];
-    if(!cur||top>cur.weight||(top===cur.weight&&e1>cur.e1rm)) strength[info.name]={weight:top,e1rm:Math.max(e1,cur?cur.e1rm:0)};
+    if(!cur||top>cur.weight||(top===cur.weight&&best>cur.e1rm)) strength[info.name]={weight:top,e1rm:Math.max(best,cur?cur.e1rm:0)};
   });
   let fastestKmh=0,fastestEx=null,longestKm=0,longestEx=null;
   Object.keys(STATE.runLog||{}).forEach(id=>{
