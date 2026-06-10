@@ -141,7 +141,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 0;padding-bottom:calc(6px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:7px 0 6px;z-index:20;display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
 .bnav-icon{font-size:19px;line-height:1}
@@ -365,6 +365,51 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .setw-reps{width:34px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 2px;font-size:13px;font-family:'Aptos',monospace;text-align:center;-webkit-appearance:none;appearance:none}
 .setw-reps:focus{border-color:var(--accent);outline:none}
 .setw-reps.miss{border-color:var(--accent3);color:var(--accent3)}
+.lasttime{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:11px;font-family:'Aptos',monospace;color:var(--text3);margin:0 0 9px}
+.lt-v{color:var(--text2)}
+.sug-apply{margin-left:auto;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;padding:5px 10px;font-family:'Aptos',monospace;font-size:11px;font-weight:600;cursor:pointer}
+.sug-apply.hold{border-color:var(--border);color:var(--text2)}
+.ri-row{padding:10px 0;border-bottom:1px solid var(--border)}
+.ri-top{display:flex;align-items:center;font-size:14px;color:var(--text);font-family:'Aptos',monospace}
+.ri-del{margin-left:auto;background:transparent;border:none;color:var(--text3);font-size:13px;cursor:pointer;padding:2px 6px}
+.ri-sub{font-size:11px;color:var(--text3);font-family:'Aptos',monospace;margin-top:2px}
+.zbar{display:flex;height:5px;border-radius:99px;overflow:hidden;margin-top:6px;background:var(--surface2)}
+.zbar span{display:block;height:100%}
+.rd-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
+.rd-hd{font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.rd-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+.rd-lbl{font-size:13px;color:var(--text2);font-family:'Aptos',monospace}
+.rd-chips{display:flex;gap:5px}
+.rd-chip{border:1px solid var(--border);background:transparent;color:var(--text3);border-radius:8px;padding:6px 10px;font-size:12px;font-family:'Aptos',monospace;cursor:pointer}
+.rd-chip.on{border-color:var(--accent);background:var(--accent);color:#0a0a0f;font-weight:600}
+.rd-verdict{display:flex;align-items:center;gap:12px;margin-top:10px;padding:11px;border:1px solid var(--border);border-radius:12px;background:var(--surface2)}
+.rd-score{font-size:30px;font-family:'Aptos',sans-serif;line-height:1;min-width:46px;text-align:center}
+.rd-band{font-size:13px;font-weight:600;font-family:'Aptos',monospace}
+.rd-advice{font-size:11px;color:var(--text2);line-height:1.45;margin-top:2px}
+.rd-hint{font-size:11px;color:var(--text3);margin-top:8px;font-family:'Aptos',monospace}
+.plate-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.plate-chip{border:1px solid var(--border);background:var(--surface2);border-radius:8px;padding:6px 10px;font-size:13px;font-family:'Aptos',monospace;color:var(--text)}
+.mus-row{margin-bottom:9px}
+.mus-top{display:flex;justify-content:space-between;font-size:11px;font-family:'Aptos',monospace;color:var(--text2);margin-bottom:3px}
+.mus-track{position:relative;height:8px;background:var(--surface2);border-radius:99px;overflow:visible}
+.mus-fill{height:100%;border-radius:99px}
+.mus-mark{position:absolute;top:-2px;width:2px;height:12px;background:var(--text3);opacity:.7;border-radius:2px}
+.gd-card{background:var(--surface);border:1px solid var(--border);border-left-width:4px;border-radius:14px;padding:13px 14px;margin-bottom:14px}
+.gd-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.gd-dot{width:9px;height:9px;border-radius:50%}
+.gd-title{font-size:14px;font-weight:600;font-family:'Aptos',monospace}
+.gd-advice{font-size:12.5px;color:var(--text2);line-height:1.5}
+.gd-reasons{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.gd-reasons span{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);background:var(--surface2);border-radius:6px;padding:3px 7px}
+.gd-soft{font-size:11px;color:var(--accent);font-family:'Aptos',monospace;margin-top:8px}
+.gd-adj{font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;margin-top:9px}
+.gd-adj span{color:var(--text3);font-size:10px}
+.gd-btn{margin-top:11px;width:100%;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:10px;padding:10px;font-family:'Aptos',monospace;font-size:13px;cursor:pointer}
+.srpe-wrap{margin-bottom:10px}
+.srpe-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.srpe-row{display:flex;gap:4px}
+.srpe-chip{flex:1;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:7px;padding:7px 0;font-size:12px;font-family:'Aptos',monospace;cursor:pointer}
+.srpe-chip.on{border-color:var(--accent);background:var(--accent);color:#0a0a0f;font-weight:600}
 .setw-inp:focus{outline:none;border-color:var(--accent)}
 .prog-legend{display:flex;flex-wrap:wrap;margin-top:8px}
 .rec-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:12px}
@@ -475,7 +520,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v9</div>
+      <div class="hdr-build">Build 2026-06-10 · v17</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -741,12 +786,55 @@ input[type=number]{-moz-appearance:textfield}
   <div id="rp-msg" class="pc-note" style="text-align:center"></div>
 
   <div class="tool-divider"></div>
+  <div class="tool-h">Plate &amp; warm-up calculator</div>
+  <div class="tool-sub">What to load on the bar per side, plus a warm-up ramp to your working weight.</div>
+  <div class="pc-field">
+    <label>Working weight (kg)</label>
+    <div class="pc-input-row"><input id="pl-w" type="number" inputmode="decimal" step="2.5" oninput="plCalc()" placeholder="100" style="flex:1"><span class="pc-unit">kg</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Bar</label>
+    <div class="pc-input-row"><select id="pl-bar" onchange="plCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="20">Olympic 20 kg</option><option value="15">Women\u2019s 15 kg</option><option value="10">Training 10 kg</option><option value="0">No bar / dumbbells</option>
+    </select></div>
+  </div>
+  <div id="pl-out"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Import a run (GPX / TCX)</div>
+  <div class="tool-sub">Bring in real runs from Garmin, Strava or Apple Health — it reads distance, pace, heart rate and time-in-zone, and feeds your Stats load &amp; fitness trend.</div>
+  <button class="data-btn accent" onclick="document.getElementById('run-file').click()">⬆︎ Import run file</button>
+  <input id="run-file" type="file" accept=".gpx,.tcx,application/gpx+xml,application/vnd.garmin.tcx+xml,application/xml,text/xml" style="display:none" onchange="importRunFile(this)">
+  <div id="ri-msg" class="pc-note" style="text-align:center"></div>
+  <div id="ri-list"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Log a run manually</div>
+  <div class="tool-sub">No file? Enter an outdoor run by hand — it feeds the same Stats load, fitness &amp; race predictor.</div>
+  <div class="pc-field">
+    <label>Distance (km)</label>
+    <div class="pc-input-row"><input id="mr-km" type="number" inputmode="decimal" step="0.1" placeholder="10" style="flex:1"><span class="pc-unit">km</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Time</label>
+    <div class="pc-input-row" style="gap:8px"><input id="mr-min" type="number" inputmode="numeric" placeholder="50" style="flex:1"><span class="pc-unit">min</span><input id="mr-sec" type="number" inputmode="numeric" placeholder="00" style="flex:1"><span class="pc-unit">sec</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Average heart rate — optional (bpm)</label>
+    <div class="pc-input-row"><input id="mr-hr" type="number" inputmode="numeric" placeholder="—" style="flex:1"><span class="pc-unit">bpm</span></div>
+  </div>
+  <button class="pc-apply" onclick="logManualRun()">Log run</button>
+  <div id="mr-msg" class="pc-note" style="text-align:center"></div>
+
+  <div class="tool-divider"></div>
   <div class="tool-h">Data &amp; backup</div>
   <div class="tool-sub">Everything is saved on this device automatically. Export a backup before clearing your browser, switching phones, or just to be safe.</div>
   <button class="data-btn accent" onclick="exportData()">⬇︎ Export backup</button>
   <button class="data-btn" onclick="copyBackup()">⧉ Copy JSON</button>
   <button class="data-btn" onclick="document.getElementById('import-file').click()">⬆︎ Restore backup</button>
   <input id="import-file" type="file" accept="application/json,.json" style="display:none" onchange="importData(this)">
+  <button class="data-btn" onclick="exportICS()">📅 Add plan to calendar (.ics)</button>
+  <div id="backup-note" class="pc-note" style="text-align:center"></div>
   <div id="data-msg" class="tool-sub" style="margin-top:10px"></div>
 </div>
 
@@ -1353,6 +1441,12 @@ if(!STATE.setsMigrated){
 if(!STATE.runLog) STATE.runLog={};
 if(!STATE.runTarget) STATE.runTarget={};
 if(!STATE.exerciseReps) STATE.exerciseReps={};
+if(!STATE.importedRuns) STATE.importedRuns=[];
+if(!STATE.readiness) STATE.readiness={};
+if(!STATE.bodyweightLog) STATE.bodyweightLog={};
+if(!STATE.sessionRPE) STATE.sessionRPE={};
+if(!STATE.softenDay) STATE.softenDay={};
+if(!STATE.celebratedPR) STATE.celebratedPR={};
 if(!STATE.recovery) STATE.recovery={};
 if(!STATE.profile) STATE.profile={};
 
@@ -1447,7 +1541,7 @@ function renderToday(){
     container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+recoveryPanelHTML(today);
     return;
   }
-  let out=sessions.map(s=>renderSessionCard(s,true)).join('');
+  let out=guidanceCardHTML(today)+readinessCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -1583,15 +1677,17 @@ function sessionAllEx(s){
 function loggedRPEs(s){
   return sessionAllEx(s).map(e=>STATE.exerciseRPE[e.id]).filter(v=>typeof v==='number'&&v>0);
 }
-function sessionRPEval(s){ const v=loggedRPEs(s); if(!v.length) return null; return v.reduce((a,b)=>a+b,0)/v.length; }
+function sessionRPEval(s){ const key=sessionKey(s); if(STATE.sessionRPE && STATE.sessionRPE[key]>0) return STATE.sessionRPE[key]; const v=loggedRPEs(s); if(!v.length) return null; return v.reduce((a,b)=>a+b,0)/v.length; }
 function sessionLoad(s){ const r=sessionRPEval(s); return r==null?0:Math.round(r*estimateDuration(s)); }
 function loadStripInner(s){
+  const key=sessionKey(s); const quick=sessionRPEQuickHTML(s);
   const r=sessionRPEval(s), n=loggedRPEs(s).length;
-  if(r==null) return '<div class="ls-hint">Rate each exercise\u2019s RPE above to track session load (RPE \u00d7 minutes).</div>';
+  const manual=STATE.sessionRPE&&STATE.sessionRPE[key]>0;
+  if(r==null) return quick+'<div class="ls-hint">Tap a number above, or rate each exercise\u2019s RPE, to track session load (RPE \u00d7 minutes).</div>';
   const load=sessionLoad(s);
-  return '<div class="ls-row"><div><div class="ls-k">Session RPE</div><div class="ls-v">'+r.toFixed(1)+'</div></div>'
+  return quick+'<div class="ls-row"><div><div class="ls-k">Session RPE</div><div class="ls-v">'+r.toFixed(1)+'</div></div>'
     + '<div style="text-align:right"><div class="ls-k">Training load</div><div class="ls-v">'+load+' <span style="font-size:12px;color:var(--text2)">AU</span></div></div></div>'
-    + '<div class="ls-sub">Avg of '+n+' rated exercise'+(n>1?'s':'')+' \u00d7 '+estimateDuration(s)+' min (Foster session-RPE). See Stats for weekly load, monotony & ACWR.</div>';
+    + '<div class="ls-sub">'+(manual?'Your quick session rating':('Avg of '+n+' rated exercise'+(n>1?'s':'')))+' \u00d7 '+estimateDuration(s)+' min (Foster session-RPE). Feeds Stats load, fitness &amp; ACWR.</div>';
 }
 function refreshLoadStrip(key){
   const s=PROGRAM.find(x=>sessionKey(x)===key); if(!s) return;
@@ -1834,6 +1930,7 @@ function sessionDate(s){
 function dailyLoadMap(){
   const m={};
   PROGRAM.forEach(s=>{ const L=sessionLoad(s); if(L>0){ const k=_ymd(sessionDate(s)); m[k]=(m[k]||0)+L; } });
+  (STATE.importedRuns||[]).forEach(r=>{ if(r&&r.load>0&&r.date){ m[r.date]=(m[r.date]||0)+r.load; } });
   return m;
 }
 function loadWindow(days){
@@ -1929,6 +2026,41 @@ function exReps(exId,idx,fallback){ const a=STATE.exerciseReps&&STATE.exerciseRe
 function exSetPairs(exId){ const p=exPrescriptionById(exId); if(!p) return []; const ws=STATE.exerciseSets[exId]||[]; const out=[]; for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; out.push({w,reps:exReps(exId,i,p.reps)}); } return out; }
 function exE1RM(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return null; return Math.round(Math.max.apply(null,pairs.map(s=>epley1RM(s.w,s.reps)))); }
 function exVolume(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return 0; return pairs.reduce((a,s)=>a+s.reps*s.w,0); }
+function _startOfToday(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+function lastLoggedForName(name){
+  const today=_startOfToday(); let best=null;
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(!(d<today)) return;
+    s.exercises.forEach(e=>{ if(e.cat!=='strength'||e.name!==name) return;
+      const ws=(STATE.exerciseSets[e.id]||[]).map(parseFloat).filter(x=>x>0); if(!ws.length) return;
+      if(!best||d>best.date) best={date:d,ex:e,id:e.id};
+    });
+  });
+  return best;
+}
+function fmtLastSets(rec){
+  const ws=(STATE.exerciseSets[rec.id]||[]); const p=parsePrescription(rec.ex.detail); const goal=p?p.reps:null;
+  const parts=[]; for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; parts.push(s1Fmt(w)+'×'+exReps(rec.id,i,goal)); }
+  return parts.join(', ');
+}
+function suggestNextLoad(name){
+  const rec=lastLoggedForName(name); if(!rec) return null;
+  const wsraw=(STATE.exerciseSets[rec.id]||[]); const ws=wsraw.map(parseFloat).filter(x=>x>0); if(!ws.length) return null;
+  const topW=Math.max.apply(null,ws);
+  const p=parsePrescription(rec.ex.detail); const goal=p?p.reps:null;
+  let allHit=true;
+  for(let i=0;i<wsraw.length;i++){ const w=parseFloat(wsraw[i]); if(!(w>0)) continue; if(goal&&exReps(rec.id,i,goal)<goal) allHit=false; }
+  const rpe=STATE.exerciseRPE[rec.id]; const rpeOk=(rpe==null)||rpe<=8;
+  const inc=(classifyLift(name)==='upper')?2.5:5;
+  if(allHit&&rpeOk) return {rec,last:topW,next:roundKg(topW+inc),action:'up',rpe};
+  return {rec,last:topW,next:topW,action:'hold',rpe};
+}
+function applySuggest(exId,sessKey,load){
+  const p=exPrescriptionById(exId); const n=p?Math.min(p.sets,8):3;
+  for(let i=0;i<n;i++){ setSetWeight(exId,sessKey,i,load); const inp=document.getElementById('setw-'+exId+'-'+i); if(inp) inp.value=load; }
+  if(typeof appToast==='function') appToast(s1Fmt(load)+' kg loaded across today\u2019s sets \u2713');
+  if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}
+  const sg=document.getElementById('sug-'+exId); const b=sg&&sg.querySelector('.sug-apply'); if(b) b.textContent='\u2713 '+s1Fmt(load)+' kg set';
+}
 function setSetWeight(exId,sessKey,idx,val){
   if(!STATE.exerciseSets[exId]) STATE.exerciseSets[exId]=[];
   const w=parseFloat(String(val).replace(',','.'));
@@ -1937,6 +2069,8 @@ function setSetWeight(exId,sessKey,idx,val){
   const badge=document.getElementById('e1rm-'+exId);
   if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
   refreshLoadStrip(sessKey);
+  if(typeof checkPR==='function') checkPR(exId);
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
 }
 function setSetReps(exId,sessKey,idx,val){
   if(!STATE.exerciseReps) STATE.exerciseReps={};
@@ -1950,6 +2084,8 @@ function setSetReps(exId,sessKey,idx,val){
   const badge=document.getElementById('e1rm-'+exId);
   if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
   refreshLoadStrip(sessKey);
+  if(typeof checkPR==='function') checkPR(exId);
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
 }
 function setRunSpeed(exId,sessKey,val){
   const v=parseFloat(String(val).replace(',','.'));
@@ -1960,7 +2096,10 @@ function setRunSpeed(exId,sessKey,val){
 }
 function weightControlHTML(e,sessKey){
   if(!isLoggableLift(e)) return '';
-  const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
+  const p=parsePrescription(e.detail);
+  let n=Math.min(p.sets,8);
+  let eased=false;
+  if(STATE.softenDay&&STATE.softenDay[_ymd(new Date())]){ const sx=PROGRAM.find(x=>sessionKey(x)===sessKey); if(sx&&_sameDay(sessionDate(sx),_startOfToday())&&n>1){ n=n-1; eased=true; } }
   const arr=STATE.exerciseSets[e.id]||[];
   const reparr=(STATE.exerciseReps&&STATE.exerciseReps[e.id])||[];
   let inputs='';
@@ -1980,7 +2119,17 @@ function weightControlHTML(e,sessKey){
   }
   const isComp=COMPOUND_LIFTS.includes(e.name.toLowerCase());
   const e1=exE1RM(e.id);
-  return '<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal</span><div class="setw-row">'+inputs+'</div>'
+  let hist='';
+  const sug=suggestNextLoad(e.name);
+  if(sug){
+    const dd=sug.rec.date; const dstr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dd.getDay()]+' '+dd.getDate()+'/'+(dd.getMonth()+1);
+    const btn = sug.action==='up'
+      ? '<button class="sug-apply" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.next+')">↗ Try '+s1Fmt(sug.next)+' kg</button>'
+      : '<button class="sug-apply hold" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.last+')">Repeat '+s1Fmt(sug.last)+' kg</button>';
+    hist='<div class="lasttime" id="sug-'+e.id+'"><span>Last '+dstr+':</span> <span class="lt-v">'+fmtLastSets(sug.rec)+'</span>'
+      +(sug.rpe!=null?' <span>@RPE '+sug.rpe+'</span>':'')+btn+'</div>';
+  }
+  return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal'+(eased?' · eased −1 set':'')+'</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
 }
 function runControlHTML(e,sessKey){
@@ -2193,7 +2342,330 @@ function prCardHTML(){
     ${rows}
   </div>`;
 }
+function fitnessSeries(){
+  const map=dailyLoadMap(); const keys=Object.keys(map); if(!keys.length) return null;
+  const start=new Date(keys.sort()[0]); start.setHours(0,0,0,0);
+  const today=_startOfToday(); let ctl=0,atl=0; const out=[];
+  for(let d=new Date(start); d<=today; d.setDate(d.getDate()+1)){
+    const L=map[_ymd(d)]||0; const tsb=ctl-atl;
+    ctl=ctl+(L-ctl)/42; atl=atl+(L-atl)/7;
+    out.push({d:new Date(d),ctl,atl,tsb});
+  }
+  return out;
+}
+function formBand(tsb,ctl){
+  const r=ctl>0?tsb/ctl:0;
+  if(r>0.05) return ['#5fd6a0','Fresh / tapered'];
+  if(r>=-0.15) return ['#5aa6ff','Neutral'];
+  if(r>=-0.4) return ['#e8c66b','Productive overload'];
+  return ['#ff6b47','High fatigue'];
+}
+function fitnessCardHTML(){
+  const wrap=(inner)=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">FITNESS · FATIGUE · FORM</div>'+inner+'</div>';
+  const s=fitnessSeries();
+  if(!s||s.length<2) return wrap('<div class="ls-hint">Log and RPE-rate a few sessions to build your fitness (CTL), fatigue (ATL) and form (TSB) trend.</div>');
+  const last=s[s.length-1]; const ctl=last.ctl, atl=last.atl, tsb=last.tsb; const band=formBand(tsb,ctl);
+  const data=s.slice(Math.max(0,s.length-90)); const n=data.length;
+  const W=340,H=130,padL=24,padR=8,padT=10,padB=16;
+  const maxV=Math.max(1,...data.map(x=>Math.max(x.ctl,x.atl)));
+  const X=i=>padL+(i/Math.max(1,n-1))*(W-padL-padR);
+  const Y=v=>padT+(1-v/maxV)*(H-padT-padB);
+  const lineFor=k=>data.map((x,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(x[k]).toFixed(1)).join(' ');
+  const ctlArea=lineFor('ctl')+' L '+X(n-1).toFixed(1)+' '+(H-padB)+' L '+X(0).toFixed(1)+' '+(H-padB)+' Z';
+  const cards='<div style="display:flex;gap:8px;margin-bottom:10px">'
+    +'<div class="tl-card"><div class="tl-val">'+Math.round(ctl)+'</div><div class="tl-lbl">Fitness · CTL</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+Math.round(atl)+'</div><div class="tl-lbl">Fatigue · ATL</div></div>'
+    +'<div class="tl-card"><div class="tl-val" style="color:'+band[0]+'">'+(tsb>0?'+':'')+Math.round(tsb)+'</div><div class="tl-lbl">Form · TSB</div></div></div>';
+  const svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="ctlg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity="0.30"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>'
+    +'<path d="'+ctlArea+'" fill="url(#ctlg)"></path>'
+    +'<path d="'+lineFor('ctl')+'" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>'
+    +'<path d="'+lineFor('atl')+'" fill="none" stroke="var(--accent2)" stroke-width="1.6" stroke-dasharray="3 2" stroke-linejoin="round"></path></svg>';
+  const legend='<div style="display:flex;gap:14px;justify-content:center;margin-top:2px;font-size:9px;font-family:\'Aptos\',monospace;color:var(--text3)"><span><span style="color:var(--accent)">━</span> Fitness (42d)</span><span><span style="color:var(--accent2)">┅</span> Fatigue (7d)</span></div>';
+  const note='<div class="pc-note" style="margin-top:8px">Form today: <strong style="color:'+band[0]+'">'+band[1]+'</strong>. Form (TSB = fitness − fatigue) positive ≈ fresh/tapered; moderately negative ≈ productive overload; deeply negative ≈ heavy fatigue. Built from your session-RPE load, so treat the trend (not the absolute number) as the signal. Ride form positive into race week.</div>';
+  return wrap(cards+svg+legend+note);
+}
+// ===== TIER 2/3 FEATURE LOGIC =====
+// ── Daily readiness ──
+var READINESS_Q=[
+  {k:'sleep',label:'Sleep',opts:[['Poor',0],['OK',1],['Good',2]]},
+  {k:'soreness',label:'Soreness',opts:[['High',0],['Some',1],['None',2]]},
+  {k:'energy',label:'Energy',opts:[['Low',0],['OK',1],['High',2]]},
+  {k:'stress',label:'Stress',opts:[['High',0],['Some',1],['Low',2]]}
+];
+function readinessScore(r){ let sum=0,cnt=0; READINESS_Q.forEach(q=>{ if(typeof r[q.k]==='number'){ sum+=r[q.k]; cnt++; } }); return cnt?Math.round((sum/(cnt*2))*100):null; }
+function readinessBand(score){
+  if(score>=70) return ['#5fd6a0','Green — go as planned','Recovered. Train hard — chase your top sets and target paces.'];
+  if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
+  return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
+}
+function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); saveState(STATE); renderToday(); }
+function readinessCardHTML(date){
+  const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
+  const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
+  let verdict;
+  if(score!=null){ const b=readinessBand(score); verdict='<div class="rd-verdict" style="border-color:'+b[0]+'"><div class="rd-score" style="color:'+b[0]+'">'+score+'</div><div><div class="rd-band" style="color:'+b[0]+'">'+b[1]+'</div><div class="rd-advice">'+b[2]+'</div></div></div>'; }
+  else verdict='<div class="rd-hint">Tap how you feel to get a readiness score and a push/back-off call for today.</div>';
+  return '<div class="rd-card"><div class="rd-hd">DAILY READINESS</div>'+rows+verdict+'</div>';
+}
+// ── Race predictor (Riegel) ──
+function predictMarathon(){
+  const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=3&&r.durationSec>0);
+  if(!runs.length) return null;
+  let best=null;
+  runs.forEach(r=>{ const pred=r.durationSec*Math.pow(42.195/r.distKm,1.06); if(!best||pred<best.pred) best={pred,run:r}; });
+  return {sec:Math.round(best.pred),from:best.run};
+}
+function racePredictCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">RACE PREDICTOR 🏁</div>'+inner+'</div>';
+  const pm=predictMarathon();
+  if(!pm) return wrap('<div class="ls-hint">Import a run of 3 km or longer (Tools → Import a run) and I\u2019ll predict your marathon finish and training paces from it.</div>');
+  const t=pm.sec, hh=Math.floor(t/3600), mm=Math.round((t%3600)/60); const big=hh+':'+String(mm).padStart(2,'0');
+  const p=rpPaces(t);
+  const fr=pm.from; const fd=new Date(fr.dateISO); const fds=fd.getDate()+'/'+(fd.getMonth()+1);
+  const row=(l,sec)=>'<tr><td class="p">'+l+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
+  return wrap('<div style="text-align:center;margin-bottom:8px"><div style="font-size:34px;font-family:\'Aptos\',sans-serif;color:var(--accent);line-height:1">'+big+'</div><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">PREDICTED MARATHON</div></div>'
+    +'<table class="s1-tbl"><tbody>'+row('Easy',p.easy)+row('Marathon',p.mp)+row('Threshold',p.thr)+row('Interval',p.int)+'</tbody></table>'
+    +'<div class="pc-note">From your '+fr.distKm+' km run on '+fds+' ('+fmtPaceSec(fr.paceSec)+'/km), via the Riegel model (exponent 1.06). It assumes marathon-specific endurance; without long-run training, real time runs slower. Updates as you import faster/longer runs.</div>');
+}
+// ── Plate & warm-up calculator ──
+function platesFor(target,bar){ let per=(target-bar)/2; if(per<-0.01) return null; const plates=[25,20,15,10,5,2.5,1.25]; const out=[]; plates.forEach(p=>{ let c=0; while(per>=p-1e-9){ per-=p; c++; } if(c) out.push([p,c]); }); return {out,leftover:Math.round(per*100)/100}; }
+function plCalc(){
+  const t=parseFloat(String((document.getElementById('pl-w')||{}).value).replace(',','.'));
+  const bar=parseFloat((document.getElementById('pl-bar')||{}).value||'20');
+  const out=document.getElementById('pl-out'); if(!out) return;
+  if(!(t>0)){ out.innerHTML='<div class="ls-hint">Enter a target weight to see the plates per side and a warm-up ramp.</div>'; return; }
+  const pf=platesFor(t,bar);
+  let plateHTML;
+  if(!pf){ plateHTML='<div class="pc-note">'+t+' kg is below the bar ('+bar+' kg).</div>'; }
+  else { const chips=pf.out.length?pf.out.map(x=>'<span class="plate-chip">'+x[1]+' × '+s1Fmt(x[0])+'</span>').join(''):'<span class="pc-note">just the bar</span>';
+    plateHTML='<div class="pc-res-hd">Per side ('+bar+' kg bar)</div><div class="plate-row">'+chips+'</div>'+(pf.leftover>0?'<div class="pc-note">+'+pf.leftover+' kg can\u2019t be matched with standard plates.</div>':''); }
+  // warm-up ramp to target
+  const steps=[['empty bar',bar,8],['40%',roundKg(t*0.4),5],['60%',roundKg(t*0.6),3],['80%',roundKg(t*0.8),2],['work',roundKg(t),'×']];
+  const wu=steps.filter((s,i)=>i===0||s[1]>bar||i===steps.length-1).map(s=>'<tr><td class="p">'+s[0]+'</td><td class="r">'+s1Fmt(s[1])+' kg'+(s[2]!=='×'?'<small>'+s[2]+' reps</small>':'<small>working sets</small>')+'</td></tr>').join('');
+  out.innerHTML=plateHTML+'<div class="pc-res-hd" style="margin-top:12px">Warm-up ramp</div><table class="s1-tbl"><tbody>'+wu+'</tbody></table>';
+}
+// ── Weekly sets per muscle (MEV/MRV) ──
+function muscleFor(name){
+  const n=(name||'').toLowerCase();
+  if(/squat|leg press|\blunge|step.?up|leg extension|wall sit/.test(n)) return 'Quads';
+  if(/deadlift|\brdl\b|hinge|good ?morning|hamstring|glute|hip thrust|bridge|nordic|leg curl/.test(n)) return 'Posterior chain';
+  if(/bench|chest|\bfly\b|\bdip\b|push.?up/.test(n)) return 'Chest';
+  if(/\brow\b|pull.?up|pull.?down|chin|\blat\b|face ?pull|shrug/.test(n)) return 'Back';
+  if(/overhead|ohp|shoulder|push press|lateral raise|\braise\b|delt|landmine press/.test(n)) return 'Shoulders';
+  if(/curl|tricep|bicep|pushdown|push.?down|skull/.test(n)) return 'Arms';
+  if(/core|plank|fallout|rollout|hollow|\bab\b|crunch|carry|pallof|dead ?bug|anti-|sit.?up|leg raise/.test(n)) return 'Core';
+  return 'Other';
+}
+function weekRange(date){ const d=new Date(date); d.setHours(0,0,0,0); const dow=(d.getDay()+6)%7; const mon=new Date(d); mon.setDate(d.getDate()-dow); const sun=new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999); return {mon,sun}; }
+function weeklyMuscleSets(){
+  const {mon,sun}=weekRange(new Date()); const c={};
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const dt=sessionDate(s); if(dt<mon||dt>sun) return;
+    const done=STATE.completedSessions[sessionKey(s)];
+    s.exercises.forEach(e=>{ if(e.cat!=='strength') return; const p=parsePrescription(e.detail); if(!p) return;
+      const logged=(STATE.exerciseSets[e.id]||[]).map(parseFloat).filter(x=>x>0).length;
+      const sets=logged>0?logged:(done?p.sets:0);
+      if(sets>0){ const mus=muscleFor(e.name); c[mus]=(c[mus]||0)+sets; }
+    });
+  });
+  return c;
+}
+function muscleCardHTML(){
+  const c=weeklyMuscleSets(); const order=['Quads','Posterior chain','Chest','Back','Shoulders','Arms','Core'];
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">WEEKLY SETS / MUSCLE</div>'+inner+'</div>';
+  if(!order.some(k=>c[k]>0)) return wrap('<div class="ls-hint">Log or complete strength sets this week to see weekly volume per muscle against productive landmarks (MEV–MRV).</div>');
+  const MEV=8,MRV=20,SC=24;
+  const rows=order.map(k=>{ const v=c[k]||0; const pct=Math.min(100,v/SC*100); const col=v===0?'var(--surface3)':(v<MEV?'#5aa6ff':(v<=MRV?'#5fd6a0':'#ff6b47'));
+    return '<div class="mus-row"><div class="mus-top"><span>'+k+'</span><span>'+v+' sets</span></div><div class="mus-track"><div class="mus-fill" style="width:'+pct+'%;background:'+col+'"></div><span class="mus-mark" style="left:'+(MEV/SC*100)+'%"></span><span class="mus-mark" style="left:'+(MRV/SC*100)+'%"></span></div></div>';
+  }).join('');
+  return wrap(rows+'<div class="pc-note">This week\u2019s hard sets per muscle. The two ticks mark MEV (~8, minimum to grow) and MRV (~20, recovery ceiling). Blue = under maintenance, green = productive, red = over the ceiling.</div>');
+}
+// ── Consistency ──
+function totalTonnage(){ let t=0; Object.keys(STATE.exerciseSets||{}).forEach(id=>{ t+=exVolume(id); }); return t; }
+function consistencyStats(){
+  const today=_startOfToday(); let sched=0,done=0;
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const dt=sessionDate(s); if(dt>today) return; sched++; if(STATE.completedSessions[sessionKey(s)]) done++; });
+  const adh=sched?Math.round(done/sched*100):0;
+  let streak=0; const d=new Date(today);
+  for(let i=0;i<160;i++){ const ss=getSessionsForDate(d).filter(s=>s.type!=='rest');
+    if(ss.length){ const anyDone=ss.some(s=>STATE.completedSessions[sessionKey(s)]);
+      if(anyDone) streak++; else if(!_sameDay(d,today)) break; }
+    d.setDate(d.getDate()-1);
+  }
+  const {mon,sun}=weekRange(today); let wS=0,wD=0;
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const dt=sessionDate(s); if(dt<mon||dt>sun) return; wS++; if(STATE.completedSessions[sessionKey(s)]) wD++; });
+  return {sched,done,adh,streak,wS,wD};
+}
+function consistencyCardHTML(){
+  const c=consistencyStats(); const ton=totalTonnage();
+  return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">CONSISTENCY</div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:8px">'
+    +'<div class="tl-card"><div class="tl-val">'+c.streak+'</div><div class="tl-lbl">Day streak</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+c.adh+'%</div><div class="tl-lbl">Adherence</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+c.wD+'/'+c.wS+'</div><div class="tl-lbl">This week</div></div></div>'
+    +'<div class="pc-note">'+c.done+' of '+c.sched+' scheduled sessions completed so far'+(ton>0?(' · '+(ton>=1000?(ton/1000).toFixed(1)+' t':Math.round(ton)+' kg')+' total tonnage lifted'):'')+'.</div></div>';
+}
+// ── Body weight + relative strength ──
+function latestBW(){ const l=STATE.bodyweightLog||{}; const ks=Object.keys(l).sort(); if(ks.length) return l[ks[ks.length-1]]; const w=STATE.profile&&parseFloat(STATE.profile.weight); return w>0?w:null; }
+function logBodyweight(){ const i=document.getElementById('bw-in'); const v=parseFloat(String(i.value).replace(',','.')); if(!(v>0)) return; if(!STATE.bodyweightLog) STATE.bodyweightLog={}; STATE.bodyweightLog[_ymd(new Date())]=v; STATE.profile=STATE.profile||{}; STATE.profile.weight=v; saveState(STATE); if(typeof appToast==='function') appToast('Body weight logged: '+v+' kg \u2713'); renderStats(); }
+function bodyCompCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">BODY WEIGHT &amp; RELATIVE STRENGTH</div>'+inner+'</div>';
+  const bw=latestBW(); const log=STATE.bodyweightLog||{}; const ks=Object.keys(log).sort();
+  let spark='';
+  if(ks.length>=2){ const vals=ks.map(k=>log[k]); const mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals); const W=300,H=46; const X=i=>i/(ks.length-1)*W; const Y=v=>mx===mn?H/2:(H-4)-((v-mn)/(mx-mn))*(H-8); const line=vals.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' '); spark='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="46" preserveAspectRatio="none"><path d="'+line+'" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linejoin="round"/></svg>'; }
+  const input='<div class="pc-input-row" style="margin-top:8px"><input id="bw-in" type="number" inputmode="decimal" step="0.1" placeholder="'+(bw?bw+' kg':'kg')+'" style="flex:1"><button class="sug-apply" style="margin-left:8px" onclick="logBodyweight()">Log today</button></div>';
+  let rel='';
+  if(bw){ const pr=computePRs().strength;
+    const stds=[['Squat',1.5,/squat/],['Bench press',1.0,/bench/],['Deadlift',2.0,/deadlift/],['Overhead press',0.6,/overhead|ohp/]];
+    const found=stds.map(st=>{ let bestE=0; pr.forEach(x=>{ if(st[2].test(x.name.toLowerCase())) bestE=Math.max(bestE,x.e1rm); }); if(bestE<=0) return null; const ratio=bestE/bw; return {name:st[0],ratio,std:st[1],ok:ratio>=st[1]}; }).filter(Boolean);
+    if(found.length) rel='<div class="pc-res-hd" style="margin-top:12px">Strength-to-bodyweight (est 1RM ÷ BW)</div>'+found.map(f=>'<div class="pr-row"><span class="pr-name">'+f.name+'</span><span class="pr-val" style="color:'+(f.ok?'#5fd6a0':'var(--text)')+'">'+f.ratio.toFixed(2)+'×<small>target '+f.std.toFixed(1)+'× BW</small></span></div>').join('');
+  }
+  const head = ks.length ? '<div style="font-size:24px;font-family:Aptos,sans-serif;color:var(--text)">'+bw+' kg</div>'+spark : '<div class="ls-hint">Log your body weight to track the trend and your strength-to-bodyweight ratios.</div>';
+  return wrap(head+input+rel);
+}
+// ── Calendar (.ics) export + backup recency ──
+function exportICS(){
+  const pad=n=>String(n).padStart(2,'0');
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN'];
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>e.name).join(', ')).replace(/,/g,'\\,'),'END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='albert-12-week-plan.ics'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1500);
+  if(typeof appToast==='function') appToast('Calendar file exported \u2713');
+}
+function backupAgeText(){ if(!STATE.lastBackupAt) return 'No backup exported yet.'; const days=Math.floor((Date.now()-STATE.lastBackupAt)/864e5); return days<=0?'Last backup: today.':('Last backup: '+days+' day'+(days>1?'s':'')+' ago.'); }
+function refreshBackupNote(){ const el=document.getElementById('backup-note'); if(!el) return; const stale=!STATE.lastBackupAt||(Date.now()-STATE.lastBackupAt)>7*864e5; el.textContent=backupAgeText()+(stale?' Consider exporting a fresh one.':''); el.style.color=stale?'var(--accent3)':'var(--text3)'; }
+// ── Today's Guidance (synthesis) + deload flag ──
+function acwrNow(){
+  const map=dailyLoadMap(); const keys=Object.keys(map); if(!keys.length) return {acwr:null,ready:false};
+  const w7=loadWindow(7), w28=loadWindow(28);
+  const acute=w7.reduce((a,b)=>a+b.load,0); const chronic=w28.reduce((a,b)=>a+b.load,0)/4;
+  const earliest=new Date(keys.sort()[0]); const today0=_startOfToday(); const spanDays=Math.round((today0-earliest)/864e5);
+  const ready=spanDays>=14&&chronic>0; return {acwr:ready?acute/chronic:null,ready};
+}
+function todayGuidance(){
+  const ymd=_ymd(new Date());
+  const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const rs=readinessScore(r);
+  const ser=fitnessSeries(); const tsb=ser&&ser.length?ser[ser.length-1].tsb:null; const ctl=ser&&ser.length?ser[ser.length-1].ctl:0;
+  const aw=acwrNow(); let sev=0; const reasons=[];
+  if(rs!=null){ if(rs<45){sev=Math.max(sev,2);reasons.push('low readiness');} else if(rs<70){sev=Math.max(sev,1);reasons.push('moderate readiness');} else reasons.push('readiness good'); }
+  if(aw.acwr!=null){ if(aw.acwr>1.5){sev=Math.max(sev,2);reasons.push('workload spike '+aw.acwr.toFixed(2));} else if(aw.acwr>1.3){sev=Math.max(sev,1);reasons.push('workload rising');} else if(aw.acwr<0.8) reasons.push('workload low'); }
+  if(tsb!=null&&ctl>0){ const ratio=tsb/ctl; if(ratio<-0.4){sev=Math.max(sev,2);reasons.push('form low');} else if(ratio<-0.15){sev=Math.max(sev,1);} else if(ratio>0.05) reasons.push('form fresh'); }
+  const deload=(aw.acwr!=null&&aw.acwr>1.5)||(tsb!=null&&ctl>0&&tsb/ctl<-0.45);
+  let color,title,advice;
+  if(sev===0){ color='#5fd6a0'; title='Green — push'; advice='Recovered and workload in range. Go after your top sets and target paces today.'; }
+  else if(sev===1){ color='#e8c66b'; title='Amber — moderate'; advice='Slightly loaded. Keep the session but cap intensity (~RPE 8), trim a back-off set, keep easy runs easy.'; }
+  else { color='#ff6b47'; title='Red — back off'; advice='Under-recovered or workload spiking. Make today easy / technique work, or rest.'; }
+  if(deload) advice+=' Workload high — a cutback week looks due.';
+  return {sev,color,title,advice,reasons,deload,hasInputs:(rs!=null||aw.acwr!=null||(tsb!=null&&ctl>0))};
+}
+function guidanceCardHTML(date){
+  const g=todayGuidance(); if(!g.hasInputs) return '';
+  const ymd=_ymd(date); const soft=STATE.softenDay&&STATE.softenDay[ymd];
+  const chips=g.reasons.length?'<div class="gd-reasons">'+g.reasons.map(x=>'<span>'+x+'</span>').join('')+'</div>':'';
+  const a=loadAdjustPct(); const pct=a.pct;
+  const adjLine='<div class="gd-adj">Auto-load: <strong style="color:'+g.color+'">'+(pct>0?'+':'')+pct+'%</strong> <span>· '+a.basis+'</span></div>';
+  const label = pct===0 ? '⚖ Hold loads as planned' : ('⚖ Apply '+(pct>0?'+':'')+pct+'% to today\u2019s lifts');
+  const btn='<button class="gd-btn" onclick="applyAutoAdjust()">'+label+'</button>';
+  return '<div class="gd-card" style="border-color:'+g.color+'"><div class="gd-top"><span class="gd-dot" style="background:'+g.color+'"></span><span class="gd-title" style="color:'+g.color+'">'+g.title+'</span></div><div class="gd-advice">'+g.advice+'</div>'+chips+adjLine+(soft?'<div class="gd-soft">Eased: a back-off set dropped on each lift.</div>':'')+btn+'</div>';
+}
+function toggleSoften(){ const ymd=_ymd(new Date()); if(!STATE.softenDay) STATE.softenDay={}; STATE.softenDay[ymd]=!STATE.softenDay[ymd]; saveState(STATE);
+  renderToday(); if(typeof appToast==='function') appToast(STATE.softenDay[ymd]?'Eased mode on — go gentle today':'Full session restored'); }
+// ── Readiness-based load autoregulation ──
+// Scales planned load by a % from the guidance score: asymmetric (small + when fresh,
+// larger − when fatigued), pivoting on a neutral readiness of 65, with an ACWR/Form safety floor.
+function loadAdjustPct(){
+  const ymd=_ymd(new Date());
+  const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const rs=readinessScore(r);
+  const g=todayGuidance(); let pct, basis;
+  if(rs!=null){ pct = rs>=65 ? 5*(rs-65)/35 : -20*(65-rs)/65; basis='readiness '+rs; }
+  else { pct = g.sev===0?0:(g.sev===1?-7:-15); basis='guidance'; }
+  if(g.deload){ pct=Math.min(pct,-10); basis+=' · workload high'; }
+  pct=Math.max(-25,Math.min(6,pct));
+  return {pct:Math.round(pct*10)/10, basis, g};
+}
+function applyAutoAdjust(){
+  const a=loadAdjustPct(); const pct=a.pct; const mult=1+pct/100; const ymd=_ymd(new Date());
+  let applied=0;
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat!=='strength'||!isLoggableLift(e)) return;
+    const rec=lastLoggedForName(e.name); if(!rec) return;
+    const base=Math.max(0,...(STATE.exerciseSets[rec.id]||[]).map(parseFloat).filter(x=>x>0));
+    if(!(base>0)) return;
+    const target=roundKg(base*mult); const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
+    STATE.exerciseSets[e.id]=Array(n).fill(target); applied++;
+  }));
+  if(!STATE.softenDay) STATE.softenDay={}; STATE.softenDay[ymd]=(pct<=-15);   // also drop a set on big cuts
+  saveState(STATE); renderToday();
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  if(typeof appToast==='function') appToast(applied?('Loads auto-adjusted '+(pct>0?'+':'')+pct+'% for today \u2713'):'No prior loads to scale — log each lift once first');
+}
+// ── One-tap session RPE ──
+function setSessionRPE(key,val){ if(!STATE.sessionRPE) STATE.sessionRPE={}; STATE.sessionRPE[key]=(STATE.sessionRPE[key]===val?0:val); saveState(STATE); refreshLoadStrip(key); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); }
+function sessionRPEQuickHTML(s){
+  const key=sessionKey(s); const cur=STATE.sessionRPE&&STATE.sessionRPE[key];
+  let chips=''; for(let i=1;i<=10;i++) chips+='<button class="srpe-chip'+(cur===i?' on':'')+'" onclick="setSessionRPE(\''+key+'\','+i+')">'+i+'</button>';
+  return '<div class="srpe-wrap"><div class="srpe-lbl">Quick session effort (RPE) — overrides per-exercise</div><div class="srpe-row">'+chips+'</div></div>';
+}
+// ── PR celebration ──
+function checkPR(exId){
+  const meta=exMetaMap(); const info=meta[exId]; if(!info||info.cat!=='strength') return;
+  const name=info.name; const myE1=exE1RM(exId); if(!(myE1>0)) return;
+  let prevE1=0; Object.keys(STATE.exerciseSets||{}).forEach(id=>{ if(id===exId) return; const mm=meta[id]; if(!mm||mm.name!==name) return; const e=exE1RM(id); if(e>prevE1) prevE1=e; });
+  if(prevE1<=0) return;
+  if(!STATE.celebratedPR) STATE.celebratedPR={};
+  const tag=name+'|'+Math.round(myE1);
+  if(myE1>prevE1+0.01 && !STATE.celebratedPR[tag]){ STATE.celebratedPR[tag]=1; saveState(STATE); if(typeof appToast==='function') appToast('🏆 New PR! '+name+' — est 1RM '+s1Fmt(roundKg(myE1))+' kg'); if(navigator.vibrate){try{navigator.vibrate([20,40,20]);}catch(e){}} }
+}
+// ── Manual run logging ──
+function logManualRun(){
+  const km=parseFloat(String((document.getElementById('mr-km')||{}).value).replace(',','.'));
+  const mm=parseInt((document.getElementById('mr-min')||{}).value,10)||0;
+  const ss=parseInt((document.getElementById('mr-sec')||{}).value,10)||0;
+  const hr=parseInt((document.getElementById('mr-hr')||{}).value,10)||null;
+  const msg=document.getElementById('mr-msg');
+  if(!(km>0)||(mm*60+ss)<=0){ if(msg) msg.textContent='Enter a distance and a time.'; return; }
+  const dur=mm*60+ss; const paceSec=Math.round(dur/km);
+  const zb=hrZoneBounds(); let estRPE=5, trimp=null;
+  if(hr&&zb){ const rest=zb.rest||(STATE.profile&&parseFloat(STATE.profile.restHR))||60; const hrr=Math.max(0,Math.min(1,(hr-rest)/(zb.hrmax-rest))); estRPE=Math.max(1,Math.min(10,1+9*hrr)); trimp=Math.round(dur/60*hrr*0.64*Math.exp(1.92*hrr)); }
+  const load=Math.round(estRPE*dur/60);
+  if(!STATE.importedRuns) STATE.importedRuns=[];
+  STATE.importedRuns.push({id:'ir_'+Date.now(),name:'Manual run',source:'manual',date:_ymd(new Date()),dateISO:new Date().toISOString(),distKm:+km.toFixed(2),durationSec:dur,avgHR:hr||null,maxHR:null,paceSec,zoneSec:[0,0,0,0,0],estRPE:+estRPE.toFixed(1),trimp,load});
+  saveState(STATE); renderImportedRuns();
+  ['mr-km','mr-min','mr-sec','mr-hr'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  if(msg) msg.textContent='';
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  if(typeof appToast==='function') appToast('Run logged: '+(+km.toFixed(2))+' km \u2713');
+}
+// ── Weekly review ──
+function weeklyReviewCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">THIS WEEK\u2019S REVIEW</div>'+inner+'</div>';
+  const {mon,sun}=weekRange(new Date()); let done=0,sched=0,ton=0,runKm=0;
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(d<mon||d>sun) return; sched++; if(STATE.completedSessions[sessionKey(s)]) done++; s.exercises.forEach(e=>{ if(e.cat==='strength') ton+=exVolume(e.id); }); });
+  (STATE.importedRuns||[]).forEach(r=>{ const d=new Date(r.dateISO); if(d>=mon&&d<=sun) runKm+=r.distKm; });
+  let rsum=0,rn=0; for(let d=new Date(mon); d<=sun; d.setDate(d.getDate()+1)){ const rr=STATE.readiness&&STATE.readiness[_ymd(d)]; if(rr){ const sc=readinessScore(rr); if(sc!=null){rsum+=sc;rn++;} } }
+  const avgR=rn?Math.round(rsum/rn):null;
+  const ser=fitnessSeries(); let formDelta=null;
+  if(ser&&ser.length){ const endTsb=ser[ser.length-1].tsb; const ws=ser.find(x=>x.d>=mon); formDelta=Math.round(endTsb-(ws?ws.tsb:ser[0].tsb)); }
+  if(!sched && !runKm) return wrap('<div class="ls-hint">Your week\u2019s recap — sessions, tonnage, km and readiness — appears here as you train.</div>');
+  let focus;
+  const g=todayGuidance();
+  if(g.deload) focus='Workload is high — plan a cutback week to absorb it.';
+  else if(avgR!=null&&avgR<55) focus='Readiness has been low — prioritise sleep and easy days.';
+  else if(done<sched*0.6) focus='Consistency dipped — aim to bank the key sessions next week.';
+  else focus='Solid week — keep the progression rolling.';
+  const cards='<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">'
+    +'<div class="tl-card"><div class="tl-val">'+done+'/'+sched+'</div><div class="tl-lbl">Sessions</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+(runKm>=1?runKm.toFixed(0):runKm.toFixed(1))+'</div><div class="tl-lbl">km run</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+(ton>=1000?(ton/1000).toFixed(1)+'t':Math.round(ton))+'</div><div class="tl-lbl">Tonnage</div></div></div>'
+    +'<div style="display:flex;gap:8px;margin-bottom:8px">'
+    +'<div class="tl-card"><div class="tl-val">'+(avgR!=null?avgR:'—')+'</div><div class="tl-lbl">Avg readiness</div></div>'
+    +'<div class="tl-card"><div class="tl-val">'+(formDelta!=null?((formDelta>0?'+':'')+formDelta):'—')+'</div><div class="tl-lbl">Form change</div></div></div>';
+  return wrap(cards+'<div class="pc-note"><strong>Focus:</strong> '+focus+'</div>');
+}
 function renderStats(){
+  // ===== TIER 2/3 FEATURE LOGIC =====
   const done=totalCompleted();
   const pct=Math.round((done/84)*100);
   const strengthDone=PROGRAM.filter(s=>s.type==='strength'&&STATE.completedSessions[sessionKey(s)]).length;
@@ -2218,7 +2690,13 @@ function renderStats(){
       <div class="stat-card"><div class="stat-val">${runDone}</div><div class="stat-lbl">Run sessions</div></div>
     </div>
     ${trainingLoadCardHTML()}
+    ${fitnessCardHTML()}
+    ${racePredictCardHTML()}
+    ${consistencyCardHTML()}
+    ${weeklyReviewCardHTML()}
     ${prCardHTML()}
+    ${muscleCardHTML()}
+    ${bodyCompCardHTML()}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">LAST 14 DAYS</div>
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
@@ -2942,6 +3420,9 @@ function pcEnsureInit(){
   poInit(); poCalc();
   ssInit(); ssCalc();
   rpCalc();
+  plCalc();
+  renderImportedRuns();
+  refreshBackupNote();
 }
 function fmtPaceSec(sec){
   if(!isFinite(sec)||sec<=0) return '–';
@@ -3117,7 +3598,7 @@ function tClick(){ tBeep(1600,.045,.32); tVibrate(12); }
 // ═══════════════════════════════════════════
 function copyBackup(){
   const json=JSON.stringify(STATE);
-  const done=()=>{ const m=document.getElementById('data-msg'); if(m) m.textContent='Backup JSON copied to clipboard.'; if(typeof appToast==='function') appToast('Backup copied to clipboard ✓'); if(navigator.vibrate){ try{navigator.vibrate(20);}catch(e){} } };
+  const done=()=>{ STATE.lastBackupAt=Date.now(); saveState(STATE); refreshBackupNote(); const m=document.getElementById('data-msg'); if(m) m.textContent='Backup JSON copied to clipboard.'; if(typeof appToast==='function') appToast('Backup copied to clipboard ✓'); if(navigator.vibrate){ try{navigator.vibrate(20);}catch(e){} } };
   if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(json).then(done).catch(()=>_fallbackCopy(json,done)); }
   else _fallbackCopy(json,done);
 }
@@ -3131,13 +3612,14 @@ function exportData(){
     const url=URL.createObjectURL(blob); const a=document.createElement('a');
     a.href=url; a.download='albert12-backup-'+_ymd(new Date())+'.json'; document.body.appendChild(a); a.click();
     setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },120);
+    STATE.lastBackupAt=Date.now(); saveState(STATE); refreshBackupNote();
     const m=document.getElementById('data-msg'); if(m) m.textContent='Backup downloaded.';
   }catch(e){ const m=document.getElementById('data-msg'); if(m) m.textContent='Export failed on this browser.'; }
 }
 function hasTrainingData(){
   try{
     const n=k=>(STATE[k]&&Object.keys(STATE[k]).length)||0;
-    return (n('completedSessions')+n('completedExercises')+n('exerciseSets')+n('exerciseReps')+n('runLog')+n('exerciseRPE'))>0;
+    return (n('completedSessions')+n('completedExercises')+n('exerciseSets')+n('exerciseReps')+n('runLog')+n('exerciseRPE')+((STATE.importedRuns||[]).length))>0;
   }catch(e){ return true; }
 }
 function showRestoreBannerIfEmpty(){
@@ -3340,6 +3822,95 @@ function ssApply(){
   const msg=document.getElementById('ss-msg');
   if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(exName+': set-by-set plan loaded onto today ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent='Per-set loads applied to today’s '+exName+'.'; }
   else { if(msg) msg.textContent='“'+exName+'” isn’t in today’s session — pick a lift you’re training today.'; }
+}
+// ── Run import (GPX / TCX) ──
+function hrMaxFromProfile(){ const age=STATE.profile&&parseFloat(STATE.profile.age); return age>0?Math.round(208-0.7*age):null; }
+function hrZoneBounds(){
+  const hrmax=hrMaxFromProfile(); if(!hrmax) return null;
+  const rest=STATE.profile&&parseFloat(STATE.profile.restHR); const useK=rest>0;
+  const edges=[0.5,0.6,0.7,0.8,0.9,1.0];
+  const bound=f=> useK ? Math.round(rest+f*(hrmax-rest)) : Math.round(f*hrmax);
+  const zones=[]; for(let i=0;i<5;i++) zones.push({z:i+1,lo:bound(edges[i]),hi:bound(edges[i+1])});
+  return {hrmax, rest:useK?rest:null, zones};
+}
+function zoneIndexFor(hr,zb){ if(!(hr>0)) return -1; if(hr<zb.zones[0].lo) return 0; for(let i=0;i<5;i++){ if(hr>=zb.zones[i].lo && hr<zb.zones[i].hi) return i; } return 4; }
+function _hav(a,b){ const R=6371000,toR=x=>x*Math.PI/180; const dLat=toR(b.lat-a.lat),dLon=toR(b.lon-a.lon),la1=toR(a.lat),la2=toR(b.lat); const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+function parseActivityFile(text){
+  let doc; try{ doc=new DOMParser().parseFromString(text,'application/xml'); }catch(e){ return null; }
+  if(!doc||doc.getElementsByTagName('parsererror').length) return null;
+  const pts=[];
+  const trkpt=doc.getElementsByTagName('trkpt');
+  if(trkpt.length){
+    for(let i=0;i<trkpt.length;i++){ const e=trkpt[i];
+      const lat=parseFloat(e.getAttribute('lat')), lon=parseFloat(e.getAttribute('lon'));
+      const tEl=e.getElementsByTagName('time')[0]; const t=tEl?new Date(tEl.textContent):null;
+      let hr=null; const all=e.getElementsByTagName('*');
+      for(let j=0;j<all.length;j++){ if(/(^|:)hr$/i.test(all[j].tagName)){ hr=parseInt(all[j].textContent,10); break; } }
+      pts.push({t,lat:isNaN(lat)?null:lat,lon:isNaN(lon)?null:lon,dist:null,hr:(hr>0?hr:null)});
+    }
+  } else {
+    const tp=doc.getElementsByTagName('Trackpoint');
+    for(let i=0;i<tp.length;i++){ const e=tp[i];
+      const tEl=e.getElementsByTagName('Time')[0]; const t=tEl?new Date(tEl.textContent):null;
+      const dEl=e.getElementsByTagName('DistanceMeters')[0]; let dist=dEl?parseFloat(dEl.textContent):null; if(dist!=null&&isNaN(dist)) dist=null;
+      let hr=null; const hrEl=e.getElementsByTagName('HeartRateBpm')[0]; if(hrEl){ const v=hrEl.getElementsByTagName('Value')[0]; if(v) hr=parseInt(v.textContent,10); }
+      const la=e.getElementsByTagName('LatitudeDegrees')[0], lo=e.getElementsByTagName('LongitudeDegrees')[0];
+      pts.push({t, lat:la?parseFloat(la.textContent):null, lon:lo?parseFloat(lo.textContent):null, dist, hr:(hr>0?hr:null)});
+    }
+  }
+  return summarizeRun(pts);
+}
+function summarizeRun(pts){
+  const tp=pts.filter(p=>p.t&&!isNaN(p.t.getTime())); if(tp.length<2) return null;
+  const t0=tp[0].t, tN=tp[tp.length-1].t; const elapsed=Math.max(1,Math.round((tN-t0)/1000));
+  let distM=0; const last=tp[tp.length-1];
+  if(last.dist!=null && tp[0].dist!=null){ distM=last.dist-tp[0].dist; }
+  else { for(let i=1;i<tp.length;i++){ if(tp[i].lat!=null&&tp[i-1].lat!=null){ const d=_hav(tp[i-1],tp[i]); const dt=(tp[i].t-tp[i-1].t)/1000; if(!(dt>0)? d<1000 : (d/dt<12)) distM+=d; } } }
+  const distKm=distM/1000;
+  const hrs=tp.map(p=>p.hr).filter(h=>h>0);
+  const avgHR=hrs.length?Math.round(hrs.reduce((a,b)=>a+b,0)/hrs.length):null;
+  const maxHR=hrs.length?Math.max.apply(null,hrs):null;
+  const zb=hrZoneBounds(); const zoneSec=[0,0,0,0,0];
+  if(zb&&hrs.length){ for(let i=1;i<tp.length;i++){ const dt=(tp[i].t-tp[i-1].t)/1000; if(!(dt>0)) continue; const seg=Math.min(dt,30); const hr=tp[i-1].hr||tp[i].hr; const zi=zoneIndexFor(hr,zb); if(zi>=0) zoneSec[zi]+=seg; } }
+  const durMin=elapsed/60; let estRPE=5, trimp=null;
+  if(avgHR&&zb){ const rest=zb.rest||(STATE.profile&&parseFloat(STATE.profile.restHR))||60; const hrr=Math.max(0,Math.min(1,(avgHR-rest)/(zb.hrmax-rest))); estRPE=Math.max(1,Math.min(10,1+9*hrr)); trimp=Math.round(durMin*hrr*0.64*Math.exp(1.92*hrr)); }
+  const load=Math.round(estRPE*durMin);
+  const paceSec=distKm>0?Math.round(elapsed/distKm):null;
+  return {date:_ymd(t0),dateISO:t0.toISOString(),distKm:+distKm.toFixed(2),durationSec:elapsed,avgHR,maxHR,paceSec,zoneSec,estRPE:+estRPE.toFixed(1),trimp,load};
+}
+function importRunFile(input){
+  const f=input.files&&input.files[0]; if(!f) return;
+  const msg=document.getElementById('ri-msg'); if(msg) msg.textContent='Reading '+f.name+'…';
+  const r=new FileReader();
+  r.onload=function(){
+    let run=null; try{ run=parseActivityFile(String(r.result)); }catch(e){ run=null; }
+    if(!run){ if(msg) msg.textContent='Couldn\u2019t read that file — export it as .gpx or .tcx with timestamps.'; input.value=''; return; }
+    if(!STATE.importedRuns) STATE.importedRuns=[];
+    run.id='ir_'+Date.now(); run.name=f.name.replace(/\.[^.]+$/,'');
+    STATE.importedRuns.push(run); saveState(STATE);
+    if(msg) msg.textContent=''; renderImportedRuns();
+    if(typeof appToast==='function') appToast('Run imported: '+run.distKm+' km \u2713');
+    if(typeof showRestoreBannerIfEmpty==='function') showRestoreBannerIfEmpty();
+    input.value='';
+  };
+  r.onerror=function(){ if(msg) msg.textContent='Could not read that file.'; };
+  r.readAsText(f);
+}
+function deleteImportedRun(id){ STATE.importedRuns=(STATE.importedRuns||[]).filter(r=>r.id!==id); saveState(STATE); renderImportedRuns(); }
+function _fmtDur(sec){ const m=Math.floor(sec/60),s=sec%60,h=Math.floor(m/60); return h>0?(h+'h '+(m%60)+'m'):(m+'m '+String(s).padStart(2,'0')+'s'); }
+function renderImportedRuns(){
+  const el=document.getElementById('ri-list'); if(!el) return;
+  const runs=(STATE.importedRuns||[]).slice().sort((a,b)=>new Date(b.dateISO)-new Date(a.dateISO));
+  if(!runs.length){ el.innerHTML='<div class="ls-hint">No imported runs yet. In Garmin Connect / Strava / Apple Health, export an activity as GPX or TCX, then import it here.</div>'; return; }
+  const cols=['#5aa6ff','#5fd6a0','#e8c66b','#ff8a5c','#ff6b47'];
+  el.innerHTML=runs.map(r=>{
+    const pace=r.paceSec?fmtPaceSec(r.paceSec)+'/km':'—';
+    const zsum=r.zoneSec?r.zoneSec.reduce((a,b)=>a+b,0):0;
+    const zbar = zsum>0 ? '<div class="zbar">'+r.zoneSec.map((s,i)=>{ const pct=Math.round(s/zsum*100); return pct>0?'<span style="width:'+pct+'%;background:'+cols[i]+'" title="Z'+(i+1)+' '+pct+'%"></span>':''; }).join('')+'</div>' : '';
+    const d=new Date(r.dateISO); const ds=d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2);
+    return '<div class="ri-row"><div class="ri-top">'+r.distKm+' km · '+pace+'<button class="ri-del" onclick="deleteImportedRun(\''+r.id+'\')">✕</button></div>'
+      +'<div class="ri-sub">'+ds+' · '+_fmtDur(r.durationSec)+(r.avgHR?(' · ♥ '+r.avgHR+(r.maxHR?('/'+r.maxHR):'')):'')+' · '+r.load+' AU'+(r.trimp?(' · TRIMP '+r.trimp):'')+'</div>'+zbar+'</div>';
+  }).join('');
 }
 // ── Run progression planner (marathon endurance) ──
 function rpStep(d){ const i=document.getElementById('rp-km'); let v=parseFloat(i.value)||0; i.value=Math.max(0,Math.round(v+d)); rpCalc(); }
