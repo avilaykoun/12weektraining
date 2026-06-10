@@ -436,6 +436,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .ex-name,.session-name,.pc-line,.pc-line .v,.s1-tbl td,.rec-txt,.ex-note-input,.setw-inp,.wt-inp,.timer-btn,.pc-apply,.calc-btn,.tool-h,.srch-name,.prog-day-hdr{font-size:14px}
 .session-name{font-size:16px}
 .wk-group-hdr .wk-name{font-size:12px}
+/* ---- Personal Records ---- */
+.pr-sub{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.pr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--border)}
+.pr-row:first-of-type{border-top:none}
+.pr-name{font-size:13px;color:var(--text)}
+.pr-val{font-family:'Aptos',monospace;font-size:15px;color:var(--accent);text-align:right;line-height:1.2}
+.pr-val small{display:block;font-size:10px;color:var(--text3);margin-top:2px}
+.pr-empty{font-family:'Aptos',monospace;font-size:12px;color:var(--text3);line-height:1.6}
 /* ---- keep native UI from flashing white; blend with navy ---- */
 html,body{color-scheme:dark}
 select option,select optgroup{background:var(--surface);color:var(--text)}
@@ -526,6 +534,19 @@ input[type=number]{-moz-appearance:textfield}
 <!-- PACE CALCULATOR -->
 <div class="section" id="section-pace">
   <div class="section-title">TRAINING TOOLS</div>
+  <div class="tool-h">Heart-rate training zones</div>
+  <div class="tool-sub">Find your aerobic base, threshold and VO₂max zones.</div>
+  <div class="pc-field">
+    <label>Age (years)</label>
+    <div class="pc-input-row"><input id="hr-age" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="32"><span class="pc-unit">yrs</span></div>
+  </div>
+  <div class="pc-field">
+    <label>Resting HR — optional, for sharper zones (bpm)</label>
+    <div class="pc-input-row"><input id="hr-rest" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="—"><span class="pc-unit">bpm</span></div>
+  </div>
+  <div id="hr-results"></div>
+
+  <div class="tool-divider"></div>
   <div class="tool-h">Treadmill pace</div>
   <div class="tool-sub">Convert speed ⇄ pace, adjust for incline, project splits.</div>
   <div class="pc-toggle">
@@ -561,19 +582,6 @@ input[type=number]{-moz-appearance:textfield}
     </div>
   </div>
   <div id="pc-results"></div>
-
-  <div class="tool-divider"></div>
-  <div class="tool-h">Heart-rate training zones</div>
-  <div class="tool-sub">Find your aerobic base, threshold and VO₂max zones.</div>
-  <div class="pc-field">
-    <label>Age (years)</label>
-    <div class="pc-input-row"><input id="hr-age" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="32"><span class="pc-unit">yrs</span></div>
-  </div>
-  <div class="pc-field">
-    <label>Resting HR — optional, for sharper zones (bpm)</label>
-    <div class="pc-input-row"><input id="hr-rest" type="number" inputmode="numeric" oninput="renderHRZones()" placeholder="—"><span class="pc-unit">bpm</span></div>
-  </div>
-  <div id="hr-results"></div>
 
   <div class="tool-divider"></div>
   <div class="tool-h">Daily fuel &amp; hydration</div>
@@ -616,9 +624,106 @@ input[type=number]{-moz-appearance:textfield}
   <div id="s1-msg" class="pc-note" style="text-align:center"></div>
 
   <div class="tool-divider"></div>
+  <div class="tool-h">Progressive overload planner</div>
+  <div class="tool-sub">Evidence-based weight jumps for getting stronger over the weeks ahead.</div>
+  <div class="pc-field">
+    <label>Exercise</label>
+    <div class="pc-input-row"><select id="po-ex" onchange="poCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:15px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none"></select></div>
+  </div>
+  <div class="pc-field">
+    <label>Current working weight (kg)</label>
+    <div class="pc-input-row"><button class="stp-b" onclick="poStep(-2.5)">−</button><input id="po-wt" type="number" inputmode="decimal" step="2.5" oninput="poCalc()" placeholder="100" style="flex:1"><span class="pc-unit">kg</span><button class="stp-b" onclick="poStep(2.5)">+</button></div>
+  </div>
+  <div class="pc-field">
+    <label>Progression rate</label>
+    <div class="pc-input-row"><select id="po-method" onchange="poCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="rec">Recommended (2-for-2 rule)</option>
+      <option value="2.5">Conservative · +2.5%</option>
+      <option value="5">Standard · +5%</option>
+      <option value="10">Aggressive · +10%</option>
+      <option value="abs2.5">Smallest plate · +2.5 kg</option>
+      <option value="abs1.25">Microplate · +1.25 kg</option>
+    </select></div>
+  </div>
+  <div class="pc-field">
+    <label>Project forward</label>
+    <div class="pc-input-row"><select id="po-weeks" onchange="poCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="4">4 weeks</option><option value="6" selected>6 weeks</option><option value="8">8 weeks</option><option value="12">12 weeks</option>
+    </select></div>
+  </div>
+  <div id="po-out"></div>
+  <button class="pc-apply" id="po-apply" onclick="poApply()">Apply next step to today’s lift</button>
+  <div id="po-msg" class="pc-note" style="text-align:center"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Set-by-set strength planner</div>
+  <div class="tool-sub">Build an exact load for every set of a lift using a proven strength scheme, then drop it into today’s session.</div>
+  <div class="pc-field">
+    <label>Exercise</label>
+    <div class="pc-input-row"><select id="ss-ex" onchange="ssExChange()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:15px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none"></select></div>
+  </div>
+  <div class="pc-field">
+    <label>Estimated 1RM (kg)</label>
+    <div class="pc-input-row"><button class="stp-b" onclick="ssStep(-2.5)">−</button><input id="ss-1rm" type="number" inputmode="decimal" step="2.5" oninput="ssCalc()" placeholder="auto" style="flex:1"><span class="pc-unit">kg</span><button class="stp-b" onclick="ssStep(2.5)">+</button></div>
+  </div>
+  <div class="pc-field">
+    <label>Loading scheme</label>
+    <div class="pc-input-row"><select id="ss-scheme" onchange="ssCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="straight">Straight sets · same load</option>
+      <option value="ramp">Ramp to a top set</option>
+      <option value="topback" selected>Top set + back-offs</option>
+      <option value="wave">Strength wave · training max</option>
+      <option value="rpt">Reverse pyramid · heaviest first</option>
+      <option value="rpe">RPE autoregulated · by feel</option>
+    </select></div>
+  </div>
+  <div id="ss-out"></div>
+  <button class="pc-apply" id="ss-apply" onclick="ssApply()">Apply set plan to today’s lift</button>
+  <div id="ss-msg" class="pc-note" style="text-align:center"></div>
+
+  <div class="tool-divider"></div>
+  <div class="tool-h">Run progression planner</div>
+  <div class="tool-sub">Progressively overload your running for marathon endurance — weekly volume, long-run targets and training paces.</div>
+  <div class="pc-field">
+    <label>Current weekly distance (km)</label>
+    <div class="pc-input-row"><button class="stp-b" onclick="rpStep(-5)">−</button><input id="rp-km" type="number" inputmode="decimal" step="1" oninput="rpCalc()" placeholder="40" style="flex:1"><span class="pc-unit">km</span><button class="stp-b" onclick="rpStep(5)">+</button></div>
+  </div>
+  <div class="pc-field">
+    <label>Goal marathon time (h:mm)</label>
+    <div class="pc-input-row"><input id="rp-goal" type="text" inputmode="numeric" oninput="rpGoalFmt(this)" placeholder="3:45" style="flex:1"></div>
+  </div>
+  <div class="pc-field">
+    <label>Weekly build rate</label>
+    <div class="pc-input-row"><select id="rp-rate" onchange="rpCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="5">Conservative · +5% / week</option>
+      <option value="10" selected>Recommended · +10% / week</option>
+      <option value="0">Hold volume</option>
+    </select></div>
+  </div>
+  <div class="pc-field">
+    <label>Project forward</label>
+    <div class="pc-input-row"><select id="rp-weeks" onchange="rpCalc()" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="4">4 weeks</option><option value="6">6 weeks</option><option value="8" selected>8 weeks</option><option value="12">12 weeks</option>
+    </select></div>
+  </div>
+  <div id="rp-out"></div>
+  <div class="pc-field" style="margin-top:12px">
+    <label>Apply pace to today’s run</label>
+    <div class="pc-input-row"><select id="rp-applypace" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
+      <option value="easy">Easy / recovery</option>
+      <option value="mp" selected>Marathon pace</option>
+      <option value="thr">Threshold / tempo</option>
+      <option value="int">Interval / VO₂</option>
+    </select></div>
+  </div>
+  <button class="pc-apply" id="rp-apply" onclick="rpApply()">Apply pace to today’s run</button>
+  <div id="rp-msg" class="pc-note" style="text-align:center"></div>
+
+  <div class="tool-divider"></div>
   <div class="tool-h">Data &amp; backup</div>
   <div class="tool-sub">Everything is saved on this device automatically. Export a backup before clearing your browser, switching phones, or just to be safe.</div>
   <button class="data-btn accent" onclick="exportData()">⬇︎ Export backup</button>
+  <button class="data-btn" onclick="copyBackup()">⧉ Copy JSON</button>
   <button class="data-btn" onclick="document.getElementById('import-file').click()">⬆︎ Restore backup</button>
   <input id="import-file" type="file" accept="application/json,.json" style="display:none" onchange="importData(this)">
   <div id="data-msg" class="tool-sub" style="margin-top:10px"></div>
@@ -1980,6 +2085,62 @@ function toggleRecovery(ymd,key){
   const el=document.getElementById('rec-'+ymd+'-'+key);
   if(el) el.classList.toggle('on',!!STATE.recovery[ymd][key]);
 }
+// ── Personal Records: scan logged STATE (exerciseSets + runLog) ──
+function exMetaMap(){
+  const m={};
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ m[e.id]={name:e.name,cat:e.cat,detail:e.detail}; }));
+  return m;
+}
+function parseDistanceKm(detail){
+  const m=String(detail||'').match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+  return m?parseFloat(m[1]):null;
+}
+function computePRs(){
+  const meta=exMetaMap();
+  const strength={};
+  Object.keys(STATE.exerciseSets||{}).forEach(id=>{
+    const info=meta[id]; if(!info||info.cat!=='strength') return;
+    const sets=(STATE.exerciseSets[id]||[]).map(parseFloat).filter(v=>v>0);
+    if(!sets.length) return;
+    const top=Math.max(...sets);
+    const pres=parsePrescription(info.detail); const reps=pres?pres.reps:1;
+    const e1=epley1RM(top,reps);
+    const cur=strength[info.name];
+    if(!cur||top>cur.weight||(top===cur.weight&&e1>cur.e1rm)) strength[info.name]={weight:top,e1rm:Math.max(e1,cur?cur.e1rm:0)};
+  });
+  let fastestKmh=0,fastestEx=null,longestKm=0,longestEx=null;
+  Object.keys(STATE.runLog||{}).forEach(id=>{
+    const info=meta[id]; if(!info) return;
+    const kmh=parseFloat(STATE.runLog[id]); if(!(kmh>0)) return;
+    if(kmh>fastestKmh){ fastestKmh=kmh; fastestEx=info; }
+    const dist=parseDistanceKm(info.detail);
+    if(dist&&dist>longestKm){ longestKm=dist; longestEx=info; }
+  });
+  const strengthArr=Object.keys(strength).map(n=>({name:n,weight:strength[n].weight,e1rm:strength[n].e1rm})).sort((a,b)=>b.e1rm-a.e1rm);
+  return {strength:strengthArr,fastestKmh,fastestEx,longestKm,longestEx};
+}
+function prCardHTML(){
+  const pr=computePRs();
+  const hasAny=pr.strength.length||pr.fastestKmh>0||pr.longestKm>0;
+  let rows='';
+  if(!hasAny){
+    rows='<div class="pr-empty">No personal records yet. Log set weights or run speeds in Today and your bests appear here automatically.</div>';
+  } else {
+    if(pr.strength.length){
+      rows+='<div class="pr-sub">Strength · heaviest set</div>';
+      rows+=pr.strength.slice(0,6).map(s=>`<div class="pr-row"><span class="pr-name">${s.name}</span><span class="pr-val">${s1Fmt(s.weight)} kg<small>est 1RM ${s1Fmt(roundKg(s.e1rm))} kg</small></span></div>`).join('');
+    }
+    if(pr.fastestKmh>0||pr.longestKm>0){
+      rows+='<div class="pr-sub" style="margin-top:12px">Running</div>';
+      if(pr.fastestKmh>0) rows+=`<div class="pr-row"><span class="pr-name">Fastest pace</span><span class="pr-val">${fmtPaceSec(3600/pr.fastestKmh)} /km<small>${pr.fastestKmh.toFixed(1)} km/h${pr.fastestEx?' · '+pr.fastestEx.name:''}</small></span></div>`;
+      if(pr.longestKm>0) rows+=`<div class="pr-row"><span class="pr-name">Longest run</span><span class="pr-val">${s1Fmt(pr.longestKm)} km<small>${pr.longestEx?pr.longestEx.name:''}</small></span></div>`;
+    }
+  }
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
+    <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">PERSONAL RECORDS 🏆</div>
+    ${rows}
+  </div>`;
+}
 function renderStats(){
   const done=totalCompleted();
   const pct=Math.round((done/84)*100);
@@ -2005,6 +2166,7 @@ function renderStats(){
       <div class="stat-card"><div class="stat-val">${runDone}</div><div class="stat-lbl">Run sessions</div></div>
     </div>
     ${trainingLoadCardHTML()}
+    ${prCardHTML()}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">LAST 14 DAYS</div>
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
@@ -2725,6 +2887,9 @@ function pcEnsureInit(){
   if(p.goal){ const g=document.getElementById('mac-goal'); if(g) g.value=p.goal; }
   renderHRZones(); renderMacros();
   s1InitSelects(); s1Calc();
+  poInit(); poCalc();
+  ssInit(); ssCalc();
+  rpCalc();
 }
 function fmtPaceSec(sec){
   if(!isFinite(sec)||sec<=0) return '–';
@@ -2898,6 +3063,16 @@ function tClick(){ tBeep(1600,.045,.32); tVibrate(12); }
 // ═══════════════════════════════════════════
 // DATA: BACKUP / RESTORE + STORAGE HARDENING
 // ═══════════════════════════════════════════
+function copyBackup(){
+  const json=JSON.stringify(STATE);
+  const done=()=>{ const m=document.getElementById('data-msg'); if(m) m.textContent='Backup JSON copied to clipboard.'; if(typeof appToast==='function') appToast('Backup copied to clipboard ✓'); if(navigator.vibrate){ try{navigator.vibrate(20);}catch(e){} } };
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(json).then(done).catch(()=>_fallbackCopy(json,done)); }
+  else _fallbackCopy(json,done);
+}
+function _fallbackCopy(text,cb){
+  try{ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }catch(e){}
+  if(cb) cb();
+}
 function exportData(){
   try{
     const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});
@@ -2952,6 +3127,244 @@ const S1_TARGETS=[
 ];
 let _s1Inited=false;
 function roundKg(w){ return Math.max(0,Math.round(w/2.5)*2.5); }
+// ── Progressive overload planner ──
+function poRound(w,step){ step=step||2.5; return Math.max(0,Math.round(w/step)*step); }
+function classifyLift(name){
+  const n=(name||'').toLowerCase();
+  if(/(squat|deadlift|lunge|hinge|\bleg\b|calf|hip thrust|\brdl\b|glute|step.?up|bridge|hamstring|good ?morning|box jump)/.test(n)) return 'lower';
+  if(/(bench|press|row|pull|curl|dip|overhead|ohp|push|chin|lat|fly|face ?pull|shrug|raise|extension|triceps|biceps|landmine)/.test(n)) return 'upper';
+  return 'compound';
+}
+function poInit(){
+  const ex=document.getElementById('po-ex'); if(!ex) return;
+  if(!ex.options.length){ ex.innerHTML=s1Lifts().map(n=>'<option>'+n+'</option>').join(''); const tl=s1TodayLift(); if(tl) ex.value=tl; }
+}
+function poStep(d){ const i=document.getElementById('po-wt'); let v=parseFloat(i.value)||0; i.value=poRound(Math.max(0,v+d)); poCalc(); }
+function poPlan(){
+  const w=parseFloat(String(document.getElementById('po-wt').value).replace(',','.'));
+  if(!(w>0)) return null;
+  const ex=document.getElementById('po-ex').value;
+  const method=document.getElementById('po-method').value;
+  const weeks=parseInt(document.getElementById('po-weeks').value,10)||6;
+  const type=classifyLift(ex);
+  let mode='pct', pct=5, abs=0, step=2.5, label='';
+  if(method==='rec'){ mode='pct'; pct = type==='upper'?2.5:(type==='lower'?5:5); label='2-for-2 · '+(type==='upper'?'upper-body 2.5%':type==='lower'?'lower-body 5%':'compound 5%'); }
+  else if(method==='abs2.5'){ mode='abs'; abs=2.5; step=2.5; label='+2.5 kg / step'; }
+  else if(method==='abs1.25'){ mode='abs'; abs=1.25; step=1.25; label='+1.25 kg / step'; }
+  else { mode='pct'; pct=parseFloat(method); label='+'+pct+'% / step'; }
+  const rows=[]; let cur=w;
+  for(let i=1;i<=weeks;i++){
+    let next = mode==='pct' ? cur*(1+pct/100) : cur+abs;
+    next = poRound(next, step);
+    if(next<=cur) next=cur+step;            // ensure it always moves up
+    const cumPct=((next-w)/w*100);
+    rows.push({week:i, weight:next, delta:next-cur, cumPct});
+    cur=next;
+  }
+  return {ex,type,mode,pct,abs,step,label,weeks,start:w,rows};
+}
+function poCalc(){
+  poInit();
+  const out=document.getElementById('po-out'); if(!out) return;
+  const btn=document.getElementById('po-apply'), msg=document.getElementById('po-msg');
+  const plan=poPlan();
+  if(!plan){
+    out.innerHTML='<div class="ls-hint">Enter your current working weight to plan your next jumps.</div>';
+    if(btn){ btn.disabled=true; btn.textContent='Apply next step to today’s lift'; } if(msg) msg.textContent=''; return;
+  }
+  const next=plan.rows[0];
+  const ladder=plan.rows.map(r=>'<tr><td class="p">Wk '+r.week+'</td><td class="z">+'+s1Fmt(r.delta)+' kg</td><td class="r">'+s1Fmt(r.weight)+' kg<small>+'+r.cumPct.toFixed(1)+'%</small></td></tr>').join('');
+  out.innerHTML='<div class="pc-res"><div class="pc-res-hd">Next session target · '+plan.label+'</div>'
+    +'<div class="pc-big"><div class="pc-big-card"><div class="pc-big-v">'+s1Fmt(next.weight)+'</div><div class="pc-big-l">kg · +'+s1Fmt(next.delta)+' kg</div></div></div>'
+    +'<table class="s1-tbl"><tbody>'+ladder+'</tbody></table>'
+    +'<div class="pc-note">Sport-science guidance (ACSM): when you beat the target by 1–2 reps on two sessions in a row, add ~2–10% — about 2–5% upper-body, 5–10% lower-body. Smaller, frequent jumps stick better than big ones. Plan a lighter deload every 4–6 weeks and re-test. General guidance, not individualised advice.</div></div>';
+  if(btn){ btn.disabled=false; btn.textContent='Apply '+s1Fmt(next.weight)+' kg → today’s '+plan.ex; }
+  if(msg) msg.textContent='Next step is +'+s1Fmt(next.delta)+' kg ('+plan.type+'-body). Fills today’s set loads.';
+}
+// ── Set-by-set strength planner (per-set load prescription) ──
+function ssFindPrescription(name){
+  let today=null,first=null;
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{ if(!today&&e.cat==='strength'&&e.name===name) today=parsePrescription(e.detail); }));
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(!first&&e.cat==='strength'&&e.name===name) first=parsePrescription(e.detail); }));
+  return today||first||{sets:3,reps:5};
+}
+function ssBestE1RM(name){
+  const pr=computePRs(); const m=pr.strength.find(s=>s.name===name); return m?roundKg(m.e1rm):null;
+}
+function ssInit(){
+  const ex=document.getElementById('ss-ex'); if(!ex) return;
+  if(!ex.options.length){
+    ex.innerHTML=s1Lifts().map(n=>'<option>'+n+'</option>').join('');
+    const tl=s1TodayLift(); if(tl) ex.value=tl;
+    ssSuggest1RM();           // suggest once, only when first built
+  }
+}
+function ssSuggest1RM(){
+  const ex=document.getElementById('ss-ex'), o=document.getElementById('ss-1rm');
+  if(!ex||!o) return;
+  const best=ssBestE1RM(ex.value);
+  o.value = best || '';       // editable suggestion; blank if nothing logged
+}
+function ssExChange(){ ssSuggest1RM(); ssCalc(); }   // refresh suggestion only when the lift changes
+function ssStep(d){ const i=document.getElementById('ss-1rm'); let v=parseFloat(i.value)||0; i.value=roundKg(Math.max(0,v+d)); ssCalc(); }
+function ssPlan(){
+  const name=document.getElementById('ss-ex').value;
+  const orm=parseFloat(String(document.getElementById('ss-1rm').value).replace(',','.'));
+  if(!(orm>0)) return null;
+  const scheme=document.getElementById('ss-scheme').value;
+  const pres=ssFindPrescription(name); const sets=Math.max(1,Math.min(pres.sets,8)), reps=pres.reps;
+  const repPct=100/(1+reps/30);              // %1RM that supports `reps` reps (Epley inverse)
+  const rows=[]; let base='1RM';
+  if(scheme==='straight'){
+    for(let i=0;i<sets;i++) rows.push({reps, pct:repPct, w:roundKg(orm*repPct/100)});
+  } else if(scheme==='ramp'){
+    for(let i=0;i<sets;i++){ const pct=Math.max(60, repPct-(sets-1-i)*5); rows.push({reps, pct, w:roundKg(orm*pct/100), tag:i===sets-1?'top set':''}); }
+  } else if(scheme==='topback'){
+    const topW=roundKg(orm*repPct/100);
+    for(let i=0;i<sets;i++){ if(i===0) rows.push({reps, pct:repPct, w:topW, tag:'top set'}); else rows.push({reps, pct:repPct*0.9, w:roundKg(topW*0.9), tag:'back-off'}); }
+  } else if(scheme==='rpt'){            // reverse pyramid — heaviest set first, then drop load
+    for(let i=0;i<sets;i++){ const pct=Math.max(60, repPct*(1-0.075*i)); rows.push({reps, pct, w:roundKg(orm*pct/100), tag:i===0?'top set (heaviest)':'−'+(7.5*i).toFixed(1)+'% · +reps ok'}); }
+  } else if(scheme==='rpe'){            // autoregulated by RPE / reps-in-reserve
+    for(let i=0;i<sets;i++){ const rpe=(sets===1)?8:(i===0?7:(i===sets-1?9:8)); const rir=10-rpe; const eff=reps+rir; const pct=100/(1+eff/30); rows.push({reps, pct, w:roundKg(orm*pct/100), tag:'RPE '+rpe+' · '+rir+' RIR'}); }
+  } else { // wave — % of a training max (90% of 1RM), last set AMRAP
+    base='training max (90% 1RM)'; const tm=orm*0.9;
+    const pcts = reps>=5?[65,75,85] : reps>=3?[70,80,90] : [75,85,95];
+    for(let i=0;i<sets;i++){ const pct=pcts[Math.min(i,pcts.length-1)]; const last=(i===sets-1);
+      rows.push({reps:last?(reps+'+'):reps, pct, w:roundKg(tm*pct/100), tag:last?'AMRAP':''}); }
+  }
+  return {name, orm, scheme, sets, reps, base, rows};
+}
+function ssCalc(){
+  ssInit();
+  const out=document.getElementById('ss-out'); if(!out) return;
+  const btn=document.getElementById('ss-apply'), msg=document.getElementById('ss-msg');
+  const plan=ssPlan();
+  if(!plan){
+    out.innerHTML='<div class="ls-hint">Enter your estimated 1RM (or log a heavy set so it auto-fills) to build the plan.</div>';
+    if(btn){ btn.disabled=true; btn.textContent='Apply set plan to today’s lift'; } if(msg) msg.textContent=''; return;
+  }
+  const names={straight:'Straight sets',ramp:'Ramp to top set',topback:'Top set + back-offs',wave:'Strength wave',rpt:'Reverse pyramid',rpe:'RPE autoregulated'};
+  const rows=plan.rows.map((r,i)=>'<tr><td class="p">Set '+(i+1)+'</td><td class="z">'+r.reps+' reps'+(r.tag?' · '+r.tag:'')+'<small>'+Math.round(r.pct)+'% of '+plan.base+'</small></td><td class="r">'+s1Fmt(r.w)+' kg</td></tr>').join('');
+  const principle = plan.scheme==='wave'
+    ? 'Training-max waves keep working loads heavy but submaximal, with the last set taken near failure (AMRAP) to drive progression — a hallmark of effective strength programming.'
+    : plan.scheme==='topback'
+    ? 'One heavy top set provides the strength stimulus; back-off sets at ~90% add quality volume without burning you out — strong evidence for this for trained lifters.'
+    : plan.scheme==='ramp'
+    ? 'Ramping warms the nervous system into a heavy top set, the set that drives most of the strength adaptation.'
+    : plan.scheme==='rpt'
+    ? 'Reverse pyramid puts your heaviest set first, when you’re freshest — maximising the load on the most important set, with lighter back-downs (add a rep or two) for volume.'
+    : plan.scheme==='rpe'
+    ? 'Autoregulation by RPE/reps-in-reserve matches load to how you feel that day — work up to a hard top set (~1 rep in reserve) and add weight whenever the same RPE feels lighter. Strongly supported for managing fatigue and progressing safely.'
+    : 'Straight sets at a rep-matched intensity are simple and effective when paired with progressive overload week to week.';
+  out.innerHTML='<div class="pc-res"><div class="pc-res-hd">'+names[plan.scheme]+' · '+plan.sets+' × '+plan.reps+'</div>'
+    +'<table class="s1-tbl"><tbody>'+rows+'</tbody></table>'
+    +'<div class="pc-note">'+principle+' Loads rounded to 2.5 kg. General guidance, not individualised advice — adjust to how the sets actually feel.</div></div>';
+  if(btn){ btn.disabled=false; btn.textContent='Apply set plan → today’s '+plan.name; }
+  if(msg) msg.textContent=names[plan.scheme]+': fills each of today’s '+plan.sets+' sets individually.';
+}
+function ssApply(){
+  const plan=ssPlan(); if(!plan) return;
+  const weights=plan.rows.map(r=>r.w); const exName=plan.name; let applied=0;
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat==='strength'&&e.name.toLowerCase()===exName.toLowerCase()){
+      const p=parsePrescription(e.detail); const n=p?Math.min(p.sets,8):weights.length;
+      const arr=[]; for(let i=0;i<n;i++) arr.push(weights[Math.min(i,weights.length-1)]);
+      STATE.exerciseSets[e.id]=arr; applied++;
+    }
+  }));
+  const msg=document.getElementById('ss-msg');
+  if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(exName+': set-by-set plan loaded onto today ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent='Per-set loads applied to today’s '+exName+'.'; }
+  else { if(msg) msg.textContent='“'+exName+'” isn’t in today’s session — pick a lift you’re training today.'; }
+}
+// ── Run progression planner (marathon endurance) ──
+function rpStep(d){ const i=document.getElementById('rp-km'); let v=parseFloat(i.value)||0; i.value=Math.max(0,Math.round(v+d)); rpCalc(); }
+function rpGoalFmt(el){
+  let digits=String(el.value).replace(/\D/g,'').slice(0,3);   // H + MM (marathon: 1-digit hours)
+  let out = digits.length<=1 ? digits : digits[0]+':'+digits.slice(1);
+  el.value=out;
+  rpCalc();
+}
+function rpParseTime(str){
+  const p=String(str||'').trim().split(':').map(s=>parseInt(s,10));
+  if(!p.length||p.some(isNaN)) return null;
+  if(p.length===2) return p[0]*3600+p[1]*60;
+  if(p.length===3) return p[0]*3600+p[1]*60+p[2];
+  return null;
+}
+function rpPaces(goalSec){            // seconds per km for each zone
+  const mp=goalSec/42.195;
+  return {mp, easy:mp+75, thr:mp-18, int:mp-40};
+}
+function rpPlan(){
+  const km=parseFloat(String(document.getElementById('rp-km').value).replace(',','.'));
+  if(!(km>0)) return null;
+  const rate=parseFloat(document.getElementById('rp-rate').value)/100;
+  const weeks=parseInt(document.getElementById('rp-weeks').value,10)||8;
+  const goalSec=rpParseTime(document.getElementById('rp-goal').value);
+  const paces=goalSec?rpPaces(goalSec):null;
+  const rows=[]; let lastBuild=km;
+  for(let w=1;w<=weeks;w++){
+    let vol,cut=false;
+    if(w%4===0){ vol=Math.round(lastBuild*0.75); cut=true; }      // cutback / recovery week
+    else { vol=(w===1)?Math.round(km):Math.round(lastBuild*(1+rate)); lastBuild=vol; }
+    const longRun=Math.min(32,Math.round(vol*0.32));               // long run ~32% of week, cap 32 km
+    rows.push({week:w,vol,longRun,cut});
+  }
+  return {km,rate,weeks,paces,goalSec,rows};
+}
+function rpCalc(){
+  const out=document.getElementById('rp-out'); if(!out) return;
+  const btn=document.getElementById('rp-apply'), msg=document.getElementById('rp-msg');
+  const plan=rpPlan();
+  if(!plan){
+    out.innerHTML='<div class="ls-hint">Enter your current weekly distance (and a goal time for training paces) to build the plan.</div>';
+    if(btn) btn.disabled=true; if(msg) msg.textContent=''; return;
+  }
+  let pacesHTML='';
+  if(plan.paces){
+    const p=plan.paces; const row=(lbl,sec,note)=>'<tr><td class="p">'+lbl+'</td><td class="z">'+note+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
+    pacesHTML='<div class="pc-res-hd" style="margin-bottom:6px">Training paces · ~80% easy / 20% hard</div>'
+      +'<table class="s1-tbl"><tbody>'
+      +row('Easy',p.easy,'most runs · zone 2')
+      +row('Marathon',p.mp,'race-pace work')
+      +row('Threshold',p.thr,'tempo · comfortably hard')
+      +row('Interval',p.int,'VO₂ · short reps')
+      +'</tbody></table>';
+  } else {
+    pacesHTML='<div class="pc-note">Add a goal marathon time (e.g. 3:45) to get easy / marathon / threshold / interval paces.</div>';
+  }
+  const volRows=plan.rows.map(r=>'<tr><td class="p">Wk '+r.week+(r.cut?' ↓':'')+'</td><td class="z">'+(r.cut?'cutback / recover':'build')+'<small>long run '+r.longRun+' km</small></td><td class="r">'+r.vol+' km</td></tr>').join('');
+  out.innerHTML='<div class="pc-res">'+pacesHTML
+    +'<div class="pc-res-hd" style="margin:14px 0 6px">Weekly volume ramp</div>'
+    +'<table class="s1-tbl"><tbody>'+volRows+'</tbody></table>'
+    +'<div class="pc-note">Progressive overload for endurance: raise weekly volume by ~10% at most, with a cutback week (~−25%) every 4th week to absorb the load. Keep ~80% of running easy and ~20% hard (threshold/intervals). Build the long run toward ~32 km, then taper 2–3 weeks out. General guidance — back off if niggles appear.</div></div>';
+  if(btn) btn.disabled=!plan.paces;
+  if(msg) msg.textContent = plan.paces ? 'Pick a pace zone and apply it to today’s run.' : 'Enter a goal time to enable pace targets.';
+}
+function rpApply(){
+  const plan=rpPlan(); if(!plan||!plan.paces){ const m=document.getElementById('rp-msg'); if(m) m.textContent='Add a goal marathon time first to compute paces.'; return; }
+  const which=document.getElementById('rp-applypace').value;
+  const sec=plan.paces[which==='mp'?'mp':which]; const kmh=+(3600/sec).toFixed(1); const pace=fmtPaceSec(sec);
+  const labels={easy:'Easy',mp:'Marathon',thr:'Threshold',int:'Interval'};
+  let applied=0;
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{ if(e.cat==='run'){ STATE.runTarget[e.id]={kmh,incline:0,pace}; applied++; } }));
+  const msg=document.getElementById('rp-msg');
+  if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(labels[which]+' pace '+pace+'/km set on today’s run ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent=labels[which]+' target ('+pace+'/km · '+kmh+' km/h) applied to today’s run.'; }
+  else { if(msg) msg.textContent='No run scheduled today to apply this to.'; }
+}
+function poApply(){
+  const plan=poPlan(); if(!plan) return;
+  const load=plan.rows[0].weight, exName=plan.ex; let applied=0;
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat==='strength'&&e.name.toLowerCase()===exName.toLowerCase()){
+      const p=parsePrescription(e.detail); const n=p?Math.min(p.sets,8):3;
+      STATE.exerciseSets[e.id]=Array(n).fill(load); applied++;
+    }
+  }));
+  const msg=document.getElementById('po-msg');
+  if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(exName+': next step '+s1Fmt(load)+' kg loaded onto today ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent='Loaded onto today’s '+exName+'.'; }
+  else { if(msg) msg.textContent='“'+exName+'” isn’t in today’s session — pick a lift you’re training today.'; }
+}
 function s1Fmt(n){ if(!isFinite(n)) return '—'; return (Math.round(n*10)%10===0)?String(Math.round(n)):n.toFixed(1); }
 function s1Lifts(){ const out=[]; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat==='strength'&&parsePrescription(e.detail)&&out.indexOf(e.name)<0) out.push(e.name); })); return out.sort(); }
 function s1TodayLift(){ let lift=null; getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{ if(!lift&&e.cat==='strength'&&parsePrescription(e.detail)) lift=e.name; })); return lift; }
