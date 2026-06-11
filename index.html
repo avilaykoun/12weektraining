@@ -488,6 +488,19 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .acc>summary:active{background:var(--surface2)}
 .acc-body{padding:2px 16px 16px}
 .acc-body .tool-sub{margin-top:0}
+.gd-undo{margin-top:7px;border-color:var(--text3);color:var(--text2)}
+.trend-lbl{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);margin-bottom:7px}
+.trend-bars{display:flex;align-items:flex-end;gap:4px;height:70px}
+.trend-bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.trend-fill{width:100%;max-width:22px;background:linear-gradient(180deg,var(--accent),var(--accent2));border-radius:4px 4px 0 0;min-height:4px}
+.trend-bar span{font-size:9px;color:var(--text3);font-family:'Aptos',monospace;margin-top:3px}
+.swap-acc{margin-top:6px}
+.swap-acc>summary{list-style:none;cursor:pointer;font-size:10px;font-family:'Aptos',monospace;color:var(--text3);-webkit-tap-highlight-color:transparent;padding:2px 0}
+.swap-acc>summary::-webkit-details-marker{display:none}
+.swap-body{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.swap-chip{border:1px solid var(--border);background:var(--surface2);color:var(--text2);border-radius:7px;padding:5px 9px;font-size:11px;font-family:'Aptos',monospace;cursor:pointer}
+.swap-chip.on{border-color:var(--accent);color:var(--accent)}
+.ri-tag{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);background:rgba(71,168,255,.12);border-radius:6px;padding:2px 6px}
 .accg{margin-bottom:12px}
 .accg>summary{list-style:none;cursor:pointer;padding:11px 4px;display:flex;align-items:center;font-family:'Aptos',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);font-weight:600;-webkit-tap-highlight-color:transparent}
 .accg>summary::-webkit-details-marker{display:none}
@@ -545,7 +558,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v20</div>
+      <div class="hdr-build">Build 2026-06-10 · v21</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -860,6 +873,7 @@ input[type=number]{-moz-appearance:textfield}
   <button class="data-btn" onclick="document.getElementById('import-file').click()">⬆︎ Restore backup</button>
   <input id="import-file" type="file" accept="application/json,.json" style="display:none" onchange="importData(this)">
   <button class="data-btn" onclick="exportICS()">📅 Add plan to calendar (.ics)</button>
+  <button class="data-btn" onclick="exportWeekICS()">📅 Add this week only (.ics)</button>
   <div id="backup-note" class="pc-note" style="text-align:center"></div>
   <div id="data-msg" class="tool-sub" style="margin-top:10px"></div>
   </div></details>
@@ -944,8 +958,8 @@ input[type=number]{-moz-appearance:textfield}
 // ─────────────────────────────────────────
 // DATA — 12-WEEK PROGRAM
 // ─────────────────────────────────────────
-const RACE_DATE = new Date('2026-08-30');
-const PLAN_START = new Date('2026-06-09');
+const RACE_DATE = new Date(2026,7,30);
+const PLAN_START = new Date(2026,5,9);
 
 const PROGRAM = [
   // PHASE 1 — Foundation (Weeks 1-3)
@@ -1440,8 +1454,27 @@ const PROGRAM = [
 // ─────────────────────────────────────────
 // STATE
 // ─────────────────────────────────────────
-function loadState(){try{return JSON.parse(localStorage.getItem('mt_state')||'{}')}catch(e){return{}}}
-function saveState(s){localStorage.setItem('mt_state',JSON.stringify(s))}
+function loadState(){
+  try{ const raw=localStorage.getItem('mt_state'); const o=JSON.parse(raw||'{}'); if(o&&typeof o==='object'&&Object.keys(o).length) return o; }catch(e){}
+  try{ const b=JSON.parse(localStorage.getItem('mt_state_bak')||'{}'); if(b&&typeof b==='object'&&Object.keys(b).length) return b; }catch(e){}
+  return {};
+}
+var _saveWarned=false;
+function saveState(s){
+  try{
+    const j=JSON.stringify(s);
+    localStorage.setItem('mt_state',j);
+    const t=Date.now(); const lb=+(localStorage.getItem('mt_bak_at')||0);
+    if(t-lb>864e5){ try{ localStorage.setItem('mt_state_bak',j); localStorage.setItem('mt_bak_at',String(t)); }catch(_){} }
+  }catch(e){
+    if(!_saveWarned){ _saveWarned=true; try{ if(typeof appToast==='function') appToast('⚠️ Couldn\u2019t save on this device — export a backup soon (Tools → Data)'); }catch(_){} }
+  }
+}
+const SCHEMA_VERSION=1;
+function ensureContainers(){
+  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
+  if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
+}
 let STATE = loadState();
 if(!STATE.completedExercises) STATE.completedExercises={};
 if(!STATE.completedSessions) STATE.completedSessions={};
@@ -1476,6 +1509,8 @@ if(!STATE.softenDay) STATE.softenDay={};
 if(!STATE.celebratedPR) STATE.celebratedPR={};
 if(!STATE.recovery) STATE.recovery={};
 if(!STATE.profile) STATE.profile={};
+if(!STATE.exerciseSwap) STATE.exerciseSwap={};
+ensureContainers();
 
 // ─────────────────────────────────────────
 // HELPERS
@@ -1613,17 +1648,19 @@ function renderExercises(s,interactive){
     }
     const done=STATE.completedExercises[e.id];
     const dotCol=e.cat==='run'?'run':e.cat==='core'?'core':'';
+    const dispName=exDisplayName(e);
     html+=`<div class="ex-row">
       <div class="ex-check ${done?'done':''}" onclick="toggleExercise('${e.id}','${sessionKey(s)}')"></div>
       <div class="ex-info">
-        <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${e.name}</div>
+        <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
         <div class="ex-detail">${e.detail}</div>
         <input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
         ${rpeControlHTML(e.id, sessionKey(s))}
         ${weightControlHTML(e, sessionKey(s))}
         ${runControlHTML(e, sessionKey(s))}
+        ${interactive&&e.cat==='strength'?swapControlHTML(e):''}
       </div>
-      <button class="ex-info-btn" onclick="showExDemo('${e.name.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
+      <button class="ex-info-btn" onclick="showExDemo('${dispName.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
     </div>`;
   });
   return html;
@@ -1704,7 +1741,15 @@ function sessionAllEx(s){
 function loggedRPEs(s){
   return sessionAllEx(s).map(e=>STATE.exerciseRPE[e.id]).filter(v=>typeof v==='number'&&v>0);
 }
-function sessionRPEval(s){ const key=sessionKey(s); if(STATE.sessionRPE && STATE.sessionRPE[key]>0) return STATE.sessionRPE[key]; const v=loggedRPEs(s); if(!v.length) return null; return v.reduce((a,b)=>a+b,0)/v.length; }
+function labelRPE(z){ return {easy:4,mp:6,thr:7,int:9}[z]||4; }
+function sessionRPEval(s){
+  const key=sessionKey(s);
+  if(STATE.sessionRPE && STATE.sessionRPE[key]>0) return STATE.sessionRPE[key];
+  const v=loggedRPEs(s); if(v.length) return v.reduce((a,b)=>a+b,0)/v.length;
+  const runs=s.exercises.filter(e=>e.cat==='run');
+  if(runs.length){ const done=STATE.completedSessions[key]||runs.some(e=>STATE.runLog[e.id]||STATE.completedExercises[e.id]); if(done){ const rpes=runs.map(e=>labelRPE(runZoneFromLabel(e.name,e.detail))); return Math.max.apply(null,rpes); } }
+  return null;
+}
 function sessionLoad(s){ const r=sessionRPEval(s); return r==null?0:Math.round(r*estimateDuration(s)); }
 function loadStripInner(s){
   const key=sessionKey(s); const quick=sessionRPEQuickHTML(s);
@@ -2469,8 +2514,14 @@ function readinessCardHTML(date){
 }
 var rdOpen=false;
 // ── Race predictor (Riegel) ──
+function parseRunDistanceKm(t){ const m=String(t||'').match(/(\d+(?:\.\d+)?)\s*(?:[–-]\s*(\d+(?:\.\d+)?))?\s*km/i); if(!m) return 0; const a=parseFloat(m[1]); const b=m[2]?parseFloat(m[2]):a; return (a+b)/2; }
+function runLogCandidates(){
+  const out=[];
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat!=='run') return; const kmh=parseFloat(STATE.runLog[e.id]); if(!(kmh>0)) return; const dist=parseRunDistanceKm(e.detail||e.name); if(!(dist>=3)) return; out.push({distKm:dist, durationSec:Math.round(dist/kmh*3600), source:'treadmill'}); }));
+  return out;
+}
 function predictMarathon(){
-  const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=3&&r.durationSec>0);
+  const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=3&&r.durationSec>0).concat(runLogCandidates());
   if(!runs.length) return null;
   let best=null;
   runs.forEach(r=>{ const pred=r.durationSec*Math.pow(42.195/r.distKm,1.06); if(!best||pred<best.pred) best={pred,run:r}; });
@@ -2482,11 +2533,11 @@ function racePredictCardHTML(){
   if(!pm) return wrap('<div class="ls-hint">Import a run of 3 km or longer (Tools → Import a run) and I\u2019ll predict your marathon finish and training paces from it.</div>');
   const t=pm.sec, hh=Math.floor(t/3600), mm=Math.round((t%3600)/60); const big=hh+':'+String(mm).padStart(2,'0');
   const p=rpPaces(t);
-  const fr=pm.from; const fd=new Date(fr.dateISO); const fds=fd.getDate()+'/'+(fd.getMonth()+1);
+  const fr=pm.from; const paceSec=fr.paceSec||(fr.durationSec/fr.distKm); const srcTxt=fr.source==='treadmill'?'treadmill run':(fr.dateISO?('run on '+(d=>d.getDate()+'/'+(d.getMonth()+1))(new Date(fr.dateISO))):'logged run');
   const row=(l,sec)=>'<tr><td class="p">'+l+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
   return wrap('<div style="text-align:center;margin-bottom:8px"><div style="font-size:34px;font-family:\'Aptos\',sans-serif;color:var(--accent);line-height:1">'+big+'</div><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">PREDICTED MARATHON</div></div>'
     +'<table class="s1-tbl"><tbody>'+row('Easy',p.easy)+row('Marathon',p.mp)+row('Threshold',p.thr)+row('Interval',p.int)+'</tbody></table>'
-    +'<div class="pc-note">From your '+fr.distKm+' km run on '+fds+' ('+fmtPaceSec(fr.paceSec)+'/km), via the Riegel model (exponent 1.06). It assumes marathon-specific endurance; without long-run training, real time runs slower. Updates as you import faster/longer runs.</div>');
+    +'<div class="pc-note">From your '+(+fr.distKm.toFixed(1))+' km '+srcTxt+' ('+fmtPaceSec(paceSec)+'/km), via the Riegel model (exponent 1.06). It assumes marathon-specific endurance; without long-run training, real time runs slower. Updates as you log faster/longer runs.</div>');
 }
 // ── Plate & warm-up calculator ──
 function platesFor(target,bar){ let per=(target-bar)/2; if(per<-0.01) return null; const plates=[25,20,15,10,5,2.5,1.25]; const out=[]; plates.forEach(p=>{ let c=0; while(per>=p-1e-9){ per-=p; c++; } if(c) out.push([p,c]); }); return {out,leftover:Math.round(per*100)/100}; }
@@ -2628,7 +2679,8 @@ function guidanceCardHTML(date){
   const a=loadAdjustPct(); const pct=a.pct;
   const adjLine='<div class="gd-adj">Auto-load: <strong style="color:'+g.color+'">'+(pct>0?'+':'')+pct+'%</strong> <span>· '+a.basis+'</span></div>';
   const label = pct===0 ? '⚖ Hold loads as planned' : ('⚖ Apply '+(pct>0?'+':'')+pct+'% to today\u2019s lifts');
-  const btn='<button class="gd-btn" onclick="applyAutoAdjust()">'+label+'</button>';
+  const undoable = STATE._adjUndo && STATE._adjUndo.ymd===ymd;
+  const btn='<button class="gd-btn" onclick="applyAutoAdjust()">'+label+'</button>'+(undoable?'<button class="gd-btn gd-undo" onclick="undoAutoAdjust()">↩ Undo load change</button>':'');
   return '<div class="gd-card" style="border-color:'+g.color+'"><div class="gd-top"><span class="gd-dot" style="background:'+g.color+'"></span><span class="gd-title" style="color:'+g.color+'">'+g.title+'</span></div><div class="gd-advice">'+g.advice+'</div>'+chips+adjLine+(soft?'<div class="gd-soft">Eased: a back-off set dropped on each lift.</div>':'')+btn+'</div>';
 }
 function toggleSoften(){ const ymd=_ymd(new Date()); if(!STATE.softenDay) STATE.softenDay={}; STATE.softenDay[ymd]=!STATE.softenDay[ymd]; saveState(STATE);
@@ -2648,19 +2700,31 @@ function loadAdjustPct(){
 }
 function applyAutoAdjust(){
   const a=loadAdjustPct(); const pct=a.pct; const mult=1+pct/100; const ymd=_ymd(new Date());
-  let applied=0;
+  let applied=0; const snap={};
   getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
     if(e.cat!=='strength'||!isLoggableLift(e)) return;
     const rec=lastLoggedForName(e.name); if(!rec) return;
-    const base=Math.max(0,...(STATE.exerciseSets[rec.id]||[]).map(parseFloat).filter(x=>x>0));
+    const lastSets=(STATE.exerciseSets[rec.id]||[]).map(parseFloat);
+    const base=Math.max(0,...lastSets.filter(x=>x>0));
     if(!(base>0)) return;
-    const target=roundKg(base*mult); const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
-    STATE.exerciseSets[e.id]=Array(n).fill(target); applied++;
+    const p=parsePrescription(e.detail); const n=Math.min(p.sets,8);
+    snap[e.id]=(STATE.exerciseSets[e.id]||[]).slice();
+    const arr=[]; for(let i=0;i<n;i++){ const baseI=(lastSets[i]>0?lastSets[i]:base); arr.push(roundKg(baseI*mult)); }
+    STATE.exerciseSets[e.id]=arr; applied++;
   }));
-  if(!STATE.softenDay) STATE.softenDay={}; STATE.softenDay[ymd]=(pct<=-15);   // also drop a set on big cuts
+  if(!STATE.softenDay) STATE.softenDay={};
+  if(applied) STATE._adjUndo={ymd, sets:snap, soften:!!STATE.softenDay[ymd]};
+  STATE.softenDay[ymd]=(pct<=-15);   // also drop a set on big cuts
   saveState(STATE); renderToday();
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
-  if(typeof appToast==='function') appToast(applied?('Loads auto-adjusted '+(pct>0?'+':'')+pct+'% for today \u2713'):'No prior loads to scale — log each lift once first');
+  if(typeof appToast==='function') appToast(applied?('Loads auto-adjusted '+(pct>0?'+':'')+pct+'% for today \u2713 — tap Undo to revert'):'No prior loads to scale — log each lift once first');
+}
+function undoAutoAdjust(){
+  const u=STATE._adjUndo; if(!u) return;
+  Object.keys(u.sets).forEach(id=>{ if(u.sets[id]&&u.sets[id].length) STATE.exerciseSets[id]=u.sets[id]; else delete STATE.exerciseSets[id]; });
+  if(!STATE.softenDay) STATE.softenDay={}; STATE.softenDay[u.ymd]=u.soften;
+  STATE._adjUndo=null; saveState(STATE); renderToday();
+  if(typeof appToast==='function') appToast('Loads restored ↩');
 }
 // ── One-tap session RPE ──
 function setSessionRPE(key,val){ if(!STATE.sessionRPE) STATE.sessionRPE={}; STATE.sessionRPE[key]=(STATE.sessionRPE[key]===val?0:val); saveState(STATE); refreshLoadStrip(key); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); }
@@ -2693,9 +2757,11 @@ function logManualRun(){
   const load=Math.round(estRPE*dur/60);
   if(!STATE.importedRuns) STATE.importedRuns=[];
   STATE.importedRuns.push({id:'ir_'+Date.now(),name:'Manual run',source:'manual',date:_ymd(new Date()),dateISO:new Date().toISOString(),distKm:+km.toFixed(2),durationSec:dur,avgHR:hr||null,maxHR:null,paceSec,zoneSec:[0,0,0,0,0],estRPE:+estRPE.toFixed(1),trimp,load});
-  saveState(STATE); renderImportedRuns();
+  let linked=0;
+  getSessionsForDate(new Date()).forEach(s=>{ const runs=s.exercises.filter(e=>e.cat==='run'); if(!runs.length) return; if(!STATE.completedSessions[sessionKey(s)]){ STATE.completedSessions[sessionKey(s)]=true; linked++; } runs.forEach(e=>{ STATE.completedExercises[e.id]=true; }); });
+  saveState(STATE); renderImportedRuns(); if(typeof currentSection!=='undefined'&&currentSection==='today') renderToday();
   ['mr-km','mr-min','mr-sec','mr-hr'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  if(msg) msg.textContent='';
+  if(msg) msg.textContent=linked?'Logged and ticked off today\u2019s scheduled run.':'';
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
   if(typeof appToast==='function') appToast('Run logged: '+(+km.toFixed(2))+' km \u2713');
 }
@@ -2724,6 +2790,53 @@ function weeklyReviewCardHTML(){
     +'<div class="tl-card"><div class="tl-val">'+(avgR!=null?avgR:'—')+'</div><div class="tl-lbl">Avg readiness</div></div>'
     +'<div class="tl-card"><div class="tl-val">'+(formDelta!=null?((formDelta>0?'+':'')+formDelta):'—')+'</div><div class="tl-lbl">Form change</div></div></div>';
   return wrap(cards+'<div class="pc-note"><strong>Focus:</strong> '+focus+'</div>');
+}
+// ── Trends over time ──
+function weeklyTonnageSeries(){ const byWeek={}; PROGRAM.forEach(s=>{ if(s.type==='rest') return; s.exercises.forEach(e=>{ if(e.cat!=='strength') return; const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; }); }); return byWeek; }
+function e1rmByName(){ const byName={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat!=='strength') return; const e1=exE1RM(e.id); if(e1>0)(byName[e.name]=byName[e.name]||[]).push({week:s.week,e1}); })); return byName; }
+function trendsCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">TRENDS OVER TIME</div>'+inner+'</div>';
+  const ton=weeklyTonnageSeries(); const weeks=Object.keys(ton).map(Number).sort((a,b)=>a-b);
+  if(!weeks.length) return wrap('<div class="ls-hint">Log strength sets across weeks to see your tonnage and est-1RM trends here.</div>');
+  const maxT=Math.max.apply(null,weeks.map(w=>ton[w]))||1;
+  const bars=weeks.map(w=>'<div class="trend-bar"><div class="trend-fill" style="height:'+Math.max(4,Math.round(ton[w]/maxT*100))+'%"></div><span>'+w+'</span></div>').join('');
+  const byName=e1rmByName();
+  const lifts=Object.keys(byName).filter(n=>{ const ws={}; byName[n].forEach(p=>ws[p.week]=1); return Object.keys(ws).length>=2; });
+  const e1rows=lifts.slice(0,6).map(n=>{ const pts=byName[n].slice().sort((a,b)=>a.week-b.week); const first=pts[0].e1, best=Math.max.apply(null,pts.map(p=>p.e1)); const delta=best-first; const col=delta>0.5?'#5fd6a0':(delta<-0.5?'#ff6b47':'var(--text)'); return '<div class="pr-row"><span class="pr-name">'+n+'</span><span class="pr-val">'+Math.round(best)+' kg<small style="color:'+col+'">'+(delta>=0?'+':'')+Math.round(delta)+' kg since wk'+pts[0].week+'</small></span></div>'; }).join('');
+  return wrap('<div class="trend-lbl">Weekly tonnage (kg lifted)</div><div class="trend-bars">'+bars+'</div>'+(e1rows?('<div class="trend-lbl" style="margin-top:14px">Estimated 1RM progress</div>'+e1rows):''));
+}
+// ── Exercise substitutions ──
+var SWAP_LIB={
+  'Quads':['Goblet squat','Bulgarian split squat','Leg press','Front squat','Walking lunge','Hack squat'],
+  'Posterior chain':['Romanian deadlift','Hip thrust','Good morning','Single-leg RDL','Back extension','Kettlebell swing'],
+  'Chest':['DB bench press','Push-up','Incline DB press','Dip','Machine chest press','Floor press'],
+  'Back':['DB row','Lat pulldown','Chin-up','Seated cable row','Inverted row','Chest-supported row'],
+  'Shoulders':['DB shoulder press','Lateral raise','Arnold press','Landmine press','Pike push-up'],
+  'Arms':['DB curl','Hammer curl','Triceps pushdown','Skullcrusher','Cable curl','Close-grip push-up'],
+  'Core':['Plank','Hanging leg raise','Pallof press','Dead bug','Ab rollout','Side plank']
+};
+function exDisplayName(e){ return (STATE.exerciseSwap&&STATE.exerciseSwap[e.id])||e.name; }
+function swapControlHTML(e){
+  const mus=muscleFor(e.name); const lib=SWAP_LIB[mus]||[]; const cur=STATE.exerciseSwap&&STATE.exerciseSwap[e.id];
+  if(!lib.length && !cur) return '';
+  const orig=e.name; const seen={}; const opts=[orig].concat(lib).filter(n=>{ const k=n.toLowerCase(); if(seen[k])return false; seen[k]=1; return true; }).slice(0,7);
+  const chips=opts.map(n=>'<button class="swap-chip'+(((cur||orig)===n)?' on':'')+'" onclick="setSwap(\''+e.id+'\',\''+n.replace(/'/g,"\\'")+'\',\''+orig.replace(/'/g,"\\'")+'\')">'+n+'</button>').join('');
+  return '<details class="swap-acc"><summary>⇄ swap'+(cur?(' · '+cur):'')+'</summary><div class="swap-body">'+chips+'</div></details>';
+}
+function setSwap(exId,name,orig){ if(!STATE.exerciseSwap) STATE.exerciseSwap={}; if(name===orig) delete STATE.exerciseSwap[exId]; else STATE.exerciseSwap[exId]=name; saveState(STATE); renderToday(); if(typeof appToast==='function') appToast(name===orig?('Reverted to '+orig):('Swapped to '+name)); }
+// ── Run intensity tag ──
+function runIntensityTag(paceSec){ const p=trainingPacesNow(); if(!p||!paceSec) return ''; if(paceSec>p.easy-8) return 'Easy'; if(paceSec>p.thr) return 'Steady/MP'; if(paceSec>p.int) return 'Threshold'; return 'Interval'; }
+// ── Single-week calendar export ──
+function exportWeekICS(){
+  const pad=n=>String(n).padStart(2,'0'); const {mon,sun}=weekRange(new Date());
+  const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN']; let n=0;
+  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(d<mon||d>sun) return; const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'wk@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>exDisplayName(e)).join(', ')).replace(/,/g,'\\,'),'END:VEVENT'); n++; });
+  lines.push('END:VCALENDAR');
+  if(!n){ if(typeof appToast==='function') appToast('No sessions scheduled this week'); return; }
+  const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='albert-this-week.ics'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1500);
+  if(typeof appToast==='function') appToast('This week exported \u2713');
 }
 function renderStats(){
   // ===== TIER 2/3 FEATURE LOGIC =====
@@ -2767,6 +2880,7 @@ function renderStats(){
     ${prCardHTML()}
     ${muscleCardHTML()}
     ${bodyCompCardHTML()}
+    ${trendsCardHTML()}
     </details>
     <details class="accg"><summary>Plan &amp; phase</summary>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
@@ -3667,7 +3781,7 @@ function tClick(){ tBeep(1600,.045,.32); tVibrate(12); }
 // DATA: BACKUP / RESTORE + STORAGE HARDENING
 // ═══════════════════════════════════════════
 function copyBackup(){
-  const json=JSON.stringify(STATE);
+  const json=JSON.stringify(Object.assign({_app:'albert12',_v:SCHEMA_VERSION},STATE));
   const done=()=>{ STATE.lastBackupAt=Date.now(); saveState(STATE); refreshBackupNote(); const m=document.getElementById('data-msg'); if(m) m.textContent='Backup JSON copied to clipboard.'; if(typeof appToast==='function') appToast('Backup copied to clipboard ✓'); if(navigator.vibrate){ try{navigator.vibrate(20);}catch(e){} } };
   if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(json).then(done).catch(()=>_fallbackCopy(json,done)); }
   else _fallbackCopy(json,done);
@@ -3678,7 +3792,7 @@ function _fallbackCopy(text,cb){
 }
 function exportData(){
   try{
-    const blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});
+    const blob=new Blob([JSON.stringify(Object.assign({_app:'albert12',_v:SCHEMA_VERSION},STATE),null,2)],{type:'application/json'});
     const url=URL.createObjectURL(blob); const a=document.createElement('a');
     a.href=url; a.download='albert12-backup-'+_ymd(new Date())+'.json'; document.body.appendChild(a); a.click();
     setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },120);
@@ -3704,9 +3818,10 @@ function importData(input){
   const r=new FileReader();
   r.onload=function(){ const m=document.getElementById('data-msg');
     try{ const obj=JSON.parse(r.result);
-      if(obj&&typeof obj==='object'){ STATE=Object.assign(STATE,obj); saveState(STATE);
+      const looksOurs = obj&&typeof obj==='object'&&(obj._app==='albert12'||obj.completedSessions||obj.exerciseSets||obj.profile||obj.importedRuns);
+      if(looksOurs){ for(const k in STATE){ delete STATE[k]; } Object.assign(STATE,obj); delete STATE._app; delete STATE._v; ensureContainers(); saveState(STATE);
         if(m) m.textContent='Backup restored ✓'; hideRestoreBanner(); if(typeof appToast==='function') appToast('Backup restored — your sessions are back ✓'); renderToday(); if(currentSection==='stats') renderStats(); if(currentSection==='progress') renderProgress(); }
-      else { if(m) m.textContent='That file did not contain valid data.'; }
+      else { if(m) m.textContent='That file does not look like an Albert 12 Week backup.'; }
     }catch(e){ if(m) m.textContent='Could not read that file.'; } };
   r.readAsText(f); input.value='';
 }
@@ -3978,7 +4093,8 @@ function renderImportedRuns(){
     const zsum=r.zoneSec?r.zoneSec.reduce((a,b)=>a+b,0):0;
     const zbar = zsum>0 ? '<div class="zbar">'+r.zoneSec.map((s,i)=>{ const pct=Math.round(s/zsum*100); return pct>0?'<span style="width:'+pct+'%;background:'+cols[i]+'" title="Z'+(i+1)+' '+pct+'%"></span>':''; }).join('')+'</div>' : '';
     const d=new Date(r.dateISO); const ds=d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2);
-    return '<div class="ri-row"><div class="ri-top">'+r.distKm+' km · '+pace+'<button class="ri-del" onclick="deleteImportedRun(\''+r.id+'\')">✕</button></div>'
+    const itag=runIntensityTag(r.paceSec); const itagHTML=itag?(' · <span class="ri-tag">≈ '+itag+'</span>'):'';
+    return '<div class="ri-row"><div class="ri-top">'+r.distKm+' km · '+pace+itagHTML+'<button class="ri-del" onclick="deleteImportedRun(\''+r.id+'\')">✕</button></div>'
       +'<div class="ri-sub">'+ds+' · '+_fmtDur(r.durationSec)+(r.avgHR?(' · ♥ '+r.avgHR+(r.maxHR?('/'+r.maxHR):'')):'')+' · '+r.load+' AU'+(r.trimp?(' · TRIMP '+r.trimp):'')+'</div>'+zbar+'</div>';
   }).join('');
 }
