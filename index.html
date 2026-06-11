@@ -387,6 +387,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .rd-band{font-size:13px;font-weight:600;font-family:'Aptos',monospace}
 .rd-advice{font-size:11px;color:var(--text2);line-height:1.45;margin-top:2px}
 .rd-hint{font-size:11px;color:var(--text3);margin-top:8px;font-family:'Aptos',monospace}
+.rd-done{padding:0}
+.rd-done>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:12px 14px;-webkit-tap-highlight-color:transparent}
+.rd-done>summary::-webkit-details-marker{display:none}
+.rd-score-sm{font-size:26px;font-family:'Aptos',sans-serif;line-height:1;min-width:34px;text-align:center}
+.rd-sum-band{flex:1;font-size:12.5px;font-weight:600;font-family:'Aptos',monospace}
+.rd-sum-edit{font-size:10px;color:var(--text3);font-family:'Aptos',monospace}
+.rd-done[open] .rd-sum-edit::after{content:' ⌄';display:inline-block;transform:rotate(180deg)}
+.rd-open{padding:2px 14px 14px}
 .plate-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .plate-chip{border:1px solid var(--border);background:var(--surface2);border-radius:8px;padding:6px 10px;font-size:13px;font-family:'Aptos',monospace;color:var(--text)}
 .mus-row{margin-bottom:9px}
@@ -472,6 +480,23 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .wk-group-body{display:none;padding-top:8px}
 .wk-group-body.open{display:block}
 .run-target{font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);background:rgba(71,168,255,.1);border:1px solid rgba(71,168,255,.25);border-radius:8px;padding:5px 9px;margin-top:6px}
+.acc{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:var(--surface);overflow:hidden}
+.acc>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-family:'Aptos',monospace;font-size:13px;color:var(--text);font-weight:600;-webkit-tap-highlight-color:transparent}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:'⌄';color:var(--text3);font-size:15px;transition:transform .2s;margin-left:10px}
+.acc[open]>summary::after{transform:rotate(180deg)}
+.acc>summary:active{background:var(--surface2)}
+.acc-body{padding:2px 16px 16px}
+.acc-body .tool-sub{margin-top:0}
+.accg{margin-bottom:12px}
+.accg>summary{list-style:none;cursor:pointer;padding:11px 4px;display:flex;align-items:center;font-family:'Aptos',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);font-weight:600;-webkit-tap-highlight-color:transparent}
+.accg>summary::-webkit-details-marker{display:none}
+.accg>summary::before{content:'›';color:var(--text3);font-size:15px;transition:transform .2s;margin-right:8px;display:inline-block}
+.accg[open]>summary::before{transform:rotate(90deg)}
+.run-sug{display:flex;align-items:center;gap:8px;font-size:11px;font-family:'Aptos',monospace;color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 9px;margin-top:6px}
+.run-sug.muted{color:var(--text3);background:transparent;border-style:dashed}
+.run-sug span{flex:1}
+.run-setbtn{border:1px solid var(--accent2);background:transparent;color:var(--accent2);border-radius:7px;padding:4px 9px;font-size:10px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer;white-space:nowrap}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
 .s1-tbl{width:100%;border-collapse:collapse;margin-top:10px}
@@ -520,7 +545,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v17</div>
+      <div class="hdr-build">Build 2026-06-10 · v20</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -600,7 +625,7 @@ input[type=number]{-moz-appearance:textfield}
 <!-- PACE CALCULATOR -->
 <div class="section" id="section-pace">
   <div class="section-title">TRAINING TOOLS</div>
-  <div class="tool-h">Heart-rate training zones</div>
+  <details class="acc" open><summary>Heart-rate training zones</summary><div class="acc-body">
   <div class="tool-sub">Find your aerobic base, threshold and VO₂max zones.</div>
   <div class="pc-field">
     <label>Age (years)</label>
@@ -612,8 +637,8 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div id="hr-results"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Treadmill pace</div>
+  </div></details>
+  <details class="acc"><summary>Treadmill pace</summary><div class="acc-body">
   <div class="tool-sub">Convert speed ⇄ pace, adjust for incline, project splits.</div>
   <div class="pc-toggle">
     <button class="pc-tg-btn active" id="pc-metric" onclick="pcSetUnit('metric')">km · min/km</button>
@@ -649,8 +674,8 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div id="pc-results"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Daily fuel &amp; hydration</div>
+  </div></details>
+  <details class="acc"><summary>Daily fuel &amp; hydration</summary><div class="acc-body">
   <div class="tool-sub">Rough daily calories, protein, carbs, fat and fluids for your goal.</div>
   <div class="pc-field">
     <label>Body weight (kg)</label>
@@ -666,8 +691,8 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div id="mac-results"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Strength 1RM &amp; load</div>
+  </div></details>
+  <details class="acc"><summary>Strength 1RM &amp; load</summary><div class="acc-body">
   <div class="tool-sub">Estimate your 1-rep max, then push a working load straight onto today’s lift.</div>
   <div class="pc-field">
     <label>Exercise</label>
@@ -689,8 +714,8 @@ input[type=number]{-moz-appearance:textfield}
   <button class="pc-apply" id="s1-apply" onclick="s1Apply()">Apply to today’s lift</button>
   <div id="s1-msg" class="pc-note" style="text-align:center"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Progressive overload planner</div>
+  </div></details>
+  <details class="acc"><summary>Progressive overload planner</summary><div class="acc-body">
   <div class="tool-sub">Evidence-based weight jumps for getting stronger over the weeks ahead.</div>
   <div class="pc-field">
     <label>Exercise</label>
@@ -721,8 +746,8 @@ input[type=number]{-moz-appearance:textfield}
   <button class="pc-apply" id="po-apply" onclick="poApply()">Apply next step to today’s lift</button>
   <div id="po-msg" class="pc-note" style="text-align:center"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Set-by-set strength planner</div>
+  </div></details>
+  <details class="acc"><summary>Set-by-set strength planner</summary><div class="acc-body">
   <div class="tool-sub">Build an exact load for every set of a lift using a proven strength scheme, then drop it into today’s session.</div>
   <div class="pc-field">
     <label>Exercise</label>
@@ -747,8 +772,8 @@ input[type=number]{-moz-appearance:textfield}
   <button class="pc-apply" id="ss-apply" onclick="ssApply()">Apply set plan to today’s lift</button>
   <div id="ss-msg" class="pc-note" style="text-align:center"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Run progression planner</div>
+  </div></details>
+  <details class="acc"><summary>Run progression planner</summary><div class="acc-body">
   <div class="tool-sub">Progressively overload your running for marathon endurance — weekly volume, long-run targets and training paces.</div>
   <div class="pc-field">
     <label>Current weekly distance (km)</label>
@@ -776,17 +801,18 @@ input[type=number]{-moz-appearance:textfield}
   <div class="pc-field" style="margin-top:12px">
     <label>Apply pace to today’s run</label>
     <div class="pc-input-row"><select id="rp-applypace" style="flex:1;background:transparent;border:none;color:var(--text);padding:12px;font-size:14px;font-family:'Aptos',monospace;-webkit-appearance:none;appearance:none">
-      <option value="easy">Easy / recovery</option>
-      <option value="mp" selected>Marathon pace</option>
-      <option value="thr">Threshold / tempo</option>
-      <option value="int">Interval / VO₂</option>
+      <option value="auto" selected>Auto — match each segment</option>
+      <option value="easy">Force easy / recovery</option>
+      <option value="mp">Force marathon pace</option>
+      <option value="thr">Force threshold / tempo</option>
+      <option value="int">Force interval / VO₂</option>
     </select></div>
   </div>
   <button class="pc-apply" id="rp-apply" onclick="rpApply()">Apply pace to today’s run</button>
   <div id="rp-msg" class="pc-note" style="text-align:center"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Plate &amp; warm-up calculator</div>
+  </div></details>
+  <details class="acc"><summary>Plate &amp; warm-up calculator</summary><div class="acc-body">
   <div class="tool-sub">What to load on the bar per side, plus a warm-up ramp to your working weight.</div>
   <div class="pc-field">
     <label>Working weight (kg)</label>
@@ -800,16 +826,16 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div id="pl-out"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Import a run (GPX / TCX)</div>
+  </div></details>
+  <details class="acc"><summary>Import a run (GPX / TCX)</summary><div class="acc-body">
   <div class="tool-sub">Bring in real runs from Garmin, Strava or Apple Health — it reads distance, pace, heart rate and time-in-zone, and feeds your Stats load &amp; fitness trend.</div>
   <button class="data-btn accent" onclick="document.getElementById('run-file').click()">⬆︎ Import run file</button>
   <input id="run-file" type="file" accept=".gpx,.tcx,application/gpx+xml,application/vnd.garmin.tcx+xml,application/xml,text/xml" style="display:none" onchange="importRunFile(this)">
   <div id="ri-msg" class="pc-note" style="text-align:center"></div>
   <div id="ri-list"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Log a run manually</div>
+  </div></details>
+  <details class="acc"><summary>Log a run manually</summary><div class="acc-body">
   <div class="tool-sub">No file? Enter an outdoor run by hand — it feeds the same Stats load, fitness &amp; race predictor.</div>
   <div class="pc-field">
     <label>Distance (km)</label>
@@ -826,8 +852,8 @@ input[type=number]{-moz-appearance:textfield}
   <button class="pc-apply" onclick="logManualRun()">Log run</button>
   <div id="mr-msg" class="pc-note" style="text-align:center"></div>
 
-  <div class="tool-divider"></div>
-  <div class="tool-h">Data &amp; backup</div>
+  </div></details>
+  <details class="acc"><summary>Data &amp; backup</summary><div class="acc-body">
   <div class="tool-sub">Everything is saved on this device automatically. Export a backup before clearing your browser, switching phones, or just to be safe.</div>
   <button class="data-btn accent" onclick="exportData()">⬇︎ Export backup</button>
   <button class="data-btn" onclick="copyBackup()">⧉ Copy JSON</button>
@@ -836,6 +862,7 @@ input[type=number]{-moz-appearance:textfield}
   <button class="data-btn" onclick="exportICS()">📅 Add plan to calendar (.ics)</button>
   <div id="backup-note" class="pc-note" style="text-align:center"></div>
   <div id="data-msg" class="tool-sub" style="margin-top:10px"></div>
+  </div></details>
 </div>
 
 <!-- PROGRESS -->
@@ -2132,11 +2159,45 @@ function weightControlHTML(e,sessKey){
   return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal'+(eased?' · eased −1 set':'')+'</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
 }
+function runZoneFromLabel(name,detail){
+  const t=((name||'')+' '+(detail||'')).toLowerCase();
+  if(/interval|vo2|\brep\b|reps|strides?|400m|800m|1k rep|5k pace|3k pace|zone ?5/.test(t)) return 'int';
+  if(/tempo|threshold|comfortably hard|lactate|zone ?3.?4|zone ?4/.test(t)) return 'thr';
+  if(/marathon|race ?pace|goal pace|\bmp\b|steady|zone ?3\b/.test(t)) return 'mp';
+  return 'easy';
+}
+function trainingPacesNow(){
+  let goalSec=(STATE.profile&&parseFloat(STATE.profile.goalMarathonSec))||null;
+  if(!goalSec){ const pm=(typeof predictMarathon==='function')?predictMarathon():null; if(pm) goalSec=pm.sec; }
+  return goalSec?rpPaces(goalSec):null;
+}
+function runPaceForExercise(e){
+  const paces=trainingPacesNow(); if(!paces) return null;
+  const z=runZoneFromLabel(e.name,e.detail); const sec=paces[z];
+  return {z, label:{easy:'Easy',mp:'Marathon',thr:'Threshold',int:'Interval'}[z], sec};
+}
+function applyRunPace(exId,sessKey){
+  let ex=null; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.id===exId) ex=e; }));
+  const rp=ex?runPaceForExercise(ex):null; if(!rp) return;
+  const kmh=+(3600/rp.sec).toFixed(1);
+  if(!STATE.runTarget) STATE.runTarget={};
+  STATE.runTarget[exId]={kmh,incline:0,pace:fmtPaceSec(rp.sec)};
+  saveState(STATE);
+  const el=document.getElementById('rsug-'+exId); if(el) el.innerHTML='🎯 Target '+kmh+' km/h · '+fmtPaceSec(rp.sec)+'/km ('+rp.label+')';
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  if(typeof appToast==='function') appToast(rp.label+' pace '+fmtPaceSec(rp.sec)+'/km set \u2713');
+  if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}
+}
 function runControlHTML(e,sessKey){
   if(e.cat!=='run') return '';
   const v=STATE.runLog[e.id]||'';
   const tgt=STATE.runTarget&&STATE.runTarget[e.id];
-  const tgtHTML = tgt? '<div class="run-target">🎯 Target '+tgt.kmh+' km/h · '+tgt.pace+'/km'+(tgt.incline?(' · '+tgt.incline+'% incline'):'')+'</div>' : '';
+  const rp=runPaceForExercise(e);
+  let paceLine;
+  if(tgt){ paceLine='<div class="run-target" id="rsug-'+e.id+'">🎯 Target '+tgt.kmh+' km/h · '+tgt.pace+'/km'+(tgt.incline?(' · '+tgt.incline+'% incline'):'')+'</div>'; }
+  else if(rp){ paceLine='<div class="run-sug" id="rsug-'+e.id+'"><span>🏃 '+rp.label+' pace ~'+fmtPaceSec(rp.sec)+'/km · '+(3600/rp.sec).toFixed(1)+' km/h</span><button class="run-setbtn" onclick="applyRunPace(\''+e.id+'\',\''+sessKey+'\')">Set target</button></div>'; }
+  else { paceLine='<div class="run-sug muted">Add your goal time in Tools → Run progression planner to auto-calc each run\u2019s pace.</div>'; }
+  const tgtHTML = paceLine;
   return tgtHTML+'<div class="wt-wrap"><span class="wt-lbl">km/h</span><div class="stp">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',-0.1)">−</button>'
     +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg speed" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
@@ -2398,15 +2459,15 @@ function readinessBand(score){
   if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
   return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
 }
-function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); saveState(STATE); renderToday(); }
+function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); rdOpen=true; saveState(STATE); renderToday(); }
 function readinessCardHTML(date){
   const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
   const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
-  let verdict;
-  if(score!=null){ const b=readinessBand(score); verdict='<div class="rd-verdict" style="border-color:'+b[0]+'"><div class="rd-score" style="color:'+b[0]+'">'+score+'</div><div><div class="rd-band" style="color:'+b[0]+'">'+b[1]+'</div><div class="rd-advice">'+b[2]+'</div></div></div>'; }
-  else verdict='<div class="rd-hint">Tap how you feel to get a readiness score and a push/back-off call for today.</div>';
-  return '<div class="rd-card"><div class="rd-hd">DAILY READINESS</div>'+rows+verdict+'</div>';
+  if(score==null) return '<div class="rd-card"><div class="rd-hd">DAILY READINESS</div>'+rows+'<div class="rd-hint">Tap how you feel to get a readiness score and a push/back-off call for today.</div></div>';
+  const b=readinessBand(score);
+  return '<details class="rd-card rd-done"'+(rdOpen?' open':'')+'><summary class="rd-sum" onclick="rdOpen=!rdOpen"><span class="rd-score-sm" style="color:'+b[0]+'">'+score+'</span><span class="rd-sum-band" style="color:'+b[0]+'">Readiness · '+b[1]+'</span><span class="rd-sum-edit">adjust</span></summary><div class="rd-open">'+rows+'</div></details>';
 }
+var rdOpen=false;
 // ── Race predictor (Riegel) ──
 function predictMarathon(){
   const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=3&&r.durationSec>0);
@@ -2691,16 +2752,23 @@ function renderStats(){
     </div>
     ${trainingLoadCardHTML()}
     ${fitnessCardHTML()}
-    ${racePredictCardHTML()}
+    <details class="accg" open><summary>This week</summary>
     ${consistencyCardHTML()}
     ${weeklyReviewCardHTML()}
-    ${prCardHTML()}
-    ${muscleCardHTML()}
-    ${bodyCompCardHTML()}
+    </details>
+    <details class="accg"><summary>Running &amp; predictions</summary>
+    ${racePredictCardHTML()}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">LAST 14 DAYS</div>
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
     </div>
+    </details>
+    <details class="accg"><summary>Strength &amp; body</summary>
+    ${prCardHTML()}
+    ${muscleCardHTML()}
+    ${bodyCompCardHTML()}
+    </details>
+    <details class="accg"><summary>Plan &amp; phase</summary>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">PHASE BREAKDOWN</div>
       ${[1,2,3,4].map(ph=>{
@@ -2726,6 +2794,7 @@ function renderStats(){
         <div style="font-family:'Aptos',monospace;font-size:12px;color:var(--text2)">days to<br>30 Aug 2026</div>
       </div>
     </div>
+    </details>
   `;
   document.getElementById('stats-view').innerHTML=html;
   const diff=Math.ceil((RACE_DATE-new Date())/(1000*60*60*24));
@@ -3419,6 +3488,7 @@ function pcEnsureInit(){
   s1InitSelects(); s1Calc();
   poInit(); poCalc();
   ssInit(); ssCalc();
+  { const gs=STATE.profile&&parseFloat(STATE.profile.goalMarathonSec); const gEl=document.getElementById('rp-goal'); if(gs>0&&gEl&&!gEl.value){ gEl.value=Math.floor(gs/3600)+':'+String(Math.round((gs%3600)/60)).padStart(2,'0'); } }
   rpCalc();
   plCalc();
   renderImportedRuns();
@@ -3937,6 +4007,7 @@ function rpPlan(){
   const rate=parseFloat(document.getElementById('rp-rate').value)/100;
   const weeks=parseInt(document.getElementById('rp-weeks').value,10)||8;
   const goalSec=rpParseTime(document.getElementById('rp-goal').value);
+  if(goalSec){ STATE.profile=STATE.profile||{}; if(STATE.profile.goalMarathonSec!==goalSec){ STATE.profile.goalMarathonSec=goalSec; saveState(STATE); } }
   const paces=goalSec?rpPaces(goalSec):null;
   const rows=[]; let lastBuild=km;
   for(let w=1;w<=weeks;w++){
@@ -3977,15 +4048,35 @@ function rpCalc(){
   if(btn) btn.disabled=!plan.paces;
   if(msg) msg.textContent = plan.paces ? 'Pick a pace zone and apply it to today’s run.' : 'Enter a goal time to enable pace targets.';
 }
+function applyAutoPacesToday(){
+  const paces=trainingPacesNow(); if(!paces) return {applied:0,nopace:true};
+  if(!STATE.runTarget) STATE.runTarget={};
+  let applied=0; const parts=[];
+  getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat!=='run') return;
+    const rp=runPaceForExercise(e); if(!rp) return;
+    STATE.runTarget[e.id]={kmh:+(3600/rp.sec).toFixed(1),incline:0,pace:fmtPaceSec(rp.sec)};
+    applied++; parts.push(rp.label);
+  }));
+  if(applied) saveState(STATE);
+  return {applied,parts};
+}
 function rpApply(){
-  const plan=rpPlan(); if(!plan||!plan.paces){ const m=document.getElementById('rp-msg'); if(m) m.textContent='Add a goal marathon time first to compute paces.'; return; }
   const which=document.getElementById('rp-applypace').value;
+  const msg=document.getElementById('rp-msg');
+  if(which==='auto'){
+    const r=applyAutoPacesToday();
+    if(r.nopace){ if(msg) msg.textContent='Add a goal marathon time above first (or import a 3 km+ run).'; return; }
+    if(r.applied){ if(typeof appToast==='function') appToast('Paces matched to today\u2019s '+r.applied+' run segment'+(r.applied>1?'s':'')+' \u2713'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); if(msg) msg.textContent='Matched each segment: '+r.parts.join(' → ')+'.'; }
+    else { if(msg) msg.textContent='No run scheduled today to apply this to.'; }
+    return;
+  }
+  const plan=rpPlan(); if(!plan||!plan.paces){ if(msg) msg.textContent='Add a goal marathon time first to compute paces.'; return; }
   const sec=plan.paces[which==='mp'?'mp':which]; const kmh=+(3600/sec).toFixed(1); const pace=fmtPaceSec(sec);
   const labels={easy:'Easy',mp:'Marathon',thr:'Threshold',int:'Interval'};
   let applied=0;
   getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{ if(e.cat==='run'){ STATE.runTarget[e.id]={kmh,incline:0,pace}; applied++; } }));
-  const msg=document.getElementById('rp-msg');
-  if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(labels[which]+' pace '+pace+'/km set on today’s run ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent=labels[which]+' target ('+pace+'/km · '+kmh+' km/h) applied to today’s run.'; }
+  if(applied){ saveState(STATE); if(typeof appToast==='function') appToast(labels[which]+' pace '+pace+'/km set on today’s run ✓'); if(navigator.vibrate){try{navigator.vibrate(20);}catch(e){}} if(currentSection==='today') renderToday(); if(msg) msg.textContent=labels[which]+' (forced) target ('+pace+'/km · '+kmh+' km/h) applied to every run today.'; }
   else { if(msg) msg.textContent='No run scheduled today to apply this to.'; }
 }
 function poApply(){
