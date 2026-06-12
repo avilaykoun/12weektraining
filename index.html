@@ -501,6 +501,52 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .swap-chip{border:1px solid var(--border);background:var(--surface2);color:var(--text2);border-radius:7px;padding:5px 9px;font-size:11px;font-family:'Aptos',monospace;cursor:pointer}
 .swap-chip.on{border-color:var(--accent);color:var(--accent)}
 .ri-tag{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);background:rgba(71,168,255,.12);border-radius:6px;padding:2px 6px}
+.phase-strip{background:var(--surface2);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.phase-strip>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:9px;padding:11px 13px;-webkit-tap-highlight-color:transparent}
+.phase-strip>summary::-webkit-details-marker{display:none}
+.phase-strip>summary::after{content:'⌄';color:var(--text3);font-size:14px;margin-left:auto;transition:transform .2s}
+.phase-strip[open]>summary::after{transform:rotate(180deg)}
+.ps-tag{font-size:10px;font-family:'Aptos',monospace;font-weight:700;color:#0a0a0f;background:var(--accent);border-radius:6px;padding:4px 7px;white-space:nowrap}
+.ps-line{font-size:12.5px;color:var(--text);font-family:'Aptos',monospace}
+.ps-focus{padding:0 13px 12px;font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;line-height:1.5}
+.mc-sec{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 8px}
+.mc-sec:first-child{margin-top:2px}
+.mc-sub{text-transform:none;letter-spacing:0;color:var(--text3);margin-left:4px}
+.nig-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;gap:8px}
+.nig-lbl{font-size:13px;color:var(--text2);font-family:'Aptos',monospace}
+.nig-hint{font-size:11px;color:var(--text3);font-family:'Aptos',monospace;margin-bottom:9px}
+.nig-step{display:flex;align-items:center;gap:8px}
+.nig-b{width:30px;height:30px;border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;font-size:16px;cursor:pointer}
+.nig-val{min-width:20px;text-align:center;font-size:15px;font-family:'Aptos',sans-serif;color:var(--text)}
+.nig-val.hot{color:#ff6b47;font-weight:700}
+.mob-btn{border:1px solid var(--border);background:transparent;color:var(--text3);border-radius:8px;padding:6px 12px;font-size:12px;font-family:'Aptos',monospace;cursor:pointer}
+.mob-btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(95,214,160,.08)}
+.io-bar{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.io-easy{background:#5fd6a0;color:#0a0a0f;font-size:11px;font-family:'Aptos',monospace;font-weight:600;display:flex;align-items:center;justify-content:center;min-width:0}
+.io-hard{background:#ff8a5c;color:#0a0a0f;font-size:11px;font-family:'Aptos',monospace;font-weight:600;display:flex;align-items:center;justify-content:center;min-width:0}
+.io-target{font-size:10px;color:var(--text3);font-family:'Aptos',monospace;text-align:center;margin-top:5px}
+.bm-sched-wrap{margin-bottom:14px}
+.bm-sched{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;margin-bottom:6px}
+.bm-sched.due{border-color:var(--accent);background:rgba(212,175,90,.08)}
+.bm-sched-l{font-size:12.5px;font-family:'Aptos',monospace;color:var(--text)}
+.bm-what{font-size:10px;color:var(--text3);margin-top:2px}
+.bm-ok{font-size:10px;font-family:'Aptos',monospace;color:#5fd6a0;white-space:nowrap}
+.bm-due{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);font-weight:700;white-space:nowrap}
+.bm-up{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);white-space:nowrap}
+.bm-miss{font-size:10px;font-family:'Aptos',monospace;color:#ff8a5c;white-space:nowrap}
+.bm-h2{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:6px 0 8px}
+.bm-hist{margin-top:12px}
+.bm-hrow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bm-hl{min-width:0;flex:1}
+.bm-ht{font-size:13px;color:var(--text);font-family:'Aptos',monospace}
+.bm-hs{font-size:10.5px;color:var(--text3);font-family:'Aptos',monospace;margin-top:2px}
+.bm-hbtns{display:flex;gap:6px;flex-shrink:0}
+.bm-edit,.bm-del{width:30px;height:30px;border:1px solid var(--border);background:var(--surface2);border-radius:8px;font-size:13px;cursor:pointer;color:var(--text2);-webkit-tap-highlight-color:transparent}
+.bm-del{color:#ff6b47}
+.bm-cancel{width:100%;margin-top:7px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:10px;padding:11px;font-size:13px;font-family:'Aptos',monospace;cursor:pointer}
+.bm-nudge{display:flex;gap:10px;align-items:center;background:rgba(212,175,90,.1);border:1px solid var(--accent);border-radius:12px;padding:11px 13px;margin-bottom:12px;cursor:pointer;font-size:12.5px;font-family:'Aptos',monospace;color:var(--text);line-height:1.4}
+.bm-nudge-tag{font-size:10px;font-weight:700;color:#0a0a0f;background:var(--accent);border-radius:6px;padding:4px 7px;white-space:nowrap}
+.bm-nudge-go{color:var(--accent);font-weight:600;white-space:nowrap}
 .accg{margin-bottom:12px}
 .accg>summary{list-style:none;cursor:pointer;padding:11px 4px;display:flex;align-items:center;font-family:'Aptos',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);font-weight:600;-webkit-tap-highlight-color:transparent}
 .accg>summary::-webkit-details-marker{display:none}
@@ -558,7 +604,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v21</div>
+      <div class="hdr-build">Build 2026-06-10 · v27</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -825,6 +871,11 @@ input[type=number]{-moz-appearance:textfield}
   <div id="rp-msg" class="pc-note" style="text-align:center"></div>
 
   </div></details>
+  <details class="acc"><summary>Benchmark tests</summary><div class="acc-body">
+  <div class="tool-sub">Test at each block boundary to recalibrate paces &amp; loads from real data, not estimates.</div>
+  <div id="bm-card"></div>
+  </div></details>
+
   <details class="acc"><summary>Plate &amp; warm-up calculator</summary><div class="acc-body">
   <div class="tool-sub">What to load on the bar per side, plus a warm-up ramp to your working weight.</div>
   <div class="pc-field">
@@ -1425,10 +1476,10 @@ const PROGRAM = [
     {id:'p4w11sun1',name:'Full rest + mobility',detail:'',cat:'rest'},
   ],note:''},
   // Race week
-  {phase:4,week:12,day:'Mon',name:'Shake-out + strides',type:'run',exercises:[
-    {id:'p4w12mon1',name:'Easy jog',detail:'3km very easy',cat:'run'},
-    {id:'p4w12mon2',name:'Strides',detail:'2 × 20 sec · feel fast, stop feeling stiff',cat:'run'},
-  ],note:'Race week — trust the training'},
+  {phase:4,week:12,day:'Mon',name:'Post-race recovery',type:'rest',exercises:[
+    {id:'p4w12mon1',name:'Gentle walk',detail:'15–20 min easy — loosen the legs',cat:'rest'},
+    {id:'p4w12mon2',name:'Refuel & rehydrate',detail:'Protein + carbs, plenty of fluids',cat:'rest'},
+  ],note:'You did it 🎉 — celebrate, then rest. No running today.'},
   {phase:4,week:12,day:'Tue',name:'Last mini strength',type:'strength',exercises:[
     {id:'p4w12tue1',name:'Squat',detail:'2 × 5 @ 65% · stimulus only, no fatigue',cat:'strength'},
     {id:'p4w12tue2',name:'Deadlift',detail:'2 × 5 @ 65%',cat:'strength'},
@@ -1438,18 +1489,34 @@ const PROGRAM = [
   {phase:4,week:12,day:'Wed',name:'Rest',type:'rest',exercises:[
     {id:'p4w12wed1',name:'Gentle walk',detail:'20–25 min only',cat:'rest'},
   ],note:'Stay off your feet otherwise'},
-  {phase:4,week:12,day:'Thu',name:'Final shake-out',type:'run',exercises:[
+  {phase:4,week:12,day:'Thu',name:'Shake-out',type:'run',exercises:[
     {id:'p4w12thu1',name:'Very easy jog',detail:'20–25 min + 2 × 20 sec strides',cat:'run'},
-  ],note:'Last proper run before race'},
+  ],note:'Easy legs — keep it relaxed'},
   {phase:4,week:12,day:'Fri',name:'FULL REST',type:'rest',exercises:[
     {id:'p4w12fri1',name:'Complete rest',detail:'Stay off feet. Gear check. Sleep well.',cat:'rest'},
-  ],note:'Lay out all race gear tonight'},
-  {phase:4,week:12,day:'Sat',name:'RACE DAY 🏃',type:'run',exercises:[
-    {id:'p4w12sat1',name:'Start easy',detail:'First 10km should feel almost too comfortable',cat:'run'},
-    {id:'p4w12sat2',name:'Fuel early',detail:'First gel by 40 min — don\'t wait until hungry',cat:'run'},
-    {id:'p4w12sat3',name:'Trust your training',detail:'12 weeks of work is in your legs. Let it out.',cat:'run'},
+  ],note:'Rest up — race is Sunday'},
+  {phase:4,week:12,day:'Sat',name:'Pre-race primer',type:'run',exercises:[
+    {id:'p4w12sat1',name:'Short easy jog',detail:'12–15 min very easy',cat:'run'},
+    {id:'p4w12sat2',name:'Strides',detail:'3 × 20 sec · feel sharp, not tired',cat:'run'},
+    {id:'p4w12sat3',name:'Gear & fuel check',detail:'Lay out kit, pin bib, pre-load carbs, hydrate',cat:'rest'},
+  ],note:'Day before — stay off your feet, sleep well'},
+  {phase:4,week:12,day:'Sun',name:'RACE DAY 🏃',type:'run',exercises:[
+    {id:'p4w12sun1',name:'Start easy',detail:'First 10km should feel almost too comfortable',cat:'run'},
+    {id:'p4w12sun2',name:'Fuel early',detail:'First gel by 40 min — don\'t wait until hungry',cat:'run'},
+    {id:'p4w12sun3',name:'Trust your training',detail:'12 weeks of work is in your legs. Let it out.',cat:'run'},
   ],note:'You\'ve done the work. Enjoy it.'},
 ];
+
+// Long runs on Sunday: swap each week's Saturday long run with its Sunday rest
+// (also puts a rest day immediately before the long run). Idempotent on reload.
+PROGRAM.forEach(s=>{
+  if(s.day==='Sat' && /long/i.test(s.name)){
+    const rest=PROGRAM.find(x=>x.week===s.week && x.day==='Sun');
+    if(rest){ rest.day='Sat'; s.day='Sun'; }
+  }
+});
+// Keep each week's sessions in true chronological order (the plan's week runs Tue→Mon).
+(function(){ const ord={Tue:0,Wed:1,Thu:2,Fri:3,Sat:4,Sun:5,Mon:6}; PROGRAM.sort((a,b)=> a.week!==b.week ? a.week-b.week : (ord[a.day]-ord[b.day])); })();
 
 // ─────────────────────────────────────────
 // STATE
@@ -1472,7 +1539,7 @@ function saveState(s){
 }
 const SCHEMA_VERSION=1;
 function ensureContainers(){
-  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
+  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
   if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
 }
 let STATE = loadState();
@@ -1510,6 +1577,10 @@ if(!STATE.celebratedPR) STATE.celebratedPR={};
 if(!STATE.recovery) STATE.recovery={};
 if(!STATE.profile) STATE.profile={};
 if(!STATE.exerciseSwap) STATE.exerciseSwap={};
+if(!STATE.niggles) STATE.niggles={};
+if(!STATE.mobilityDone) STATE.mobilityDone={};
+if(!STATE.restHRLog) STATE.restHRLog={};
+if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
 ensureContainers();
 
 // ─────────────────────────────────────────
@@ -1600,10 +1671,10 @@ function renderToday(){
   const sessions=getSessionsForDate(today);
   const container=document.getElementById('today-sessions');
   if(sessions.length===0){
-    container.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+recoveryPanelHTML(today);
+    container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+recoveryPanelHTML(today);
     return;
   }
-  let out=guidanceCardHTML(today)+readinessCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('');
+  let out=phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -2201,7 +2272,7 @@ function weightControlHTML(e,sessKey){
     hist='<div class="lasttime" id="sug-'+e.id+'"><span>Last '+dstr+':</span> <span class="lt-v">'+fmtLastSets(sug.rec)+'</span>'
       +(sug.rpe!=null?' <span>@RPE '+sug.rpe+'</span>':'')+btn+'</div>';
   }
-  return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal'+(eased?' · eased −1 set':'')+'</span><div class="setw-row">'+inputs+'</div>'
+  return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal · '+phaseIntent().rir+(eased?' · eased −1 set':'')+'</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
 }
 function runZoneFromLabel(name,detail){
@@ -2504,7 +2575,7 @@ function readinessBand(score){
   if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
   return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
 }
-function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); rdOpen=true; saveState(STATE); renderToday(); }
+function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); morningOpen=true; if(typeof hideRestoreBanner==='function') hideRestoreBanner(); saveState(STATE); renderToday(); }
 function readinessCardHTML(date){
   const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
   const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
@@ -2664,13 +2735,16 @@ function todayGuidance(){
   if(rs!=null){ if(rs<45){sev=Math.max(sev,2);reasons.push('low readiness');} else if(rs<70){sev=Math.max(sev,1);reasons.push('moderate readiness');} else reasons.push('readiness good'); }
   if(aw.acwr!=null){ if(aw.acwr>1.5){sev=Math.max(sev,2);reasons.push('workload spike '+aw.acwr.toFixed(2));} else if(aw.acwr>1.3){sev=Math.max(sev,1);reasons.push('workload rising');} else if(aw.acwr<0.8) reasons.push('workload low'); }
   if(tsb!=null&&ctl>0){ const ratio=tsb/ctl; if(ratio<-0.4){sev=Math.max(sev,2);reasons.push('form low');} else if(ratio<-0.15){sev=Math.max(sev,1);} else if(ratio>0.05) reasons.push('form fresh'); }
+  const mn=maxNiggleToday(); if(mn.mx>=7){ sev=Math.max(sev,2); reasons.push('pain '+mn.reg+' '+mn.mx); } else if(mn.mx>=4){ sev=Math.max(sev,1); reasons.push(mn.reg+' niggle '+mn.mx); }
+  const re=rhrElevated(); if(re&&re.elevated){ sev=Math.max(sev,1); reasons.push('resting HR +'+re.delta); }
   const deload=(aw.acwr!=null&&aw.acwr>1.5)||(tsb!=null&&ctl>0&&tsb/ctl<-0.45);
   let color,title,advice;
   if(sev===0){ color='#5fd6a0'; title='Green — push'; advice='Recovered and workload in range. Go after your top sets and target paces today.'; }
   else if(sev===1){ color='#e8c66b'; title='Amber — moderate'; advice='Slightly loaded. Keep the session but cap intensity (~RPE 8), trim a back-off set, keep easy runs easy.'; }
   else { color='#ff6b47'; title='Red — back off'; advice='Under-recovered or workload spiking. Make today easy / technique work, or rest.'; }
+  if(mn.mx>=4) advice+=' Protect the '+mn.reg.toLowerCase()+' — swap to pain-free variations and don\u2019t push through it.';
   if(deload) advice+=' Workload high — a cutback week looks due.';
-  return {sev,color,title,advice,reasons,deload,hasInputs:(rs!=null||aw.acwr!=null||(tsb!=null&&ctl>0))};
+  return {sev,color,title,advice,reasons,deload,hasInputs:(rs!=null||aw.acwr!=null||(tsb!=null&&ctl>0)||mn.mx>0||(re&&re.today))};
 }
 function guidanceCardHTML(date){
   const g=todayGuidance(); if(!g.hasInputs) return '';
@@ -2838,6 +2912,177 @@ function exportWeekICS(){
   const a=document.createElement('a'); a.href=url; a.download='albert-this-week.ics'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1500);
   if(typeof appToast==='function') appToast('This week exported \u2713');
 }
+// ── Phase intent (periodisation) ──
+function _phaseWeek(){ const ps=new Date(PLAN_START); ps.setHours(0,0,0,0); const d=Math.floor((_startOfToday()-ps)/864e5); return Math.max(1,Math.min(12,Math.floor(d/7)+1)); }
+function phaseIntent(week){
+  week=week||_phaseWeek();
+  if(week<=3) return {phase:1,name:'Foundation',intent:'Build the base — hypertrophy & technique',rir:'2–3 RIR',focus:'Volume up, stay 2–3 reps shy of failure; keep easy runs genuinely easy.'};
+  if(week<=7) return {phase:2,name:'Build',intent:'Get strong — heavier mains, add quality',rir:'1–2 RIR',focus:'Push mains to 1–2 reps in reserve; long run extends, one quality run a week.'};
+  if(week<=10) return {phase:3,name:'Peak',intent:'Convert to power & race fitness',rir:'1 RIR, lower volume',focus:'Hold loads but cut sets; add jumps/plyo for reactive strength. Don\u2019t chase 1RMs.'};
+  return {phase:4,name:'Taper',intent:'Sharpen & freshen — maintain, don\u2019t build',rir:'2–3 RIR, low volume',focus:'Cut volume ~40–60%, keep a little race-pace intensity, prioritise sleep and fresh legs.'};
+}
+function phaseStripHTML(){ const p=phaseIntent(); return '<details class="phase-strip"><summary><span class="ps-tag">BLOCK '+p.phase+'</span><span class="ps-line"><strong>'+p.name+'</strong> · '+p.rir+'</span></summary><div class="ps-focus">'+p.intent+'. '+p.focus+'</div></details>'; }
+// ── Niggle / pain radar + mobility + morning resting HR ──
+var NIGGLE_REGIONS=['Hip','Hamstring','Knee','Low back','Calf/Achilles','Foot','Other'];
+var morningOpen=false;
+function bumpNiggle(region,d){ const ymd=_ymd(new Date()); if(!STATE.niggles) STATE.niggles={}; if(!STATE.niggles[ymd]) STATE.niggles[ymd]={}; const v=Math.max(0,Math.min(10,(STATE.niggles[ymd][region]||0)+d)); if(v===0) delete STATE.niggles[ymd][region]; else STATE.niggles[ymd][region]=v; morningOpen=true; saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); renderToday(); }
+function toggleMobility(){ const ymd=_ymd(new Date()); if(!STATE.mobilityDone) STATE.mobilityDone={}; STATE.mobilityDone[ymd]=!STATE.mobilityDone[ymd]; morningOpen=true; saveState(STATE); renderToday(); }
+function maxNiggleToday(){ const ymd=_ymd(new Date()); const n=(STATE.niggles&&STATE.niggles[ymd])||{}; let mx=0,reg=''; Object.keys(n).forEach(k=>{ if(n[k]>mx){mx=n[k];reg=k;} }); return {mx,reg}; }
+function rhrBaseline(excludeToday){ const log=STATE.restHRLog||{}; const ymd=_ymd(new Date()); const ks=Object.keys(log).sort(); const vals=ks.filter(k=>!(excludeToday&&k===ymd)).slice(-14).map(k=>log[k]); if(vals.length<3) return null; return vals.reduce((a,b)=>a+b,0)/vals.length; }
+function rhrElevated(){ const ymd=_ymd(new Date()); const log=STATE.restHRLog||{}; const today=log[ymd]; const bl=rhrBaseline(true); if(!today||!bl) return null; const delta=Math.round(today-bl); return {today,bl:Math.round(bl),delta,elevated:delta>=5}; }
+function logRestHRToday(v){ const ymd=_ymd(new Date()); v=parseInt(v,10); if(!STATE.restHRLog) STATE.restHRLog={}; if(v>0) STATE.restHRLog[ymd]=v; else delete STATE.restHRLog[ymd]; const bl=rhrBaseline(); if(bl){ STATE.profile=STATE.profile||{}; STATE.profile.restHR=Math.round(bl); } saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); }
+function morningCardHTML(date){
+  const ymd=_ymd(date);
+  const rr=(STATE.readiness&&STATE.readiness[ymd])||{}; const rscore=readinessScore(rr);
+  const n=(STATE.niggles&&STATE.niggles[ymd])||{}; const mob=STATE.mobilityDone&&STATE.mobilityDone[ymd]; const rhr=(STATE.restHRLog&&STATE.restHRLog[ymd])||'';
+  const rdRows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(rr[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
+  const nigRows=NIGGLE_REGIONS.map(r=>{ const v=n[r]||0; return '<div class="nig-row"><span class="nig-lbl">'+r+'</span><div class="nig-step"><button class="nig-b" onclick="bumpNiggle(\''+r+'\',-1)">−</button><span class="nig-val'+(v>=4?' hot':'')+'">'+v+'</span><button class="nig-b" onclick="bumpNiggle(\''+r+'\',1)">+</button></div></div>'; }).join('');
+  const body='<div class="mc-sec">How you feel</div>'+rdRows
+    +'<div class="mc-sec">Niggles &amp; recovery <span class="mc-sub">0 none → 10 sharp</span></div>'+nigRows
+    +'<div class="nig-row"><span class="nig-lbl">Mobility done?</span><button class="mob-btn'+(mob?' on':'')+'" onclick="toggleMobility()">'+(mob?'✓ Done':'Mark done')+'</button></div>'
+    +'<div class="nig-row"><span class="nig-lbl">Morning resting HR</span><div class="pc-input-row" style="width:128px"><input id="rhr-in" type="number" inputmode="numeric" placeholder="bpm" value="'+rhr+'" oninput="logRestHRToday(this.value)" style="flex:1"><span class="pc-unit">bpm</span></div></div>';
+  const logged = rscore!=null || Object.keys(n).length>0 || mob || rhr;
+  if(!logged) return '<div class="rd-card"><div class="rd-hd">MORNING CHECK-IN</div>'+body+'</div>';
+  const b=rscore!=null?readinessBand(rscore):null; const mn=maxNiggleToday(); const re=rhrElevated();
+  const headNum=rscore!=null?rscore:(mn.mx||'–'); const headCol=b?b[0]:((mn.mx>=7||(re&&re.elevated))?'#ff6b47':(mn.mx>=4?'#e8c66b':'#5fd6a0'));
+  const bits=[]; if(b) bits.push(b[1]); if(mn.mx>0) bits.push((mn.mx>=4?'⚠ ':'')+mn.reg+' '+mn.mx); bits.push(mob?'mob ✓':'mob ✗'); if(re) bits.push('RHR '+re.today+(re.elevated?(' ↑'+re.delta):''));
+  return '<details class="rd-card rd-done"'+(morningOpen?' open':'')+'><summary class="rd-sum" onclick="morningOpen=!morningOpen"><span class="rd-score-sm" style="color:'+headCol+'">'+headNum+'</span><span class="rd-sum-band" style="color:'+headCol+'">Check-in · '+bits.join(' · ')+'</span><span class="rd-sum-edit">adjust</span></summary><div class="rd-open">'+body+'</div></details>';
+}
+function rhrTrendCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">RESTING HR TREND ♥</div>'+inner+'</div>';
+  const log=STATE.restHRLog||{}; const ks=Object.keys(log).sort();
+  if(ks.length<2) return wrap('<div class="ls-hint">Log your morning resting HR (Today → Morning check-in). A rising trend vs your baseline is the earliest sign to ease off.</div>');
+  const vals=ks.map(k=>log[k]); const mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals); const W=300,H=46; const X=i=>i/(ks.length-1)*W; const Y=v=>mx===mn?H/2:(H-4)-((v-mn)/(mx-mn))*(H-8); const line=vals.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+  const bl=rhrBaseline(); const re=rhrElevated(); const latest=vals[vals.length-1];
+  const flag = re&&re.elevated ? '<div class="pc-note" style="color:#ff6b47">Today '+re.today+' is +'+re.delta+' over your '+re.bl+' baseline — favour easy/recovery and watch sleep.</div>' : (bl?'<div class="pc-note" style="color:#5fd6a0">Today '+latest+' vs '+Math.round(bl)+' baseline — recovery looks on track.</div>':'');
+  return wrap('<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px"><div style="font-size:24px;font-family:Aptos,sans-serif;color:var(--text)">'+latest+'</div><div style="font-size:11px;color:var(--text3);font-family:Aptos,monospace">bpm'+(bl?(' · baseline '+Math.round(bl)):'')+'</div></div><svg viewBox="0 0 '+W+' '+H+'" width="100%" height="46" preserveAspectRatio="none"><path d="'+line+'" fill="none" stroke="#ff6b47" stroke-width="2" stroke-linejoin="round"/></svg>'+flag);
+}
+// ── 80/20 intensity distribution ──
+function intensityWeek(){
+  const {mon,sun}=weekRange(new Date()); let easy=0,hard=0,src='your runs';
+  (STATE.importedRuns||[]).forEach(r=>{ const d=new Date(r.dateISO); if(d<mon||d>sun) return; const sec=r.durationSec||0; (runIntensityTag(r.paceSec)==='Easy'?easy+=sec:hard+=sec); });
+  if(easy+hard===0){ src='plan'; const paces=trainingPacesNow();
+    PROGRAM.forEach(s=>{ if(s.type==='rest')return; const d=sessionDate(s); if(d<mon||d>sun)return; if(!STATE.completedSessions[sessionKey(s)])return; s.exercises.forEach(e=>{ if(e.cat!=='run')return; const z=runZoneFromLabel(e.name,e.detail); const dist=parseRunDistanceKm(e.detail||e.name)||4; const ps=paces?paces[z]:360; const sec=dist*ps; (z==='easy'?easy+=sec:hard+=sec); }); });
+  }
+  return {easy,hard,total:easy+hard,src};
+}
+function intensityCardHTML(){
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">EASY : HARD (80/20)</div>'+inner+'</div>';
+  const w=intensityWeek();
+  if(!w.total) return wrap('<div class="ls-hint">Log or complete runs this week to see your easy:hard split. The target is ~80% of running time easy.</div>');
+  const ep=Math.round(w.easy/w.total*100); const hp=100-ep;
+  const col=ep>=75?'#5fd6a0':(ep>=65?'#e8c66b':'#ff6b47');
+  const note=ep>=75?'On target — most of your volume is easy.':(ep>=65?'A little hard-heavy — keep easy days easier.':'Too much hard running — it steals recovery from your key quality days.');
+  return wrap('<div class="io-bar"><div class="io-easy" style="width:'+ep+'%">'+(ep>=18?ep+'% easy':'')+'</div><div class="io-hard" style="width:'+hp+'%">'+(hp>=18?hp+'%':'')+'</div></div><div class="io-target">aim ≥ 80% easy</div><div class="pc-note" style="color:'+col+'">'+note+' <span style="color:var(--text3)">(from '+w.src+')</span></div>');
+}
+// ── Benchmark testing scheduler (recalibrate from real data) ──
+var BENCHMARKS=[
+  {block:'Baseline', week:1,  run:'2–5 km time trial',           strength:'Top-set check, main lifts'},
+  {block:'Build',    week:4,  run:'5 km time trial / parkrun',   strength:'3–5RM: squat, bench, deadlift'},
+  {block:'Peak',     week:8,  run:'5 km time trial / parkrun',   strength:'Heavy triple on main lifts'},
+  {block:'Taper',    week:11, run:'3 km race-pace check',        strength:'Light, crisp power check'}
+];
+function benchmarkDate(week){ const d=new Date(PLAN_START); d.setHours(0,0,0,0); d.setDate(d.getDate()+(week-1)*7); return d; }
+function blockLogged(block){ return (STATE.benchmarks||[]).some(x=>x.block===block); }
+function dueBenchmark(){ const wk=_phaseWeek(); const passed=BENCHMARKS.filter(b=>b.week<=wk); for(let i=passed.length-1;i>=0;i--){ if(!blockLogged(passed[i].block)) return passed[i]; } return null; }
+function defaultBlock(){ const d=dueBenchmark(); if(d) return d.block; const wk=_phaseWeek(); const passed=BENCHMARKS.filter(b=>b.week<=wk); return (passed[passed.length-1]||BENCHMARKS[0]).block; }
+var _editBm=null;
+function _shortDate(ymd){ const p=String(ymd||'').split('-'); return p.length===3?((+p[2])+'/'+(+p[1])):(ymd||''); }
+function editBenchmark(id){ _editBm=id; renderBenchmarks(); const bm=(STATE.benchmarks||[]).find(b=>b.id===id); const anchor=document.getElementById(bm&&bm.kind==='strength'?'bm-str-lift':'bm-run-km'); if(anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center'}); }
+function cancelEditBenchmark(){ _editBm=null; renderBenchmarks(); }
+function deleteBenchmark(id){
+  const bm=(STATE.benchmarks||[]).find(b=>b.id===id); if(!bm) return;
+  STATE.benchmarks=(STATE.benchmarks||[]).filter(b=>b.id!==id);
+  if(bm.kind==='run'){ STATE.importedRuns=(STATE.importedRuns||[]).filter(r=>!(r&&r.source==='benchmark'&&r.date===bm.date&&Math.abs((r.durationSec||0)-(bm.durationSec||0))<2&&Math.abs((r.distKm||0)-(bm.distKm||0))<0.05)); }
+  if(_editBm===id) _editBm=null;
+  saveState(STATE); renderBenchmarks();
+  if(typeof appToast==='function') appToast('Benchmark deleted');
+}
+function logBenchmarkRun(){
+  const km=parseFloat(String((document.getElementById('bm-run-km')||{}).value).replace(',','.'));
+  const mm=parseInt((document.getElementById('bm-run-min')||{}).value,10)||0;
+  const ss=parseInt((document.getElementById('bm-run-sec')||{}).value,10)||0;
+  const block=(document.getElementById('bm-run-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!(km>0)||(mm*60+ss)<=0){ if(msg) msg.textContent='Enter a distance and a time.'; return; }
+  const dur=mm*60+ss; const paceSec=Math.round(dur/km); const predSec=Math.round(dur*Math.pow(42.195/km,1.06));
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  let date=_ymd(new Date());
+  if(_editBm){ const old=STATE.benchmarks.find(b=>b.id===_editBm); if(old&&old.kind==='run'){ date=old.date; STATE.benchmarks=STATE.benchmarks.filter(b=>b.id!==_editBm); STATE.importedRuns=(STATE.importedRuns||[]).filter(r=>!(r&&r.source==='benchmark'&&r.date===old.date&&Math.abs((r.durationSec||0)-(old.durationSec||0))<2&&Math.abs((r.distKm||0)-(old.distKm||0))<0.05)); } _editBm=null; }
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'run',block,date,distKm:+km.toFixed(2),durationSec:dur,paceSec,predSec});
+  if(!STATE.importedRuns) STATE.importedRuns=[];
+  STATE.importedRuns.push({id:'bmr_'+Date.now(),name:block+' '+(+km.toFixed(1))+'k time trial',source:'benchmark',date,dateISO:new Date(date+'T08:00:00').toISOString(),distKm:+km.toFixed(2),durationSec:dur,avgHR:null,maxHR:null,paceSec,zoneSec:[0,0,0,0,0],estRPE:9,trimp:null,load:Math.round(9*dur/60)});
+  saveState(STATE); renderBenchmarks();
+  ['bm-run-km','bm-run-min','bm-run-sec'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  if(typeof appToast==='function') appToast('Benchmark saved — paces recalibrated \u2713');
+}
+function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring row|inverted row|muscle.?up|pistol|nordic|\bhang|fallout|face ?pull/i.test(name||''); }
+function logBenchmarkStrength(){
+  const lift=(document.getElementById('bm-str-lift')||{}).value;
+  const kg=parseFloat(String((document.getElementById('bm-str-kg')||{}).value).replace(',','.'))||0;
+  const reps=parseInt((document.getElementById('bm-str-reps')||{}).value,10)||0;
+  const block=(document.getElementById('bm-str-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!lift||!(reps>0)){ if(msg) msg.textContent='Pick a lift and enter your reps.'; return; }
+  const bodyweight=isBodyweightLift(lift);
+  let e1=null, bwUsed=null;
+  if(bodyweight){
+    const bw=latestBW();
+    if(bw){ bwUsed=bw; e1=Math.round(epley1RM(bw+(kg>0?kg:0),reps)); }
+    else if(kg>0){ e1=Math.round(epley1RM(kg,reps)); }
+  } else {
+    if(!(kg>0)){ if(msg) msg.textContent='Enter the weight lifted for this lift.'; return; }
+    e1=Math.round(epley1RM(kg,reps));
+  }
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  let date=_ymd(new Date());
+  if(_editBm){ const old=STATE.benchmarks.find(b=>b.id===_editBm); if(old&&old.kind==='strength'){ date=old.date; STATE.benchmarks=STATE.benchmarks.filter(b=>b.id!==_editBm); } _editBm=null; }
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'strength',block,date,lift,weight:kg,reps,e1rm:e1,bw:bwUsed,bodyweight});
+  saveState(STATE); renderBenchmarks();
+  ['bm-str-kg','bm-str-reps'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  if(typeof appToast==='function') appToast(e1?('Strength benchmark logged \u2713 — est 1RM '+e1+' kg'+(bodyweight?' (incl. body weight)':'')):('Logged '+reps+' reps \u2713 — log your body weight for an e1RM estimate'));
+}
+function _hms(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=Math.round(sec%60); return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); }
+function benchmarkHistoryHTML(){
+  const runs=(STATE.benchmarks||[]).filter(b=>b.kind==='run').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const strs=(STATE.benchmarks||[]).filter(b=>b.kind==='strength').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const btns=id=>'<div class="bm-hbtns"><button class="bm-edit" onclick="editBenchmark(\''+id+'\')">✎</button><button class="bm-del" onclick="deleteBenchmark(\''+id+'\')">✕</button></div>';
+  let out='';
+  if(runs.length){ out+='<div class="bm-h2">Run time-trials</div>'+runs.map((r,i)=>{ const prev=runs[i-1]; const dPred=prev?r.predSec-prev.predSec:null; const delta=dPred!=null?(' <small style="color:'+(dPred<0?'#5fd6a0':'#ff6b47')+'">'+(dPred<0?'▼':'▲')+' '+_hms(Math.abs(dPred))+'</small>'):''; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+r.block+' · '+(+r.distKm.toFixed(1))+'k · '+_hms(r.durationSec)+'</div><div class="bm-hs">'+fmtPaceSec(r.paceSec)+'/km · '+_shortDate(r.date)+' → '+_hms(r.predSec)+' mara'+delta+'</div></div>'+btns(r.id)+'</div>'; }).join(''); }
+  if(strs.length){ out+='<div class="bm-h2" style="margin-top:10px">Strength checks</div>'+strs.map((s,i)=>{ const prevSame=strs.slice(0,i).reverse().find(x=>x.lift===s.lift); let delta=''; if(prevSame){ if(s.e1rm!=null&&prevSame.e1rm!=null){ const d=s.e1rm-prevSame.e1rm; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' kg</small>'; } else { const d=s.reps-prevSame.reps; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' reps</small>'; } } const main=s.e1rm!=null?(s.e1rm+' kg e1RM'):(s.reps+' reps'); const sub=s.bodyweight?(s.weight>0?('BW+'+s.weight+'×'+s.reps):('BW × '+s.reps)):(s.weight+'×'+s.reps); return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.lift+' · '+main+'</div><div class="bm-hs">'+sub+' · '+s.block+' · '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
+  return out||'<div class="ls-hint">No benchmarks logged yet — your test history and recalibration deltas will appear here.</div>';
+}
+function benchmarkCardHTML(){
+  const wk=_phaseWeek(); const due=dueBenchmark();
+  const sched=BENCHMARKS.map(b=>{ const d=benchmarkDate(b.week); const ds=d.getDate()+'/'+(d.getMonth()+1); const done=blockLogged(b.block); const isDue=due&&due.block===b.block; const status=done?'<span class="bm-ok">✓ done</span>':(isDue?'<span class="bm-due">due now</span>':(wk<b.week?'<span class="bm-up">wk '+b.week+'</span>':'<span class="bm-miss">missed</span>')); return '<div class="bm-sched'+(isDue?' due':'')+'"><div class="bm-sched-l"><strong>'+b.block+'</strong> · wk '+b.week+' · '+ds+'<div class="bm-what">'+b.run+' · '+b.strength+'</div></div>'+status+'</div>'; }).join('');
+  const lifts=(typeof s1Lifts==='function'?s1Lifts():[]);
+  const selCss='style="flex:1;background:transparent;border:none;color:var(--text);padding:11px;font-size:14px;font-family:\'Aptos\',monospace;-webkit-appearance:none;appearance:none"';
+  const eb=_editBm?(STATE.benchmarks||[]).find(b=>b.id===_editBm):null;
+  const ebRun=eb&&eb.kind==='run'?eb:null, ebStr=eb&&eb.kind==='strength'?eb:null;
+  const blockSel=cur=>BENCHMARKS.map(b=>'<option value="'+b.block+'"'+((cur===b.block)?' selected':'')+'>'+b.block+'</option>').join('');
+  const runBlockOpts=blockSel(ebRun?ebRun.block:defaultBlock());
+  const strBlockOpts=blockSel(ebStr?ebStr.block:defaultBlock());
+  const liftOpts=lifts.map(n=>'<option value="'+n.replace(/"/g,'')+'"'+((ebStr&&ebStr.lift===n)?' selected':'')+'>'+n+'</option>').join('');
+  const rkv=ebRun?(+ebRun.distKm):'', rmv=ebRun?Math.floor(ebRun.durationSec/60):'', rsv=ebRun?(ebRun.durationSec%60):'';
+  const skv=ebStr?(ebStr.weight||''):'', srv=ebStr?ebStr.reps:'';
+  const runBtns=ebRun?'<button class="pc-apply" onclick="logBenchmarkRun()">Update run benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkRun()">Save run benchmark</button>';
+  const strBtns=ebStr?'<button class="pc-apply" onclick="logBenchmarkStrength()">Update strength benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkStrength()">Save strength benchmark</button>';
+  const runLogger='<div class="bm-h2">'+(ebRun?'Edit run time-trial':'Log a run time-trial')+'</div>'
+    +'<div class="pc-field"><label>Distance &amp; time</label><div class="pc-input-row" style="gap:6px"><input id="bm-run-km" type="number" inputmode="decimal" step="0.1" placeholder="5" value="'+rkv+'" style="flex:1"><span class="pc-unit">km</span><input id="bm-run-min" type="number" inputmode="numeric" placeholder="min" value="'+rmv+'" style="flex:1"><input id="bm-run-sec" type="number" inputmode="numeric" placeholder="sec" value="'+rsv+'" style="flex:1"></div></div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-run-block" '+selCss+'>'+runBlockOpts+'</select></div></div>'
+    +runBtns;
+  const strLogger='<div class="bm-h2" style="margin-top:14px">'+(ebStr?'Edit strength check':'Log a strength check')+'</div>'
+    +(liftOpts?('<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
+    +'<div class="pc-field"><label>Best set <span class="mc-sub">reps required; weight optional for bodyweight</span></label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">×</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
+    +'<div class="pc-note" style="margin-top:-2px">Bodyweight moves (pull-ups, dips): leave weight blank for bodyweight, or enter <em>added</em> load — your logged body weight is included automatically.</div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
+    +strBtns):'<div class="ls-hint">No barbell lifts found to test.</div>');
+  return '<div class="bm-sched-wrap">'+sched+'</div>'+runLogger+strLogger+'<div id="bm-msg" class="pc-note" style="text-align:center"></div><div class="bm-hist">'+benchmarkHistoryHTML()+'</div>';
+}
+function renderBenchmarks(){ const el=document.getElementById('bm-card'); if(el) el.innerHTML=benchmarkCardHTML(); }
+function benchmarkNudgeHTML(){ const due=dueBenchmark(); if(!due) return ''; return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split(' / ')[0].toLowerCase()+' and a strength check to recalibrate. <span class="bm-nudge-go">Open Tools ›</span></div></div>'; }
 function renderStats(){
   // ===== TIER 2/3 FEATURE LOGIC =====
   const done=totalCompleted();
@@ -2867,10 +3112,12 @@ function renderStats(){
     ${fitnessCardHTML()}
     <details class="accg" open><summary>This week</summary>
     ${consistencyCardHTML()}
+    ${rhrTrendCardHTML()}
     ${weeklyReviewCardHTML()}
     </details>
     <details class="accg"><summary>Running &amp; predictions</summary>
     ${racePredictCardHTML()}
+    ${intensityCardHTML()}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">LAST 14 DAYS</div>
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
@@ -3606,6 +3853,7 @@ function pcEnsureInit(){
   rpCalc();
   plCalc();
   renderImportedRuns();
+  renderBenchmarks();
   refreshBackupNote();
 }
 function fmtPaceSec(sec){
