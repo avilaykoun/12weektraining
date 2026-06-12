@@ -448,6 +448,12 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .bn-list{margin:4px 0 8px}
 .bn-row{font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;line-height:1.5;padding:3px 0;border-top:1px solid var(--border)}
 .bn-row:first-child{border-top:none}
+.pin-row{display:flex;gap:7px;margin-top:9px}
+.pin-btn{flex:1;border:1px dashed var(--border);background:var(--surface2);color:var(--text2);border-radius:8px;padding:8px 10px;font-size:11.5px;font-family:'Aptos',monospace;cursor:pointer}
+.pin-btn.ghost{flex:0 0 auto;border-style:solid;color:var(--text3)}
+.vh-dead{margin:6px 0}
+.vh-dead-row{font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;padding:3px 0;border-top:1px solid var(--border)}
+.vh-dead-row:first-child{border-top:none}
 .restore-banner{margin:14px 0 4px;padding:14px;border:1px solid var(--accent);border-radius:14px;background:var(--surface2);display:flex;flex-direction:column;gap:10px}
 .rb-txt{font-size:13px;color:var(--text2);line-height:1.5}
 .rb-txt strong{color:var(--text)}
@@ -634,7 +640,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v34</div>
+      <div class="hdr-build">Build 2026-06-10 · v35</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -901,6 +907,12 @@ input[type=number]{-moz-appearance:textfield}
   <div id="rp-msg" class="pc-note" style="text-align:center"></div>
 
   </div></details>
+  <details class="acc"><summary>Video health</summary><div class="acc-body">
+  <div class="tool-sub">Checks every exercise &amp; pinned clip against YouTube and auto-skips dead ones. Run after updating the app or if a video won&#8217;t load.</div>
+  <button class="deload-btn" id="vh-btn" onclick="runVideoHealthCheck()">▶ Check all videos now</button>
+  <div id="vh-out"></div>
+  </div></details>
+
   <details class="acc"><summary>Mobility &amp; recovery</summary><div class="acc-body">
   <div class="tool-sub">Follow-along routines for rest &amp; recovery days. Tap one to play — hip &amp; hamstring picks tailored to you.</div>
   <div id="mob-list"></div>
@@ -1593,7 +1605,7 @@ function saveState(s){
 }
 const SCHEMA_VERSION=1;
 function ensureContainers(){
-  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
+  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks','badVideos','pinnedVideos'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
   if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
 }
 let STATE = loadState();
@@ -3738,7 +3750,7 @@ function renderDemoAnimView(){
   if(!_demoCtx) return;
   destroyDemoPlayer();
   const c = _demoCtx;
-  const hasVid = !!(c.data && c.data.id);
+  const hasVid = !!((c.data && c.data.id) || getPinned(pinKeyEx(c.name)));
   document.getElementById('demo-anim').innerHTML =
     '<div class="demo-figure">'+buildAnim(c.name)+'</div>'
     + '<div class="demo-actions">'
@@ -3758,49 +3770,145 @@ function fallToAnim(note){
     + '<div class="demo-actions">'
     + '<a class="demo-act ghost" href="'+ytUrl+'" target="_blank" rel="noopener">▶ Open on YouTube</a>'
     + '</div>'
-    + '<div class="demo-anim-note">'+(note||'Showing the animated guide — tap “Open on YouTube” to watch the footage.')+'</div>';
+    + '<div class="demo-anim-note">'+(note||'Showing the animated guide — tap “Open on YouTube” to watch the footage.')+'</div>'
+    + pinRowHTML(pinKeyEx(c.name), c.name, 'playExVideo');
 }
 // BACKUP view: the real YouTube clip, played INSIDE the app — falls back to the animation if it can't embed
+// ── Pinned videos: user can attach any YouTube link to an exercise or routine; it then plays in-app ──
+function parseYTUrl(s){
+  s=String(s||'').trim();
+  if(/^[A-Za-z0-9_-]{11}$/.test(s)) return s;
+  const m=s.match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/);
+  return m?m[1]:null;
+}
+function pinKeyEx(name){ return 'ex:'+String(name||'').toLowerCase().trim(); }
+function getPinned(key){ return (STATE.pinnedVideos&&STATE.pinnedVideos[key])||null; }
+function pinVideoPrompt(key,label,after){
+  const cur=getPinned(key);
+  const url=prompt('Paste a YouTube link for \u201c'+label+'\u201d'+(cur?'\n(currently pinned: '+cur+')':'')+'\n\nThis video will play inside the app.', '');
+  if(url===null) return;
+  const id=parseYTUrl(url);
+  if(!id){ appToast('Couldn\u2019t read a YouTube link from that'); return; }
+  STATE.pinnedVideos[key]=id; delete STATE.badVideos[id]; saveState(STATE);
+  appToast('Pinned — this video now plays in-app');
+  if(typeof window!=='undefined'&&window[after]) window[after]();
+}
+function unpinVideo(key,after){
+  if(STATE.pinnedVideos){ delete STATE.pinnedVideos[key]; saveState(STATE); appToast('Pin removed'); }
+  if(typeof window!=='undefined'&&window[after]) window[after]();
+}
+function pinRowHTML(key,label,after){
+  const cur=getPinned(key);
+  const esc=s=>String(s).replace(/'/g,"\\'");
+  return '<div class="pin-row"><button class="pin-btn" onclick="pinVideoPrompt(\''+esc(key)+'\',\''+esc(label)+'\',\''+(after||'')+'\')">📌 '+(cur?'Replace pinned video':'Pin your own video')+'</button>'
+    +(cur?'<button class="pin-btn ghost" onclick="unpinVideo(\''+esc(key)+'\',\''+(after||'')+'\')">✕ Unpin</button>':'')+'</div>';
+}
 function playExVideo(){
   if(!_demoCtx) return;
   const token = ++_demoToken;
   const c = _demoCtx;
   const animEl = document.getElementById('demo-anim');
   const back = '<button class="demo-back" onclick="renderDemoAnimView()">↺ Back to animation</button>';
-  const hasId = !!(c.data && c.data.id);
-  // No curated clip: never attempt the deprecated search-embed (black screen risk).
-  // Show a one-tap watch card immediately instead.
-  if(!hasId){
-    animEl.innerHTML = '<a class="demo-searchcard" href="'+c.searchUrl+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Watch demos — '+c.name+'</div><div class="demo-search-sub">Opens YouTube · top form videos</div></a>' + back;
+  const pinKey = pinKeyEx(c.name);
+  // Build the chain of playable candidates: user's pinned clip first, then the curated one.
+  const chain=[];
+  const pin=getPinned(pinKey); if(pin) chain.push({id:pin,title:'Pinned video — '+c.name});
+  if(c.data&&c.data.id&&(!pin||pin!==c.data.id)) chain.push({id:c.data.id,title:c.data.title});
+  const playable=chain.filter(x=>!STATE.badVideos[x.id]);
+  if(!playable.length){
+    // Nothing currently playable in-app: offer the search card + pinning.
+    animEl.innerHTML = '<a class="demo-searchcard" href="'+c.searchUrl+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Watch demos — '+c.name+'</div><div class="demo-search-sub">Opens YouTube · top form videos</div></a>'
+      + pinRowHTML(pinKey, c.name, 'playExVideo') + back;
     return;
   }
   animEl.innerHTML = '<div class="demo-loading">Loading video…</div>' + back;
   whenYTApi(function(){
     if(token !== _demoToken) return;
     if(_ytApiState === 'failed' || !(window.YT && window.YT.Player)){
-      animEl.innerHTML = demoIframeHTML(c.data, c.searchUrl) + back;
+      animEl.innerHTML = demoIframeHTML({id:playable[0].id,title:playable[0].title}, c.searchUrl) + pinRowHTML(pinKey, c.name, 'playExVideo') + back;
       return;
     }
-    animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(c.data, c.searchUrl) + back;
-    const onPlayFail = function(){
+    function attempt(i){
       if(token !== _demoToken) return;
-      fallToAnim('This clip blocks in-app playback — here\u2019s the animated guide. \u201cOpen on YouTube\u201d plays the same video there.');
-    };
-    let started=false;
-    try{
-      _demoPlayer = new YT.Player('demo-yt-mount', {
-        videoId: c.data.id,
-        host: 'https://www.youtube-nocookie.com',
-        playerVars: { rel:0, modestbranding:1, playsinline:1, autoplay:1 },
-        events: {
-          onError: function(){ onPlayFail(); }, // removed / private / embedding disabled (when YT reports it)
-          onStateChange: function(ev){ if(ev && ev.data!=null && ev.data!==-1) started=true; } // playing/buffering/cued/paused all count
-        }
-      });
-      // Watchdog: blocked embeds often show a black player WITHOUT firing onError.
-      setTimeout(function(){ if(token===_demoToken && !started) onPlayFail(); }, 6000);
-    }catch(e){ onPlayFail(); }
+      if(i>=playable.length){
+        fallToAnim('No clip for this one will play in-app right now — pin any YouTube link below and it will.');
+        return;
+      }
+      const v=playable[i];
+      destroyDemoPlayer();
+      animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>'
+        + demoLinksHTML({id:v.id,title:v.title}, c.searchUrl)
+        + pinRowHTML(pinKey, c.name, 'playExVideo') + back;
+      let started=false;
+      const fail=function(){
+        if(token!==_demoToken) return;
+        STATE.badVideos[v.id]=true; saveState(STATE); // remember — skip instantly next time
+        attempt(i+1);
+      };
+      try{
+        _demoPlayer = new YT.Player('demo-yt-mount', {
+          videoId: v.id,
+          host: 'https://www.youtube-nocookie.com',
+          playerVars: { rel:0, modestbranding:1, playsinline:1, autoplay:1 },
+          events: {
+            onError: function(){ fail(); },
+            onStateChange: function(ev){ if(ev && ev.data!=null && ev.data!==-1) started=true; }
+          }
+        });
+        setTimeout(function(){ if(token===_demoToken && !started) fail(); }, 5000);
+      }catch(e){ fail(); }
+    }
+    attempt(0);
   });
+}
+// ── Video health check: runs on-device (needs internet), probes every clip via YouTube thumbnails ──
+function _probeVideo(id){
+  return new Promise(function(res){
+    const img=new Image(); let done=false;
+    const fin=v=>{ if(!done){ done=true; res(v); } };
+    img.onload=function(){ fin(img.naturalWidth===120 ? 'dead' : 'ok'); }; // YT serves a 120px default thumb for removed/invalid videos
+    img.onerror=function(){ fin('unknown'); };
+    setTimeout(function(){ fin('unknown'); }, 8000);
+    img.src='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
+  });
+}
+async function runVideoHealthCheck(){
+  const out=document.getElementById('vh-out');
+  const btn=document.getElementById('vh-btn');
+  if(!out) return;
+  if(!navigator.onLine){ out.innerHTML='<div class="tool-sub">You\u2019re offline — connect to the internet and run again.</div>'; return; }
+  if(btn) btn.disabled=true;
+  const byId={};
+  Object.keys(EXERCISE_VIDEOS).forEach(k=>{ const d=EXERCISE_VIDEOS[k]; if(d&&d.id){ (byId[d.id]=byId[d.id]||[]).push(k); } });
+  Object.keys(STATE.pinnedVideos||{}).forEach(k=>{ const id=STATE.pinnedVideos[k]; if(id){ (byId[id]=byId[id]||[]).push(k.replace(/^ex:/,'').replace(/^mob:/,'routine: ')); } });
+  const ids=Object.keys(byId);
+  STATE.badVideos={}; // fresh verdicts
+  let okN=0, deadList=[], unkN=0, i=0;
+  out.innerHTML='<div class="tool-sub">Checking 1/'+ids.length+'…</div>';
+  while(i<ids.length){
+    const batch=ids.slice(i,i+6);
+    const rs=await Promise.all(batch.map(_probeVideo));
+    rs.forEach((r,j)=>{ const id=batch[j];
+      if(r==='ok') okN++;
+      else if(r==='dead'){ STATE.badVideos[id]=true; deadList.push(byId[id][0]); }
+      else unkN++;
+    });
+    i+=batch.length;
+    out.innerHTML='<div class="tool-sub">Checking '+Math.min(i,ids.length)+'/'+ids.length+'…</div>';
+  }
+  saveState(STATE);
+  let html='<div class="tool-sub"><strong>'+okN+'</strong> clips available'+(unkN?' · '+unkN+' couldn\u2019t be checked':'')+'</div>';
+  if(unkN===ids.length){
+    html='<div class="tool-sub">Couldn\u2019t reach YouTube to verify — check your connection and run again. Nothing was changed.</div>';
+  } else if(deadList.length){
+    html+='<div class="tool-sub" style="color:var(--accent)">'+deadList.length+' unavailable (auto-skipped from now on):</div>'
+      +'<div class="vh-dead">'+deadList.map(n=>'<div class="vh-dead-row">✕ '+n+'</div>').join('')+'</div>'
+      +'<div class="tool-sub">Open any of these from a session → ▶ → \u201cPin your own video\u201d to attach a replacement that plays in-app.</div>';
+  } else {
+    html+='<div class="tool-sub">No dead links — every curated clip resolves. (Clips whose owners block embedding will still auto-skip when played.)</div>';
+  }
+  out.innerHTML=html;
+  if(btn) btn.disabled=false;
 }
 // ── Mobility & recovery follow-along routines ──
 var MOBILITY=[
@@ -3836,16 +3944,38 @@ function _mobAltChips(){ const c=_mobCtx; return '<div class="mobalt-row">'+c.r.
 function renderMobPlayer(){
   const c=_mobCtx; if(!c) return;
   destroyDemoPlayer();
-  // YouTube no longer supports reliable search-based embedding (black-screen risk),
-  // so the routine opens as a one-tap follow-along card with selectable variants.
-  mobFallback();
+  const opt=c.r.opts[c.opt];
+  const key='mob:'+opt.q;
+  const pin=getPinned(key);
+  if(!pin || STATE.badVideos[pin]){ mobFallback(); return; }
+  // A pinned routine plays INSIDE the app
+  const anim=document.getElementById('demo-anim');
+  const su='https://www.youtube.com/results?search_query='+encodeURIComponent(opt.q);
+  anim.innerHTML='<div class="demo-video"><div id="demo-yt-mount"></div></div>'+_mobAltChips()
+    +pinRowHTML(key, c.r.t+' — '+opt.l, 'renderMobPlayer')
+    +'<div class="demo-links"><a class="demo-link alt" href="'+su+'" target="_blank" rel="noopener">🔍 More options on YouTube</a></div>';
+  const token=++_demoToken; let started=false;
+  whenYTApi(function(){
+    if(token!==_demoToken) return;
+    if(_ytApiState==='failed' || !(window.YT&&window.YT.Player)){ mobFallback(); return; }
+    const fail=function(){ if(token!==_demoToken) return; STATE.badVideos[pin]=true; saveState(STATE); mobFallback(); };
+    try{
+      _demoPlayer=new YT.Player('demo-yt-mount',{ videoId:pin, host:'https://www.youtube-nocookie.com',
+        playerVars:{ rel:0, modestbranding:1, playsinline:1, autoplay:1 },
+        events:{ onError:function(){ fail(); }, onStateChange:function(ev){ if(ev&&ev.data!=null&&ev.data!==-1) started=true; } } });
+      setTimeout(function(){ if(token===_demoToken && !started) fail(); }, 5000);
+    }catch(e){ fail(); }
+  });
 }
 function mobFallback(){
   const c=_mobCtx; if(!c) return;
   const opt=c.r.opts[c.opt];
+  const key='mob:'+opt.q;
   const su='https://www.youtube.com/results?search_query='+encodeURIComponent(opt.q);
   document.getElementById('demo-anim').innerHTML=
-    '<a class="demo-searchcard" href="'+su+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Play follow-along — '+opt.l+'</div><div class="demo-search-sub">Opens YouTube</div></a>'+_mobAltChips();
+    '<a class="demo-searchcard" href="'+su+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Play follow-along — '+opt.l+'</div><div class="demo-search-sub">Opens YouTube</div></a>'+_mobAltChips()
+    +pinRowHTML(key, c.r.t+' — '+opt.l, 'renderMobPlayer')
+    +'<div class="demo-anim-note">Pin a routine you like and it will play inside the app from then on.</div>';
 }
 function mobilityListHTML(){
   return MOBILITY.map((r,i)=>'<div class="mob-row" onclick="openMobility('+i+')"><div class="mob-l"><div class="mob-t">'+r.t+'</div><div class="mob-f">'+r.f+'</div></div><div class="mob-r"><span class="mob-d">'+r.d+'</span><span class="mob-play">▶</span></div></div>').join('');
