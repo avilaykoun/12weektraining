@@ -51,7 +51,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;overflow-y:auto;padding:0 20px;padding-bottom:84px;scrollbar-width:none;background:#11203a;background:var(--bg)}
+.content{flex:1;overflow-y:auto;padding:0 20px;padding-bottom:calc(96px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
 .content::-webkit-scrollbar{display:none}
 .section{display:none}
 .section.active{display:block}
@@ -141,7 +141,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:7px 0 6px;z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:7px 0 calc(6px + var(--safe));z-index:20;display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
 .bnav-icon{font-size:19px;line-height:1}
@@ -352,7 +352,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .pc-note{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);line-height:1.5;margin-top:10px}
 /* Strength/run inline logging + progress */
 .wt-wrap{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
-.wt-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;min-width:30px}
+.wt-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;min-width:30px;white-space:normal;line-height:1.4}
 .wt-inp{width:94px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:13px;font-family:'Aptos',monospace}
 .wt-inp:focus{outline:none;border-color:var(--accent)}
 .e1rm-badge{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);white-space:nowrap}
@@ -437,7 +437,17 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .stp-b:active{background:var(--accent);color:#0a0a0f}
 .setw-inp{width:46px}
 /* Floating timer widget */
-.fab{position:absolute;right:14px;bottom:calc(70px + var(--safe));width:50px;height:50px;border-radius:50%;background:var(--accent);color:#0a0a0f;border:none;font-size:22px;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.45);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.fab{position:absolute;right:14px;bottom:calc(70px + var(--safe));width:50px;height:50px;border-radius:50%;background:var(--accent);color:#0a0a0f;border:none;font-size:22px;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.45);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .25s,opacity .25s}
+.fab.fab-hide{transform:translateY(140px);opacity:0;pointer-events:none}
+.fuel-card{background:rgba(212,175,90,.07);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:9px}
+.fuel-hd{font-size:9.5px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.06em;margin-bottom:6px}
+.fuel-row{display:flex;gap:8px;font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;line-height:1.45;padding:2px 0}
+.fuel-k{flex-shrink:0;width:48px;color:var(--text3);text-transform:uppercase;font-size:9.5px;padding-top:2px}
+.deload-btn{display:block;width:100%;border:1px dashed var(--border);background:var(--surface);color:var(--text2);border-radius:10px;padding:10px;font-size:12px;font-family:'Aptos',monospace;cursor:pointer;margin-bottom:12px}
+.deload-btn.on{border:1px solid var(--accent);color:var(--accent);background:rgba(212,175,90,.1)}
+.bn-list{margin:4px 0 8px}
+.bn-row{font-size:11.5px;color:var(--text2);font-family:'Aptos',monospace;line-height:1.5;padding:3px 0;border-top:1px solid var(--border)}
+.bn-row:first-child{border-top:none}
 .restore-banner{margin:14px 0 4px;padding:14px;border:1px solid var(--accent);border-radius:14px;background:var(--surface2);display:flex;flex-direction:column;gap:10px}
 .rb-txt{font-size:13px;color:var(--text2);line-height:1.5}
 .rb-txt strong{color:var(--text)}
@@ -624,7 +634,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v31</div>
+      <div class="hdr-build">Build 2026-06-10 · v34</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -1542,6 +1552,25 @@ PROGRAM.forEach(s=>{
 });
 // Keep each week's sessions in true chronological order (the plan's week runs Tue→Mon).
 (function(){ const ord={Tue:0,Wed:1,Thu:2,Fri:3,Sat:4,Sun:5,Mon:6}; PROGRAM.sort((a,b)=> a.week!==b.week ? a.week-b.week : (ord[a.day]-ord[b.day])); })();
+// Runner-durability optionals (tib bar + reverse treadmill + eccentric calf + pogo) — idempotent
+(function(){
+  PROGRAM.forEach(s=>{
+    if(s.type!=='strength') return;
+    const base='opt_'+s.phase+'w'+s.week+s.day.toLowerCase();
+    const has=id=>s.exercises.some(e=>e.id===id);
+    const add=(suffix,name,detail)=>{ const id=base+suffix; if(!has(id)) s.exercises.push({id,name,detail,cat:'strength'}); };
+    const n=(s.name||'').toLowerCase();
+    if(/lower body a/.test(n)){
+      add('btw','Backwards treadmill walk','5–8 min easy · optional · knee + quad durability');
+      add('tib','Tib bar raise','2 × 15 · optional · shin & ankle armour');
+      add('pogo','Pogo hops','2 × 20 · stiff-ankle bounce · optional · running economy');
+    } else if(/lower body b/.test(n)){
+      add('ecc','Eccentric calf raise','3 × 8/leg · 3-sec lower · optional · Achilles strength');
+      add('tib','Tib bar raise','2 × 15 · optional · shin & ankle armour');
+      add('btw','Backwards treadmill walk','5 min easy · optional · knee flush');
+    }
+  });
+})();
 
 // ─────────────────────────────────────────
 // STATE
@@ -1564,7 +1593,7 @@ function saveState(s){
 }
 const SCHEMA_VERSION=1;
 function ensureContainers(){
-  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
+  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
   if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
 }
 let STATE = loadState();
@@ -1755,6 +1784,7 @@ function renderExercises(s,interactive){
         ${rpeControlHTML(e.id, sessionKey(s))}
         ${weightControlHTML(e, sessionKey(s))}
         ${runControlHTML(e, sessionKey(s))}
+        ${e.cat==='run'&&/long run/i.test(e.name)?fuelingHTML(e):''}
         ${interactive&&(e.cat==='strength'||e.cat==='core')?swapControlHTML(e):''}
       </div>
       <button class="ex-info-btn" onclick="showExDemo('${dispName.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
@@ -1927,12 +1957,25 @@ function weekMonitorHTML(monday){
     + reasonTxt + '</div>';
   return wrap(rows+status);
 }
+function toggleDeloadWeek(){
+  const wk=_phaseWeek(); if(!wk){ appToast('Plan hasn\u2019t started yet'); return; }
+  if(!STATE.deloadWeeks) STATE.deloadWeeks={};
+  if(STATE.deloadWeeks[wk]) delete STATE.deloadWeeks[wk]; else STATE.deloadWeeks[wk]=true;
+  saveState(STATE);
+  renderWeek(); if(currentSection==='today') renderToday();
+  appToast(STATE.deloadWeeks[wk]?('Week '+wk+' set to DELOAD — −1 set per lift, go ~10% lighter'):('Week '+wk+' back to normal'));
+}
+function deloadBtnHTML(){
+  const wk=_phaseWeek(); if(!wk) return '';
+  const on=STATE.deloadWeeks&&STATE.deloadWeeks[wk];
+  return '<button class="deload-btn'+(on?' on':'')+'" onclick="toggleDeloadWeek()">'+(on?'✓ Deload week ON — lifts trimmed · tap to undo':'⤓ Make this a deload week')+'</button>';
+}
 function renderWeek(){
   const today=new Date();
   const weekSessions=getWeekSessions(today);
   const container=document.getElementById('week-view');
   const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  let html='';
+  let html=deloadBtnHTML();
   weekSessions.forEach((wd,i)=>{
     const isToday=wd.date.toDateString()===today.toDateString();
     const isPast=wd.date<today&&!isToday;
@@ -2268,7 +2311,9 @@ function weightControlHTML(e,sessKey){
   if(!isLoggableLift(e)) return '';
   const p=parsePrescription(e.detail);
   let n=Math.min(p.sets,8);
-  let eased=false;
+  let eased=false, dl=false;
+  const sxw=PROGRAM.find(x=>sessionKey(x)===sessKey);
+  if(sxw&&STATE.deloadWeeks&&STATE.deloadWeeks[sxw.week]){ dl=true; if(n>1) n=n-1; }
   if(STATE.softenDay&&STATE.softenDay[_ymd(new Date())]){ const sx=PROGRAM.find(x=>sessionKey(x)===sessKey); if(sx&&_sameDay(sessionDate(sx),_startOfToday())&&n>1){ n=n-1; eased=true; } }
   const arr=STATE.exerciseSets[e.id]||[];
   const reparr=(STATE.exerciseReps&&STATE.exerciseReps[e.id])||[];
@@ -2299,7 +2344,7 @@ function weightControlHTML(e,sessKey){
     hist='<div class="lasttime" id="sug-'+e.id+'"><span>Last '+dstr+':</span> <span class="lt-v">'+fmtLastSets(sug.rec)+'</span>'
       +(sug.rpe!=null?' <span>@RPE '+sug.rpe+'</span>':'')+btn+'</div>';
   }
-  return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal · '+phaseIntent().rir+(eased?' · eased −1 set':'')+'</span><div class="setw-row">'+inputs+'</div>'
+  return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal · '+phaseIntent().rir+(eased?' · eased −1 set':'')+(dl?' · <span style="color:var(--accent)">DELOAD −1 set · go ~10% lighter</span>':'')+'</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
 }
 function runZoneFromLabel(name,detail){
@@ -2318,6 +2363,17 @@ function runPaceForExercise(e){
   const paces=trainingPacesNow(); if(!paces) return null;
   const z=runZoneFromLabel(e.name,e.detail); const sec=paces[z];
   return {z, label:{easy:'Easy',mp:'Marathon',thr:'Threshold',int:'Interval'}[z], sec};
+}
+function fuelingHTML(e){
+  const mins=runMinutes(e.detail)||0; if(mins<70) return '';
+  const carbs = mins>=150?'70–90':(mins>=105?'50–70':'30–50');
+  const gels = Math.max(1, Math.round((mins-25)/27));
+  const isRace=/race/i.test(e.name)||/race/i.test(e.detail);
+  return '<div class="fuel-card"><div class="fuel-hd">⛽ FUEL PLAN · ~'+mins+' MIN</div>'
+    +'<div class="fuel-row"><span class="fuel-k">Carbs</span><span>'+carbs+' g/hr ≈ '+gels+' gel'+(gels>1?'s':'')+' — first at 25–30 min, then every ~25 min</span></div>'
+    +'<div class="fuel-row"><span class="fuel-k">Fluid</span><span>400–800 ml/hr to thirst · add electrolytes if hot or &gt;90 min</span></div>'
+    +'<div class="fuel-row"><span class="fuel-k">Pacing</span><span>Start at the SLOW end of the band — negative-split, don’t bank time</span></div>'
+    +(isRace?'':'<div class="fuel-row"><span class="fuel-k">Why</span><span>Practise race-day fuelling now — the gut is trainable</span></div>')+'</div>';
 }
 function applyRunPace(exId,sessKey){
   let ex=null; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.id===exId) ex=e; }));
@@ -2338,7 +2394,7 @@ function runControlHTML(e,sessKey){
   const rp=runPaceForExercise(e);
   let paceLine;
   if(tgt){ paceLine='<div class="run-target" id="rsug-'+e.id+'">🎯 Target '+tgt.kmh+' km/h · '+tgt.pace+'/km'+(tgt.incline?(' · '+tgt.incline+'% incline'):'')+'</div>'; }
-  else if(rp){ paceLine='<div class="run-sug" id="rsug-'+e.id+'"><span>🏃 '+rp.label+' pace ~'+fmtPaceSec(rp.sec)+'/km · '+(3600/rp.sec).toFixed(1)+' km/h</span><button class="run-setbtn" onclick="applyRunPace(\''+e.id+'\',\''+sessKey+'\')">Set target</button></div>'; }
+  else if(rp){ const lo=rp.sec-6, hi=rp.sec+(rp.z==='easy'?25:6); paceLine='<div class="run-sug" id="rsug-'+e.id+'"><span>🏃 '+rp.label+' '+fmtPaceSec(lo)+'–'+fmtPaceSec(hi)+'/km · ~'+(3600/rp.sec).toFixed(1)+' km/h</span><button class="run-setbtn" onclick="applyRunPace(\''+e.id+'\',\''+sessKey+'\')">Set target</button></div>'; }
   else { paceLine='<div class="run-sug muted">Add your goal time in Tools → Run progression planner to auto-calc each run\u2019s pace.</div>'; }
   const tgtHTML = paceLine;
   return tgtHTML+'<div class="wt-wrap"><span class="wt-lbl">km/h</span><div class="stp">'
@@ -2890,7 +2946,21 @@ function weeklyReviewCardHTML(){
     +'<div style="display:flex;gap:8px;margin-bottom:8px">'
     +'<div class="tl-card"><div class="tl-val">'+(avgR!=null?avgR:'—')+'</div><div class="tl-lbl">Avg readiness</div></div>'
     +'<div class="tl-card"><div class="tl-val">'+(formDelta!=null?((formDelta>0?'+':'')+formDelta):'—')+'</div><div class="tl-lbl">Form change</div></div></div>';
-  return wrap(cards+'<div class="pc-note"><strong>Focus:</strong> '+focus+'</div>');
+  // ── Bottlenecks ──
+  const bn=[];
+  const iw=intensityWeek(); const tot=iw.easy+iw.hard;
+  if(tot>600){ const pctE=Math.round(iw.easy/tot*100); bn.push(pctE>=80?'✅ 80/20 intact — '+pctE+'% easy running':'⚠️ Only '+pctE+'% easy running — slow the easy days down'); }
+  const aw=acwrNow();
+  if(aw.acwr!=null){ bn.push(aw.acwr>1.3?'⚠️ ACWR '+aw.acwr.toFixed(2)+' — load rising fast, hold volume':(aw.acwr<0.8?'ℹ️ ACWR '+aw.acwr.toFixed(2)+' — room to build':'✅ ACWR '+aw.acwr.toFixed(2)+' — sweet spot')); }
+  const byName=e1rmByName(); const stalled=[];
+  Object.keys(byName).forEach(nm=>{ const pts=byName[nm].slice().sort((a,b)=>a.week-b.week); const wks=[...new Set(pts.map(p=>p.week))]; if(wks.length>=3){ const best=Math.max.apply(null,pts.map(p=>p.e1)); if(best-pts[0].e1<0.5) stalled.push(nm); } });
+  if(stalled.length) bn.push('⚠️ Stalled: '+stalled.slice(0,3).join(', ')+' — swap the variation or adjust reps');
+  let ngThis=0,ngLast=0,ngReg='';
+  const lastMon=new Date(mon); lastMon.setDate(lastMon.getDate()-7);
+  Object.keys(STATE.niggles||{}).forEach(dk=>{ const d=new Date(dk+'T12:00'); const o=STATE.niggles[dk]; Object.keys(o).forEach(rg=>{ const v=o[rg]||0; if(d>=mon&&d<=sun&&v>ngThis){ngThis=v;ngReg=rg;} if(d>=lastMon&&d<mon&&v>ngLast)ngLast=v; }); });
+  if(ngThis>=4&&ngThis>ngLast) bn.push('⚠️ '+ngReg+' niggle trending up ('+ngLast+'→'+ngThis+') — protect it now, not after it blows up');
+  const bnHTML=bn.length?'<div class="bn-list">'+bn.map(x=>'<div class="bn-row">'+x+'</div>').join('')+'</div>':'';
+  return wrap(cards+bnHTML+'<div class="pc-note"><strong>Focus:</strong> '+focus+'</div>');
 }
 // ── Trends over time ──
 function weeklyTonnageSeries(){ const byWeek={}; PROGRAM.forEach(s=>{ if(s.type==='rest') return; s.exercises.forEach(e=>{ if(e.cat!=='strength') return; const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; }); }); return byWeek; }
@@ -2907,7 +2977,7 @@ function trendsCardHTML(){
   return wrap('<div class="trend-lbl">Weekly tonnage (kg lifted)</div><div class="trend-bars">'+bars+'</div>'+(e1rows?('<div class="trend-lbl" style="margin-top:14px">Estimated 1RM progress</div>'+e1rows):''));
 }
 // ── Exercise substitutions ──
-var AVAILABLE_EQUIP=['Barbell','Rings','Low row','Lat pulldown','Landmine','Bodyweight'];
+var AVAILABLE_EQUIP=['Barbell','Rings','Low row','Lat pulldown','Landmine','Bodyweight','Tib bar','Reverse treadmill'];
 var SUB_LIB={
   squat:[['Back squat','Barbell'],['Front squat','Barbell'],['Box squat','Barbell'],['Tempo back squat','Barbell'],['Pause squat','Barbell'],['Landmine squat','Landmine'],['Bulgarian split squat','Bodyweight'],['Pistol squat','Bodyweight'],['Squat jump','Bodyweight']],
   hinge:[['Romanian deadlift','Barbell'],['Conventional deadlift','Barbell'],['Stiff-leg deadlift','Barbell'],['Barbell hip thrust','Barbell'],['Good morning','Barbell'],['Landmine RDL','Landmine'],['Single-leg RDL','Bodyweight'],['Nordic curl','Bodyweight'],['Ring leg curl','Rings'],['Glute bridge','Bodyweight']],
@@ -2916,18 +2986,20 @@ var SUB_LIB={
   vpush:[['Overhead press','Barbell'],['Push press','Barbell'],['Z-press','Barbell'],['Half-kneeling landmine press','Landmine'],['Tall-kneeling landmine press','Landmine'],['Ring pike push-up','Rings'],['Pike push-up','Bodyweight']],
   hpull:[['Barbell bent-over row','Barbell'],['Pendlay row','Barbell'],['Seated low row','Low row'],['Wide-grip low row','Low row'],['Landmine row','Landmine'],['Ring row','Rings'],['Feet-elevated ring row','Rings'],['Inverted row','Bodyweight']],
   vpull:[['Lat pulldown','Lat pulldown'],['Close-grip pulldown','Lat pulldown'],['Neutral-grip pulldown','Lat pulldown'],['Pull-up','Rings'],['Chin-up','Rings'],['Weighted pull-up','Rings'],['Negative pull-up','Bodyweight']],
-  calf:[['Barbell calf raise','Barbell'],['Standing calf raise','Bodyweight'],['Single-leg calf raise','Bodyweight']],
+  calf:[['Barbell calf raise','Barbell'],['Standing calf raise','Bodyweight'],['Single-leg calf raise','Bodyweight'],['Eccentric calf raise (3-sec lower)','Bodyweight'],['Bent-knee soleus calf raise','Bodyweight']],
   core:[['Plank','Bodyweight'],['Side plank','Bodyweight'],['Dead bug','Bodyweight'],['Hollow hold','Bodyweight'],['Hanging leg raise','Rings'],['Hanging knee raise','Rings'],['Ring fallout','Rings'],['Barbell rollout','Barbell'],['Landmine rotation','Landmine'],['Pallof press','Low row']],
   carry:[['Barbell front-rack carry','Barbell'],['Landmine carry','Landmine'],['Suitcase carry','Bodyweight']],
   hang:[['Dead hang','Rings'],['Active hang','Rings'],['Scapular pull-up','Rings']],
   glute:[['Single-leg glute bridge','Bodyweight'],['Side-lying hip abduction','Bodyweight'],['Cossack squat','Bodyweight'],['Barbell hip thrust','Barbell']],
-  plyo:[['Box jump','Bodyweight'],['Squat jump','Bodyweight'],['Broad jump','Bodyweight'],['Tuck jump','Bodyweight'],['Barbell jump squat','Barbell']],
+  plyo:[['Box jump','Bodyweight'],['Squat jump','Bodyweight'],['Broad jump','Bodyweight'],['Tuck jump','Bodyweight'],['Pogo hops','Bodyweight'],['Single-leg pogo hops','Bodyweight'],['Barbell jump squat','Barbell']],
+  knee:[['Backwards treadmill walk','Reverse treadmill'],['Tib bar raise','Tib bar'],['ATG split squat','Bodyweight'],['Spanish squat (band)','Bodyweight'],['Eccentric step-down','Bodyweight'],['Poliquin step-up','Bodyweight'],['Terminal knee extension','Bodyweight']],
   power:[['Hang power clean','Barbell'],['Power clean','Barbell'],['Barbell high pull','Barbell'],['Clean pull','Barbell'],['Box jump','Bodyweight']]
 };
 function subPattern(name){
   const n=(name||'').toLowerCase();
   if(/foam roll|mobility|skill work|stretch|warm.?up|cool.?down|get.?up|windmill|around the world/.test(n)) return null;
-  if(/calf/.test(n)) return 'calf';
+  if(/spanish squat|terminal knee|step.?down|poliquin|peterson|atg split|backwards? (treadmill )?walk|reverse treadmill|tib bar|tibialis/.test(n)) return 'knee';
+  if(/calf|soleus/.test(n)) return 'calf';
   if(/carry/.test(n)) return 'carry';
   if(/hip abduction|abduct|clamshell|monster walk/.test(n)) return 'glute';
   if(/box jump|jump|plyo|bound|pogo/.test(n)) return 'plyo';
@@ -2951,8 +3023,9 @@ function swapControlHTML(e){
   const alts=(pat&&SUB_LIB[pat])?SUB_LIB[pat].filter(a=>AVAILABLE_EQUIP.indexOf(a[1])>=0):[];
   if(!alts.length && cur===orig) return '';
   const esc=s=>String(s).replace(/'/g,"\\'");
-  const seen={}; seen[orig.toLowerCase()]=1;
-  const list=alts.filter(a=>{ const k=a[0].toLowerCase(); if(seen[k])return false; seen[k]=1; return true; });
+  const norm=s=>String(s).toLowerCase().replace(/\([^)]*\)/g,'').replace(/[^a-z0-9]/g,'').replace(/s$/,'');
+  const seen={}; seen[norm(orig)]=1;
+  const list=alts.filter(a=>{ const k=norm(a[0]); if(seen[k])return false; seen[k]=1; return true; });
   const optRow=(name,eq,on)=>'<div class="swap-opt"><button class="swap-chip'+(on?' on':'')+'" onclick="setSwap(\''+e.id+'\',\''+esc(name)+'\',\''+esc(orig)+'\')"><span class="swap-nm">'+name+'</span><span class="swap-eq">'+eq+'</span></button><button class="swap-vid" onclick="event.stopPropagation();showExDemo(\''+esc(name)+'\',\'\')" aria-label="Watch demo">▶</button></div>';
   let chips=optRow(orig,'prescribed',cur===orig);
   chips+=list.map(a=>optRow(a[0],a[1],cur===a[0])).join('');
@@ -3414,6 +3487,22 @@ const EXERCISE_VIDEOS = {
 };
 // Map any program exercise name -> canonical video key (or null for non-movement items)
 const VIDEO_ALIASES = {
+  // runner-durability additions
+  'tib bar raise':'tibialis raise','eccentric calf raise':'calf raise','bent-knee soleus calf raise':'calf raise','eccentric calf raise (3-sec lower)':'calf raise',
+  // swap-alternative variants → closest curated clip
+  'chin-up':'pull-ups','weighted pull-up':'pull-ups','negative pull-up':'pull-ups','lat pulldown':'pull-ups','close-grip pulldown':'pull-ups','neutral-grip pulldown':'pull-ups',
+  'inverted row':'ring rows','feet-elevated ring row':'ring rows','pendlay row':'barbell bent-over row','seated low row':'barbell bent-over row','wide-grip low row':'barbell bent-over row',
+  'box squat':'back squat','pause squat':'back squat','tempo back squat':'back squat',
+  'stiff-leg deadlift':'romanian deadlift','good morning':'romanian deadlift',
+  'close-grip bench press':'barbell bench press','incline barbell press':'barbell bench press','floor press':'barbell bench press',
+  'hollow hold':'hollow body hold','barbell rollout':'ring fallout','landmine rotation':'pallof press',
+  'squat jump':'box jumps','broad jump':'box jumps','tuck jump':'box jumps','barbell jump squat':'box jumps',
+  'barbell high pull':'hang power clean','clean pull':'hang power clean','power clean':'hang power clean',
+  'active hang':'dead hang','barbell front-rack carry':'farmer carry','landmine carry':'farmer carry',
+  'ring leg curl':'nordic curl','barbell reverse lunge':'walking lunges','reverse lunge':'walking lunges','barbell split squat':'bulgarian split squat',
+  'pistol squat':'bulgarian split squat','cossack squat':'bulgarian split squat','ring dip':'ring push-ups',
+  'z-press':'db overhead press','pike push-up':'db overhead press','ring pike push-up':'db overhead press',
+
   'squat':'back squat','deadlift':'conventional deadlift','bench press':'barbell bench press',
   'bent-over row':'barbell bent-over row','barbell row':'barbell bent-over row',
   'bulgarian split squat':'bulgarian split squat','bulgarian split squat (db)':'bulgarian split squat',
@@ -3678,29 +3767,38 @@ function playExVideo(){
   const c = _demoCtx;
   const animEl = document.getElementById('demo-anim');
   const back = '<button class="demo-back" onclick="renderDemoAnimView()">↺ Back to animation</button>';
-  if(!(c.data && c.data.id)){
-    fallToAnim('No clip linked for this one — showing the animated guide. Use “Open on YouTube” to search demos.');
+  const hasId = !!(c.data && c.data.id);
+  // No curated clip: never attempt the deprecated search-embed (black screen risk).
+  // Show a one-tap watch card immediately instead.
+  if(!hasId){
+    animEl.innerHTML = '<a class="demo-searchcard" href="'+c.searchUrl+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Watch demos — '+c.name+'</div><div class="demo-search-sub">Opens YouTube · top form videos</div></a>' + back;
     return;
   }
   animEl.innerHTML = '<div class="demo-loading">Loading video…</div>' + back;
   whenYTApi(function(){
     if(token !== _demoToken) return;
     if(_ytApiState === 'failed' || !(window.YT && window.YT.Player)){
-      animEl.innerHTML = demoIframeHTML(c.data, c.searchUrl) + back; // best effort, links still work
+      animEl.innerHTML = demoIframeHTML(c.data, c.searchUrl) + back;
       return;
     }
     animEl.innerHTML = '<div class="demo-video"><div id="demo-yt-mount"></div></div>' + demoLinksHTML(c.data, c.searchUrl) + back;
     const onPlayFail = function(){
       if(token !== _demoToken) return;
-      fallToAnim('This clip can’t play inside the app — here’s the animated guide. Tap “Open on YouTube” to watch the footage.');
+      fallToAnim('This clip blocks in-app playback — here\u2019s the animated guide. \u201cOpen on YouTube\u201d plays the same video there.');
     };
+    let started=false;
     try{
       _demoPlayer = new YT.Player('demo-yt-mount', {
         videoId: c.data.id,
         host: 'https://www.youtube-nocookie.com',
         playerVars: { rel:0, modestbranding:1, playsinline:1, autoplay:1 },
-        events: { onError: function(){ onPlayFail(); } } // removed / private / embedding disabled
+        events: {
+          onError: function(){ onPlayFail(); }, // removed / private / embedding disabled (when YT reports it)
+          onStateChange: function(ev){ if(ev && ev.data!=null && ev.data!==-1) started=true; } // playing/buffering/cued/paused all count
+        }
       });
+      // Watchdog: blocked embeds often show a black player WITHOUT firing onError.
+      setTimeout(function(){ if(token===_demoToken && !started) onPlayFail(); }, 6000);
     }catch(e){ onPlayFail(); }
   });
 }
@@ -3738,22 +3836,9 @@ function _mobAltChips(){ const c=_mobCtx; return '<div class="mobalt-row">'+c.r.
 function renderMobPlayer(){
   const c=_mobCtx; if(!c) return;
   destroyDemoPlayer();
-  const opt=c.r.opts[c.opt];
-  const su='https://www.youtube.com/results?search_query='+encodeURIComponent(opt.q);
-  const anim=document.getElementById('demo-anim');
-  anim.innerHTML='<div class="demo-video"><div id="demo-yt-mount"></div></div>'+_mobAltChips()
-    +'<div class="demo-links"><a class="demo-link alt" href="'+su+'" target="_blank" rel="noopener">🔍 More options on YouTube</a></div>';
-  const token=++_demoToken; let ready=false;
-  whenYTApi(function(){
-    if(token!==_demoToken) return;
-    if(_ytApiState==='failed' || !(window.YT&&window.YT.Player)){ mobFallback(); return; }
-    try{
-      _demoPlayer=new YT.Player('demo-yt-mount',{ host:'https://www.youtube.com',
-        playerVars:{ listType:'search', list:opt.q, rel:0, modestbranding:1, playsinline:1 },
-        events:{ onReady:function(){ ready=true; }, onError:function(){ mobFallback(); } } });
-    }catch(e){ mobFallback(); }
-    setTimeout(function(){ if(token===_demoToken && !ready) mobFallback(); }, 6500);
-  });
+  // YouTube no longer supports reliable search-based embedding (black-screen risk),
+  // so the routine opens as a one-tap follow-along card with selectable variants.
+  mobFallback();
 }
 function mobFallback(){
   const c=_mobCtx; if(!c) return;
@@ -4127,6 +4212,21 @@ function openTimer(){ TM.open=true; document.getElementById('timer-sheet').class
 function closeTimer(){ TM.open=false; document.getElementById('timer-sheet').classList.remove('open'); }
 function timerMode(m){ TM.mode=m; ['rest','watch','metro'].forEach(x=>{const t=document.getElementById('tt-'+x); if(t) t.classList.toggle('active',x===m);}); timerRender(); }
 function setFabState(){ const f=document.getElementById('fab-timer'); if(f) f.classList.toggle('running', TM.restRunning||TM.wRunning||TM.metroOn); }
+// FAB hides while scrolling down so it never covers content; reappears on scroll-up or pause
+(function(){
+  let lastY=0, idleT=null;
+  document.addEventListener('DOMContentLoaded', function(){
+    const c=document.querySelector('.content'); const f=document.getElementById('fab-timer');
+    if(!c||!f) return;
+    c.addEventListener('scroll', function(){
+      const y=c.scrollTop;
+      if(y>lastY+8) f.classList.add('fab-hide');
+      else if(y<lastY-8) f.classList.remove('fab-hide');
+      lastY=y;
+      clearTimeout(idleT); idleT=setTimeout(function(){ f.classList.remove('fab-hide'); }, 900);
+    }, {passive:true});
+  });
+})();
 function watchElapsed(){ return TM.wAcc + (TM.wRunning?(Date.now()-TM.wStart):0); }
 function timerRender(){
   const b=document.getElementById('timer-body'); if(!b) return;
