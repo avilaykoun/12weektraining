@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Albert 12 Week Program">
+<meta name="apple-mobile-web-app-title" content="AV Fitness">
 <meta name="theme-color" content="#11203a">
 <meta name="color-scheme" content="dark">
 <title>Albert 12 Week Program</title>
@@ -640,7 +640,7 @@ input[type=number]{-moz-appearance:textfield}
     <div>
       <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
       <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-      <div class="hdr-build">Build 2026-06-10 · v35</div>
+      <div class="hdr-build">Build 2026-06-10 · v37</div>
     </div>
     <div style="display:flex;align-items:center;gap:12px">
       <div style="text-align:right">
@@ -4443,10 +4443,19 @@ function importData(input){
 }
 function initPWA(){
   try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
-  try{ const man={name:'Albert 12 Week Program',short_name:'Albert 12wk',display:'standalone',orientation:'portrait',background_color:'#11203a',theme_color:'#11203a',start_url:'.'};
-    const mb=new Blob([JSON.stringify(man)],{type:'application/manifest+json'});
-    const l=document.createElement('link'); l.rel='manifest'; l.href=URL.createObjectURL(mb); document.head.appendChild(l);
-  }catch(e){}
+  const hosted=/^https?:/.test(location.protocol);
+  if(hosted){
+    // Hosted (e.g. GitHub Pages): real manifest + service worker → installable, offline, in-place updates
+    try{ const l=document.createElement('link'); l.rel='manifest'; l.href='manifest.json'; document.head.appendChild(l); }catch(e){}
+    try{ const a=document.createElement('link'); a.rel='apple-touch-icon'; a.href='icon-180.png'; document.head.appendChild(a); }catch(e){}
+    try{ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); }catch(e){}
+  } else {
+    // Opened as a plain file: keep the lightweight blob manifest so Add-to-Home-Screen still looks right
+    try{ const man={name:'AV Fitness',short_name:'AV Fitness',display:'standalone',orientation:'portrait',background_color:'#11203a',theme_color:'#11203a',start_url:'.'};
+      const mb=new Blob([JSON.stringify(man)],{type:'application/manifest+json'});
+      const l=document.createElement('link'); l.rel='manifest'; l.href=URL.createObjectURL(mb); document.head.appendChild(l);
+    }catch(e){}
+  }
 }
 
 function initSwipe(){
