@@ -325,8 +325,8 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 /* SEARCH */
 .hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 .hdr-search-btn:active{background:var(--surface2)}
-.hdr-collapse-btn{background:transparent;border:none;color:var(--text3);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:transform .25s,color .15s;padding:0}
-.hdr-collapse-btn:active{color:var(--accent)}
+.hdr-collapse-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:transform .25s,background .15s;padding:0;line-height:1}
+.hdr-collapse-btn:active{background:var(--surface2)}
 .hdr-collapsible{overflow:hidden;transition:max-height .3s ease,opacity .25s ease}
 .hdr-collapsible.collapsed{max-height:0!important;opacity:0;pointer-events:none}
 .hdr-collapsible.expanded{opacity:1}
@@ -769,7 +769,7 @@ input[type=number]{-moz-appearance:textfield}
         <div style="font-size:11px;font-family:'Aptos',monospace;color:var(--accent)" id="hdr-progress">0 / 84 sessions</div>
       </div>
       <button class="hdr-search-btn" onclick="openSearch()" aria-label="Search">🔍</button>
-      <button class="hdr-collapse-btn" id="hdr-collapse-btn" onclick="toggleHdrCollapse()" aria-label="Toggle countdown">⌃</button>
+      <button class="hdr-collapse-btn" id="hdr-collapse-btn" onclick="toggleHdrCollapse()" aria-label="Toggle countdown">▾</button>
     </div>
   </div>
   <div class="hdr-collapsible expanded" id="hdr-collapsible">
