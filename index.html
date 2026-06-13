@@ -51,7 +51,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;overflow-y:auto;padding:0 20px;padding-bottom:calc(96px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding:0 20px;padding-bottom:calc(96px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
 .content::-webkit-scrollbar{display:none}
 .section{display:none}
 .section.active{display:block}
@@ -172,6 +172,36 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .phase-pill{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Aptos',monospace;font-size:10px;cursor:pointer;letter-spacing:.04em;transition:all .15s}
 .phase-pill.active{background:var(--accent2);color:#000;border-color:var(--accent2);font-weight:500}
 
+
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.hub-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s,border-color .15s;-webkit-tap-highlight-color:transparent;min-height:80px;position:relative;overflow:hidden}
+.hub-card:active{background:var(--surface2);border-color:var(--accent2)}
+.hub-card-icon{font-size:28px;flex-shrink:0;line-height:1}
+.hub-card-content{flex:1;min-width:0}
+.hub-card-title{font-size:13px;font-weight:600;letter-spacing:.02em;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hub-card-detail{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);line-height:1.4;letter-spacing:.02em}
+.hub-card-arr{font-size:18px;color:var(--border);flex-shrink:0;line-height:1}
+.hub-card-accent{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:99px 0 0 99px}
+.hub-card-full{grid-column:1/-1}
+.hub-welcome{background:linear-gradient(135deg,var(--surface2) 0%,var(--surface) 100%);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.hub-welcome-text{flex:1}
+.hub-welcome-title{font-size:16px;font-weight:600;letter-spacing:.04em;margin-bottom:2px;color:var(--accent)}
+.hub-welcome-sub{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);line-height:1.5}
+.hub-welcome-icon{font-size:36px;flex-shrink:0}
+.hub-section-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin:12px 0 6px;font-weight:600}
+
+.today-progress{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.tpb-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.tpb-week{font-size:13px;font-weight:600;letter-spacing:.04em}
+.tpb-pct{font-size:11px;font-family:'Aptos',monospace;color:var(--accent)}
+.tpb-phase{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);margin-bottom:6px}
+.tpb-track{height:4px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.tpb-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .6s ease}
+
+.s-status{font-size:9px;font-family:'Aptos',monospace;padding:2px 7px;border-radius:99px;letter-spacing:.04em;flex-shrink:0;font-weight:600}
+.s-status-done{background:rgba(95,214,160,.18);color:var(--green)}
+.s-status-today{background:rgba(90,166,255,.18);color:var(--accent2)}
+.s-status-missed{background:rgba(255,138,92,.15);color:var(--accent3)}
 .section-title{font-family:'Aptos',sans-serif;font-size:18px;letter-spacing:1.5px;margin-bottom:14px;padding-top:6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .divider{height:1px;background:var(--border);margin:16px 0}
 
@@ -624,13 +654,14 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nutr-hero-lbl{font-size:9px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 .nutr-hero-sep{width:1px;height:30px;background:var(--border);margin:0 4px}
 .nutr-hint{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-align:center;letter-spacing:.04em;margin-bottom:10px;opacity:.7}
-.nutr-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px}
-.nutr-card-hd{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.nutr-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;overflow:clip;margin-bottom:12px}
+.nutr-card-hd{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
 .nutr-card-icon{font-size:20px;flex-shrink:0}
 .nutr-card-title{font-weight:500;font-size:14px;flex:1}
 .nutr-card-sub{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.03em}
-.nutr-card-body{max-height:0;overflow:hidden;padding:0 16px;border-top:0px solid transparent;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .2s ease,border-top-width .2s ease}
-.nutr-card-body.open{max-height:5000px;padding:14px 16px;border-top:1px solid var(--border)}
+.nutr-card-body{display:none;padding:14px 16px;border-top:1px solid var(--border)}
+.nutr-card-body.open{display:block;animation:nutrFade .2s ease}
+@keyframes nutrFade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .nutr-phase-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px}
 .nutr-phase-cell{background:var(--surface2);border-radius:10px;padding:8px 10px;text-align:center}
 .nutr-phase-cell .npc-val{font-size:13px;font-weight:600;color:var(--accent);font-family:'Aptos',monospace}
@@ -639,7 +670,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nutr-macro-cell{background:var(--surface2);border-radius:10px;padding:10px 8px;text-align:center}
 .nutr-macro-val{font-size:16px;font-weight:600;color:var(--accent);font-family:'Aptos',monospace}
 .nutr-macro-lbl{font-size:9px;color:var(--text3);font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px;text-transform:uppercase}
-.nutr-day-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+.nutr-day-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
 .nutr-day-tabs::-webkit-scrollbar{display:none}
 .nutr-day-tab{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Aptos',monospace;font-size:11px;cursor:pointer;transition:all .15s}
 .nutr-day-tab.active{background:var(--accent2);color:#000;border-color:var(--accent2);font-weight:500}
@@ -747,6 +778,7 @@ input[type=number]{-moz-appearance:textfield}
     <button class="nav-btn" onclick="showSection('pace',this)">Tools</button>
     <button class="nav-btn" onclick="showSection('progress',this)">Progress</button>
     <button class="nav-btn" onclick="showSection('nutrition',this)">Nutrition</button>
+    <button class="nav-btn" onclick="showSection('hub',this)">Menu</button>
   </div>
 </div>
 
@@ -1413,6 +1445,16 @@ input[type=number]{-moz-appearance:textfield}
 
 </div>
 
+<!-- HUB -->
+<div class="section" id="section-hub">
+  <div class="section-title">MENU</div>
+  <div id="hub-welcome-area"></div>
+  <div class="hub-section-lbl">Training</div>
+  <div class="hub-grid" id="hub-train-grid"></div>
+  <div class="hub-section-lbl">Health & tools</div>
+  <div class="hub-grid" id="hub-health-grid"></div>
+</div>
+
 <!-- EXERCISE DEMO MODAL -->
 <div class="demo-modal-overlay" id="demo-overlay" onclick="closeDemoModal(event)">
   <div class="demo-modal" id="demo-modal">
@@ -1457,29 +1499,17 @@ input[type=number]{-moz-appearance:textfield}
   <button class="bnav-btn active" onclick="showSection('today',null,'today-btn')" id="bn-today">
     <div class="bnav-icon">⚡</div><div class="bnav-lbl">Today</div>
   </button>
-  <button class="bnav-btn" onclick="showSection('week',null,'week-btn')" id="bn-week">
-    <div class="bnav-icon">📅</div><div class="bnav-lbl">Week</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('calendar',null,'cal-btn')" id="bn-calendar">
-    <div class="bnav-icon">🗓️</div><div class="bnav-lbl">Calendar</div>
-  </button>
   <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
     <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
   </button>
   <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
     <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
   </button>
-  <button class="bnav-btn" onclick="showSection('stats',null,'stats-btn')" id="bn-stats">
-    <div class="bnav-icon">🏃</div><div class="bnav-lbl">Stats</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('pace',null,'pace-btn')" id="bn-pace">
-    <div class="bnav-icon">🛠️</div><div class="bnav-lbl">Tools</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('progress',null,'progress-btn')" id="bn-progress">
-    <div class="bnav-icon">📈</div><div class="bnav-lbl">Progress</div>
-  </button>
   <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
     <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
+  </button>
+  <button class="bnav-btn" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
+    <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
   </button>
 </div>
 
@@ -2359,10 +2389,10 @@ function showSection(id,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace',progress:'bn-progress',nutrition:'bn-nutrition'};
+  const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace',progress:'bn-progress',nutrition:'bn-nutrition',hub:'bn-hub'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition'];
+  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition','hub'];
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
@@ -2374,6 +2404,7 @@ function showSection(id,btn){
   else if(id==='stats') renderStats();
   else if(id==='pace') pcEnsureInit();
   else if(id==='progress') renderProgress();
+  else if(id==='hub') renderHub();
 }
 
 // ─────────────────────────────────────────
@@ -2387,6 +2418,108 @@ function nutrShowDay(day,btn){
   document.querySelectorAll('.nutr-day-tab').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
+
+// ─────────────────────────────────────────
+// HUB PAGE
+// ─────────────────────────────────────────
+function renderHub(){
+  const wk=_phaseWeek();
+  const pi=getPhaseInfo(wk);
+  const todaySess=getSessionsForDate(new Date());
+  const todayName=todaySess.length?todaySess.filter(s=>s.type!=='rest').map(s=>s.name).join(' · ')||'Rest day':'Rest day';
+  const totalDone=Object.keys(STATE.completedSessions||{}).filter(k=>(STATE.completedSessions||{})[k]).length;
+  const totalSched=PROGRAM.filter(s=>s.type!=='rest'&&sessionDate(s)<=new Date()).length;
+  const pct=totalSched?Math.round(totalDone/Math.max(totalSched,1)*100):0;
+  const raceDays=Math.max(0,Math.ceil((RACE_DATE-new Date())/864e5));
+  // total distance from run logs
+  let totKm=0;
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat!=='run') return;
+    const v=parseFloat((STATE.runLog||{})[e.id]);
+    if(v>0){
+      const m=e.detail&&e.detail.match(/(\d+(?:\.\d+)?)\s*(?:–|-)\s*(\d+(?:\.\d+)?)\s*km/i);
+      if(m) totKm+=(parseFloat(m[1])+parseFloat(m[2]))/2;
+    }
+  }));
+  (STATE.importedRuns||[]).forEach(r=>{if(r&&r.distKm>0)totKm+=r.distKm;});
+
+  // Welcome / status area
+  const welEl=document.getElementById('hub-welcome-area');
+  if(welEl) welEl.innerHTML=`<div class="hub-welcome">
+    <div class="hub-welcome-text">
+      <div class="hub-welcome-title">Week ${wk} · ${pi.name}</div>
+      <div class="hub-welcome-sub">${pi.intent}.<br>${pct}% complete · Race in ${raceDays} days</div>
+    </div>
+    <div class="hub-welcome-icon">🏆</div>
+  </div>`;
+
+  const accent='var(--accent2)', gold='var(--accent)', green='var(--green)', orange='var(--accent3)', muted='var(--text3)';
+  const trainCards=[
+    {id:'today',icon:'⚡',title:'Today',detail:todayName,color:accent},
+    {id:'week',icon:'📅',title:'This week',detail:'Week '+wk+' of 12',color:gold},
+    {id:'calendar',icon:'🗓️',title:'Calendar',detail:'Race in '+raceDays+' days',color:orange},
+    {id:'program',icon:'📋',title:'Full program',detail:pi.name+' · '+pi.rir,color:accent},
+    {id:'history',icon:'📊',title:'Training log',detail:totalDone+' sessions done',color:green},
+    {id:'stats',icon:'🏃',title:'Stats',detail:totKm.toFixed(0)+' km logged',color:green},
+  ];
+  const healthCards=[
+    {id:'nutrition',icon:'🥗',title:'Nutrition',detail:'172g protein · 86 kg',color:green},
+    {id:'progress',icon:'📈',title:'Progress',detail:'PRs & benchmarks',color:gold},
+    {id:'pace',icon:'🛠️',title:'Training tools',detail:'Pace · HR zones · splits',color:muted,full:true},
+  ];
+
+  function cardHTML(c){
+    return `<div class="hub-card${c.full?' hub-card-full':''}" onclick="showSection('${c.id}')">
+      <div class="hub-card-accent" style="background:${c.color}"></div>
+      <div class="hub-card-icon">${c.icon}</div>
+      <div class="hub-card-content">
+        <div class="hub-card-title">${c.title}</div>
+        <div class="hub-card-detail">${escHtml(c.detail)}</div>
+      </div>
+      <span class="hub-card-arr">›</span>
+    </div>`;
+  }
+
+  const tg=document.getElementById('hub-train-grid');
+  const hg=document.getElementById('hub-health-grid');
+  if(tg) tg.innerHTML=trainCards.map(cardHTML).join('');
+  if(hg) hg.innerHTML=healthCards.map(cardHTML).join('');
+}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ─────────────────────────────────────────
+// TODAY PROGRESS BAR
+// ─────────────────────────────────────────
+function todayProgressHTML(){
+  const wk=_phaseWeek();
+  const pi=getPhaseInfo(wk);
+  const total=PROGRAM.filter(s=>s.type!=='rest').length;
+  const done=PROGRAM.filter(s=>s.type!=='rest'&&sessionDate(s)<=new Date()&&STATE.completedSessions[sessionKey(s)]).length;
+  const pct=total?Math.round(done/total*100):0;
+  return `<div class="today-progress">
+    <div class="tpb-row">
+      <span class="tpb-week">Week ${wk} of 12</span>
+      <span class="tpb-pct">${pct}% complete</span>
+    </div>
+    <div class="tpb-phase">${pi.name} phase · ${pi.rir}</div>
+    <div class="tpb-track"><div class="tpb-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────
+// SESSION STATUS CHIP
+// ─────────────────────────────────────────
+function sessionStatusChip(s,date){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const sDate=new Date(date); sDate.setHours(0,0,0,0);
+  const key=sessionKey(s);
+  const done=STATE.completedSessions[key];
+  if(done) return '<span class="s-status s-status-done">Done</span>';
+  if(sDate.getTime()===today.getTime()) return '<span class="s-status s-status-today">Today</span>';
+  if(sDate<today&&s.type!=='rest') return '<span class="s-status s-status-missed">Missed</span>';
+  return '';
+}
+
 function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function renderToday(){
   const today=new Date();
@@ -2397,7 +2530,7 @@ function renderToday(){
     container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
     return;
   }
-  let out=phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
+  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -2414,6 +2547,7 @@ function renderSessionCard(s,interactive){
       <div class="session-name">${s.name}</div>
       <span class="dur-badge">⏱ ${dur} min</span>
       <span class="session-type ${typeClass(s.type)}">${typeLabel(s.type)}</span>
+      ${sessionStatusChip(s,sessionDate(s))}
       <div class="chev" id="chev-${key}">›</div>
     </div>
     ${done?`<div class="session-completed-banner">✓ COMPLETED · ${doneEx}/${totalEx} exercises logged</div>`:''}
@@ -5485,7 +5619,7 @@ function initPWA(){
 
 function initSwipe(){
   const c=document.querySelector('.content'); if(!c) return;
-  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition'];
+  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition','hub'];
   let x0=0,y0=0,t0=0,track=false;
   const blocked=el=>!!(el&&el.closest&&el.closest('.nav,.phase-sel,input,textarea,select,.setw-row,.stp,.timer-sheet,.demo-modal,.search-panel,svg,.fab,.pc-input-row'));
   c.addEventListener('touchstart',function(e){ if(e.touches.length!==1||blocked(e.target)){track=false;return;} const t=e.touches[0]; x0=t.clientX;y0=t.clientY;t0=Date.now();track=true; },{passive:true});
