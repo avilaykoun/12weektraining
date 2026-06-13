@@ -3962,14 +3962,30 @@ function renderProgress(){
     html+=_pcard('WEEKLY RUNNING VOLUME · KM','<div class="ls-hint">Log your run speed in Today (or import a GPX/TCX) and your weekly mileage will chart here.</div>');
   }
   const ls=liftSeries(); const names=Object.keys(ls).filter(k=>ls[k].length);
-
   if(names.length){
-    const pal=['#e8c66b','#47a8ff','#ff6b47','#47ffa0','#b48bff','#ffb43c'];
-    const series=names.slice(0,6).map((n,i)=>({name:n,color:pal[i%pal.length],points:ls[n].map(p=>({week:p.week,y:p.e1rm}))}));
-    const legend=series.map(s=>'<span style="display:inline-flex;align-items:center;gap:4px;margin:0 10px 4px 0;font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2)"><span style="width:10px;height:10px;border-radius:2px;background:'+s.color+'"></span>'+s.name+'</span>').join('');
-    html+=_pcard('ESTIMATED 1RM · STRENGTH PROGRESS', svgLines(series)+'<div class="prog-legend">'+legend+'</div><div class="tl-method">Estimated 1-rep max via the Epley formula: load × (1 + reps ÷ 30). Each lift appears here only once you enter the load (kg) in Today — open your Wednesday session and type the weight for Barbell bench press, Squat, Deadlift etc. to see them chart here.</div>');
+    const liftRows=names.map(name=>{
+      const pts=ls[name]; const cur=pts[pts.length-1]; const prev=pts.length>1?pts[pts.length-2]:null;
+      const delta=prev!=null?cur.e1rm-prev.e1rm:null;
+      const deltaStr=delta==null?'<span style="color:var(--text3)">first week</span>':delta>0?'<span style="color:var(--green)">+'+delta+' kg ↑</span>':delta<0?'<span style="color:#ff6b47">'+delta+' kg ↓</span>':'<span style="color:var(--text3)">→ holding</span>';
+      let spark='';
+      if(pts.length>1){
+        const SW=72,SH=28; const xs=pts.map(p=>p.week),ys=pts.map(p=>p.e1rm);
+        const xMn=xs[0],xMx=12,yMn=Math.min(...ys),yMx=Math.max(...ys),yR=yMx-yMn||1;
+        const sx=w=>2+(w-xMn)/(xMx-xMn)*(SW-4); const sy=v=>SH-2-(v-yMn)/yR*(SH-4);
+        const d=pts.map((p,i)=>(i?'L':'M')+sx(p.week).toFixed(1)+' '+sy(p.e1rm).toFixed(1)).join(' ');
+        const dts=pts.map(p=>'<circle cx="'+sx(p.week).toFixed(1)+'" cy="'+sy(p.e1rm).toFixed(1)+'" r="2.5" fill="var(--accent)" stroke="var(--bg)" stroke-width="1"/>').join('');
+        spark='<svg viewBox="0 0 '+SW+' '+SH+'" width="'+SW+'" height="'+SH+'" style="flex-shrink:0;opacity:.85"><path d="'+d+'" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linejoin="round"/>'+dts+'</svg>';
+      } else {
+        spark='<div style="width:72px;text-align:right;font-size:19px;font-weight:700;color:var(--accent);font-family:Aptos,sans-serif;flex-shrink:0">'+cur.e1rm+'<span style="font-size:10px;font-weight:400;color:var(--text3)"> kg</span></div>';
+      }
+      return '<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--border)">'
+        +'<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+name+'</div>'
+        +'<div style="font-size:10px;color:var(--text3);font-family:Aptos,monospace;margin-top:2px">e1RM <b style="color:var(--text);font-size:13px">'+cur.e1rm+'</b> kg · '+deltaStr+'</div></div>'
+        +spark+'</div>';
+    }).join('');
+    html+=_pcard('STRENGTH PROGRESS · ESTIMATED 1RM',liftRows+'<div class="tl-method" style="margin-top:10px">Epley formula: load × (1 + reps ÷ 30). Log weights in Today for each session — each lift gets its own row once data exists.</div>');
   } else {
-    html+=_pcard('ESTIMATED 1RM · STRENGTH PROGRESS','<div class="ls-hint">Enter load (kg) for your strength sets in Today — Barbell bench press, Back squat, Deadlift and other major lifts will chart here automatically once logged.</div>');
+    html+=_pcard('STRENGTH PROGRESS · ESTIMATED 1RM','<div class="ls-hint">Enter load (kg) for your strength sets in Today — Barbell bench press, Back squat, Deadlift and other major lifts will appear here automatically once logged.</div>');
   }
   const rs=runSpeedSeries(); const rWeeks=Object.keys(rs).map(Number).sort((a,b)=>a-b);
   if(rWeeks.length){
