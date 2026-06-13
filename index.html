@@ -3924,7 +3924,7 @@ function svgLines(series){
   let paths='',dots='';
   series.forEach(s=>{ if(!s.points.length) return; const d=s.points.map((p,i)=>(i?'L':'M')+X(p.week).toFixed(1)+' '+Y(p.y).toFixed(1)).join(' ');
     paths+='<path d="'+d+'" fill="none" stroke="'+s.color+'" stroke-width="2" stroke-linejoin="round"></path>';
-    s.points.forEach(p=>dots+='<circle cx="'+X(p.week).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="2.6" fill="'+s.color+'"></circle>'); });
+    s.points.forEach(p=>dots+='<circle cx="'+X(p.week).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="4" fill="'+s.color+'" stroke="var(--bg)" stroke-width="1.5"></circle>'); });
   let xl=''; for(let w=1;w<=12;w+=2) xl+='<text x="'+X(w).toFixed(1)+'" y="'+(H-8)+'" fill="var(--text3)" font-size="9" text-anchor="middle" font-family="Aptos,monospace">'+w+'</text>';
   const yl='<text x="'+(padL-6)+'" y="'+(padT+4)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="Aptos,monospace">'+Math.round(ymax)+'</text><text x="'+(padL-6)+'" y="'+(H-padB)+'" fill="var(--text3)" font-size="9" text-anchor="end" font-family="Aptos,monospace">'+Math.round(ymin)+'</text>';
   return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet">'+yl+xl+paths+dots+'</svg>';
