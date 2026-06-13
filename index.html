@@ -3814,7 +3814,7 @@ function benchmarkCardHTML(){
     +runBtns;
 
   const strLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular strength · 1RM testing</div>'
-    +'<details class="bm-proto"><summary>NSCA 1RM protocol &amp; video</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don't need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div><a class="bm-video" href="https://www.youtube.com/results?search_query=1RM+testing+protocol+strength+NSCA" target="_blank" rel="noopener">Watch: 1RM testing protocol</a></div></details>'
+    +'<details class="bm-proto"><summary>NSCA 1RM protocol &amp; video</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don&#39;t need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div><a class="bm-video" href="https://www.youtube.com/results?search_query=1RM+testing+protocol+strength+NSCA" target="_blank" rel="noopener">Watch: 1RM testing protocol</a></div></details>'
     +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
     +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
@@ -3824,7 +3824,7 @@ function benchmarkCardHTML(){
   const endSelId='bm-end-test';
   const endLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular endurance &amp; aerobic capacity</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-end-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+' onchange="_bmShowProto('bm-end-proto-body','end',this.value)">'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+' onchange="_bmShowProto(\'bm-end-proto-body\',\'end\',this.value)">'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-end-val" type="text" inputmode="numeric" placeholder="reps / seconds / metres" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-end-block" '+selCss+'>'+endBlockOpts+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkEndurance()">Save endurance test</button>';
@@ -3832,7 +3832,7 @@ function benchmarkCardHTML(){
   const mobTests=['Overhead squat score (1–3)','Ankle dorsiflexion knee-to-wall (cm)','Hip 90/90 internal rotation gap (cm)','Modified Thomas test score (1–3)','Active straight-leg raise (degrees)'];
   const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Joint mobility assessment</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-mob-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+' onchange="_bmShowProto('bm-mob-proto-body','mob',this.value)">'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+' onchange="_bmShowProto(\'bm-mob-proto-body\',\'mob\',this.value)">'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="score / cm / degrees" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-flex-block" '+selCss+'>'+flexBlockOpts+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkMobility()">Save mobility test</button>';
@@ -3840,7 +3840,7 @@ function benchmarkCardHTML(){
   const powTests=['Standing broad jump (cm)','Countermovement vertical jump (cm)'];
   const powLogger='<div class="bm-section-hd" style="margin-top:14px">Power · Explosive output</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-pow-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-pow-test" '+selCss+' onchange="_bmShowProto('bm-pow-proto-body','pow',this.value)">'+powTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-pow-test" '+selCss+' onchange="_bmShowProto(\'bm-pow-proto-body\',\'pow\',this.value)">'+powTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result (cm)</label><div class="pc-input-row" style="gap:6px"><input id="bm-pow-val" type="number" inputmode="decimal" step="1" placeholder="centimetres" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-pow-block" '+selCss+'>'+blockSel(defaultBlock())+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkPower()">Save power test</button>';
@@ -3848,7 +3848,7 @@ function benchmarkCardHTML(){
   const spdTests=['30 m sprint (seconds)','5-10-5 pro agility shuttle (seconds)'];
   const spdLogger='<div class="bm-section-hd" style="margin-top:14px">Speed &amp; agility</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-spd-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-spd-test" '+selCss+' onchange="_bmShowProto('bm-spd-proto-body','spd',this.value)">'+spdTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-spd-test" '+selCss+' onchange="_bmShowProto(\'bm-spd-proto-body\',\'spd\',this.value)">'+spdTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result (seconds)</label><div class="pc-input-row" style="gap:6px"><input id="bm-spd-val" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 4.35" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-spd-block" '+selCss+'>'+blockSel(defaultBlock())+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkSpeed()">Save speed test</button>';
