@@ -323,9 +323,30 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .opt-count{font-size:9px;color:var(--text3);background:var(--surface2);border-radius:99px;padding:1px 7px}
 .ex-row.opt-row{background:rgba(255,107,71,.03)}
 /* Essential vs supplementary priority dots */
-.ex-essential .ex-name::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle;flex-shrink:0}
-.ex-supplementary .ex-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent2);opacity:.45;margin-right:7px;vertical-align:middle;flex-shrink:0}
+.ex-essential .ex-name::before{content:'';display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:middle;flex-shrink:0;box-shadow:0 0 7px rgba(232,198,107,.55)}
+.ex-supplementary .ex-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent2);opacity:.45;margin-right:9px;vertical-align:middle;flex-shrink:0}
 .ex-supplementary .ex-name{color:var(--text2)}
+/* Chef recipe cards */
+.nutr-recipe-card{background:var(--surface2);border-radius:10px;padding:13px 14px;margin:10px 0}
+.nutr-recipe-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.nutr-recipe-title{font-size:13px;font-weight:600;color:var(--text);font-family:'Aptos',sans-serif}
+.nutr-recipe-time{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);background:rgba(90,166,255,.1);border-radius:99px;padding:2px 8px;flex-shrink:0}
+.nutr-recipe-badge{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.03em;margin-bottom:10px}
+.nutr-recipe-sect{font-size:9px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:8px 0 4px}
+.nutr-recipe-list{margin:0 0 2px;padding-left:16px}
+.nutr-recipe-list li{font-size:12px;font-family:'Aptos',sans-serif;color:var(--text2);margin-bottom:3px;line-height:1.45}
+.nutr-recipe-macros{font-size:11px;font-family:'Aptos',monospace;color:var(--green);margin-top:9px;padding-top:8px;border-top:1px solid rgba(42,42,56,.6)}
+.nutr-rec-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:2px}
+.nutr-rec-tab{flex-shrink:0;font-size:11px;font-family:'Aptos',monospace;background:var(--surface2);border:1px solid var(--border);color:var(--text3);border-radius:99px;padding:4px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.nutr-rec-tab.active{background:rgba(232,198,107,.12);border-color:var(--accent);color:var(--accent)}
+/* Training paces card on Today */
+.pace-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin:0 0 12px}
+.pace-card-hd{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px}
+.pace-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-top:1px solid rgba(42,42,56,.5)}
+.pace-row:first-of-type{border-top:none}
+.pace-lbl{font-size:12px;font-family:'Aptos',monospace;color:var(--text3)}
+.pace-val{font-size:13px;font-family:'Aptos',monospace;color:var(--text);font-weight:500}
+.pace-note{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);margin-top:7px}
 
 /* SEARCH */
 .hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
@@ -1198,6 +1219,7 @@ input[type=number]{-moz-appearance:textfield}
         <tr><td>Intervals / threshold</td><td>530–580g</td><td>172g</td><td>95g</td><td>~3,800</td></tr>
         <tr><td>Long run (≥20 km)</td><td>650–750g</td><td>172g</td><td>95g</td><td>~4,400</td></tr>
       </table>
+      <div id="nutr-hydration-out" style="margin-top:8px"></div>
       <div class="nutr-warn">These targets are calculated for your bodyweight of 86 kg. You have one marathon in your legs — your gut and aerobic base are already trained. You can push the upper end of these carb ranges.</div>
     </div>
   </div>
@@ -1368,6 +1390,18 @@ input[type=number]{-moz-appearance:textfield}
           <div class="nutr-meal-macros"><span class="nutr-m-chip prot">28g prot</span><span class="nutr-m-chip">~180 kcal</span></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Chef recipes card -->
+  <div class="nutr-card">
+    <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <div class="nutr-card-icon">👨‍🍳</div>
+      <div><div class="nutr-card-title">Chef's recipes</div><div class="nutr-card-sub">Performance meals · ingredients scale to your weight</div></div>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
+    </div>
+    <div class="nutr-card-body open">
+      <div id="nutr-recipes-out"><div class="ls-hint" style="padding:12px 0">Save your body weight in the Personalise card above to see calibrated recipes.</div></div>
     </div>
   </div>
 
@@ -2460,11 +2494,11 @@ function saveNutrProfile(){
 }
 // ---- NUTRITION MACRO RENDERER ----
 const _NUTR_DAYS=[
-  {label:'Full rest',           cLo:3.14,cHi:3.60},
-  {label:'Easy run / upper',    cLo:4.65,cHi:5.12},
-  {label:'Strength (lower)',    cLo:5.58,cHi:6.16},
-  {label:'Intervals / threshold',cLo:6.16,cHi:6.74},
-  {label:'Long run (≥20 km)',   cLo:7.56,cHi:8.72},
+  {label:'Full rest',             cLo:3.14,cHi:3.60, fatMult:1.15, fluidL:2.5, sodMg:1400},
+  {label:'Easy run / upper',      cLo:4.65,cHi:5.12, fatMult:1.05, fluidL:3.2, sodMg:1800},
+  {label:'Strength (lower)',      cLo:5.58,cHi:6.16, fatMult:1.00, fluidL:3.5, sodMg:2000},
+  {label:'Intervals / threshold', cLo:6.16,cHi:6.74, fatMult:0.85, fluidL:4.0, sodMg:2500},
+  {label:'Long run (≥20 km)',     cLo:7.56,cHi:8.72, fatMult:0.72, fluidL:5.0, sodMg:3200},
 ];
 function renderNutritionMacros(){
   const bwArr=Object.entries(STATE.bodyweightLog||{});
@@ -2473,10 +2507,8 @@ function renderNutritionMacros(){
   const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
   const carbsPerHr=(STATE.profile&&parseFloat(STATE.profile.carbsPerHr))||90;
   const goalStr=(STATE.profile&&STATE.profile.goal)||'performance';
-  // Fat multiplier: slightly lower on lose-fat goal
-  const fatMult=goalStr==='lose'?0.9:1.1;
+  const goalFatAdj=goalStr==='lose'?-0.15:goalStr==='build'?0.05:0;
   const prot=Math.round(w*protMult);
-  const fat=Math.round(w*fatMult);
   // Pre-fill profile form
   const npfw=document.getElementById('npf-weight'); if(npfw&&!npfw.value) npfw.value=w;
   const npfp=document.getElementById('npf-prot'); if(npfp) npfp.value=String(protMult);
@@ -2490,7 +2522,7 @@ function renderNutritionMacros(){
   const nhp=document.getElementById('nh-protein'); if(nhp) nhp.textContent=prot+'g';
   const nhw=document.getElementById('nh-weight'); if(nhw) nhw.textContent=w+'kg';
   const nhk=document.getElementById('nh-kcal');
-  if(nhk){ const peakCarb=Math.round(w*(_NUTR_DAYS[4].cLo+_NUTR_DAYS[4].cHi)/2); nhk.textContent=(Math.round((peakCarb*4+prot*4+fat*9)/100)*100).toLocaleString(); }
+  if(nhk){ const peakCarb=Math.round(w*(_NUTR_DAYS[4].cLo+_NUTR_DAYS[4].cHi)/2); const peakFat=Math.round(w*(_NUTR_DAYS[4].fatMult+goalFatAdj)); nhk.textContent=(Math.round((peakCarb*4+prot*4+peakFat*9)/100)*100).toLocaleString(); }
   // protein tip
   const tip=document.getElementById('nutr-protein-tip');
   if(tip) tip.innerHTML='Protein is fixed at <strong>'+prot+' g/day</strong> ('+protMult+' g/kg × '+w+' kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.';
@@ -2499,10 +2531,17 @@ function renderNutritionMacros(){
   if(tbl){
     const rows=_NUTR_DAYS.map(d=>{
       const cLo=Math.round(w*d.cLo),cHi=Math.round(w*d.cHi),cMid=(cLo+cHi)/2;
-      const kcal=Math.round((cMid*4+prot*4+fat*9)/100)*100;
-      return '<tr><td>'+d.label+'</td><td>'+cLo+'–'+cHi+'g</td><td>'+prot+'g</td><td>'+fat+'g</td><td>~'+kcal.toLocaleString()+'</td></tr>';
+      const dayFat=Math.round(w*(d.fatMult+goalFatAdj));
+      const kcal=Math.round((cMid*4+prot*4+dayFat*9)/100)*100;
+      return '<tr><td>'+d.label+'</td><td>'+cLo+'–'+cHi+'g</td><td>'+prot+'g</td><td>'+dayFat+'g</td><td>~'+kcal.toLocaleString()+'</td></tr>';
     }).join('');
     tbl.innerHTML='<tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>'+rows;
+  }
+  // Hydration & sodium guide
+  const hydEl=document.getElementById('nutr-hydration-out');
+  if(hydEl){
+    const hrows=_NUTR_DAYS.map(d=>`<tr><td>${d.label}</td><td>${d.fluidL.toFixed(1)}L+</td><td>${d.sodMg.toLocaleString()}mg+</td></tr>`).join('');
+    hydEl.innerHTML='<details style="margin-top:4px"><summary style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.05em">FLUID &amp; SODIUM TARGETS ▸</summary><table class="nutr-table" style="margin-top:6px"><tr><th>Day type</th><th>Fluid</th><th>Sodium</th></tr>'+hrows+'</table><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:6px">Add 500ml fluid per 30 min of intense running. Long runs: 400–600ml/hr + electrolyte tabs (300–500mg sodium/hr).</div></details>';
   }
   // race week carb load — per-day stepped protocol
   const cl=document.getElementById('nutr-carbload-detail');
@@ -2534,6 +2573,88 @@ function renderNutritionMacros(){
   // card sub-label
   const sub=document.querySelector('.nutr-card-hd .nutr-card-sub');
   if(sub&&sub.textContent.includes('86 kg')) sub.textContent='Personalised for '+w+' kg · one previous marathon';
+  renderNutrRecipes(w,goalStr);
+}
+
+function nutrShowRecipe(key,btn){
+  ['strength','longrun','quality','rest'].forEach(k=>{
+    const el=document.getElementById('nutr-rec-'+k); if(el) el.style.display=k===key?'':'none';
+  });
+  btn.closest('.nutr-rec-tabs').querySelectorAll('.nutr-rec-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function renderNutrRecipes(w,goal){
+  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const prot=Math.round(w*protMult);
+  const mealP=Math.round(prot/5);
+  const oats=Math.round(w*0.8/5)*5;
+  const rice=Math.round(w*1.05/5)*5;
+  const chicken=Math.max(120,Math.round(mealP/0.31/10)*10);
+  const longRice=Math.round(rice*1.4/5)*5;
+  // All recipes use ingredients available at Woolworths/Coles or Sydney Asian grocers (Chinatown, Cabramatta, Harris Farm)
+  const R={
+    strength:{
+      pre:{title:'Tamago Gohan (TKG)',time:'5 min',badge:'2 hrs before session · Japanese egg rice',
+        items:[`${rice}g Japanese short-grain rice (Koshihikari — Woolworths/Coles)`,'2 free-range eggs (room temp)','1 tbsp Kikkoman soy sauce','1 tsp sesame oil','2 spring onions (sliced)','½ sheet nori, torn (optional)'],
+        steps:['Cook rice in rice cooker or microwave (SunRice cups, 2 min). Rice must be HOT.','Make a well in centre of rice. Crack both eggs directly in. Add soy sauce and sesame oil.','Stir vigorously for 30–45 sec — the heat cooks the egg into a silky emulsion. Top with spring onion and nori.'],
+        macros:`~${Math.round(rice*3.8)}g carbs · ${Math.round(mealP*0.85)}g protein · 11g fat · high-carb, easy-digest`},
+      post:{title:'Teriyaki chicken rice',time:'12 min',badge:'Within 30 min of finishing — most important window',
+        items:[`${rice}g white rice (SunRice microwave cup = 60 sec)`,`${chicken}g chicken thigh or breast (diced)`,'1 tbsp soy sauce (Kikkoman)','1 tbsp mirin (Asian grocer or Woolworths)','1 tsp honey','100g frozen edamame or broccolini','Sesame seeds + spring onion'],
+        steps:['Mix soy, mirin, honey in a small bowl — this is your teriyaki sauce.','Pan-fry chicken in a hot non-stick pan 5–6 min until cooked. Pour sauce over and toss 1 min until caramelised.','Microwave rice 60 sec. Steam veg 2 min. Plate everything, top with sesame seeds.'],
+        macros:`~${Math.round(rice*3.8+8)}g carbs · ${Math.round(chicken*0.31)}g protein · 9g fat`}
+    },
+    longrun:{
+      pre:{title:'Matcha banana oats',time:'5 min',badge:'2.5–3 hrs before the long run',
+        items:[`${longRice}g rolled oats (Woolworths Homebrand or Carman\'s)`,'1 ripe banana (sliced)','350ml full-cream or oat milk','1 tsp matcha powder (Asian grocer — Chatswood, Chinatown)','2 tbsp honey','Pinch of sea salt'],
+        steps:['Microwave oats + milk 3 min, stir once at 1.5 min.','Whisk in matcha powder and honey until smooth.','Top with banana and salt. Eat slowly and rest — this is your last carb load before the run.'],
+        macros:`~${Math.round(longRice*3.7+27+42)}g carbs · 14g protein · 8g fat · proven, gut-tested formula`},
+      post:{title:'Bibimbap recovery bowl',time:'15 min',badge:'Within 60 min — maximum glycogen + protein window',
+        items:[`${rice}g steamed white rice`,'150g beef mince or chicken breast (cooked)','1 medium carrot (julienned)','80g baby spinach (blanched)','2 eggs (fried, runny yolk)','1 tbsp gochujang (Korean chilli paste — Woolworths Asian aisle or H-Mart)','1 tsp sesame oil + sesame seeds'],
+        steps:['Cook rice and protein separately (can use leftover rice from the fridge — microwave 90 sec).','Quickly stir-fry carrot in sesame oil 2 min. Wilt spinach in same pan 30 sec.','Build the bowl: rice base, arrange veg and protein around the edge, fried egg on top. Add a spoonful of gochujang and a drizzle of sesame oil. Mix everything together before eating.'],
+        macros:`~${Math.round(rice*3.8+10)}g carbs · ${Math.round(mealP*1.3)}g protein · 18g fat — complete recovery meal`}
+    },
+    quality:{
+      pre:{title:'Japanese rice balls (onigiri) + banana',time:'2 min (with pre-cooked rice)',badge:'90 min before intervals',
+        items:[`${Math.round(rice*1.3/5)*5}g pre-cooked Japanese white rice`,'1 ripe banana','1 umeboshi (pickled plum — Asian grocer) OR 1 tsp soy sauce + pinch of salt','1 sheet nori','200ml water'],
+        steps:['Batch-cook rice Sunday. Shape into 2 balls using glad wrap — press umeboshi or soy+salt into the centre. Wrap in nori.','Refrigerate. Microwave 90 sec on the morning of training.','Eat with banana 90 min before. White rice + banana = fastest glycogen top-up with zero GI risk.'],
+        macros:`~${Math.round(Math.round(rice*1.3/5)*5*3.8+27)}g carbs · 8g protein · 1g fat — maximum pre-session glycogen`},
+      post:{title:'Miso soup + chicken rice',time:'5 min',badge:'Within 30 min of finishing',
+        items:['2 sachets instant miso soup (Hikari or Marukome — Coles Asian aisle)','200ml boiling water per sachet',`${rice}g steamed white rice (microwave cup)`,`${Math.round(chicken*0.9/10)*10}g cooked chicken breast (shredded or sliced)`,'1 tbsp light soy sauce','Sliced spring onion'],
+        steps:['Dissolve miso sachets in boiling water — done in 30 sec.','Microwave rice 60 sec. Add shredded chicken and a dash of soy.','Eat rice + chicken first (glycogen priority), sip miso alongside. The sodium in miso supports electrolyte recovery.'],
+        macros:`~${Math.round(rice*3.8+6)}g carbs · ${Math.round(Math.round(chicken*0.9/10)*10*0.31+4)}g protein · 4g fat — fast, warm, easy on the gut`}
+    },
+    rest:{
+      pre:{title:'Salmon teriyaki bowl',time:'15 min',badge:'Lunch or dinner — rest day omega-3 priority',
+        items:[`${Math.max(150,Math.round(chicken*1.15/10)*10)}g Atlantic salmon fillet (Woolworths/Coles or Sydney Fish Market)`,'2 tbsp soy sauce + 2 tbsp mirin + 1 tbsp honey (teriyaki glaze)','80g edamame (frozen, from Woolworths freezer aisle)','80g baby spinach','1 tsp sesame oil + sesame seeds','Steamed rice or rice noodles (${Math.round(rice*0.7/5)*5}g dry — optional on rest day)'],
+        steps:['Mix teriyaki glaze. Score salmon skin and marinate 5 min (or just pour over before cooking).','Pan-fry salmon skin-down on medium-high heat 4 min. Flip, pour glaze over, cook 2 min — it caramelises fast.','Microwave edamame 2 min. Wilt spinach 30 sec in the same pan. Assemble with sesame oil + seeds.'],
+        macros:`~20g carbs · ${Math.round(Math.max(150,Math.round(chicken*1.15/10)*10)*0.20)}g protein · 22g fat · DHA + EPA for tissue repair`},
+      post:{title:'Silken tofu with century egg & ginger',time:'5 min',badge:'Evening — slow protein before bed',
+        items:['300g silken tofu (Woolworths refrigerated section or Asian grocer)','1 century egg (pidan — Asian grocer, optional) OR 2 soft-boiled eggs','1 tbsp soy sauce','1 tsp sesame oil','1 tsp fresh ginger (grated)','Spring onion + dried chilli flakes'],
+        steps:['Slide tofu from packet onto plate — no cooking needed. Silken tofu is eaten cold.','Slice century egg (or halve soft-boiled eggs) and arrange on top.','Mix soy + sesame oil + ginger into a dressing. Pour over, garnish with spring onion and chilli.'],
+        macros:`~4g carbs · 22g protein · 10g fat · slow-release tofu protein ideal overnight`}
+    }
+  };
+  const tabs=[{k:'strength',lbl:'Strength'},{k:'longrun',lbl:'Long run'},{k:'quality',lbl:'Intervals'},{k:'rest',lbl:'Rest day'}];
+  let html='<div class="nutr-rec-tabs">';
+  tabs.forEach((t,i)=>{ html+=`<button class="nutr-rec-tab${i===0?' active':''}" onclick="nutrShowRecipe('${t.k}',this)">${t.lbl}</button>`; });
+  html+='</div>';
+  tabs.forEach((t,i)=>{
+    const r=R[t.k]; if(!r) return;
+    html+=`<div id="nutr-rec-${t.k}" style="${i>0?'display:none':''}">`;
+    [r.pre,r.post].forEach(rec=>{
+      html+=`<div class="nutr-recipe-card">
+<div class="nutr-recipe-hd"><span class="nutr-recipe-title">${rec.title}</span><span class="nutr-recipe-time">⏱ ${rec.time}</span></div>
+<div class="nutr-recipe-badge">${rec.badge}</div>
+<div class="nutr-recipe-sect">Ingredients</div>
+<ul class="nutr-recipe-list">${rec.items.map(x=>`<li>${x}</li>`).join('')}</ul>
+<div class="nutr-recipe-sect">Method</div>
+<ol class="nutr-recipe-list">${rec.steps.map(x=>`<li>${x}</li>`).join('')}</ol>
+<div class="nutr-recipe-macros">${rec.macros}</div>
+</div>`;
+    });
+    html+='</div>';
+  });
+  const el=document.getElementById('nutr-recipes-out'); if(el) el.innerHTML=html;
 }
 
 function toggleHdrCollapse(){
@@ -2719,6 +2840,24 @@ function sessionStatusChip(s,date){
 }
 
 function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function trainingPacesTodayHTML(sessions){
+  if(!sessions.some(s=>s.type==='run'||s.type==='combo')) return '';
+  const paces=trainingPacesNow(); if(!paces) return '';
+  const fmt=sec=>{const m=Math.floor(sec/60),s=Math.round(sec%60);return m+':'+(s<10?'0':'')+s;};
+  const today=sessions.find(s=>s.type==='run'||s.type==='combo');
+  const isQuality=today&&today.exercises.some(e=>/interval|threshold|tempo|800m|1000m|1200m/i.test(e.name+' '+(e.detail||'')));
+  const isLong=today&&today.exercises.some(e=>/long run/i.test(e.name));
+  const rows=[
+    isLong?['Long run',fmt(paces.mp+30),'30 sec/km above marathon pace']:[],
+    ['Marathon pace',fmt(paces.mp),'race pace'],
+    isQuality?['Threshold',fmt(paces.thr),'comfortably hard']:[],
+    isQuality?['Intervals',fmt(paces.int),'hard effort']:[],
+    ['Easy / recovery',fmt(paces.easy),'conversational'],
+  ].filter(r=>r.length);
+  return '<div class="pace-card"><div class="pace-card-hd">Today\'s training paces</div>'
+    +rows.map(r=>'<div class="pace-row"><span class="pace-lbl">'+r[0]+'</span><span class="pace-val">'+r[1]+' /km</span></div>').join('')
+    +'<div class="pace-note">Riegel model from your best logged run · update by logging a run in Tools</div></div>';
+}
 function renderToday(){
   const today=new Date();
   document.getElementById('today-date-lbl').textContent=formatDate(today).toUpperCase();
@@ -2728,7 +2867,7 @@ function renderToday(){
     container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
     return;
   }
-  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+sessions.map(s=>renderSessionCard(s,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
+  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -2900,7 +3039,8 @@ function renderExercises(s,interactive){
   }
   // Main exercises sorted and grouped: Strength → Core → Running → Recovery
   const catRank=e=>e.cat==='core'?1:e.cat==='run'?2:e.cat==='rest'?3:0;
-  const mainExs=[...s.exercises.filter(e=>!e.supp)].sort((a,b)=>catRank(a)-catRank(b));
+  const prioRank=e=>essentialSet.has(e.id)?0:1;
+  const mainExs=[...s.exercises.filter(e=>!e.supp)].sort((a,b)=>catRank(a)-catRank(b)||prioRank(a)-prioRank(b));
   let lastCat='';
   mainExs.forEach(e=>{
     const cat=e.cat==='core'?'core':e.cat==='run'?'run':e.cat==='rest'?'rest':'lift';
@@ -3915,7 +4055,7 @@ function readinessBand(score){
   if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
   return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
 }
-function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); morningOpen=true; if(typeof hideRestoreBanner==='function') hideRestoreBanner(); saveState(STATE); renderToday(); }
+function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); morningOpen=true; if(typeof hideRestoreBanner==='function') hideRestoreBanner(); const rs=readinessScore(STATE.readiness[ymd]); if(rs!=null&&rs<45){if(!STATE.softenDay) STATE.softenDay={}; if(!STATE.softenDay[ymd]){STATE.softenDay[ymd]=true; if(typeof appToast==='function') appToast('Low readiness — session eased');}} saveState(STATE); renderToday(); }
 function readinessCardHTML(date){
   const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
   const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
@@ -5495,25 +5635,6 @@ function getOptionalExercises(s){
     {id:pre+'opt1', name:knee[0], detail:knee[1], cat:knee[2], optional:true},
     {id:pre+'opt2', name:scap[0], detail:scap[1], cat:scap[2], optional:true}
   ];
-}
-function renderOptional(s){
-  const opts=getOptionalExercises(s);
-  const doneCount=opts.filter(e=>STATE.completedExercises[e.id]).length;
-  return '<div class="ex-section-lbl supp">Warm-up · knee &amp; shoulder prehab '
-    + '<span class="opt-count">'+doneCount+'/2</span></div>'
-    + opts.map(e=>{
-      const done=STATE.completedExercises[e.id];
-      return '<div class="ex-row opt-row">'
-        + '<div class="ex-check '+(done?'done':'')+'" onclick="toggleExercise(\''+e.id+'\',\''+sessionKey(s)+'\')"></div>'
-        + '<div class="ex-info">'
-        + '<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
-        + '<div class="ex-detail">'+e.detail+'</div>'
-        + '<input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="'+(STATE.exerciseNotes[e.id]||'')+'" oninput="saveExNote(\''+e.id+'\',this.value)">'
-        + rpeControlHTML(e.id, sessionKey(s))
-        + '</div>'
-        + '<button class="ex-info-btn" onclick="showExDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">ⓘ</button>'
-        + '</div>';
-    }).join('');
 }
 
 // ─────────────────────────────────────────
