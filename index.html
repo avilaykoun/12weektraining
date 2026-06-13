@@ -369,6 +369,9 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .lt-v{color:var(--text2)}
 .sug-apply{margin-left:auto;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;padding:5px 10px;font-family:'Aptos',monospace;font-size:11px;font-weight:600;cursor:pointer}
 .sug-apply.hold{border-color:var(--border);color:var(--text2)}
+.presc-band{width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:11px;font-family:'Aptos',monospace;color:var(--text2);background:rgba(71,168,255,.07);border:1px solid rgba(71,168,255,.2);border-radius:8px;padding:6px 10px;margin:0 0 8px}
+.presc-band b{color:var(--accent2);margin-right:2px}
+.presc-apply{margin-left:auto;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:7px;padding:4px 9px;font-family:'Aptos',monospace;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
 .ri-row{padding:10px 0;border-bottom:1px solid var(--border)}
 .ri-top{display:flex;align-items:center;font-size:14px;color:var(--text);font-family:'Aptos',monospace}
 .ri-del{margin-left:auto;background:transparent;border:none;color:var(--text3);font-size:13px;cursor:pointer;padding:2px 6px}
@@ -592,6 +595,17 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .run-sug.muted{color:var(--text3);background:transparent;border-style:dashed}
 .run-sug span{flex:1}
 .run-setbtn{border:1px solid var(--accent2);background:transparent;color:var(--accent2);border-radius:7px;padding:4px 9px;font-size:10px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer;white-space:nowrap}
+.pace-block{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-top:7px;margin-bottom:4px}
+.pace-zone-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.pace-zone-chip{border-radius:6px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.pace-zone-chip.easy{background:rgba(95,214,160,.2);color:#5fd6a0}
+.pace-zone-chip.mp{background:rgba(71,168,255,.2);color:#47a8ff}
+.pace-zone-chip.thr{background:rgba(232,198,107,.2);color:#e8c66b}
+.pace-zone-chip.int{background:rgba(255,107,71,.2);color:#ff6b47}
+.pace-num{font-size:18px;font-family:'Aptos',monospace;font-weight:700;color:var(--text);letter-spacing:-.01em}
+.pace-km{font-size:11px;font-family:'Aptos',monospace;color:var(--text3);margin-top:2px}
+.pace-rep{font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);margin-top:3px;font-weight:600}
+.bm-section-hd{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 7px;font-weight:600;padding-bottom:5px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
 .s1-tbl{width:100%;border-collapse:collapse;margin-top:10px}
@@ -2267,8 +2281,39 @@ function fmtLastSets(rec){
   const parts=[]; for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; parts.push(s1Fmt(w)+'×'+exReps(rec.id,i,goal)); }
   return parts.join(', ');
 }
+// ── Benchmark-seeded weight prescription ──
+function benchmarkE1RMForLift(name){
+  if(!name) return null;
+  const norm=n=>n.toLowerCase().replace(/^barbell\s+/,'').replace(/\s*\(.*?\)/g,'').trim();
+  const n=norm(name);
+  const bms=(STATE.benchmarks||[]).filter(b=>b.kind==='strength'&&b.e1rm).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  for(const b of bms){ if(norm(b.lift||'')===n) return b.e1rm; }
+  return null;
+}
+function parsePrescriptionPct(detail){
+  const m=String(detail||'').match(/(\d+)[–\-](\d+)%|(\d+)%/);
+  if(!m) return null;
+  const lo=m[1]?+m[1]:+m[3], hi=m[2]?+m[2]:lo;
+  return {lo,hi};
+}
+function prescribedWeightBand(e){
+  const pct=parsePrescriptionPct(e.detail); if(!pct) return null;
+  let e1rm=null;
+  PROGRAM.forEach(s=>s.exercises.forEach(ex=>{ if(ex.name===e.name){ const v=exE1RM(ex.id); if(v&&(!e1rm||v>e1rm)) e1rm=v; } }));
+  if(!e1rm) e1rm=benchmarkE1RMForLift(e.name);
+  if(!e1rm) return null;
+  return {lo:roundKg(e1rm*pct.lo/100),hi:roundKg(e1rm*pct.hi/100),e1rm,pct};
+}
 function suggestNextLoad(name){
-  const rec=lastLoggedForName(name); if(!rec) return null;
+  const rec=lastLoggedForName(name);
+  if(!rec){
+    const bmE1=benchmarkE1RMForLift(name); if(!bmE1) return null;
+    let bestPct={lo:65,hi:70};
+    PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.name===name){ const p=parsePrescriptionPct(e.detail); if(p) bestPct=p; } }));
+    const suggested=roundKg(bmE1*bestPct.lo/100);
+    const suggestedHi=roundKg(bmE1*bestPct.hi/100);
+    return {rec:null,last:null,next:suggested,nextHi:suggestedHi,action:'bm',rpe:null,bmE1,pct:bestPct};
+  }
   const wsraw=(STATE.exerciseSets[rec.id]||[]); const ws=wsraw.map(parseFloat).filter(x=>x>0); if(!ws.length) return null;
   const topW=Math.max.apply(null,ws);
   const p=parsePrescription(rec.ex.detail); const goal=p?p.reps:null;
@@ -2284,7 +2329,7 @@ function applySuggest(exId,sessKey,load){
   for(let i=0;i<n;i++){ setSetWeight(exId,sessKey,i,load); const inp=document.getElementById('setw-'+exId+'-'+i); if(inp) inp.value=load; }
   if(typeof appToast==='function') appToast(s1Fmt(load)+' kg loaded across today\u2019s sets \u2713');
   if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}
-  const sg=document.getElementById('sug-'+exId); const b=sg&&sg.querySelector('.sug-apply'); if(b) b.textContent='\u2713 '+s1Fmt(load)+' kg set';
+  const sg=document.getElementById('sug-'+exId); const b=sg&&sg.querySelector('.sug-apply,.presc-apply'); if(b) b.textContent='\u2713 '+s1Fmt(load)+' kg set';
 }
 function setSetWeight(exId,sessKey,idx,val){
   if(!STATE.exerciseSets[exId]) STATE.exerciseSets[exId]=[];
@@ -2349,12 +2394,25 @@ function weightControlHTML(e,sessKey){
   let hist='';
   const sug=suggestNextLoad(e.name);
   if(sug){
-    const dd=sug.rec.date; const dstr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dd.getDay()]+' '+dd.getDate()+'/'+(dd.getMonth()+1);
-    const btn = sug.action==='up'
-      ? '<button class="sug-apply" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.next+')">↗ Try '+s1Fmt(sug.next)+' kg</button>'
-      : '<button class="sug-apply hold" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.last+')">Repeat '+s1Fmt(sug.last)+' kg</button>';
-    hist='<div class="lasttime" id="sug-'+e.id+'"><span>Last '+dstr+':</span> <span class="lt-v">'+fmtLastSets(sug.rec)+'</span>'
-      +(sug.rpe!=null?' <span>@RPE '+sug.rpe+'</span>':'')+btn+'</div>';
+    if(sug.action==='bm'){
+      const lo=s1Fmt(sug.next), hi=s1Fmt(sug.nextHi);
+      const dispRange=(sug.pct.lo!==sug.pct.hi)?lo+'–'+hi:lo;
+      const btn='<button class="presc-apply" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.next+')">Load '+lo+' kg</button>';
+      hist='<div class="presc-band" id="sug-'+e.id+'"><b>From '+s1Fmt(sug.bmE1)+' kg e1RM benchmark:</b> start at '+dispRange+' kg ('+sug.pct.lo+(sug.pct.lo!==sug.pct.hi?'–'+sug.pct.hi:'')+'% 1RM)'+btn+'</div>';
+    } else {
+      const dd=sug.rec.date; const dstr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dd.getDay()]+' '+dd.getDate()+'/'+(dd.getMonth()+1);
+      const btn = sug.action==='up'
+        ? '<button class="sug-apply" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.next+')">&#8599; Try '+s1Fmt(sug.next)+' kg</button>'
+        : '<button class="sug-apply hold" onclick="applySuggest(\''+e.id+'\',\''+sessKey+'\','+sug.last+')">Repeat '+s1Fmt(sug.last)+' kg</button>';
+      hist='<div class="lasttime" id="sug-'+e.id+'"><span>Last '+dstr+':</span> <span class="lt-v">'+fmtLastSets(sug.rec)+'</span>'
+        +(sug.rpe!=null?' <span>@RPE '+sug.rpe+'</span>':'')+btn+'</div>';
+      // also show target zone from e1RM
+      const pb=prescribedWeightBand(e);
+      if(pb) hist='<div class="presc-band" style="margin-bottom:5px"><b>Target zone:</b> '+s1Fmt(pb.lo)+(pb.lo!==pb.hi?'–'+s1Fmt(pb.hi):'')+' kg ('+pb.pct.lo+(pb.pct.lo!==pb.pct.hi?'–'+pb.pct.hi:'')+'% of '+pb.e1rm+' kg e1RM)</div>'+hist;
+    }
+  } else {
+    const pb=prescribedWeightBand(e);
+    if(pb) hist='<div class="presc-band"><b>Target zone:</b> '+s1Fmt(pb.lo)+(pb.lo!==pb.hi?'–'+s1Fmt(pb.hi):'')+' kg ('+pb.pct.lo+(pb.pct.lo!==pb.pct.hi?'–'+pb.pct.hi:'')+'% of '+pb.e1rm+' kg e1RM)</div>';
   }
   return hist+'<div class="wt-wrap"><span class="wt-lbl">Load × reps · '+p.reps+'-rep goal · '+phaseIntent().rir+(eased?' · eased −1 set':'')+(dl?' · <span style="color:var(--accent)">DELOAD −1 set · go ~10% lighter</span>':'')+'</span><div class="setw-row">'+inputs+'</div>'
     +(isComp?'<span class="e1rm-badge" id="e1rm-'+e.id+'">'+(e1?('e1RM ~'+e1+' kg · top set'):'')+'</span>':'')+'</div>';
@@ -2387,6 +2445,15 @@ function fuelingHTML(e){
     +'<div class="fuel-row"><span class="fuel-k">Pacing</span><span>Start at the SLOW end of the band — negative-split, don’t bank time</span></div>'
     +(isRace?'':'<div class="fuel-row"><span class="fuel-k">Why</span><span>Practise race-day fuelling now — the gut is trainable</span></div>')+'</div>';
 }
+function runRepTimeForExercise(e,paceSec){
+  const m=String(e.detail||'').match(/(\d+)\s*[x\xd7]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
+  if(!m) return null;
+  const distM=m[3].toLowerCase()==='km'?+m[2]*1000:+m[2];
+  if(!(distM>0)) return null;
+  const secs=Math.round(paceSec*distM/1000);
+  const mm=Math.floor(secs/60),ss=secs%60;
+  return mm+':'+String(ss).padStart(2,'0')+' per '+m[2]+m[3];
+}
 function applyRunPace(exId,sessKey){
   let ex=null; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.id===exId) ex=e; }));
   const rp=ex?runPaceForExercise(ex):null; if(!rp) return;
@@ -2394,9 +2461,17 @@ function applyRunPace(exId,sessKey){
   if(!STATE.runTarget) STATE.runTarget={};
   STATE.runTarget[exId]={kmh,incline:0,pace:fmtPaceSec(rp.sec)};
   saveState(STATE);
-  const el=document.getElementById('rsug-'+exId); if(el) el.innerHTML='🎯 Target '+kmh+' km/h · '+fmtPaceSec(rp.sec)+'/km ('+rp.label+')';
+  const el=document.getElementById('rsug-'+exId);
+  if(el){
+    const repInfo=runRepTimeForExercise(ex,rp.sec);
+    el.className='pace-block';
+    el.innerHTML='<div class="pace-zone-row"><span class="pace-zone-chip '+rp.z+'">'+rp.label+'</span></div>'
+      +'<div class="pace-num">'+fmtPaceSec(rp.sec)+' /km</div>'
+      +'<div class="pace-km">~'+kmh+' km/h</div>'
+      +(repInfo?'<div class="pace-rep">→ '+repInfo+'</div>':'');
+  }
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
-  if(typeof appToast==='function') appToast(rp.label+' pace '+fmtPaceSec(rp.sec)+'/km set \u2713');
+  if(typeof appToast==='function') appToast(rp.label+' pace '+fmtPaceSec(rp.sec)+'/km pinned ✓');
   if(navigator.vibrate){try{navigator.vibrate(15);}catch(e){}}
 }
 function runControlHTML(e,sessKey){
@@ -2404,14 +2479,32 @@ function runControlHTML(e,sessKey){
   const v=STATE.runLog[e.id]||'';
   const tgt=STATE.runTarget&&STATE.runTarget[e.id];
   const rp=runPaceForExercise(e);
-  let paceLine;
-  if(tgt){ paceLine='<div class="run-target" id="rsug-'+e.id+'">🎯 Target '+tgt.kmh+' km/h · '+tgt.pace+'/km'+(tgt.incline?(' · '+tgt.incline+'% incline'):'')+'</div>'; }
-  else if(rp){ const lo=rp.sec-6, hi=rp.sec+(rp.z==='easy'?25:6); paceLine='<div class="run-sug" id="rsug-'+e.id+'"><span>🏃 '+rp.label+' '+fmtPaceSec(lo)+'–'+fmtPaceSec(hi)+'/km · ~'+(3600/rp.sec).toFixed(1)+' km/h</span><button class="run-setbtn" onclick="applyRunPace(\''+e.id+'\',\''+sessKey+'\')">Set target</button></div>'; }
-  else { paceLine='<div class="run-sug muted">Add your goal time in Tools → Run progression planner to auto-calc each run\u2019s pace.</div>'; }
-  const tgtHTML = paceLine;
-  return tgtHTML+'<div class="wt-wrap"><span class="wt-lbl">km/h</span><div class="stp">'
+  const z=rp?rp.z:runZoneFromLabel(e.name,e.detail);
+  const zLabel={easy:'Easy',mp:'Marathon',thr:'Threshold',int:'Interval'}[z]||'Run';
+  let paceHTML='';
+  if(tgt){
+    const repInfo=rp?runRepTimeForExercise(e,rp.sec):null;
+    paceHTML='<div class="pace-block" id="rsug-'+e.id+'">'
+      +'<div class="pace-zone-row"><span class="pace-zone-chip '+z+'">'+zLabel+'</span></div>'
+      +'<div class="pace-num">'+tgt.pace+' /km</div>'
+      +'<div class="pace-km">~'+tgt.kmh+' km/h'+(tgt.incline?' \xb7 '+tgt.incline+'% incline':'')+'</div>'
+      +(repInfo?'<div class="pace-rep">→ '+repInfo+'</div>':'')+'</div>';
+  } else if(rp){
+    const lo=rp.sec-6, hi=rp.sec+(rp.z==='easy'?30:8);
+    const repInfo=runRepTimeForExercise(e,rp.sec);
+    paceHTML='<div class="pace-block" id="rsug-'+e.id+'">'
+      +'<div class="pace-zone-row"><span class="pace-zone-chip '+rp.z+'">'+rp.label+'</span></div>'
+      +'<div class="pace-num">'+fmtPaceSec(lo)+'–'+fmtPaceSec(hi)+' /km</div>'
+      +'<div class="pace-km">~'+(3600/rp.sec).toFixed(1)+' km/h target</div>'
+      +(repInfo?'<div class="pace-rep">→ '+repInfo+'</div>':'')
+      +'<button class="run-setbtn" style="margin-top:7px" onclick="applyRunPace(\''+e.id+'\',\''+sessKey+'\')">Pin as target</button></div>';
+  } else {
+    paceHTML='<div class="run-sug muted" id="rsug-'+e.id+'">Add goal time in Tools → Run planner to get target paces.</div>';
+  }
+  return paceHTML
+    +'<div class="wt-wrap"><span class="wt-lbl">km/h logged</span><div class="stp">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',-0.1)">−</button>'
-    +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg speed" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
+    +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg km/h" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',0.1)">+</button></div>'
     +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>';
 }
@@ -3135,10 +3228,10 @@ function intensityCardHTML(){
 }
 // ── Benchmark testing scheduler (recalibrate from real data) ──
 var BENCHMARKS=[
-  {block:'Baseline', week:1,  run:'2–5 km time trial',           strength:'Top-set check, main lifts'},
-  {block:'Build',    week:4,  run:'5 km time trial / parkrun',   strength:'3–5RM: squat, bench, deadlift'},
-  {block:'Peak',     week:8,  run:'5 km time trial / parkrun',   strength:'Heavy triple on main lifts'},
-  {block:'Taper',    week:11, run:'3 km race-pace check',        strength:'Light, crisp power check'}
+  {block:'Baseline', week:1,  run:'5 km time trial (CV endurance)',           strength:'4 main lifts · pull-ups & push-ups AMRAP · flexibility check'},
+  {block:'Build',    week:4,  run:'5 km time trial or 12-min Cooper test',    strength:'3–5RM: squat, bench, deadlift · bodyweight AMRAP retest · plank hold'},
+  {block:'Peak',     week:8,  run:'5 km time trial',                          strength:'Heavy triple: squat, bench, DL · endurance retest'},
+  {block:'Taper',    week:11, run:'3 km race-pace check',                     strength:'Light crisp sets · full fitness retest'}
 ];
 function benchmarkDate(week){ const d=new Date(PLAN_START); d.setHours(0,0,0,0); d.setDate(d.getDate()+(week-1)*7); return d; }
 function blockLogged(block){ return (STATE.benchmarks||[]).some(x=>x.block===block); }
@@ -3173,9 +3266,17 @@ function logBenchmarkRun(){
   saveState(STATE); renderBenchmarks();
   ['bm-run-km','bm-run-min','bm-run-sec'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
-  if(typeof appToast==='function') appToast('Benchmark saved — paces recalibrated \u2713');
+  if(typeof appToast==='function') appToast('Run benchmark saved — paces recalibrated ✓');
 }
-function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring row|inverted row|muscle.?up|pistol|nordic|\bhang|fallout|face ?pull/i.test(name||''); }
+// Standard benchmark lifts: 4 main compounds + key bodyweight + common program lifts
+function benchmarkLiftList(){
+  const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Dips (AMRAP)','Ring push-ups (AMRAP)'];
+  const prog=typeof s1Lifts==='function'?s1Lifts():[];
+  const out=[...CORE];
+  prog.forEach(l=>{ if(!out.some(x=>x.toLowerCase()===l.toLowerCase())) out.push(l); });
+  return out;
+}
+function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring.?push|ring row|inverted row|muscle.?up|pistol|nordic|\bhang|fallout|face ?pull|amrap/i.test(name||''); }
 function logBenchmarkStrength(){
   const lift=(document.getElementById('bm-str-lift')||{}).value;
   const kg=parseFloat(String((document.getElementById('bm-str-kg')||{}).value).replace(',','.'))||0;
@@ -3187,8 +3288,8 @@ function logBenchmarkStrength(){
   let e1=null, bwUsed=null;
   if(bodyweight){
     const bw=latestBW();
-    if(bw){ bwUsed=bw; e1=Math.round(epley1RM(bw+(kg>0?kg:0),reps)); }
-    else if(kg>0){ e1=Math.round(epley1RM(kg,reps)); }
+    if(bw){ bwUsed=bw; e1=reps>1?Math.round(epley1RM(bw+(kg>0?kg:0),reps)):null; }
+    else if(kg>0){ e1=reps>1?Math.round(epley1RM(kg,reps)):null; }
   } else {
     if(!(kg>0)){ if(msg) msg.textContent='Enter the weight lifted for this lift.'; return; }
     e1=Math.round(epley1RM(kg,reps));
@@ -3200,47 +3301,116 @@ function logBenchmarkStrength(){
   saveState(STATE); renderBenchmarks();
   ['bm-str-kg','bm-str-reps'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
-  if(typeof appToast==='function') appToast(e1?('Strength benchmark logged \u2713 — est 1RM '+e1+' kg'+(bodyweight?' (incl. body weight)':'')):('Logged '+reps+' reps \u2713 — log your body weight for an e1RM estimate'));
+  if(typeof appToast==='function') appToast(e1?('Strength benchmark logged ✓ — est 1RM '+e1+' kg'+(bodyweight?' (incl. BW)':'')):('Logged '+reps+' reps ✓'+(bodyweight?'':' — log body weight for e1RM estimate')));
+}
+function logBenchmarkEndurance(){
+  const test=(document.getElementById('bm-end-test')||{}).value;
+  const rawVal=String((document.getElementById('bm-end-val')||{}).value);
+  const block=(document.getElementById('bm-end-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!test||!rawVal.trim()){ if(msg) msg.textContent='Select a test and enter a value.'; return; }
+  // Cooper test: value is meters; timed holds: value is seconds; reps: integer
+  const isCooper=/cooper/i.test(test);
+  const isTimed=/plank|wall sit|dead hang/i.test(test);
+  let val, unit;
+  if(isCooper){ val=parseInt(rawVal,10)||0; unit='m'; if(!(val>0)){ if(msg) msg.textContent='Enter distance in metres.'; return; } }
+  else if(isTimed){
+    // accept mm:ss or just seconds
+    const tp=String(rawVal).match(/^(\d+):(\d+)$/);
+    val=tp?+tp[1]*60+ +tp[2]:parseInt(rawVal,10)||0;
+    unit='s'; if(!(val>0)){ if(msg) msg.textContent='Enter time in seconds (or mm:ss).'; return; }
+  } else {
+    val=parseInt(rawVal,10)||0; unit='reps'; if(!(val>0)){ if(msg) msg.textContent='Enter reps.'; return; }
+  }
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'endurance',block,date:_ymd(new Date()),test,val,unit});
+  saveState(STATE); renderBenchmarks();
+  const el=document.getElementById('bm-end-val'); if(el) el.value='';
+  if(typeof appToast==='function') appToast('Endurance test saved ✓ — '+val+' '+unit);
+}
+function logBenchmarkFlexibility(){
+  const test=(document.getElementById('bm-flex-test')||{}).value;
+  const rawVal=String((document.getElementById('bm-flex-val')||{}).value).trim();
+  const block=(document.getElementById('bm-flex-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!test||!rawVal){ if(msg) msg.textContent='Select a test and enter a value.'; return; }
+  const val=parseFloat(rawVal.replace(',','.')); if(isNaN(val)){ if(msg) msg.textContent='Enter a number.'; return; }
+  const unit=/sit.and.reach|ankle/i.test(test)?'cm':/score|angle/i.test(test)?'pts':'cm';
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'flexibility',block,date:_ymd(new Date()),test,val,unit});
+  saveState(STATE); renderBenchmarks();
+  const el=document.getElementById('bm-flex-val'); if(el) el.value='';
+  if(typeof appToast==='function') appToast('Flexibility test saved ✓ — '+val+' '+unit);
 }
 function _hms(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=Math.round(sec%60); return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); }
 function benchmarkHistoryHTML(){
   const runs=(STATE.benchmarks||[]).filter(b=>b.kind==='run').sort((a,b)=>new Date(a.date)-new Date(b.date));
   const strs=(STATE.benchmarks||[]).filter(b=>b.kind==='strength').sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const btns=id=>'<div class="bm-hbtns"><button class="bm-edit" onclick="editBenchmark(\''+id+'\')">✎</button><button class="bm-del" onclick="deleteBenchmark(\''+id+'\')">✕</button></div>';
+  const ends=(STATE.benchmarks||[]).filter(b=>b.kind==='endurance').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const flexs=(STATE.benchmarks||[]).filter(b=>b.kind==='flexibility').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const btns=id=>'<div class="bm-hbtns"><button class="bm-edit" onclick="editBenchmark(\''+id+'\')">&#10000;</button><button class="bm-del" onclick="deleteBenchmark(\''+id+'\')">&#x2715;</button></div>';
   let out='';
-  if(runs.length){ out+='<div class="bm-h2">Run time-trials</div>'+runs.map((r,i)=>{ const prev=runs[i-1]; const dPred=prev?r.predSec-prev.predSec:null; const delta=dPred!=null?(' <small style="color:'+(dPred<0?'#5fd6a0':'#ff6b47')+'">'+(dPred<0?'▼':'▲')+' '+_hms(Math.abs(dPred))+'</small>'):''; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+r.block+' · '+(+r.distKm.toFixed(1))+'k · '+_hms(r.durationSec)+'</div><div class="bm-hs">'+fmtPaceSec(r.paceSec)+'/km · '+_shortDate(r.date)+' → '+_hms(r.predSec)+' mara'+delta+'</div></div>'+btns(r.id)+'</div>'; }).join(''); }
-  if(strs.length){ out+='<div class="bm-h2" style="margin-top:10px">Strength checks</div>'+strs.map((s,i)=>{ const prevSame=strs.slice(0,i).reverse().find(x=>x.lift===s.lift); let delta=''; if(prevSame){ if(s.e1rm!=null&&prevSame.e1rm!=null){ const d=s.e1rm-prevSame.e1rm; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' kg</small>'; } else { const d=s.reps-prevSame.reps; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' reps</small>'; } } const main=s.e1rm!=null?(s.e1rm+' kg e1RM'):(s.reps+' reps'); const sub=s.bodyweight?(s.weight>0?('BW+'+s.weight+'×'+s.reps):('BW × '+s.reps)):(s.weight+'×'+s.reps); return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.lift+' · '+main+'</div><div class="bm-hs">'+sub+' · '+s.block+' · '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
+  if(runs.length){ out+='<div class="bm-h2">Run time-trials</div>'+runs.map((r,i)=>{ const prev=runs[i-1]; const dPred=prev?r.predSec-prev.predSec:null; const delta=dPred!=null?(' <small style="color:'+(dPred<0?'#5fd6a0':'#ff6b47')+'">'+(dPred<0?'▼':'▲')+' '+_hms(Math.abs(dPred))+'</small>'):''; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+r.block+' \xb7 '+(+r.distKm.toFixed(1))+'k \xb7 '+_hms(r.durationSec)+'</div><div class="bm-hs">'+fmtPaceSec(r.paceSec)+'/km \xb7 '+_shortDate(r.date)+' → '+_hms(r.predSec)+' marathon'+delta+'</div></div>'+btns(r.id)+'</div>'; }).join(''); }
+  if(strs.length){ out+='<div class="bm-h2" style="margin-top:10px">Strength checks</div>'+strs.map((s,i)=>{ const prevSame=strs.slice(0,i).reverse().find(x=>x.lift===s.lift); let delta=''; if(prevSame){ if(s.e1rm!=null&&prevSame.e1rm!=null){ const d=s.e1rm-prevSame.e1rm; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' kg</small>'; } else if(s.reps&&prevSame.reps){ const d=s.reps-prevSame.reps; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' reps</small>'; } } const main=s.e1rm!=null?(s.e1rm+' kg e1RM'):(s.reps+' reps'); const sub=s.bodyweight?(s.weight>0?('BW+'+s.weight+'\xd7'+s.reps):('BW \xd7 '+s.reps)):(s.weight+'\xd7'+s.reps); return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.lift+' \xb7 '+main+'</div><div class="bm-hs">'+sub+' \xb7 '+s.block+' \xb7 '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
+  if(ends.length){ out+='<div class="bm-h2" style="margin-top:10px">Endurance tests</div>'+ends.map((e,i)=>{ const prevSame=ends.slice(0,i).reverse().find(x=>x.test===e.test); let delta=''; if(prevSame){ const d=e.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+e.unit+'</small>'; } const disp=e.unit==='s'?_hms(e.val):e.val+' '+e.unit; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+e.test+' \xb7 '+disp+'</div><div class="bm-hs">'+e.block+' \xb7 '+_shortDate(e.date)+delta+'</div></div>'+btns(e.id)+'</div>'; }).join(''); }
+  if(flexs.length){ out+='<div class="bm-h2" style="margin-top:10px">Flexibility tests</div>'+flexs.map((f,i)=>{ const prevSame=flexs.slice(0,i).reverse().find(x=>x.test===f.test); let delta=''; if(prevSame){ const d=f.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+f.unit+'</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+f.test+' \xb7 '+f.val+' '+f.unit+'</div><div class="bm-hs">'+f.block+' \xb7 '+_shortDate(f.date)+delta+'</div></div>'+btns(f.id)+'</div>'; }).join(''); }
   return out||'<div class="ls-hint">No benchmarks logged yet — your test history and recalibration deltas will appear here.</div>';
 }
 function benchmarkCardHTML(){
   const wk=_phaseWeek(); const due=dueBenchmark();
-  const sched=BENCHMARKS.map(b=>{ const d=benchmarkDate(b.week); const ds=d.getDate()+'/'+(d.getMonth()+1); const done=blockLogged(b.block); const isDue=due&&due.block===b.block; const status=done?'<span class="bm-ok">✓ done</span>':(isDue?'<span class="bm-due">due now</span>':(wk<b.week?'<span class="bm-up">wk '+b.week+'</span>':'<span class="bm-miss">missed</span>')); return '<div class="bm-sched'+(isDue?' due':'')+'"><div class="bm-sched-l"><strong>'+b.block+'</strong> · wk '+b.week+' · '+ds+'<div class="bm-what">'+b.run+' · '+b.strength+'</div></div>'+status+'</div>'; }).join('');
-  const lifts=(typeof s1Lifts==='function'?s1Lifts():[]);
+  const sched=BENCHMARKS.map(b=>{ const d=benchmarkDate(b.week); const ds=d.getDate()+'/'+(d.getMonth()+1); const done=blockLogged(b.block); const isDue=due&&due.block===b.block; const status=done?'<span class="bm-ok">✓ done</span>':(isDue?'<span class="bm-due">due now</span>':(wk<b.week?'<span class="bm-up">wk '+b.week+'</span>':'<span class="bm-miss">missed</span>')); return '<div class="bm-sched'+(isDue?' due':'')+'"><div class="bm-sched-l"><strong>'+b.block+'</strong> \xb7 wk '+b.week+' \xb7 '+ds+'<div class="bm-what">'+b.run+' \xb7 '+b.strength+'</div></div>'+status+'</div>'; }).join('');
+  const lifts=benchmarkLiftList();
   const selCss='style="flex:1;background:transparent;border:none;color:var(--text);padding:11px;font-size:14px;font-family:\'Aptos\',monospace;-webkit-appearance:none;appearance:none"';
   const eb=_editBm?(STATE.benchmarks||[]).find(b=>b.id===_editBm):null;
   const ebRun=eb&&eb.kind==='run'?eb:null, ebStr=eb&&eb.kind==='strength'?eb:null;
   const blockSel=cur=>BENCHMARKS.map(b=>'<option value="'+b.block+'"'+((cur===b.block)?' selected':'')+'>'+b.block+'</option>').join('');
   const runBlockOpts=blockSel(ebRun?ebRun.block:defaultBlock());
   const strBlockOpts=blockSel(ebStr?ebStr.block:defaultBlock());
+  const endBlockOpts=blockSel(defaultBlock());
+  const flexBlockOpts=blockSel(defaultBlock());
   const liftOpts=lifts.map(n=>'<option value="'+n.replace(/"/g,'')+'"'+((ebStr&&ebStr.lift===n)?' selected':'')+'>'+n+'</option>').join('');
   const rkv=ebRun?(+ebRun.distKm):'', rmv=ebRun?Math.floor(ebRun.durationSec/60):'', rsv=ebRun?(ebRun.durationSec%60):'';
   const skv=ebStr?(ebStr.weight||''):'', srv=ebStr?ebStr.reps:'';
   const runBtns=ebRun?'<button class="pc-apply" onclick="logBenchmarkRun()">Update run benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkRun()">Save run benchmark</button>';
   const strBtns=ebStr?'<button class="pc-apply" onclick="logBenchmarkStrength()">Update strength benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkStrength()">Save strength benchmark</button>';
-  const runLogger='<div class="bm-h2">'+(ebRun?'Edit run time-trial':'Log a run time-trial')+'</div>'
+
+  const runLogger='<div class="bm-section-hd">Cardiovascular endurance · Run time-trial</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">5 km time trial is the primary test. Also accept 2–5 km effort or a 12-min Cooper test (log distance run).</div>'
     +'<div class="pc-field"><label>Distance &amp; time</label><div class="pc-input-row" style="gap:6px"><input id="bm-run-km" type="number" inputmode="decimal" step="0.1" placeholder="5" value="'+rkv+'" style="flex:1"><span class="pc-unit">km</span><input id="bm-run-min" type="number" inputmode="numeric" placeholder="min" value="'+rmv+'" style="flex:1"><input id="bm-run-sec" type="number" inputmode="numeric" placeholder="sec" value="'+rsv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-run-block" '+selCss+'>'+runBlockOpts+'</select></div></div>'
     +runBtns;
-  const strLogger='<div class="bm-h2" style="margin-top:14px">'+(ebStr?'Edit strength check':'Log a strength check')+'</div>'
-    +(liftOpts?('<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
-    +'<div class="pc-field"><label>Best set <span class="mc-sub">reps required; weight optional for bodyweight</span></label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">×</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
-    +'<div class="pc-note" style="margin-top:-2px">Bodyweight moves (pull-ups, dips): leave weight blank for bodyweight, or enter <em>added</em> load — your logged body weight is included automatically.</div>'
+
+  const strLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular strength · Compound lifts &amp; bodyweight</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">4 main lifts: Back squat, Bench press, Deadlift, Overhead press. Bodyweight: Pull-ups, Push-ups, Dips (enter reps; weight = added load or 0 for bodyweight).</div>'
+    +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
+    +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
+    +'<div class="pc-note" style="margin-top:-2px">Bodyweight moves: leave weight blank or 0 for BW only; enter added load if weighted. Log body weight in Tools to get e1RM for BW exercises.</div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
-    +strBtns):'<div class="ls-hint">No barbell lifts found to test.</div>');
-  return '<div class="bm-sched-wrap">'+sched+'</div>'+runLogger+strLogger+'<div id="bm-msg" class="pc-note" style="text-align:center"></div><div class="bm-hist">'+benchmarkHistoryHTML()+'</div>';
+    +strBtns;
+
+  const endTests=['Push-ups AMRAP','Pull-ups AMRAP','Dips AMRAP','Ring push-ups AMRAP','Plank hold (seconds)','Dead hang (seconds)','Wall sit (seconds)','Cooper 12-min test (metres)'];
+  const endLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular endurance &amp; aerobic capacity</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">AMRAP = as many reps as possible in one set. Plank / dead hang = hold time in seconds. Cooper test = total metres run in 12 minutes.</div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+'>'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-end-val" type="text" inputmode="numeric" placeholder="reps / seconds / metres" style="flex:1"></div></div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-end-block" '+selCss+'>'+endBlockOpts+'</select></div></div>'
+    +'<button class="pc-apply" onclick="logBenchmarkEndurance()">Save endurance test</button>';
+
+  const flexTests=['Sit and reach (cm — positive = past toes)','Hip flexor score (1–5: 1=very tight, 5=excellent)','Ankle dorsiflexion (cm — heel-to-wall knee touch)','Hamstring flexibility (cm — straight-leg raise angle as score 0–180)'];
+  const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Flexibility &amp; mobility</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">Sit and reach: sit, legs straight, reach forward — measure cm past or before toes (positive = past). Hip flexor score: self-rate 1 (very tight) to 5 (full range). Relevant for your hip, knee, and low-back niggles.</div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+'>'+flexTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="value" style="flex:1"></div></div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-flex-block" '+selCss+'>'+flexBlockOpts+'</select></div></div>'
+    +'<button class="pc-apply" onclick="logBenchmarkFlexibility()">Save flexibility test</button>';
+
+  return '<div class="bm-sched-wrap">'+sched+'</div>'
+    +runLogger+strLogger+endLogger+flexLogger
+    +'<div id="bm-msg" class="pc-note" style="text-align:center;margin-top:8px"></div>'
+    +'<div class="bm-hist">'+benchmarkHistoryHTML()+'</div>';
 }
 function renderBenchmarks(){ const el=document.getElementById('bm-card'); if(el) el.innerHTML=benchmarkCardHTML(); }
-function benchmarkNudgeHTML(){ const due=dueBenchmark(); if(!due) return ''; return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split(' / ')[0].toLowerCase()+' and a strength check to recalibrate. <span class="bm-nudge-go">Open Tools ›</span></div></div>'; }
+function benchmarkNudgeHTML(){ const due=dueBenchmark(); if(!due) return ''; return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split('(')[0].toLowerCase().trim()+' and a strength check to recalibrate your training targets. <span class="bm-nudge-go">Open Tools ›</span></div></div>'; }
 function renderStats(){
   // ===== TIER 2/3 FEATURE LOGIC =====
   const done=totalCompleted();
