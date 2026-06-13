@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AV Fitness">
@@ -51,7 +51,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 20px 24px;scrollbar-width:none;background:#11203a;background:var(--bg)}
+.content{flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:0 20px calc(80px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
 .content::-webkit-scrollbar{display:none}
 .section{display:none}
 .section.active{display:block}
@@ -142,7 +142,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{flex:none;width:100%;background:rgba(17,32,58,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 calc(5px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;background:rgba(17,32,58,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 calc(5px + var(--safe));z-index:20;display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 2px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0;touch-action:manipulation}
 .bnav-btn.active{color:var(--accent)}
 .bnav-btn.active .bnav-icon{position:relative}
@@ -174,7 +174,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 
 
 .hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.hub-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s,border-color .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-height:80px;position:relative;overflow:hidden;overflow:clip}
+.hub-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s,border-color .15s;-webkit-tap-highlight-color:transparent;min-height:80px;position:relative;overflow:hidden;overflow:clip;-webkit-appearance:none;appearance:none;text-align:left;width:100%;color:inherit;font:inherit}
 .hub-card:active{background:var(--surface2);border-color:var(--accent2)}
 .hub-card-icon{font-size:28px;flex-shrink:0;line-height:1}
 .hub-card-content{flex:1;min-width:0}
@@ -2471,7 +2471,7 @@ function renderHub(){
   ];
 
   function cardHTML(c){
-    return `<div class="hub-card${c.full?' hub-card-full':''}" onclick="showSection('${c.id}')">
+    return `<button type="button" class="hub-card${c.full?' hub-card-full':''}" onclick="showSection('${c.id}')">
       <div class="hub-card-accent" style="background:${c.color}"></div>
       <div class="hub-card-icon">${c.icon}</div>
       <div class="hub-card-content">
@@ -2479,7 +2479,7 @@ function renderHub(){
         <div class="hub-card-detail">${escHtml(c.detail)}</div>
       </div>
       <span class="hub-card-arr">›</span>
-    </div>`;
+    </button>`;
   }
 
   const tg=document.getElementById('hub-train-grid');
