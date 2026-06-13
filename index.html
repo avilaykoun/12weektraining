@@ -3625,6 +3625,19 @@ const BM_PROTOS={
   spd:{
     '30 m sprint (seconds)':'Mark start and 30 m on flat non-slip surface. Standing start, front foot on line. Record with phone slow-motion video or partner stopwatch. 3 attempts; rest 3 min; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.0 s · Good 4.0–4.4 · Average 4.5–5.0 · Needs work &gt;5.0</div>',
     '5-10-5 pro agility shuttle (seconds)':'3 cones in a line: 0 m, 5 m, 10 m. Start at middle cone (5 m). Sprint 5 m right, touch line; sprint 10 m left, touch line; sprint 5 m back through start. 3 attempts; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.2 s · Good 4.2–4.6 · Average 4.7–5.2 · Needs work &gt;5.2</div>'
+  },
+  str:{
+    'Back squat':'Bilateral squat to below parallel. Primary lower-body strength test.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.0 · Advanced 1.75 · Intermediate 1.5 · Novice 1.0</div>',
+    'Barbell bench press':'Flat bench, bar to chest, full lockout. Primary upper-body press test.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 1.0 · Novice 0.75</div>',
+    'Deadlift':'Conventional stance, full hip extension at top, controlled descent.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>',
+    'Overhead press (barbell)':'Standing strict press from rack, bar overhead to full elbow lockout.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.0 · Advanced 0.8 · Intermediate 0.6 · Novice 0.4</div>',
+    'Barbell bent-over row':'Hip hinge ~45°, bar to lower chest, elbows back. Assesses posterior chain pulling strength.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 0.9 · Novice 0.7</div>',
+    'Romanian deadlift':'Hip hinge with soft knees, bar stays close to legs, stop at mild hamstring tension.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.75 · Advanced 1.5 · Intermediate 1.25 · Novice 0.75</div>',
+    'Bulgarian split squat':'Rear foot elevated, front shin vertical, back knee near floor. Log added load (DBs or barbell) only — not bodyweight.<div class="bm-proto-norm">Norms (male, added load ×BW per leg): Elite ≥0.75 · Advanced 0.5 · Intermediate 0.25 · Novice BW only</div>',
+    'Barbell hip thrust':'Upper back on bench, barbell across hips, drive to full hip extension. Strong glute indicator.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>',
+    'Pull-ups':'Dead-hang start, chin over bar. Enter added load (0 = bodyweight). Log bodyweight in Tools for e1RM.<div class="bm-proto-norm">BW max reps (male): Elite ≥15 · Good 10–14 · Average 5–9 · Needs work &lt;5</div>',
+    'Push-ups (AMRAP)':'Enter total reps to failure (weight = 0). Chest to floor, full lockout.<div class="bm-proto-norm">Norms (male): Elite ≥50 · Good 35–49 · Average 20–34 · Needs work &lt;20</div>',
+    'Single-leg squat to box':'Step-down from ~30 cm box onto heel, controlled descent, minimal trunk lean. Enter load added beyond bodyweight (0 = BW only).<div class="bm-proto-norm">Qualitative: 5 controlled reps per leg = functional baseline. Asymmetry or knee cave = mobility/strength deficit to address.</div>'
   }
 };function _bmShowProto(bodyId,cat,val){
   const b=document.getElementById(bodyId); if(!b) return;
@@ -3786,9 +3799,12 @@ function benchmarkCardHTML(){
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-run-block" '+selCss+'>'+runBlockOpts+'</select></div></div>'
     +runBtns;
 
-  const strLogger='<div class="bm-section-hd">Strength · 1RM</div>'
-    +'<details class="bm-proto"><summary>Protocol &amp; norms (NSCA)</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don&#39;t need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div></div></details>'
-    +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
+  const strFirstLift=lifts[0]||'Back squat';
+  const strFirstNorm=(BM_PROTOS.str||{})[strFirstLift]||'';
+  const strLogger='<div class="bm-section-hd">Strength \xb7 1RM</div>'
+    +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+' onchange="_bmShowProto(\'bm-str-norms-body\',\'str\',this.value)">'+liftOpts+'</select></div></div>'
+    +'<details class="bm-proto" open><summary>Lift norms &amp; notes</summary><div id="bm-str-norms-body" class="bm-proto-body">'+strFirstNorm+'</div></details>'
+    +'<details class="bm-proto"><summary>1RM testing protocol (NSCA)</summary><div class="bm-proto-body"><strong>Warm-up sequence:</strong><ol><li>5–10 min general warm-up.</li><li>Set 1: 50% est. 1RM \xd7 8–10 reps — 2 min rest.</li><li>Set 2: 70% \xd7 4–5 reps — 2 min rest.</li><li>Set 3: 80% \xd7 2–3 reps — 3 min rest.</li><li>Set 4: 90% \xd7 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase 2–5%; up to 3 attempts; rest 3–5 min.</li></ol>A heavy 3–5RM set is enough — app calculates e1RM via Epley. BW lifts: enter 0 kg for bodyweight only.</div></details>'
     +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
     +strBtns;
