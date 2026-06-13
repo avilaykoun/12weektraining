@@ -356,11 +356,14 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 /* Training paces card on Today */
 .pace-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin:0 0 12px}
 .pace-card-hd{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px}
-.pace-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-top:1px solid rgba(42,42,56,.5)}
+.pace-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-top:1px solid rgba(42,42,56,.5)}
 .pace-row:first-of-type{border-top:none}
-.pace-lbl{font-size:12px;font-family:'Aptos',monospace;color:var(--text3)}
-.pace-val{font-size:13px;font-family:'Aptos',monospace;color:var(--text);font-weight:500}
+.pace-lbl{font-size:12px;font-family:'Aptos',monospace;color:var(--text3);padding-top:1px}
+.pace-val{font-size:13px;font-family:'Aptos',monospace;color:var(--text);font-weight:500;text-align:right}
+.pace-val small{display:block;font-size:9px;color:var(--text3);font-weight:400;margin-top:2px;letter-spacing:.02em}
 .pace-note{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);margin-top:7px}
+@keyframes bnavPulse{0%,100%{opacity:.35;transform:scaleX(1)}50%{opacity:1;transform:scaleX(1.45)}}
+.bottom-nav.nav-new-hint .bnav-handle-pill{animation:bnavPulse 1.5s ease-in-out 5;background:var(--accent)}
 
 /* SEARCH */
 .hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
@@ -2722,11 +2725,15 @@ var _progPhase=1;
 function toggleNav(){
   const nav=document.getElementById('bottom-nav');
   if(!nav) return;
+  nav.classList.remove('nav-new-hint');
   const hidden=nav.classList.toggle('nav-hidden');
-  try{localStorage.setItem('navHidden',hidden?'1':'')}catch(e){}
+  try{localStorage.setItem('navHidden',hidden?'1':'');localStorage.setItem('navToggleSeen','1');}catch(e){}
 }
 function initNavState(){
-  try{if(localStorage.getItem('navHidden')==='1'){const nav=document.getElementById('bottom-nav');if(nav)nav.classList.add('nav-hidden');}}catch(e){}
+  try{
+    if(localStorage.getItem('navHidden')==='1'){const nav=document.getElementById('bottom-nav');if(nav)nav.classList.add('nav-hidden');}
+    if(!localStorage.getItem('navToggleSeen')){const nav=document.getElementById('bottom-nav');if(nav)nav.classList.add('nav-new-hint');}
+  }catch(e){}
 }
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -2875,15 +2882,27 @@ function trainingPacesTodayHTML(sessions){
   const today=sessions.find(s=>s.type==='run'||s.type==='combo');
   const isQuality=today&&today.exercises.some(e=>/interval|threshold|tempo|800m|1000m|1200m/i.test(e.name+' '+(e.detail||'')));
   const isLong=today&&today.exercises.some(e=>/long run/i.test(e.name));
+  // Long run distance from detail
+  let longSub='30 sec/km above MP';
+  if(isLong){
+    const lx=today.exercises.find(e=>/long run/i.test(e.name));
+    if(lx){const rm=lx.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);if(rm)longSub=rm[1]+'–'+rm[2]+' km · zone 2';}
+  }
+  // Interval rep structure from detail
+  let intSub='hard effort';
+  if(isQuality){
+    const ix=today.exercises.find(e=>/interval/i.test(e.name+' '+(e.detail||'')));
+    if(ix){const rm=ix.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);if(rm)intSub=rm[1]+' × '+rm[2]+rm[3]+' hard';}
+  }
   const rows=[
-    isLong?['Long run',fmt(paces.mp+30),'30 sec/km above marathon pace']:[],
+    isLong?['Long run',fmt(paces.mp+30),longSub]:[],
     ['Marathon pace',fmt(paces.mp),'race pace'],
     isQuality?['Threshold',fmt(paces.thr),'comfortably hard']:[],
-    isQuality?['Intervals',fmt(paces.int),'hard effort']:[],
+    isQuality?['Intervals',fmt(paces.int),intSub]:[],
     ['Easy / recovery',fmt(paces.easy),'conversational'],
   ].filter(r=>r.length);
   return '<div class="pace-card"><div class="pace-card-hd">Today\'s training paces</div>'
-    +rows.map(r=>'<div class="pace-row"><span class="pace-lbl">'+r[0]+'</span><span class="pace-val">'+r[1]+' /km</span></div>').join('')
+    +rows.map(r=>'<div class="pace-row"><span class="pace-lbl">'+r[0]+'</span><span class="pace-val">'+r[1]+' /km<small>'+r[2]+'</small></span></div>').join('')
     +'<div class="pace-note">Riegel model from your best logged run · update by logging a run in Tools</div></div>';
 }
 function renderToday(){
@@ -2915,6 +2934,7 @@ function sessionFuelingHint(s){
       <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every 30 min → ${gels} gels total</span></div>
       <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val">60–90 g/hr · use race gels</span></div>
       <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes >90 min</span></div>
+      <div class="sfh-row" style="border-top:1px solid rgba(232,198,107,.2);margin-top:6px;padding-top:6px"><span class="sfh-lbl" style="color:var(--accent)">🏃 Gut training</span><span class="sfh-val" style="color:var(--text2)">Use your race-day brand today — gut adaptation takes weeks of practice</span></div>
     </div>`;
   }
   // Strength session ≥60 min intra-workout fueling
@@ -3849,6 +3869,34 @@ function stepRun(exId,sessKey,delta){
   setRunSpeed(exId,sessKey,next||'');
   const inp=document.getElementById('runi-'+exId); if(inp) inp.value=next||'';
 }
+function weeklyRunKm(){
+  const byWeek={};
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{
+    if(e.cat!=='run') return;
+    const kmh=parseFloat((STATE.runLog||{})[e.id]);
+    if(!(kmh>0)) return;
+    // Interval reps: "6 × 800m" → total metres
+    const repM=e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
+    if(repM){const dist=repM[3].toLowerCase()==='km'?+repM[2]:+repM[2]/1000;byWeek[s.week]=(byWeek[s.week]||0)+(+repM[1]*dist);return;}
+    // Distance range: "16–18km" → midpoint
+    const rangeM=e.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+    if(rangeM){byWeek[s.week]=(byWeek[s.week]||0)+(parseFloat(rangeM[1])+parseFloat(rangeM[2]))/2;return;}
+    // Simple distance before "@" to avoid "5km pace" being counted as distance
+    const beforeAt=e.detail.split('@')[0];
+    const simM=beforeAt.match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+    if(simM) byWeek[s.week]=(byWeek[s.week]||0)+parseFloat(simM[1]);
+  }));
+  (STATE.importedRuns||[]).forEach(r=>{
+    if(!r||!(r.distKm>0)||!r.date) return;
+    const d=new Date(r.date);d.setHours(0,0,0,0);
+    const start=new Date(PLAN_START);start.setHours(0,0,0,0);
+    const diff=Math.floor((d-start)/86400000);
+    if(diff<0||diff>=84) return;
+    const wk=Math.floor(diff/7)+1;
+    byWeek[wk]=(byWeek[wk]||0)+r.distKm;
+  });
+  return byWeek;
+}
 function weeklyStrengthVolume(){ const byWeek={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; })); return byWeek; }
 function liftSeries(){
   const map={};
@@ -3898,6 +3946,20 @@ function renderProgress(){
       +'<div class="tl-method">Volume = sets × reps × load, summed each week from your logged weights. Gradually nudging it upward (≈10%/week) is the core of progressive overload.</div>');
   } else {
     html+=_pcard('PROGRESSIVE OVERLOAD · WEEKLY VOLUME','<div class="ls-hint">Log the load (kg) on your strength exercises and your weekly training volume will chart here.</div>');
+  }
+  const rkMap=weeklyRunKm(); const rkWeeks=Object.keys(rkMap).map(Number).sort((a,b)=>a-b);
+  if(rkWeeks.length){
+    const lastRkW=rkWeeks[rkWeeks.length-1],prevRkW=rkWeeks.length>1?rkWeeks[rkWeeks.length-2]:null;
+    const lastRkV=Math.round(rkMap[lastRkW]),prevRkV=prevRkW!=null?Math.round(rkMap[prevRkW]):null;
+    const rkDelta=prevRkV?Math.round((lastRkV-prevRkV)/prevRkV*100):null;
+    const rkVerdict=rkDelta==null?'First week logged':rkDelta>5?'Mileage building ↑':rkDelta<-5?'Volume dropped ↓':'Holding steady';
+    html+=_pcard('WEEKLY RUNNING VOLUME · KM',
+      '<div class="tl-grid"><div class="tl-card"><div class="tl-val">'+lastRkV+' km</div><div class="tl-lbl">Latest week total</div>'+(rkDelta!=null?'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:4px">'+(rkDelta>=0?'+':'')+rkDelta+'% vs prev week</div>':'')+'</div>'
+      +'<div class="tl-card"><div class="tl-val" style="font-size:19px;line-height:1.15">'+rkVerdict+'</div><div class="tl-lbl">Mileage trend</div></div></div>'
+      +svgBars(rkMap)
+      +'<div class="tl-method">Total km run per week from logged sessions and imported files. Safe increase is ≤10%/week — ramping too fast is the #1 cause of overuse injury.</div>');
+  } else {
+    html+=_pcard('WEEKLY RUNNING VOLUME · KM','<div class="ls-hint">Log your run speed in Today (or import a GPX/TCX) and your weekly mileage will chart here.</div>');
   }
   const ls=liftSeries(); const names=Object.keys(ls).filter(k=>ls[k].length);
   if(names.length){
