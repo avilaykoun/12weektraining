@@ -1855,8 +1855,9 @@ const _appDB = (typeof Dexie !== 'undefined') ? (() => {
   return db;
 })() : null;
 
+let _migrationDone = false;
 async function _idbSave(s) {
-  if (!_appDB) return;
+  if (!_appDB || !_migrationDone) return;
   try { await _appDB.state.put({ id: 'main', data: JSON.stringify(s) }); } catch(e) {}
 }
 
@@ -1880,9 +1881,12 @@ async function _idbMigrate() {
     if (!existing) {
       const raw = localStorage.getItem('mt_state');
       const o = raw ? JSON.parse(raw) : null;
+      _migrationDone = true;
       if (o && typeof o === 'object' && Object.keys(o).length) await _idbSave(o);
+    } else {
+      _migrationDone = true;
     }
-  } catch(e) {}
+  } catch(e) { _migrationDone = true; }
 }
 
 function loadState(){
@@ -1892,6 +1896,7 @@ function loadState(){
 }
 var _saveWarned=false;
 function saveState(s){
+  s._lastSaved=Date.now();
   try{
     const j=JSON.stringify(s);
     localStorage.setItem('mt_state',j);
@@ -1957,7 +1962,7 @@ function sessionKey(s){return `p${s.phase}_w${s.week}_${s.day}`}
 function getSessionsForDate(date){
   const d=new Date(date);d.setHours(0,0,0,0);
   const start=new Date(PLAN_START);start.setHours(0,0,0,0);
-  const diffDays=Math.round((d-start)/(1000*60*60*24));
+  const diffDays=Math.floor((d-start)/(1000*60*60*24));
   if(diffDays<0||diffDays>=84) return [];
   const week=Math.floor(diffDays/7)+1;
   if(week<1||week>12) return [];
@@ -2032,6 +2037,7 @@ function showSection(id,btn){
 // ─────────────────────────────────────────
 // RENDER TODAY
 // ─────────────────────────────────────────
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function renderToday(){
   const today=new Date();
   document.getElementById('today-date-lbl').textContent=formatDate(today).toUpperCase();
@@ -2089,7 +2095,7 @@ function renderExercises(s,interactive){
     const dotCol=e.cat==='run'?'run':e.cat==='core'?'core':'';
     const dispName=exDisplayName(e);
     html+=`<div class="ex-row">
-      <button class="ex-check ${done?'done':''}" role="checkbox" aria-checked="${done?'true':'false'}" aria-label="Mark ${dispName} complete" data-ex-id="${e.id}" onclick="toggleExercise('${e.id}','${sessionKey(s)}')"></button>
+      <button class="ex-check ${done?'done':''}" role="checkbox" aria-checked="${done?'true':'false'}" aria-label="Mark ${escAttr(dispName)} complete" data-ex-id="${escAttr(e.id)}" onclick="toggleExercise('${escAttr(e.id)}','${sessionKey(s)}')"></button>
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
         <div class="ex-detail">${e.detail}</div>
@@ -2980,7 +2986,7 @@ function computePRs(){
   const meta=exMetaMap();
   const strength={};
   Object.keys(STATE.exerciseSets||{}).forEach(id=>{
-    const info=meta[id]; if(!info||info.cat!=='strength') return;
+    const info=meta[id]; if(!info||info.cat!=='strength'||info.supp) return;
     const pres=parsePrescription(info.detail); const fb=pres?pres.reps:1;
     const ws=STATE.exerciseSets[id]||[]; let top=0,best=0;
     for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; const reps=exReps(id,i,fb); top=Math.max(top,w); best=Math.max(best,epley1RM(w,reps)); }
@@ -3616,6 +3622,9 @@ function logBenchmarkStrength(){
   ['bm-str-kg','bm-str-reps'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
   if(typeof appToast==='function') appToast(e1?('Strength benchmark logged ✓ — est 1RM '+e1+' kg'+(bodyweight?' (incl. BW)':'')):('Logged '+reps+' reps ✓'+(bodyweight?'':' — log body weight for e1RM estimate')));
+  const _bmm3=document.getElementById('bm-msg'); if(_bmm3) _bmm3.textContent='';
+  const _sk=document.getElementById('bm-str-kg'); if(_sk) _sk.value='';
+  const _sr=document.getElementById('bm-str-reps'); if(_sr) _sr.value='';
 }
 function logBenchmarkEndurance(){
   const test=(document.getElementById('bm-end-test')||{}).value;
@@ -3641,6 +3650,9 @@ function logBenchmarkEndurance(){
   saveState(STATE); renderBenchmarks();
   const el=document.getElementById('bm-end-val'); if(el) el.value='';
   if(typeof appToast==='function') appToast('Endurance test saved ✓ — '+val+' '+unit);
+  const _et=document.getElementById('bm-end-test'); if(_et) _et.value='';
+  const _ev=document.getElementById('bm-end-val'); if(_ev) _ev.value='';
+  const _bmm1=document.getElementById('bm-msg'); if(_bmm1){ _bmm1.textContent=''; }
 }
 function logBenchmarkFlexibility(){
   const test=(document.getElementById('bm-flex-test')||{}).value;
@@ -3655,6 +3667,9 @@ function logBenchmarkFlexibility(){
   saveState(STATE); renderBenchmarks();
   const el=document.getElementById('bm-flex-val'); if(el) el.value='';
   if(typeof appToast==='function') appToast('Flexibility test saved ✓ — '+val+' '+unit);
+  const _ft=document.getElementById('bm-flex-test'); if(_ft) _ft.value='';
+  const _fv=document.getElementById('bm-flex-val'); if(_fv) _fv.value='';
+  const _bmm2=document.getElementById('bm-msg'); if(_bmm2){ _bmm2.textContent=''; }
 }
 function _hms(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=Math.round(sec%60); return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); }
 function benchmarkHistoryHTML(){
@@ -5223,7 +5238,7 @@ function summarizeRun(pts){
   const t0=tp[0].t, tN=tp[tp.length-1].t; const elapsed=Math.max(1,Math.round((tN-t0)/1000));
   let distM=0; const last=tp[tp.length-1];
   if(last.dist!=null && tp[0].dist!=null){ distM=last.dist-tp[0].dist; }
-  else { for(let i=1;i<tp.length;i++){ if(tp[i].lat!=null&&tp[i-1].lat!=null){ const d=_hav(tp[i-1],tp[i]); const dt=(tp[i].t-tp[i-1].t)/1000; if(!(dt>0)? d<1000 : (d/dt<12)) distM+=d; } } }
+  else { for(let i=1;i<tp.length;i++){ if(tp[i].lat!=null&&tp[i-1].lat!=null){ const d=_hav(tp[i-1],tp[i]); const dt=(tp[i].t-tp[i-1].t)/1000; if(dt>0 && d/dt<12) distM+=d; } } }
   const distKm=distM/1000;
   const hrs=tp.map(p=>p.hr).filter(h=>h>0);
   const avgHR=hrs.length?Math.round(hrs.reduce((a,b)=>a+b,0)/hrs.length):null;
@@ -5464,9 +5479,8 @@ window.onload=function(){
   _idbMigrate().then(async ()=>{
     const idbState=await _idbLoad();
     if(!idbState) return;
-    const idbKeys=Object.keys(idbState).length;
-    const lsKeys=Object.keys(STATE).length;
-    if(idbKeys>lsKeys){
+    const idbNewer=(idbState._lastSaved||0)>(STATE._lastSaved||0);
+    if(idbNewer){
       for(const k in STATE) delete STATE[k];
       Object.assign(STATE,idbState);
       ensureContainers();
