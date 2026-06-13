@@ -3627,17 +3627,14 @@ const BM_PROTOS={
     '5-10-5 pro agility shuttle (seconds)':'3 cones in a line: 0 m, 5 m, 10 m. Start at middle cone (5 m). Sprint 5 m right, touch line; sprint 10 m left, touch line; sprint 5 m back through start. 3 attempts; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.2 s · Good 4.2–4.6 · Average 4.7–5.2 · Needs work &gt;5.2</div>'
   },
   str:{
-    'Back squat':'Bilateral squat to below parallel. Primary lower-body strength test.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.0 · Advanced 1.75 · Intermediate 1.5 · Novice 1.0</div>',
-    'Barbell bench press':'Flat bench, bar to chest, full lockout. Primary upper-body press test.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 1.0 · Novice 0.75</div>',
-    'Deadlift':'Conventional stance, full hip extension at top, controlled descent.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>',
-    'Overhead press (barbell)':'Standing strict press from rack, bar overhead to full elbow lockout.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.0 · Advanced 0.8 · Intermediate 0.6 · Novice 0.4</div>',
-    'Barbell bent-over row':'Hip hinge ~45°, bar to lower chest, elbows back. Assesses posterior chain pulling strength.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 0.9 · Novice 0.7</div>',
-    'Romanian deadlift':'Hip hinge with soft knees, bar stays close to legs, stop at mild hamstring tension.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.75 · Advanced 1.5 · Intermediate 1.25 · Novice 0.75</div>',
-    'Bulgarian split squat':'Rear foot elevated, front shin vertical, back knee near floor. Log added load (DBs or barbell) only — not bodyweight.<div class="bm-proto-norm">Norms (male, added load ×BW per leg): Elite ≥0.75 · Advanced 0.5 · Intermediate 0.25 · Novice BW only</div>',
-    'Barbell hip thrust':'Upper back on bench, barbell across hips, drive to full hip extension. Strong glute indicator.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>',
-    'Pull-ups':'Dead-hang start, chin over bar. Enter added load (0 = bodyweight). Log bodyweight in Tools for e1RM.<div class="bm-proto-norm">BW max reps (male): Elite ≥15 · Good 10–14 · Average 5–9 · Needs work &lt;5</div>',
-    'Push-ups (AMRAP)':'Enter total reps to failure (weight = 0). Chest to floor, full lockout.<div class="bm-proto-norm">Norms (male): Elite ≥50 · Good 35–49 · Average 20–34 · Needs work &lt;20</div>',
-    'Single-leg squat to box':'Step-down from ~30 cm box onto heel, controlled descent, minimal trunk lean. Enter load added beyond bodyweight (0 = BW only).<div class="bm-proto-norm">Qualitative: 5 controlled reps per leg = functional baseline. Asymmetry or knee cave = mobility/strength deficit to address.</div>'
+    'Back squat':'Bilateral back squat below parallel. The gold-standard lower-body strength test in powerlifting and S&amp;C.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.0 · Advanced 1.75 · Intermediate 1.5 · Novice 1.0</div>',
+    'Front squat':'Barbell racked on front delts, elbows high, squat below parallel. Tests quad dominance and thoracic mobility under load.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.6 · Advanced 1.4 · Intermediate 1.1 · Novice 0.75</div>',
+    'Barbell bench press':'Flat bench, bar lowered to chest, full lockout. Primary upper-body horizontal press test across powerlifting and strength sports.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 1.0 · Novice 0.75</div>',
+    'Deadlift':'Conventional stance from floor to full hip extension. The single-lift test of total-body pulling strength.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>',
+    'Overhead press (barbell)':'Strict standing press from rack, bar overhead to full elbow lockout — no leg drive. Tests shoulder and upper-back pressing strength.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.0 · Advanced 0.8 · Intermediate 0.6 · Novice 0.4</div>',
+    'Barbell bent-over row':'Hip hinge ~45°, overhand grip, bar to lower chest, controlled descent. Assesses posterior chain pulling capacity.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.5 · Advanced 1.25 · Intermediate 0.9 · Novice 0.7</div>',
+    'Romanian deadlift':'Soft-knee hip hinge, bar stays close to legs, stop at moderate hamstring tension. Tests posterior chain strength and hamstring length under load.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥1.75 · Advanced 1.5 · Intermediate 1.25 · Novice 0.75</div>',
+    'Barbell hip thrust':'Upper back on bench, barbell across hips, drive to full hip extension and posterior pelvic tilt at top. Primary glute strength test, popularised by NSCA-certified coaches.<div class="bm-proto-norm">Norms (male, ×BW): Elite ≥2.5 · Advanced 2.0 · Intermediate 1.5 · Novice 1.0</div>'
   }
 };function _bmShowProto(bodyId,cat,val){
   const b=document.getElementById(bodyId); if(!b) return;
@@ -3645,11 +3642,7 @@ const BM_PROTOS={
   const d=b.closest('details'); if(d) d.open=true;
 }
 function benchmarkLiftList(){
-  const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Single-leg squat to box'];
-  const prog=typeof s1Lifts==='function'?s1Lifts():[];
-  const out=[...CORE];
-  prog.forEach(l=>{ if(!out.some(x=>x.toLowerCase()===l.toLowerCase())) out.push(l); });
-  return out;
+  return ['Back squat','Front squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Barbell hip thrust'];
 }
 function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring.?push|ring row|inverted row|muscle.?up|pistol|single.?leg.*squat|nordic|\bdead.?hang|fallout|face ?pull|amrap/i.test(name||''); }
 function logBenchmarkStrength(){
@@ -3804,7 +3797,7 @@ function benchmarkCardHTML(){
   const strLogger='<div class="bm-section-hd">Strength \xb7 1RM</div>'
     +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+' onchange="_bmShowProto(\'bm-str-norms-body\',\'str\',this.value)">'+liftOpts+'</select></div></div>'
     +'<details class="bm-proto" open><summary>Lift norms &amp; notes</summary><div id="bm-str-norms-body" class="bm-proto-body">'+strFirstNorm+'</div></details>'
-    +'<details class="bm-proto"><summary>1RM testing protocol (NSCA)</summary><div class="bm-proto-body"><strong>Warm-up sequence:</strong><ol><li>5–10 min general warm-up.</li><li>Set 1: 50% est. 1RM \xd7 8–10 reps — 2 min rest.</li><li>Set 2: 70% \xd7 4–5 reps — 2 min rest.</li><li>Set 3: 80% \xd7 2–3 reps — 3 min rest.</li><li>Set 4: 90% \xd7 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase 2–5%; up to 3 attempts; rest 3–5 min.</li></ol>A heavy 3–5RM set is enough — app calculates e1RM via Epley. BW lifts: enter 0 kg for bodyweight only.</div></details>'
+    +'<details class="bm-proto"><summary>1RM testing protocol (NSCA)</summary><div class="bm-proto-body"><strong>Warm-up sequence:</strong><ol><li>5–10 min general warm-up.</li><li>Set 1: 50% est. 1RM \xd7 8–10 reps — 2 min rest.</li><li>Set 2: 70% \xd7 4–5 reps — 2 min rest.</li><li>Set 3: 80% \xd7 2–3 reps — 3 min rest.</li><li>Set 4: 90% \xd7 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase 2–5%; up to 3 attempts; rest 3–5 min.</li></ol>A heavy 3–5RM set is enough — the app calculates e1RM via the Epley formula. Log the heaviest successful set.</div></details>'
     +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
     +strBtns;
