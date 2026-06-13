@@ -587,6 +587,17 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .bm-nudge{display:flex;gap:10px;align-items:center;background:rgba(212,175,90,.1);border:1px solid var(--accent);border-radius:12px;padding:11px 13px;margin-bottom:12px;cursor:pointer;font-size:12.5px;font-family:'Aptos',monospace;color:var(--text);line-height:1.4}
 .bm-nudge-tag{font-size:10px;font-weight:700;color:#0a0a0f;background:var(--accent);border-radius:6px;padding:4px 7px;white-space:nowrap}
 .bm-nudge-go{color:var(--accent);font-weight:600;white-space:nowrap}
+.bm-proto{margin:8px 0 10px}
+.bm-proto summary{font-size:11px;font-family:'Aptos',monospace;color:var(--accent);cursor:pointer;user-select:none;padding:4px 0;letter-spacing:.03em}
+.bm-proto summary::-webkit-details-marker{display:none}
+.bm-proto[open] summary::before{content:'▾ '}
+.bm-proto:not([open]) summary::before{content:'▸ '}
+.bm-proto-body{font-size:11.5px;font-family:'Aptos',monospace;color:var(--text2);line-height:1.65;padding:7px 0 2px}
+.bm-proto-body ol{margin:6px 0 6px 16px;padding:0}
+.bm-proto-body li{margin-bottom:3px}
+.bm-proto-norm{font-size:10.5px;color:var(--text3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.bm-video{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'Aptos',monospace;color:var(--accent);text-decoration:none;margin-top:6px;padding:4px 8px;border:1px solid rgba(212,175,90,.3);border-radius:7px}
+.bm-video::before{content:'▶';font-size:9px}
 .accg{margin-bottom:12px}
 .accg>summary{list-style:none;cursor:pointer;padding:11px 4px;display:flex;align-items:center;font-family:'Aptos',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);font-weight:600;-webkit-tap-highlight-color:transparent}
 .accg>summary::-webkit-details-marker{display:none}
@@ -3589,6 +3600,64 @@ function logBenchmarkRun(){
   if(typeof appToast==='function') appToast('Run benchmark saved — paces recalibrated ✓');
 }
 // Standard benchmark lifts: 4 main compounds + key bodyweight + common program lifts
+// ── Benchmark test protocols (global so onchange handlers can access them) ──
+const BM_PROTOS={
+  end:{
+    'Push-ups AMRAP':'Hands shoulder-width, arms fully extended at top, chest touches mat at bottom. No rest — continuous reps. Stop when form breaks (hips sag or you can\'t lock out).<div class="bm-proto-norm">Norms (male): Elite ≥50 · Good 35–49 · Average 20–34 · Needs work &lt;20</div>',
+    'Pull-ups AMRAP':'Dead-hang start (arms fully extended). Pull chin clearly above bar. No kipping. Lower all the way between reps.<div class="bm-proto-norm">Norms (male): Elite ≥15 · Good 10–14 · Average 5–9 · Needs work &lt;5</div>',
+    'Single-leg calf raise AMRAP (per leg)':'Stand on step edge, knee straight. Full range: heel below step → full plantar flexion at top. Lightly touch wall for balance only. Count each leg; record lower leg.<div class="bm-proto-norm">Aim ≥25 per leg. Asymmetry &gt;5 reps = worth addressing.</div>',
+    'Plank hold (seconds)':'Forearms on floor, elbows under shoulders, feet together. Body in straight line — no hip pike or sag. Hold until form breaks.<div class="bm-proto-norm">Aim ≥120 s · McGill norm ≥90 s</div>',
+    'McGill side bridge hold (seconds — best side)':'Lie on side, elbow under shoulder, feet stacked. Lift hips to form a straight line head-to-feet. Record best side.<div class="bm-proto-norm">Aim ≥90 s. Side imbalance &gt;15 s = asymmetry risk.</div>',
+    'Dead hang (seconds)':'Overhand grip, arms fully extended. Hang completely still — no swinging.<div class="bm-proto-norm">Aim ≥60 s for shoulder health in pulling work.</div>',
+    'Isometric wall sit (seconds)':'Back flat to wall, hips and knees at 90\xb0. Arms crossed on chest — no hands on thighs.<div class="bm-proto-norm">Aim ≥90 s.</div>',
+    'Cooper 12-min test (metres)':'400 m track preferred. Run as far as possible in exactly 12:00. VO₂max estimate: (metres − 504.9) \xf7 44.73.<div class="bm-proto-norm">Norms (male 20-29): Elite ≥2800 m · Good 2400–2799 · Average 2000–2399 · Needs work &lt;2000</div>'
+  },
+  mob:{
+    'Overhead squat score (1–3)':'Stand feet shoulder-width, arms raised overhead (use a dowel). Squat as deep as possible keeping arms vertical.<br><strong>Score 3</strong> — full depth, arms vertical, heels flat. <strong>Score 2</strong> — depth but torso leans or arms drift. <strong>Score 1</strong> — cannot reach parallel or heels rise.<div class="bm-proto-norm">Target 3. Score 1–2 suggests ankle, hip, or thoracic restriction.</div>',
+    'Ankle dorsiflexion knee-to-wall (cm)':'Lunge stance facing wall. Slide foot back until knee barely touches wall with heel flat. Measure heel-to-wall (cm). Test both; record best.<div class="bm-proto-norm">&gt;11 cm = good · &gt;9 cm = adequate · &lt;6 cm = significant restriction</div>',
+    'Hip 90/90 internal rotation gap (cm)':'Sit with front and rear hip at 90\xb0. Pelvis neutral. Lower front shin toward floor. Measure gap (cm). Record tighter side.<div class="bm-proto-norm">&lt;5 cm = good · 5–10 cm = moderate restriction · &gt;10 cm = significant limitation</div>',
+    'Modified Thomas test score (1–3)':'Sit at bench edge, hug both knees to flatten back, lower one leg freely.<br><strong>Score 3</strong> — thigh flat, knee at 90\xb0. <strong>Score 2</strong> — thigh rises 10–20\xb0. <strong>Score 1</strong> — thigh &gt;20\xb0 or knee &lt;90\xb0.<div class="bm-proto-norm">Test both sides; record worse.</div>',
+    'Active straight-leg raise (degrees)':'Lie flat. Raise one straight leg as high as possible before lower back arches or knee bends. Measure hip flexion (phone inclinometer app). Record best leg.<div class="bm-proto-norm">≥70\xb0 = adequate · &lt;60\xb0 = hamstring limitation affecting stride</div>'
+  },
+  pow:{
+    'Standing broad jump (cm)':'Stand behind line, feet shoulder-width. Swing arms, dip knees, explode forward — land both feet simultaneously. Measure take-off line to nearest heel. 3 attempts; record best.<div class="bm-proto-norm">Norms (male): Elite ≥230 cm · Good 200–229 · Average 170–199 · Needs work &lt;170</div>',
+    'Countermovement vertical jump (cm)':'Mark standing reach on wall (fingertips). Swing arms, dip, explode — swipe wall at peak. Measure from standing reach to peak mark. 3 attempts; record best. Phone app (My Jump 2) improves accuracy.<div class="bm-proto-norm">Norms (male): Elite ≥60 cm · Good 45–59 · Average 30–44 · Needs work &lt;30</div>'
+  },
+  spd:{
+    '30 m sprint (seconds)':'Mark start and 30 m on flat non-slip surface. Standing start, front foot on line. Record with phone slow-motion video or partner stopwatch. 3 attempts; rest 3 min; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.0 s · Good 4.0–4.4 · Average 4.5–5.0 · Needs work &gt;5.0</div>',
+    '5-10-5 pro agility shuttle (seconds)':'3 cones in a line: 0 m, 5 m, 10 m. Start at middle cone (5 m). Sprint 5 m right, touch line; sprint 10 m left, touch line; sprint 5 m back through start. 3 attempts; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.2 s · Good 4.2–4.6 · Average 4.7–5.2 · Needs work &gt;5.2</div>'
+  }
+};
+const BM_VIDS={
+  end:{
+    'Push-ups AMRAP':'https://www.youtube.com/results?search_query=push+up+AMRAP+test+protocol+proper+form',
+    'Pull-ups AMRAP':'https://www.youtube.com/results?search_query=pull+up+max+reps+test+dead+hang+strict',
+    'McGill side bridge hold (seconds — best side)':'https://www.youtube.com/results?search_query=McGill+side+bridge+endurance+test+protocol',
+    'Plank hold (seconds)':'https://www.youtube.com/results?search_query=plank+hold+test+proper+form+assessment',
+    'Cooper 12-min test (metres)':'https://www.youtube.com/results?search_query=Cooper+12+minute+run+test+VO2max'
+  },
+  mob:{
+    'Overhead squat score (1–3)':'https://www.youtube.com/results?search_query=overhead+squat+assessment+FMS+screen',
+    'Ankle dorsiflexion knee-to-wall (cm)':'https://www.youtube.com/results?search_query=knee+to+wall+ankle+dorsiflexion+test+measurement',
+    'Hip 90/90 internal rotation gap (cm)':'https://www.youtube.com/results?search_query=hip+90+90+mobility+test+internal+rotation',
+    'Modified Thomas test score (1–3)':'https://www.youtube.com/results?search_query=modified+Thomas+test+hip+flexor+assessment',
+    'Active straight-leg raise (degrees)':'https://www.youtube.com/results?search_query=active+straight+leg+raise+test+hamstring+assessment'
+  },
+  pow:{
+    'Standing broad jump (cm)':'https://www.youtube.com/results?search_query=standing+broad+jump+test+protocol+measurement',
+    'Countermovement vertical jump (cm)':'https://www.youtube.com/results?search_query=countermovement+vertical+jump+test+how+to+measure'
+  },
+  spd:{
+    '30 m sprint (seconds)':'https://www.youtube.com/results?search_query=30m+sprint+test+protocol+timing+athletic+assessment',
+    '5-10-5 pro agility shuttle (seconds)':'https://www.youtube.com/results?search_query=5-10-5+pro+agility+shuttle+test+protocol'
+  }
+};
+function _bmShowProto(bodyId,cat,val){
+  const b=document.getElementById(bodyId); if(!b) return;
+  const proto=(BM_PROTOS[cat]||{})[val]||'Select a test to see the protocol.';
+  const vid=(BM_VIDS[cat]||{})[val];
+  b.innerHTML=proto+(vid?'<br><a class="bm-video" href="'+vid+'" target="_blank" rel="noopener">Watch protocol video</a>':'');
+}
 function benchmarkLiftList(){
   const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Single-leg squat to box'];
   const prog=typeof s1Lifts==='function'?s1Lifts():[];
@@ -3661,7 +3730,7 @@ function logBenchmarkMobility(){
   const msg=document.getElementById('bm-msg');
   if(!test||!rawVal){ if(msg) msg.textContent='Select a test and enter a value.'; return; }
   const val=parseFloat(rawVal.replace(',','.')); if(isNaN(val)){ if(msg) msg.textContent='Enter a number.'; return; }
-  const unit=/score|squat|thomas/i.test(test)?'score':/ankle|dorsi|90.90|gap/i.test(test)?'cm':/slr|straight.leg|degree/i.test(test)?'deg':'cm';
+  const unit=/score|squat|thomas/i.test(test)?'score':/ankle|dorsi|90.90|gap|rotation|wall/i.test(test)?'cm':/slr|straight.?leg|degree|raise/i.test(test)?'deg':'cm';
   if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
   STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'mobility',block,date:_ymd(new Date()),test,val,unit});
   saveState(STATE); renderBenchmarks();
@@ -3669,6 +3738,38 @@ function logBenchmarkMobility(){
   const _ft=document.getElementById('bm-flex-test'); if(_ft) _ft.value='';
   const _fv=document.getElementById('bm-flex-val'); if(_fv) _fv.value='';
   const _bmm2=document.getElementById('bm-msg'); if(_bmm2){ _bmm2.textContent=''; }
+}
+function logBenchmarkPower(){
+  const test=(document.getElementById('bm-pow-test')||{}).value;
+  const rawVal=String((document.getElementById('bm-pow-val')||{}).value).trim();
+  const block=(document.getElementById('bm-pow-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!test||!rawVal){if(msg) msg.textContent='Select a test and enter a value.';return;}
+  const val=parseFloat(rawVal.replace(',','.'));if(isNaN(val)||!(val>0)){if(msg) msg.textContent='Enter a positive number.';return;}
+  const unit='cm';
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'power',block,date:_ymd(new Date()),test,val,unit});
+  saveState(STATE);renderBenchmarks();
+  if(typeof appToast==='function') appToast('Power test saved ✓ — '+val+' cm');
+  const _pt=document.getElementById('bm-pow-test');if(_pt) _pt.value='';
+  const _pv=document.getElementById('bm-pow-val');if(_pv) _pv.value='';
+  const _bmm4=document.getElementById('bm-msg');if(_bmm4) _bmm4.textContent='';
+}
+function logBenchmarkSpeed(){
+  const test=(document.getElementById('bm-spd-test')||{}).value;
+  const rawVal=String((document.getElementById('bm-spd-val')||{}).value).trim();
+  const block=(document.getElementById('bm-spd-block')||{}).value||defaultBlock();
+  const msg=document.getElementById('bm-msg');
+  if(!test||!rawVal){if(msg) msg.textContent='Select a test and enter a value.';return;}
+  const val=parseFloat(rawVal.replace(',','.'));if(isNaN(val)||!(val>0)){if(msg) msg.textContent='Enter time in seconds (e.g. 4.32).';return;}
+  const unit='s';
+  if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'speed',block,date:_ymd(new Date()),test,val,unit});
+  saveState(STATE);renderBenchmarks();
+  if(typeof appToast==='function') appToast('Speed test saved ✓ — '+val+' s');
+  const _st=document.getElementById('bm-spd-test');if(_st) _st.value='';
+  const _sv=document.getElementById('bm-spd-val');if(_sv) _sv.value='';
+  const _bmm5=document.getElementById('bm-msg');if(_bmm5) _bmm5.textContent='';
 }
 function _hms(sec){ const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=Math.round(sec%60); return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); }
 function benchmarkHistoryHTML(){
@@ -3682,6 +3783,10 @@ function benchmarkHistoryHTML(){
   if(strs.length){ out+='<div class="bm-h2" style="margin-top:10px">Strength checks</div>'+strs.map((s,i)=>{ const prevSame=strs.slice(0,i).reverse().find(x=>x.lift===s.lift); let delta=''; if(prevSame){ if(s.e1rm!=null&&prevSame.e1rm!=null){ const d=s.e1rm-prevSame.e1rm; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' kg</small>'; } else if(s.reps&&prevSame.reps){ const d=s.reps-prevSame.reps; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' reps</small>'; } } const main=s.e1rm!=null?(s.e1rm+' kg e1RM'):(s.reps+' reps'); const sub=s.bodyweight?(s.weight>0?('BW+'+s.weight+'\xd7'+s.reps):('BW \xd7 '+s.reps)):(s.weight+'\xd7'+s.reps); return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.lift+' \xb7 '+main+'</div><div class="bm-hs">'+sub+' \xb7 '+s.block+' \xb7 '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
   if(ends.length){ out+='<div class="bm-h2" style="margin-top:10px">Endurance tests</div>'+ends.map((e,i)=>{ const prevSame=ends.slice(0,i).reverse().find(x=>x.test===e.test); let delta=''; if(prevSame){ const d=e.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+e.unit+'</small>'; } const disp=e.unit==='s'?_hms(e.val):e.val+' '+e.unit; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+e.test+' \xb7 '+disp+'</div><div class="bm-hs">'+e.block+' \xb7 '+_shortDate(e.date)+delta+'</div></div>'+btns(e.id)+'</div>'; }).join(''); }
   if(flexs.length){ out+='<div class="bm-h2" style="margin-top:10px">Mobility tests</div>'+flexs.map((f,i)=>{ const prevSame=flexs.slice(0,i).reverse().find(x=>x.test===f.test); let delta=''; if(prevSame){ const d=f.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+f.unit+'</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+f.test+' \xb7 '+f.val+' '+f.unit+'</div><div class="bm-hs">'+f.block+' \xb7 '+_shortDate(f.date)+delta+'</div></div>'+btns(f.id)+'</div>'; }).join(''); }
+  const pows=(STATE.benchmarks||[]).filter(b=>b.kind==='power').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(pows.length){ out+='<div class="bm-h2" style="margin-top:10px">Power tests</div>'+pows.map((p,i)=>{ const prevSame=pows.slice(0,i).reverse().find(x=>x.test===p.test); let delta=''; if(prevSame){ const d=p.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' cm</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+p.test+' \xb7 '+p.val+' cm</div><div class="bm-hs">'+p.block+' \xb7 '+_shortDate(p.date)+delta+'</div></div>'+btns(p.id)+'</div>'; }).join(''); }
+  const spds=(STATE.benchmarks||[]).filter(b=>b.kind==='speed').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(spds.length){ out+='<div class="bm-h2" style="margin-top:10px">Speed tests</div>'+spds.map((s,i)=>{ const prevSame=spds.slice(0,i).reverse().find(x=>x.test===s.test); let delta=''; if(prevSame){ const d=s.val-prevSame.val; delta=' <small style="color:'+(d<=0?'#5fd6a0':'#ff6b47')+'">'+(d<=0?'▼ ':'▲ ')+Math.abs(d).toFixed(2)+' s</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.test+' \xb7 '+s.val+' s</div><div class="bm-hs">'+s.block+' \xb7 '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
   return out||'<div class="ls-hint">No benchmarks logged yet — your test history and recalibration deltas will appear here.</div>';
 }
 function benchmarkCardHTML(){
@@ -3703,43 +3808,53 @@ function benchmarkCardHTML(){
   const strBtns=ebStr?'<button class="pc-apply" onclick="logBenchmarkStrength()">Update strength benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkStrength()">Save strength benchmark</button>';
 
   const runLogger='<div class="bm-section-hd">Cardiovascular endurance · Run time-trial</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">5 km time trial is the primary test. Also accept 2–5 km effort or a 12-min Cooper test (log distance run).</div>'
+    +'<details class="bm-proto"><summary>Protocol &amp; video</summary><div class="bm-proto-body"><strong>Test:</strong> 5 km time trial on a flat, measured course (track preferred). A 2–5 km all-out effort is also accepted — the app predicts marathon time via the Riegel formula.<ol><li>Warm up 10–15 min at easy pace + 3 × 30-sec strides.</li><li>Run 5 km as fast as sustainably possible — even splits preferred.</li><li>Record finish time. App recalibrates all pacing zones immediately.</li><li>Alternative: Cooper 12-min test — mark start, run as far as possible in exactly 12:00 on a flat 400 m track. Record total metres.</li></ol><div class="bm-proto-norm"><strong>Norms (5 km):</strong> Elite ≤ 18:00 · Good 18–22 min · Average 23–28 min · Beginner &gt; 28 min</div><a class="bm-video" href="https://www.youtube.com/results?search_query=5km+time+trial+pacing+strategy+running" target="_blank" rel="noopener">Watch: 5 km time-trial pacing guide</a></div></details>'
     +'<div class="pc-field"><label>Distance &amp; time</label><div class="pc-input-row" style="gap:6px"><input id="bm-run-km" type="number" inputmode="decimal" step="0.1" placeholder="5" value="'+rkv+'" style="flex:1"><span class="pc-unit">km</span><input id="bm-run-min" type="number" inputmode="numeric" placeholder="min" value="'+rmv+'" style="flex:1"><input id="bm-run-sec" type="number" inputmode="numeric" placeholder="sec" value="'+rsv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-run-block" '+selCss+'>'+runBlockOpts+'</select></div></div>'
     +runBtns;
 
-  const strLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular strength · Compound lifts &amp; bodyweight</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">4 main lifts: Back squat, Bench press, Deadlift, Overhead press. Bodyweight: Pull-ups, Push-ups, Dips (enter reps; weight = added load or 0 for bodyweight).</div>'
+  const strLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular strength · 1RM testing</div>'
+    +'<details class="bm-proto"><summary>NSCA 1RM protocol &amp; video</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don't need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div><a class="bm-video" href="https://www.youtube.com/results?search_query=1RM+testing+protocol+strength+NSCA" target="_blank" rel="noopener">Watch: 1RM testing protocol</a></div></details>'
     +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
     +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
-    +'<div class="pc-note" style="margin-top:-2px">Bodyweight moves: leave weight blank or 0 for BW only; enter added load if weighted. Log body weight in Tools to get e1RM for BW exercises.</div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
     +strBtns;
 
   const endTests=['Push-ups AMRAP','Pull-ups AMRAP','Single-leg calf raise AMRAP (per leg)','Plank hold (seconds)','McGill side bridge hold (seconds — best side)','Dead hang (seconds)','Isometric wall sit (seconds)','Cooper 12-min test (metres)'];
+  const endSelId='bm-end-test';
   const endLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular endurance &amp; aerobic capacity</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">AMRAP = max reps, one set, no rest. Timed holds = enter seconds (or mm:ss). Single-leg calf raise: max reps per leg, knee straight. McGill side bridge: hold time on best side. Cooper test = metres run in 12 min.</div>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+'>'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-end-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+' onchange="_bmShowProto('bm-end-proto-body','end',this.value)">'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-end-val" type="text" inputmode="numeric" placeholder="reps / seconds / metres" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-end-block" '+selCss+'>'+endBlockOpts+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkEndurance()">Save endurance test</button>';
 
-  const mobTests=[
-    'Overhead squat score (1–3 — 3=full depth arms vertical)',
-    'Ankle dorsiflexion knee-to-wall (cm — best leg, heel must stay flat)',
-    'Hip 90/90 internal rotation gap (cm — front shin to floor)',
-    'Modified Thomas test score (1–3 — hip flexor length)',
-    'Active straight-leg raise (degrees — best leg, knee straight)'
-  ];
+  const mobTests=['Overhead squat score (1–3)','Ankle dorsiflexion knee-to-wall (cm)','Hip 90/90 internal rotation gap (cm)','Modified Thomas test score (1–3)','Active straight-leg raise (degrees)'];
   const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Joint mobility assessment</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">Standard S&amp;C mobility screen. Overhead squat: stand, arms overhead, squat to depth — score 3=full depth arms stay vertical; 2=depth with forward lean or arm drift; 1=can\'t reach parallel. Ankle dorsiflexion: lunge stance, move heel back until knee just touches wall — measure heel-to-wall cm (aim &gt;9 cm). Hip 90/90: sit with both hips at 90°, lower front shin toward floor — measure gap in cm (&lt;5 cm = good). Thomas test: lie on bench edge, hug one knee to chest — 3=free leg stays flat; 2=10–20° rise; 1=&gt;20°. Active SLR: lie flat, raise straight leg — degrees of hip flexion before knee bends (aim 70°+).</div>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+'>'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-mob-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+' onchange="_bmShowProto('bm-mob-proto-body','mob',this.value)">'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="score / cm / degrees" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-flex-block" '+selCss+'>'+flexBlockOpts+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkMobility()">Save mobility test</button>';
 
+  const powTests=['Standing broad jump (cm)','Countermovement vertical jump (cm)'];
+  const powLogger='<div class="bm-section-hd" style="margin-top:14px">Power · Explosive output</div>'
+    +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-pow-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-pow-test" '+selCss+' onchange="_bmShowProto('bm-pow-proto-body','pow',this.value)">'+powTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Result (cm)</label><div class="pc-input-row" style="gap:6px"><input id="bm-pow-val" type="number" inputmode="decimal" step="1" placeholder="centimetres" style="flex:1"></div></div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-pow-block" '+selCss+'>'+blockSel(defaultBlock())+'</select></div></div>'
+    +'<button class="pc-apply" onclick="logBenchmarkPower()">Save power test</button>';
+
+  const spdTests=['30 m sprint (seconds)','5-10-5 pro agility shuttle (seconds)'];
+  const spdLogger='<div class="bm-section-hd" style="margin-top:14px">Speed &amp; agility</div>'
+    +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-spd-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-spd-test" '+selCss+' onchange="_bmShowProto('bm-spd-proto-body','spd',this.value)">'+spdTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Result (seconds)</label><div class="pc-input-row" style="gap:6px"><input id="bm-spd-val" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 4.35" style="flex:1"></div></div>'
+    +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-spd-block" '+selCss+'>'+blockSel(defaultBlock())+'</select></div></div>'
+    +'<button class="pc-apply" onclick="logBenchmarkSpeed()">Save speed test</button>';
+
   return '<div class="bm-sched-wrap">'+sched+'</div>'
-    +runLogger+strLogger+endLogger+flexLogger
+    +runLogger+strLogger+endLogger+powLogger+spdLogger+flexLogger
     +'<div id="bm-msg" class="pc-note" style="text-align:center;margin-top:8px"></div>'
     +'<div class="bm-hist">'+benchmarkHistoryHTML()+'</div>';
 }
