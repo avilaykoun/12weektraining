@@ -51,7 +51,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 20px;padding-bottom:calc(96px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
+.content{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 20px 24px;scrollbar-width:none;background:#11203a;background:var(--bg)}
 .content::-webkit-scrollbar{display:none}
 .section{display:none}
 .section.active{display:block}
@@ -769,6 +769,7 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="nav" id="main-nav">
+    <button class="nav-btn active" onclick="showSection('hub',this)">Menu</button>
     <button class="nav-btn" onclick="showSection('today',this)">Today</button>
     <button class="nav-btn" onclick="showSection('week',this)">This week</button>
     <button class="nav-btn" onclick="showSection('calendar',this)">Calendar</button>
@@ -778,7 +779,6 @@ input[type=number]{-moz-appearance:textfield}
     <button class="nav-btn" onclick="showSection('pace',this)">Tools</button>
     <button class="nav-btn" onclick="showSection('progress',this)">Progress</button>
     <button class="nav-btn" onclick="showSection('nutrition',this)">Nutrition</button>
-    <button class="nav-btn active" onclick="showSection('hub',this)">Menu</button>
   </div>
 </div>
 
@@ -1455,6 +1455,8 @@ input[type=number]{-moz-appearance:textfield}
   <div class="hub-grid" id="hub-health-grid"></div>
 </div>
 
+</div><!-- /content -->
+
 <!-- EXERCISE DEMO MODAL -->
 <div class="demo-modal-overlay" id="demo-overlay" onclick="closeDemoModal(event)">
   <div class="demo-modal" id="demo-modal">
@@ -1496,20 +1498,20 @@ input[type=number]{-moz-appearance:textfield}
 <div class="app-toast" id="app-toast"><span class="dot"></span><span id="app-toast-msg"></span></div>
 
 <div class="bottom-nav">
+  <button class="bnav-btn active" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
+    <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
+  </button>
   <button class="bnav-btn" onclick="showSection('today',null,'today-btn')" id="bn-today">
     <div class="bnav-icon">⚡</div><div class="bnav-lbl">Today</div>
   </button>
   <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
     <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
   </button>
-  <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
-    <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
-  </button>
   <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
     <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
   </button>
-  <button class="bnav-btn active" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
-    <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
+  <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
+    <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
   </button>
 </div>
 
@@ -2392,7 +2394,7 @@ function showSection(id,btn){
   const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace',progress:'bn-progress',nutrition:'bn-nutrition',hub:'bn-hub'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition','hub'];
+  const order=['hub','today','week','calendar','program','history','stats','pace','progress','nutrition'];
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
@@ -5619,7 +5621,7 @@ function initPWA(){
 
 function initSwipe(){
   const c=document.querySelector('.content'); if(!c) return;
-  const order=['today','week','calendar','program','history','stats','pace','progress','nutrition','hub'];
+  const order=['hub','today','week','calendar','program','history','stats','pace','progress','nutrition'];
   let x0=0,y0=0,t0=0,track=false;
   const blocked=el=>!!(el&&el.closest&&el.closest('.nav,.phase-sel,input,textarea,select,.setw-row,.stp,.timer-sheet,.demo-modal,.search-panel,svg,.fab,.pc-input-row'));
   c.addEventListener('touchstart',function(e){ if(e.touches.length!==1||blocked(e.target)){track=false;return;} const t=e.touches[0]; x0=t.clientX;y0=t.clientY;t0=Date.now();track=true; },{passive:true});
