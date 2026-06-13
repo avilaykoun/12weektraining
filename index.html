@@ -1084,21 +1084,16 @@ const PROGRAM = [
 
   // Week 1 ─────────────────────────────────────────────────────────────────
   {phase:1,week:1,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
-    // Main 5
     {id:'p1w1mon1',name:'Back squat',detail:'4 × 8 @ 65–70% 1RM · 3-sec descent',cat:'strength'},
-    {id:'p1w1mon2',name:'Barbell hip thrust',detail:'3 × 10 · full hip extension at top',cat:'strength'},
-    {id:'p1w1mon3',name:'Hang power clean',detail:'3 × 5 · light bar · focus on triple extension',cat:'strength'},
-    {id:'p1w1mon4',name:'Nordic curl (eccentric)',detail:'3 × 5 · slow 5-sec lower · hamstring resilience',cat:'strength'},
-    {id:'p1w1mon5',name:'Bulgarian split squat (DB)',detail:'3 × 8/leg · hip mobility · upright torso',cat:'strength'},
-    // Supplementary — Phase 1 rotation
-    {id:'p1w1mon_s1',name:'Walking lunges',detail:'3 × 12/leg · bodyweight · pattern work',cat:'strength',supp:true},
-    {id:'p1w1mon_s2',name:'Single-leg calf raise (box)',detail:'3 × 15/leg · full range · Achilles loading',cat:'strength',supp:true},
-    {id:'p1w1mon_s3',name:'Banded hip abduction',detail:'3 × 15 · glute activation · standing',cat:'strength',supp:true},
-    // Core
+    {id:'p1w1mon2',name:'Romanian deadlift',detail:'3 × 10 · hip hinge focus',cat:'strength'},
+    {id:'p1w1mon3',name:'Walking lunges',detail:'3 × 12/leg · bodyweight or light DBs',cat:'strength'},
+    {id:'p1w1mon4',name:'Single-leg calf raise (box)',detail:'3 × 15/leg · full range',cat:'strength'},
+    {id:'p1w1mon5',name:'Banded hip abduction',detail:'3 × 15 · glute activation',cat:'strength'},
     {id:'p1w1mon6',name:'KB swings',detail:'3 × 15 · core braces at top',cat:'core'},
     {id:'p1w1mon7',name:'Dead bug',detail:'3 × 8/side · press back into floor',cat:'core'},
     {id:'p1w1mon8',name:'Plank',detail:'3 × 40 sec · squeeze glutes',cat:'core'},
-  ],note:'10 min hip flexor + hamstring mobility after'},
+  
+    {id:'p1w1monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min hip flexor + hamstring mobility after'},
 
   {phase:1,week:1,day:'Tue',name:'Easy run + upper pull',type:'combo',exercises:[
     {id:'p1w1tue1',name:'Easy run',detail:'6–8km @ conversational pace · zone 2',cat:'run'},
@@ -1111,21 +1106,15 @@ const PROGRAM = [
   ],note:'5 min hamstring stretch before lifting'},
 
   {phase:1,week:1,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
-    // Main 5
     {id:'p1w1wed1',name:'Barbell bench press',detail:'4 × 8 @ 65% · full range',cat:'strength'},
-    {id:'p1w1wed2',name:'Weighted pull-ups',detail:'4 × 5 · add weight or use ring rows',cat:'strength'},
-    {id:'p1w1wed3',name:'Overhead press (barbell)',detail:'3 × 8 @ 60% · press vertical · rib cage down',cat:'strength'},
-    {id:'p1w1wed4',name:'Barbell bent-over row',detail:'4 × 8 · hip hinge throughout',cat:'strength'},
-    {id:'p1w1wed5',name:'Ring dips',detail:'3 × 8 · false grip · chest forward',cat:'strength'},
-    // Supplementary — Phase 1 rotation
-    {id:'p1w1wed_s1',name:'DB lateral raise',detail:'3 × 12 · slight bend at elbow · shoulder stability',cat:'strength',supp:true},
-    {id:'p1w1wed_s2',name:'Ring face pulls',detail:'3 × 12 · rear delt + rotator cuff health',cat:'strength',supp:true},
-    {id:'p1w1wed_s3',name:'Farmer carry (DBs)',detail:'3 × 30m · brace under load · grip strength',cat:'strength',supp:true},
-    // Core
+    {id:'p1w1wed2',name:'Barbell bent-over row',detail:'4 × 8 · hip hinge throughout',cat:'strength'},
+    {id:'p1w1wed3',name:'DB overhead press',detail:'3 × 10 · scapular stability',cat:'strength'},
+    {id:'p1w1wed4',name:'Ring face pulls',detail:'3 × 12 · rear delt + rotator cuff',cat:'strength'},
+    {id:'p1w1wed5',name:'Farmer carry (DBs)',detail:'3 × 30m · brace under load',cat:'strength'},
     {id:'p1w1wed6',name:'Turkish get-up (KB)',detail:'3 × 3/side · light, slow, deliberate',cat:'core'},
     {id:'p1w1wed7',name:'Hollow body hold',detail:'3 × 25 sec · anterior core',cat:'core'},
-    {id:'p1w1wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
-  ],note:''},
+  
+    {id:'p1w1wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},],note:''},
 
   {phase:1,week:1,day:'Thu',name:'Tempo run + core',type:'run',exercises:[
     {id:'p1w1thu1',name:'Warm-up',detail:'2km easy jog',cat:'run'},
@@ -1136,22 +1125,16 @@ const PROGRAM = [
   ],note:'Hamstring + calf stretch after'},
 
   {phase:1,week:1,day:'Fri',name:'Lower body B + core',type:'strength',exercises:[
-    // Main 5
     {id:'p1w1fri1',name:'Conventional deadlift',detail:'4 × 6 @ 70% · quality over weight',cat:'strength'},
-    {id:'p1w1fri2',name:'Romanian deadlift',detail:'3 × 10 · 3-sec lower · hamstring tension',cat:'strength'},
-    {id:'p1w1fri3',name:'Box jumps',detail:'4 × 5 · soft landing, full extension',cat:'strength'},
-    {id:'p1w1fri4',name:'Step-ups (DB)',detail:'3 × 10/leg · box at knee height · drive through heel',cat:'strength'},
-    {id:'p1w1fri5',name:'Single-leg RDL (DB)',detail:'3 × 8/leg · hip hinge · balance focus',cat:'strength'},
-    // Supplementary — Phase 1 rotation
-    {id:'p1w1fri_s1',name:'Goblet squat (KB)',detail:'3 × 10 · thoracic + ankle mobility',cat:'strength',supp:true},
-    {id:'p1w1fri_s2',name:'KB swings',detail:'3 × 15 · hip power pattern',cat:'strength',supp:true},
-    {id:'p1w1fri_s3',name:'Banded hip abduction (lying)',detail:'2 × 15 · glute med activation',cat:'strength',supp:true},
-    // Core
+    {id:'p1w1fri2',name:'Box jumps',detail:'4 × 5 · soft landing, full extension',cat:'strength'},
+    {id:'p1w1fri3',name:'Bulgarian split squat (DB)',detail:'3 × 8/leg · hip mobility',cat:'strength'},
+    {id:'p1w1fri4',name:'Nordic curl (eccentric)',detail:'3 × 6 · hamstring protection',cat:'strength'},
+    {id:'p1w1fri5',name:'Goblet squat (KB)',detail:'3 × 10 · thoracic + ankle mobility',cat:'strength'},
     {id:'p1w1fri6',name:'KB around the world',detail:'3 × 8/direction · rotational control',cat:'core'},
     {id:'p1w1fri7',name:'Copenhagen plank',detail:'3 × 20 sec/side · hip adductor',cat:'core'},
     {id:'p1w1fri8',name:'Ring fallout',detail:'3 × 8 · anti-extension',cat:'core'},
-    {id:'p1w1frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},
-  ],note:'10 min full lower body mobility after'},
+  
+    {id:'p1w1frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes, drive through front heel',cat:'strength'},],note:'10 min full lower body mobility after'},
 
   {phase:1,week:1,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p1w1sat1',name:'Long run',detail:'14–16km · easy zone 2',cat:'run'},
