@@ -659,6 +659,11 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .pace-num{font-size:18px;font-family:'Aptos',monospace;font-weight:700;color:var(--text);letter-spacing:-.01em}
 .pace-km{font-size:11px;font-family:'Aptos',monospace;color:var(--text3);margin-top:2px}
 .pace-rep{font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);margin-top:3px;font-weight:600}
+.nutr-profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:2px}
+.nutr-pf-field{display:flex;flex-direction:column;gap:4px}
+.nutr-pf-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.nutr-pf-inp{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:13px;font-family:'Aptos',sans-serif;outline:none;-webkit-appearance:none;appearance:none}
+.nutr-pf-inp:focus{border-color:var(--accent2)}
 .nutr-hero{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 8px;margin-bottom:10px;align-items:center}
 .nutr-hero-cell{text-align:center}
 .nutr-hero-val{font-family:'Aptos',sans-serif;font-size:20px;color:var(--accent);font-weight:600;line-height:1}
@@ -1114,6 +1119,50 @@ input[type=number]{-moz-appearance:textfield}
 <!-- NUTRITION -->
 <div class="section" id="section-nutrition">
   <div class="section-title">NUTRITION</div>
+  <!-- Personalisation card -->
+  <div class="nutr-card" id="nutr-profile-card" style="margin-bottom:10px">
+    <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <div class="nutr-card-icon">⚙️</div>
+      <div><div class="nutr-card-title">Personalise your targets</div><div class="nutr-card-sub" id="nutr-profile-sub">Update weight · protein multiplier · goal</div></div>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
+    </div>
+    <div class="nutr-card-body">
+      <div class="nutr-profile-grid">
+        <div class="nutr-pf-field">
+          <label class="nutr-pf-lbl">Body weight (kg)</label>
+          <input class="nutr-pf-inp" id="npf-weight" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 86">
+        </div>
+        <div class="nutr-pf-field">
+          <label class="nutr-pf-lbl">Protein (g/kg)</label>
+          <select class="nutr-pf-inp" id="npf-prot">
+            <option value="1.6">1.6 g/kg — minimum</option>
+            <option value="1.8">1.8 g/kg — moderate</option>
+            <option value="2.0" selected>2.0 g/kg — optimal (default)</option>
+            <option value="2.2">2.2 g/kg — high</option>
+            <option value="2.4">2.4 g/kg — very high</option>
+          </select>
+        </div>
+        <div class="nutr-pf-field">
+          <label class="nutr-pf-lbl">Training goal</label>
+          <select class="nutr-pf-inp" id="npf-goal">
+            <option value="performance" selected>Performance</option>
+            <option value="build">Build muscle</option>
+            <option value="lose">Lose fat</option>
+          </select>
+        </div>
+        <div class="nutr-pf-field">
+          <label class="nutr-pf-lbl">Carbs/hr on run</label>
+          <select class="nutr-pf-inp" id="npf-carbhr">
+            <option value="60">60 g/hr — beginner</option>
+            <option value="75">75 g/hr — intermediate</option>
+            <option value="90" selected>90 g/hr — trained gut</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-complete done" style="width:100%;margin-top:10px" onclick="saveNutrProfile()">Save &amp; recalculate</button>
+      <div id="npf-msg" style="font-size:11px;font-family:'Aptos',monospace;color:var(--green);text-align:center;margin-top:6px;min-height:16px"></div>
+    </div>
+  </div>
   <div class="nutr-hero" id="nutr-hero">
     <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-protein">172g</div><div class="nutr-hero-lbl">Protein / day</div></div>
     <div class="nutr-hero-sep"></div>
@@ -1121,7 +1170,7 @@ input[type=number]{-moz-appearance:textfield}
     <div class="nutr-hero-sep"></div>
     <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-kcal">4,400</div><div class="nutr-hero-lbl">Peak kcal</div></div>
     <div class="nutr-hero-sep"></div>
-    <div class="nutr-hero-cell"><div class="nutr-hero-val">90g</div><div class="nutr-hero-lbl">Carbs/hr run</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-carbhr">90g</div><div class="nutr-hero-lbl">Carbs/hr run</div></div>
   </div>
   <div class="nutr-hint">Tap any card to expand</div>
 
@@ -1380,6 +1429,7 @@ input[type=number]{-moz-appearance:textfield}
       <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
     <div class="nutr-card-body">
+      <div id="nutr-supp-today"></div>
       <div class="nutr-supp-row">
         <div>
           <div class="nutr-supp-name">Creatine monohydrate</div>
@@ -2379,6 +2429,28 @@ function typeLabel(type){return type==='strength'?'Strength':type==='run'?'Run':
 // ─────────────────────────────────────────
 // COUNTDOWN
 // ─────────────────────────────────────────
+function saveNutrProfile(){
+  const wEl=document.getElementById('npf-weight');
+  const pEl=document.getElementById('npf-prot');
+  const gEl=document.getElementById('npf-goal');
+  const cEl=document.getElementById('npf-carbhr');
+  const w=parseFloat(wEl&&wEl.value);
+  if(w>0&&w<300){
+    if(!STATE.profile) STATE.profile={};
+    STATE.profile.weight=w;
+    // log as today's bodyweight entry
+    STATE.bodyweightLog[_ymd(new Date())]=w;
+  }
+  if(pEl&&parseFloat(pEl.value)){ if(!STATE.profile) STATE.profile={}; STATE.profile.protMultiplier=parseFloat(pEl.value); }
+  if(gEl&&gEl.value){ if(!STATE.profile) STATE.profile={}; STATE.profile.goal=gEl.value; }
+  if(cEl&&parseFloat(cEl.value)){ if(!STATE.profile) STATE.profile={}; STATE.profile.carbsPerHr=parseFloat(cEl.value); }
+  saveState(STATE);
+  renderNutritionMacros();
+  updateCountdown();
+  renderHub();
+  const msg=document.getElementById('npf-msg');
+  if(msg){ msg.textContent='✓ Targets updated'; setTimeout(()=>{if(msg)msg.textContent='';},3000); }
+}
 // ---- NUTRITION MACRO RENDERER ----
 const _NUTR_DAYS=[
   {label:'Full rest',           cLo:3.14,cHi:3.60},
@@ -2391,8 +2463,22 @@ function renderNutritionMacros(){
   const bwArr=Object.entries(STATE.bodyweightLog||{});
   const latestBW=bwArr.length?parseFloat(bwArr.sort((a,b)=>b[0].localeCompare(a[0]))[0][1]):null;
   const w=(latestBW&&latestBW>0)?latestBW:((STATE.profile&&parseFloat(STATE.profile.weight))||86);
-  const prot=Math.round(w*2.0);
-  const fat=Math.round(w*1.1);
+  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const carbsPerHr=(STATE.profile&&parseFloat(STATE.profile.carbsPerHr))||90;
+  const goalStr=(STATE.profile&&STATE.profile.goal)||'performance';
+  // Fat multiplier: slightly lower on lose-fat goal
+  const fatMult=goalStr==='lose'?0.9:1.1;
+  const prot=Math.round(w*protMult);
+  const fat=Math.round(w*fatMult);
+  // Pre-fill profile form
+  const npfw=document.getElementById('npf-weight'); if(npfw&&!npfw.value) npfw.value=w;
+  const npfp=document.getElementById('npf-prot'); if(npfp) npfp.value=String(protMult);
+  const npfg=document.getElementById('npf-goal'); if(npfg) npfg.value=goalStr;
+  const npfc=document.getElementById('npf-carbhr'); if(npfc) npfc.value=String(carbsPerHr);
+  // profile sub-label
+  const psub=document.getElementById('nutr-profile-sub'); if(psub) psub.textContent=w+' kg · '+protMult+' g/kg protein · '+goalStr;
+  // update carbs/hr in hero
+  const nhchr=document.getElementById('nh-carbhr'); if(nhchr) nhchr.textContent=carbsPerHr+'g';
   // hero vals
   const nhp=document.getElementById('nh-protein'); if(nhp) nhp.textContent=prot+'g';
   const nhw=document.getElementById('nh-weight'); if(nhw) nhw.textContent=w+'kg';
@@ -2400,7 +2486,7 @@ function renderNutritionMacros(){
   if(nhk){ const peakCarb=Math.round(w*(_NUTR_DAYS[4].cLo+_NUTR_DAYS[4].cHi)/2); nhk.textContent=(Math.round((peakCarb*4+prot*4+fat*9)/100)*100).toLocaleString(); }
   // protein tip
   const tip=document.getElementById('nutr-protein-tip');
-  if(tip) tip.innerHTML='Protein is fixed at <strong>'+prot+' g/day</strong> (2.0 g/kg × '+w+' kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.';
+  if(tip) tip.innerHTML='Protein is fixed at <strong>'+prot+' g/day</strong> ('+protMult+' g/kg × '+w+' kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.';
   // daily targets table
   const tbl=document.getElementById('nutr-targets-table');
   if(tbl){
@@ -2411,9 +2497,33 @@ function renderNutritionMacros(){
     }).join('');
     tbl.innerHTML='<tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>'+rows;
   }
-  // carb load section
+  // race week carb load — per-day stepped protocol
   const cl=document.getElementById('nutr-carbload-detail');
-  if(cl){ const cLo=Math.round(w*9),cHi=Math.round(w*10); cl.innerHTML='Target <strong>9–10 g carbohydrate per kg bodyweight</strong> = '+cLo+'–'+cHi+' g carbs/day ('+w+' kg).<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.'; }
+  if(cl){
+    const d3=Math.round(w*10), d2=Math.round(w*9), d1=Math.round(w*8);
+    const raceD=new Date(RACE_DATE);
+    const dayName=(offset)=>{ const d=new Date(raceD); d.setDate(raceD.getDate()-offset); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1); };
+    cl.innerHTML=`<table class="nutr-table" style="margin-bottom:8px">
+      <tr><th>Day</th><th>Date</th><th>Carbs</th><th>Notes</th></tr>
+      <tr><td>Day −3</td><td>${dayName(3)}</td><td><strong>${d3}g</strong></td><td>Max load · normal fat &amp; protein</td></tr>
+      <tr><td>Day −2</td><td>${dayName(2)}</td><td><strong>${d2}g</strong></td><td>High load · reduce fat &lt;50g · reduce fibre</td></tr>
+      <tr><td>Day −1</td><td>${dayName(1)}</td><td><strong>${d1}g</strong></td><td>Easy-digest only · white rice/bread/banana · fat &lt;30g</td></tr>
+      <tr><td>Race AM</td><td>${dayName(0)}</td><td><strong>${Math.round(w*3)}g</strong></td><td>3 hrs before gun · oats or white toast + banana</td></tr>
+    </table>Protocol: ${w} kg × 10/9/8/3 g carbs per kg. Stick to known foods — no new items during the carb load.`;
+  }
+  // supplement timing for today's session type
+  const suppEl=document.getElementById('nutr-supp-today');
+  if(suppEl){
+    const todaySess=getSessionsForDate(new Date());
+    const todayType=todaySess.length?todaySess[0].type:null;
+    const suppMap={
+      strength:`<div class="nutr-tip" style="margin-bottom:10px"><strong>Today: strength session</strong><br>Caffeine: ${Math.round(w*3)}–${Math.round(w*5)} mg (3–5 mg/kg) · 45 min before lifting.<br>Creatine: anytime · Magnesium: tonight before bed.</div>`,
+      run:`<div class="nutr-tip" style="margin-bottom:10px"><strong>Today: run session</strong><br>Caffeine: ${Math.round(w*3)}–${Math.round(w*5)} mg · 60 min before (gut needs time) · intervals/threshold only.<br>Easy runs: skip caffeine to preserve sensitivity.</div>`,
+      combo:`<div class="nutr-tip" style="margin-bottom:10px"><strong>Today: strength + run</strong><br>Caffeine: ${Math.round(w*3)}–${Math.round(w*5)} mg · 45–60 min before first discipline.<br>Intra-workout carbs if session >60 min.</div>`,
+      rest:`<div class="nutr-tip" style="margin-bottom:10px"><strong>Today: rest day</strong><br>Skip caffeine today if possible — preserves sensitivity for hard training days.<br>Magnesium glycinate: 300–400 mg tonight before bed.</div>`,
+    };
+    suppEl.innerHTML=todayType&&suppMap[todayType]?suppMap[todayType]:'';
+  }
   // card sub-label
   const sub=document.querySelector('.nutr-card-hd .nutr-card-sub');
   if(sub&&sub.textContent.includes('86 kg')) sub.textContent='Personalised for '+w+' kg · one previous marathon';
@@ -2617,28 +2727,41 @@ function renderToday(){
 }
 
 function sessionFuelingHint(s){
-  if(s.type!=='run'&&s.type!=='combo') return '';
-  const longEx=s.exercises.find(e=>{ const m=e.detail&&e.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i); return m&&parseFloat(m[2])>=18; });
-  if(!longEx) return '';
-  const m=longEx.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i);
-  const km=m?(parseFloat(m[1])+parseFloat(m[2]))/2:20;
-  const durMin=Math.round(km*5.5); // ~5:30/km easy long-run pace
-  let gels=0,t=30; while(t<=durMin){gels++;t+=30;}
-  return `<div class="session-fueling-hint">
-    <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min)</div>
-    <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — start early</span></div>
-    <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every 30 min → ${gels} gels total</span></div>
-    <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val">60–90 g/hr · use race gels</span></div>
-    <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes >90 min</span></div>
-  </div>`;
+  // Long run fueling
+  if(s.type==='run'||s.type==='combo'){
+    const longEx=s.exercises.find(e=>{ const m=e.detail&&e.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i); return m&&parseFloat(m[2])>=18; });
+    if(!longEx) return '';
+    const m=longEx.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i);
+    const km=m?(parseFloat(m[1])+parseFloat(m[2]))/2:20;
+    const durMin=Math.round(km*5.5);
+    let gels=0,t=30; while(t<=durMin){gels++;t+=30;}
+    return `<div class="session-fueling-hint">
+      <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min)</div>
+      <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — start early</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every 30 min → ${gels} gels total</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val">60–90 g/hr · use race gels</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes >90 min</span></div>
+    </div>`;
+  }
+  // Strength session ≥60 min intra-workout fueling
+  if(s.type==='strength'&&estimateDuration(s)>=60){
+    return `<div class="session-fueling-hint">
+      <div class="sfh-title">🍌 Intra-workout fuel · session ≥60 min</div>
+      <div class="sfh-row"><span class="sfh-lbl">Pre-session</span><span class="sfh-val">30–50g fast carbs 30 min before</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">At 45 min mark</span><span class="sfh-val">banana, gel, or 30g carb drink</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Why</span><span class="sfh-val">glycogen limits last sets — maintain quality</span></div>
+    </div>`;
+  }
+  return '';
 }
 function sessionAdjustBanner(s){
-  const key=sessionKey(s);
   const isDeload=STATE.deloadWeeks&&STATE.deloadWeeks[s.week];
   const isSoften=STATE.softenDay&&STATE.softenDay[_ymd(new Date())]&&_sameDay(sessionDate(s),_startOfToday());
-  if(isDeload) return `<div class="deload-banner">⚡ Deload week — 1 fewer set per lift · aim 10% lighter · stop at 3–4 RIR</div>`;
-  if(isSoften) return `<div class="soften-banner">🩵 Eased mode — reduce load ~10%, add 2 RIR, skip final sets if needed</div>`;
-  return '';
+  let out='';
+  if(isDeload) out+=`<div class="deload-banner">⚡ Deload week — 1 fewer set per lift · aim 10% lighter · stop at 3–4 RIR</div>`;
+  else if(isSoften) out+=`<div class="soften-banner">🩵 Eased mode — reduce load ~10%, add 2 RIR, skip final sets if needed</div>`;
+  if(upperBodyBeforeQualityRun(s)) out+=`<div class="soften-banner" style="border-color:rgba(232,198,107,.3);color:var(--accent)">⚠ Tomorrow is a quality run day — keep upper body intensity moderate if you feel residual fatigue going in</div>`;
+  return out;
 }
 function renderSessionCard(s,interactive){
   const key=sessionKey(s);
@@ -2658,8 +2781,8 @@ function renderSessionCard(s,interactive){
     ${done?`<div class="session-completed-banner">✓ COMPLETED · ${doneEx}/${totalEx} exercises logged</div>`:''}
     <div class="session-body" id="body-${key}">
       ${sessionAdjustBanner(s)}
-      ${renderExercises(s,interactive)}
       ${s.type!=='rest'?renderOptional(s):''}
+      ${renderExercises(s,interactive)}
       ${sessionFuelingHint(s)}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
@@ -2671,25 +2794,35 @@ function renderSessionCard(s,interactive){
   </div>`;
 }
 
+function deloadDisplayDetail(detail, s){
+  const isDeload = s && STATE.deloadWeeks && STATE.deloadWeeks[s.week];
+  if(!isDeload) return escHtml(detail);
+  const m = detail.match(/^(\d+)\s*[×x]\s*/);
+  if(!m) return escHtml(detail);
+  const orig = parseInt(m[1]);
+  const reduced = Math.max(1, orig - 1);
+  const rest = detail.slice(m[0].length);
+  return `<s style="opacity:.35">${orig}×</s> <span style="color:var(--accent)">${reduced} ×</span> ${escHtml(rest)}`;
+}
+function upperBodyBeforeQualityRun(s){
+  const upperKw=/bench|overhead press|push.up|dip|shoulder press|row|pull.up|lat pull|curl|tricep/i;
+  const lowerKw=/squat|deadlift|hip thrust|lunge|leg press|rdl|bulgarian|calf|hamstring|glute|split squat/i;
+  const hasUpper=s.exercises.some(e=>upperKw.test(e.name));
+  const hasLower=s.exercises.some(e=>lowerKw.test(e.name));
+  if(!hasUpper||hasLower) return false;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const nextDay=days[(days.indexOf(s.day)+1)%7];
+  return PROGRAM.some(p=>p.phase===s.phase&&p.week===s.week&&p.day===nextDay&&p.type==='run'&&p.exercises.some(e=>/interval|threshold|tempo|quality|800m|1000m|1200m/i.test(e.name+' '+e.detail)));
+}
 function renderExercises(s,interactive){
-  let html='';
-  let lastCat='';
-  s.exercises.forEach(e=>{
-    const cat=e.cat==='core'?'core':e.cat==='run'?'run':e.supp?'supp':'lift';
-    if(cat!==lastCat){
-      const lbl=e.cat==='core'?'Core finisher':e.cat==='run'?'Running':e.cat==='rest'?'Recovery':e.supp?'Supplementary':'Strength';
-      const suppCls=e.supp?' supp':'';
-      html+=`<div class="ex-section-lbl${suppCls}">${lbl}</div>`;
-      lastCat=cat;
-    }
+  const exRow=e=>{
     const done=STATE.completedExercises[e.id];
-    const dotCol=e.cat==='run'?'run':e.cat==='core'?'core':'';
     const dispName=exDisplayName(e);
-    html+=`<div class="ex-row">
+    return `<div class="ex-row">
       <button class="ex-check ${done?'done':''}" role="checkbox" aria-checked="${done?'true':'false'}" aria-label="Mark ${escAttr(dispName)} complete" data-ex-id="${escAttr(e.id)}" onclick="toggleExercise('${escAttr(e.id)}','${sessionKey(s)}')"></button>
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
-        <div class="ex-detail">${e.detail}</div>
+        <div class="ex-detail">${deloadDisplayDetail(e.detail,s)}</div>
         <input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
         ${rpeControlHTML(e.id, sessionKey(s))}
         ${weightControlHTML(e, sessionKey(s))}
@@ -2699,6 +2832,24 @@ function renderExercises(s,interactive){
       </div>
       <button class="ex-info-btn" onclick="showExDemo('${dispName.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
     </div>`;
+  };
+  let html='';
+  // Prehab / activation (supp) exercises go first as warm-up
+  const suppExs=s.exercises.filter(e=>e.supp);
+  if(suppExs.length){
+    html+=`<div class="ex-section-lbl supp">Warm-up & activation</div>`;
+    suppExs.forEach(e=>{ html+=exRow(e); });
+  }
+  // Main exercises grouped by category (strength → core → run)
+  let lastCat='';
+  s.exercises.filter(e=>!e.supp).forEach(e=>{
+    const cat=e.cat==='core'?'core':e.cat==='run'?'run':e.cat==='rest'?'rest':'lift';
+    if(cat!==lastCat){
+      const lbl=cat==='core'?'Core':cat==='run'?'Running':cat==='rest'?'Recovery':'Strength';
+      html+=`<div class="ex-section-lbl">${lbl}</div>`;
+      lastCat=cat;
+    }
+    html+=exRow(e);
   });
   return html;
 }
@@ -3270,8 +3421,10 @@ function applySuggest(exId,sessKey,load){
 }
 function setSetWeight(exId,sessKey,idx,val){
   if(!STATE.exerciseSets[exId]) STATE.exerciseSets[exId]=[];
-  const w=parseFloat(String(val).replace(',','.'));
-  STATE.exerciseSets[exId][idx]=(isNaN(w)||w<=0)?'':w;
+  let w=parseFloat(String(val).replace(',','.'));
+  if(isNaN(w)||w<=0){ STATE.exerciseSets[exId][idx]=''; saveState(STATE); return; }
+  if(w>500){ w=500; if(typeof appToast==='function') appToast('Weight capped at 500 kg'); const inp=document.getElementById('setw-'+exId+'-'+idx); if(inp) inp.value=500; }
+  STATE.exerciseSets[exId][idx]=w;
   saveState(STATE);
   const badge=document.getElementById('e1rm-'+exId);
   if(badge){ const e1=exE1RM(exId); badge.textContent=e1?('e1RM ~'+e1+' kg · top set'):''; }
@@ -3282,8 +3435,10 @@ function setSetWeight(exId,sessKey,idx,val){
 function setSetReps(exId,sessKey,idx,val){
   if(!STATE.exerciseReps) STATE.exerciseReps={};
   if(!STATE.exerciseReps[exId]) STATE.exerciseReps[exId]=[];
-  const r=parseInt(val,10);
-  STATE.exerciseReps[exId][idx]=(isNaN(r)||r<=0)?'':r;
+  let r=parseInt(val,10);
+  if(isNaN(r)||r<=0){ STATE.exerciseReps[exId][idx]=''; saveState(STATE); return; }
+  if(r>50){ r=50; if(typeof appToast==='function') appToast('Reps capped at 50'); const inp=document.getElementById('setr-'+exId+'-'+idx); if(inp) inp.value=50; }
+  STATE.exerciseReps[exId][idx]=r;
   saveState(STATE);
   const p=exPrescriptionById(exId);
   const inp=document.getElementById('setr-'+exId+'-'+idx);
@@ -5284,7 +5439,7 @@ function getOptionalExercises(s){
 function renderOptional(s){
   const opts=getOptionalExercises(s);
   const doneCount=opts.filter(e=>STATE.completedExercises[e.id]).length;
-  return '<div class="ex-section-lbl opt-lbl">Prehab finishers · knee + shoulder '
+  return '<div class="ex-section-lbl supp">Warm-up · knee &amp; shoulder prehab '
     + '<span class="opt-count">'+doneCount+'/2</span></div>'
     + opts.map(e=>{
       const done=STATE.completedExercises[e.id];
