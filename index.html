@@ -51,10 +51,10 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
 
 /* SCROLL CONTENT */
-.content{flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:0 20px calc(80px + var(--safe));scrollbar-width:none;background:#11203a;background:var(--bg)}
-.content::-webkit-scrollbar{display:none}
+.content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;background:#11203a;background:var(--bg)}
+
 .section{display:none}
-.section.active{display:block}
+.section.active{display:block;flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:0 20px calc(80px + var(--safe));scrollbar-width:none}
 
 /* TODAY SECTION */
 .today-date{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
@@ -5439,20 +5439,18 @@ function openTimer(){ TM.open=true; document.getElementById('timer-sheet').class
 function closeTimer(){ TM.open=false; document.getElementById('timer-sheet').classList.remove('open'); }
 function timerMode(m){ TM.mode=m; ['rest','watch','metro'].forEach(x=>{const t=document.getElementById('tt-'+x); if(t) t.classList.toggle('active',x===m);}); timerRender(); }
 function setFabState(){ const f=document.getElementById('fab-timer'); if(f) f.classList.toggle('running', TM.restRunning||TM.wRunning||TM.metroOn); }
-// FAB hides while scrolling down so it never covers content; reappears on scroll-up or pause
+// FAB hides while scrolling down; scroll events now come from .section.active
 (function(){
   let lastY=0, idleT=null;
-  document.addEventListener('DOMContentLoaded', function(){
-    const c=document.querySelector('.content'); const f=document.getElementById('fab-timer');
-    if(!c||!f) return;
-    c.addEventListener('scroll', function(){
-      const y=c.scrollTop;
-      if(y>lastY+8) f.classList.add('fab-hide');
-      else if(y<lastY-8) f.classList.remove('fab-hide');
-      lastY=y;
-      clearTimeout(idleT); idleT=setTimeout(function(){ f.classList.remove('fab-hide'); }, 900);
-    }, {passive:true});
-  });
+  function fabScroll(e){
+    const f=document.getElementById('fab-timer'); if(!f) return;
+    const y=e.target.scrollTop;
+    if(y>lastY+8) f.classList.add('fab-hide');
+    else if(y<lastY-8) f.classList.remove('fab-hide');
+    lastY=y;
+    clearTimeout(idleT); idleT=setTimeout(function(){ f.classList.remove('fab-hide'); }, 900);
+  }
+  document.addEventListener('scroll', fabScroll, {passive:true,capture:true});
 })();
 function watchElapsed(){ return TM.wAcc + (TM.wRunning?(Date.now()-TM.wStart):0); }
 function timerRender(){
@@ -5620,12 +5618,12 @@ function initPWA(){
 }
 
 function initSwipe(){
-  const c=document.querySelector('.content'); if(!c) return;
   const order=['hub','today','week','calendar','program','history','stats','pace','progress','nutrition'];
   let x0=0,y0=0,t0=0,track=false;
   const blocked=el=>!!(el&&el.closest&&el.closest('.nav,.phase-sel,input,textarea,select,.setw-row,.stp,.timer-sheet,.demo-modal,.search-panel,svg,.fab,.pc-input-row'));
-  c.addEventListener('touchstart',function(e){ if(e.touches.length!==1||blocked(e.target)){track=false;return;} const t=e.touches[0]; x0=t.clientX;y0=t.clientY;t0=Date.now();track=true; },{passive:true});
-  c.addEventListener('touchend',function(e){ if(!track) return; track=false; const t=e.changedTouches[0]; const dx=t.clientX-x0,dy=t.clientY-y0,dt=Date.now()-t0;
+  // Attach to document so swipe works regardless of which section is active
+  document.addEventListener('touchstart',function(e){ if(e.touches.length!==1||blocked(e.target)){track=false;return;} const t=e.touches[0]; x0=t.clientX;y0=t.clientY;t0=Date.now();track=true; },{passive:true});
+  document.addEventListener('touchend',function(e){ if(!track) return; track=false; const t=e.changedTouches[0]; const dx=t.clientX-x0,dy=t.clientY-y0,dt=Date.now()-t0;
     if(dt>700||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.7) return;
     const i=order.indexOf(currentSection); if(i<0) return;
     const ni = dx<0 ? i+1 : i-1; if(ni<0||ni>=order.length) return;
