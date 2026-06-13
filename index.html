@@ -44,11 +44,9 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .progress-bar{height:3px;background:var(--surface2);border-radius:99px;margin-bottom:12px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .5s ease}
 
-/* NAV TABS */
-.nav{display:flex;gap:6px;padding:0 20px 10px;flex-shrink:0;overflow-x:auto;scrollbar-width:none}
-.nav::-webkit-scrollbar{display:none}
-.nav-btn{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Aptos',monospace;font-size:11px;cursor:pointer;transition:all .15s;letter-spacing:.04em}
-.nav-btn.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:500}
+/* NAV TABS — hidden, bottom nav handles all navigation */
+.nav{display:none}
+.nav-btn{display:none}
 
 /* SCROLL CONTENT */
 .content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;background:#11203a;background:var(--bg)}
@@ -202,7 +200,7 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .s-status-done{background:rgba(95,214,160,.18);color:var(--green)}
 .s-status-today{background:rgba(90,166,255,.18);color:var(--accent2)}
 .s-status-missed{background:rgba(255,138,92,.15);color:var(--accent3)}
-.section-title{font-family:'Aptos',sans-serif;font-size:18px;letter-spacing:1.5px;margin-bottom:14px;padding-top:6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.section-title{display:none}
 .divider{height:1px;background:var(--border);margin:16px 0}
 
 .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -2398,7 +2396,7 @@ function showSection(id,btn){
   const idx=order.indexOf(id);
   if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
-  const _cc=document.querySelector('.content'); if(_cc) _cc.scrollTop=0;
+  const _sec=document.getElementById('section-'+id); if(_sec) _sec.scrollTop=0;
   if(id==='today') renderToday();
   else if(id==='week') renderWeek();
   else if(id==='calendar') renderCalendar();
