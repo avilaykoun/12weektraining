@@ -3053,7 +3053,7 @@ function renderExercises(s,interactive){
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
         <div class="ex-detail">${deloadDisplayDetail(e.detail,s)}</div>
-        <input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
+        <input class="ex-note-input" type="text" placeholder="Session notes (optional)…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
         ${rpeControlHTML(e.id, sessionKey(s))}
         ${weightControlHTML(e, sessionKey(s))}
         ${runControlHTML(e, sessionKey(s))}
