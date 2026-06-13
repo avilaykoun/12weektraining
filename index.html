@@ -78,7 +78,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .ex-section-lbl.supp{color:var(--accent2);}
 .ex-row{display:flex;align-items:center;gap:10px;padding:8px 16px;border-top:1px solid rgba(42,42,56,.6)}
 .ex-row:first-of-type{border-top:none}
-.ex-check{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ex-check{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;appearance:none;-webkit-appearance:none;padding:0;line-height:1;outline-offset:2px}
 .ex-check.done{background:var(--green);border-color:var(--green)}
 .ex-check.done::after{content:'✓';font-size:12px;color:#000;font-weight:700}
 .ex-info{flex:1}
@@ -647,6 +647,8 @@ input[type=number]{-moz-appearance:textfield}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px}
 ::-webkit-scrollbar-track{background:transparent}
 </style>
+<!-- Dexie.js — IndexedDB wrapper for larger storage payloads (GPX imports) -->
+<script src="https://cdn.jsdelivr.net/npm/dexie@3/dist/dexie.min.js"></script>
 </head>
 <body>
 
@@ -985,6 +987,7 @@ input[type=number]{-moz-appearance:textfield}
   <button class="data-btn" onclick="copyBackup()">⧉ Copy JSON</button>
   <button class="data-btn" onclick="document.getElementById('import-file').click()">⬆︎ Restore backup</button>
   <input id="import-file" type="file" accept="application/json,.json" style="display:none" onchange="importData(this)">
+  <button class="data-btn" onclick="exportCSV()">📊 Export training log (.csv)</button>
   <button class="data-btn" onclick="exportICS()">📅 Add plan to calendar (.ics)</button>
   <button class="data-btn" onclick="exportWeekICS()">📅 Add this week only (.ics)</button>
   <div id="backup-note" class="pc-note" style="text-align:center"></div>
@@ -1840,8 +1843,48 @@ PROGRAM.forEach(s=>{
 })();
 
 // ─────────────────────────────────────────
-// STATE
+// STATE — localStorage (sync boot) + IndexedDB via Dexie (async primary)
+// localStorage is used for instant synchronous boot.
+// IndexedDB handles large GPX/TCX payloads that overflow localStorage ~5 MB quota.
 // ─────────────────────────────────────────
+
+// Initialise Dexie once (CDN loads before this inline script)
+const _appDB = (typeof Dexie !== 'undefined') ? (() => {
+  const db = new Dexie('albert12_v1');
+  db.version(1).stores({ state: 'id' });
+  return db;
+})() : null;
+
+async function _idbSave(s) {
+  if (!_appDB) return;
+  try { await _appDB.state.put({ id: 'main', data: JSON.stringify(s) }); } catch(e) {}
+}
+
+async function _idbLoad() {
+  if (!_appDB) return null;
+  try {
+    const row = await _appDB.state.get('main');
+    if (row && row.data) {
+      const o = JSON.parse(row.data);
+      if (o && typeof o === 'object' && Object.keys(o).length) return o;
+    }
+  } catch(e) {}
+  return null;
+}
+
+// One-time migration: copy localStorage data into IDB if IDB is empty
+async function _idbMigrate() {
+  if (!_appDB) return;
+  try {
+    const existing = await _idbLoad();
+    if (!existing) {
+      const raw = localStorage.getItem('mt_state');
+      const o = raw ? JSON.parse(raw) : null;
+      if (o && typeof o === 'object' && Object.keys(o).length) await _idbSave(o);
+    }
+  } catch(e) {}
+}
+
 function loadState(){
   try{ const raw=localStorage.getItem('mt_state'); const o=JSON.parse(raw||'{}'); if(o&&typeof o==='object'&&Object.keys(o).length) return o; }catch(e){}
   try{ const b=JSON.parse(localStorage.getItem('mt_state_bak')||'{}'); if(b&&typeof b==='object'&&Object.keys(b).length) return b; }catch(e){}
@@ -1855,8 +1898,10 @@ function saveState(s){
     const t=Date.now(); const lb=+(localStorage.getItem('mt_bak_at')||0);
     if(t-lb>864e5){ try{ localStorage.setItem('mt_state_bak',j); localStorage.setItem('mt_bak_at',String(t)); }catch(_){} }
   }catch(e){
-    if(!_saveWarned){ _saveWarned=true; try{ if(typeof appToast==='function') appToast('⚠️ Couldn\u2019t save on this device — export a backup soon (Tools → Data)'); }catch(_){} }
+    if(!_saveWarned){ _saveWarned=true; try{ if(typeof appToast==='function') appToast('⚠️ Storage full — export a backup soon (Tools → Data)'); }catch(_){} }
   }
+  // Also persist to IndexedDB async — survives localStorage quota limits
+  _idbSave(s).catch(()=>{});
 }
 const SCHEMA_VERSION=1;
 function ensureContainers(){
@@ -2044,7 +2089,7 @@ function renderExercises(s,interactive){
     const dotCol=e.cat==='run'?'run':e.cat==='core'?'core':'';
     const dispName=exDisplayName(e);
     html+=`<div class="ex-row">
-      <div class="ex-check ${done?'done':''}" onclick="toggleExercise('${e.id}','${sessionKey(s)}')"></div>
+      <button class="ex-check ${done?'done':''}" role="checkbox" aria-checked="${done?'true':'false'}" aria-label="Mark ${dispName} complete" data-ex-id="${e.id}" onclick="toggleExercise('${e.id}','${sessionKey(s)}')"></button>
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
         <div class="ex-detail">${e.detail}</div>
@@ -2074,9 +2119,10 @@ function toggleExercise(exId,sessKey){
   updateCountdown();
   // Surgical DOM update — no full re-render so the page never jumps
   const done=STATE.completedExercises[exId];
-  const chk=document.querySelector(`.ex-check[onclick*="'${exId}'"]`);
+  const chk=document.querySelector(`.ex-check[data-ex-id="${exId}"]`);
   if(chk){
     chk.classList.toggle('done',done);
+    chk.setAttribute('aria-checked', done ? 'true' : 'false');
     const nameEl=chk.nextElementSibling&&chk.nextElementSibling.querySelector('.ex-name');
     if(nameEl) nameEl.style.cssText=done?'text-decoration:line-through;opacity:.5':'';
   }
@@ -2092,15 +2138,41 @@ function toggleExercise(exId,sessKey){
   }
 }
 function toggleSessionComplete(key){
-  STATE.completedSessions[key]=!STATE.completedSessions[key];
-  // Note: marking a session done records it as complete but leaves each
-  // exercise's tick exactly as the user set it (no auto-ticking).
+  const done=STATE.completedSessions[key]=!STATE.completedSessions[key];
   saveState(STATE);
   updateCountdown();
-  if(currentSection==='today') renderToday();
-  else if(currentSection==='calendar') renderCalendar();
-  else if(currentSection==='week') renderWeek();
-  else renderHistory();
+
+  // Surgical DOM update on the Today view — avoids full re-render so scroll
+  // position and open inputs are preserved on mobile.
+  const card=document.getElementById('card-'+key);
+  if(card){
+    const btn=document.getElementById('cbtn-'+key);
+    if(btn){ btn.textContent=done?'DONE ✓':'MARK DONE'; btn.className='btn-complete '+(done?'done':'pending'); }
+    const s=PROGRAM.find(x=>sessionKey(x)===key);
+    const existingBanner=card.querySelector('.session-completed-banner');
+    if(done){
+      const doneEx=s?s.exercises.filter(e=>STATE.completedExercises[e.id]).length:0;
+      const totalEx=s?s.exercises.length:0;
+      if(!existingBanner){
+        const hdr=card.querySelector('.session-hdr');
+        const banner=document.createElement('div');
+        banner.className='session-completed-banner';
+        banner.textContent=`✓ COMPLETED · ${doneEx}/${totalEx} exercises logged`;
+        if(hdr) hdr.insertAdjacentElement('afterend',banner);
+      } else {
+        existingBanner.textContent=`✓ COMPLETED · ${doneEx}/${totalEx} exercises logged`;
+      }
+    } else {
+      if(existingBanner) existingBanner.remove();
+    }
+  }
+
+  // Non-today sections don't have session cards in DOM — full re-render needed
+  if(currentSection!=='today'){
+    if(currentSection==='calendar') renderCalendar();
+    else if(currentSection==='week') renderWeek();
+    else renderHistory();
+  }
 }
 function saveSessionNote(key,val){STATE.sessionNotes[key]=val;saveState(STATE);}
 function saveExNote(exId,val){STATE.exerciseNotes[exId]=val;saveState(STATE);}
@@ -4828,6 +4900,70 @@ function exportData(){
     const m=document.getElementById('data-msg'); if(m) m.textContent='Backup downloaded.';
   }catch(e){ const m=document.getElementById('data-msg'); if(m) m.textContent='Export failed on this browser.'; }
 }
+function exportCSV(){
+  // Build a metadata lookup: exerciseId -> {week, phase, day, session, name, cat, supp}
+  const meta={};
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{
+    meta[e.id]={week:s.week,phase:s.phase,day:s.day,session:s.name,name:e.name,cat:e.cat,supp:e.supp||false};
+  }));
+
+  const rows=[['type','week','phase','day','session_name','exercise_id','exercise_name','cat','supplementary',
+               'set_1_kg','set_2_kg','set_3_kg','set_4_kg','set_5_kg',
+               'reps_1','reps_2','reps_3','reps_4','reps_5',
+               'speed_kmh','pace_per_km',
+               'dist_km','duration_sec','avg_hr','date']];
+
+  // Strength sets
+  Object.keys(STATE.exerciseSets||{}).sort().forEach(id=>{
+    const sets=(STATE.exerciseSets[id]||[]).map(parseFloat);
+    if(!sets.some(x=>x>0)) return;
+    const m=meta[id]||{};
+    const repArr=(STATE.exerciseReps&&STATE.exerciseReps[id])||[];
+    rows.push(['strength',
+      m.week||'',m.phase||'',m.day||'',m.session||'',
+      id, m.name||'', m.cat||'', m.supp?'1':'0',
+      sets[0]>0?sets[0]:'', sets[1]>0?sets[1]:'', sets[2]>0?sets[2]:'', sets[3]>0?sets[3]:'', sets[4]>0?sets[4]:'',
+      repArr[0]||'', repArr[1]||'', repArr[2]||'', repArr[3]||'', repArr[4]||'',
+      '','','','','','']);
+  });
+
+  // Treadmill run log
+  Object.keys(STATE.runLog||{}).sort().forEach(id=>{
+    const kmh=parseFloat(STATE.runLog[id]); if(!(kmh>0)) return;
+    const m=meta[id]||{};
+    const paceSec=Math.round(3600/kmh);
+    const paceStr=Math.floor(paceSec/60)+':'+String(paceSec%60).padStart(2,'0');
+    rows.push(['run',
+      m.week||'',m.phase||'',m.day||'',m.session||'',
+      id, m.name||'', 'run','0',
+      '','','','','','','','','','',
+      kmh.toFixed(2), paceStr,
+      '','','','']);
+  });
+
+  // Imported GPS runs
+  (STATE.importedRuns||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(r=>{
+    const kmh=r.durationSec>0?(r.distKm/r.durationSec*3600).toFixed(2):'';
+    const paceSec=r.paceSec||0;
+    const paceStr=paceSec?(Math.floor(paceSec/60)+':'+String(paceSec%60).padStart(2,'0')):'';
+    rows.push(['imported_run',
+      '','','','',
+      r.id||'', r.name||'', 'run','0',
+      '','','','','','','','','','',
+      kmh, paceStr,
+      r.distKm||'', r.durationSec||'', r.avgHR||'', r.date||'']);
+  });
+
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  try{
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob); const a=document.createElement('a');
+    a.href=url; a.download='albert12-training-log-'+_ymd(new Date())+'.csv';
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },120);
+    const m=document.getElementById('data-msg'); if(m) m.textContent='CSV exported — '+(rows.length-1)+' entries.';
+  }catch(e){ const m=document.getElementById('data-msg'); if(m) m.textContent='CSV export failed.'; }
+}
 function hasTrainingData(){
   try{
     const n=k=>(STATE[k]&&Object.keys(STATE[k]).length)||0;
@@ -5321,6 +5457,24 @@ window.onload=function(){
       toggleSession(key);
     },300);
   }
+
+  // IndexedDB migration + sync (background, non-blocking)
+  // Migrates localStorage data to IDB on first run, then checks if IDB has
+  // newer/larger data (e.g. if localStorage was cleared but IDB wasn't).
+  _idbMigrate().then(async ()=>{
+    const idbState=await _idbLoad();
+    if(!idbState) return;
+    const idbKeys=Object.keys(idbState).length;
+    const lsKeys=Object.keys(STATE).length;
+    if(idbKeys>lsKeys){
+      for(const k in STATE) delete STATE[k];
+      Object.assign(STATE,idbState);
+      ensureContainers();
+      renderToday();
+      if(currentSection==='stats') renderStats();
+      if(currentSection==='progress') renderProgress();
+    }
+  }).catch(()=>{});
 };
 </script>
 </body>
