@@ -322,6 +322,10 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .opt-lbl{display:flex;align-items:center;gap:8px;color:var(--accent3)}
 .opt-count{font-size:9px;color:var(--text3);background:var(--surface2);border-radius:99px;padding:1px 7px}
 .ex-row.opt-row{background:rgba(255,107,71,.03)}
+/* Essential vs supplementary priority dots */
+.ex-essential .ex-name::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:6px;vertical-align:middle;flex-shrink:0}
+.ex-supplementary .ex-name::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent2);opacity:.45;margin-right:7px;vertical-align:middle;flex-shrink:0}
+.ex-supplementary .ex-name{color:var(--text2)}
 
 /* SEARCH */
 .hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
@@ -2816,11 +2820,48 @@ function upperBodyBeforeQualityRun(s){
   const nextDay=days[(days.indexOf(s.day)+1)%7];
   return PROGRAM.some(p=>p.phase===s.phase&&p.week===s.week&&p.day===nextDay&&p.type==='run'&&p.exercises.some(e=>/interval|threshold|tempo|quality|800m|1000m|1200m/i.test(e.name+' '+e.detail)));
 }
+function getEssentialSet(s){
+  if(s.type==='rest') return new Set();
+  const mainExs=s.exercises.filter(e=>!e.supp);
+
+  // Pure run sessions: work segments (not warm-up/cool-down) are essential
+  if(s.type==='run'){
+    const work=mainExs.filter(e=>e.cat==='run'&&!/^(warm.?up|cool.?down)/i.test(e.name));
+    return new Set((work.length?work:mainExs.filter(e=>e.cat==='run').slice(0,1)).map(e=>e.id));
+  }
+
+  const strExs=mainExs.filter(e=>e.cat==='strength');
+  if(!strExs.length) return new Set();
+
+  const getSets=e=>{const m=e.detail.match(/^(\d+)\s*[×x]/);return m?parseInt(m[1]):2;};
+  const isCompound=e=>/squat|deadlift|bench|press|row|pull.?up|hip thrust|lunge|carry|swing|jump|clean|snatch|dip|nordic|rdl/i.test(e.name);
+
+  // Tier 1: 4+ sets (primary loading)
+  const tier1=strExs.filter(e=>getSets(e)>=4);
+  // Tier 2: 3-set compound movements
+  const tier2=strExs.filter(e=>getSets(e)===3&&isCompound(e)&&!tier1.includes(e));
+  // Tier 3: remainder (isolation, 2-set, 3-set non-compound)
+
+  let essential=[...tier1];
+  for(const e of tier2){if(essential.length>=5) break; essential.push(e);}
+  // Reach minimum of 3 from remaining if needed
+  const tier3=strExs.filter(e=>!essential.includes(e));
+  for(const e of tier3){if(essential.length>=3) break; essential.push(e);}
+  essential=essential.slice(0,5);
+
+  const ids=new Set(essential.map(e=>e.id));
+  // Combo sessions: run exercises are also essential (they ARE the run stimulus)
+  if(s.type==='combo') mainExs.filter(e=>e.cat==='run').forEach(e=>ids.add(e.id));
+  return ids;
+}
+
 function renderExercises(s,interactive){
-  const exRow=e=>{
+  const essentialSet=getEssentialSet(s);
+  const exRow=(e,inWarmup=false)=>{
     const done=STATE.completedExercises[e.id];
     const dispName=exDisplayName(e);
-    return `<div class="ex-row">
+    const prioCls=inWarmup?'ex-supplementary':essentialSet.has(e.id)?'ex-essential':'ex-supplementary';
+    return `<div class="ex-row ${prioCls}">
       <button class="ex-check ${done?'done':''}" role="checkbox" aria-checked="${done?'true':'false'}" aria-label="Mark ${escAttr(dispName)} complete" data-ex-id="${escAttr(e.id)}" onclick="toggleExercise('${escAttr(e.id)}','${sessionKey(s)}')"></button>
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
@@ -2844,7 +2885,7 @@ function renderExercises(s,interactive){
     html+=`<div class="ex-section-lbl supp">Warm-up & prehab</div>`;
     optExs.forEach(e=>{
       const done=STATE.completedExercises[e.id];
-      html+='<div class="ex-row">'
+      html+='<div class="ex-row ex-supplementary">'
         +'<div class="ex-check '+(done?'done':'')+'" onclick="toggleExercise(\''+e.id+'\',\''+sessionKey(s)+'\')"></div>'
         +'<div class="ex-info">'
         +'<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
@@ -2855,7 +2896,7 @@ function renderExercises(s,interactive){
         +'<button class="ex-info-btn" onclick="showExDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">ⓘ</button>'
         +'</div>';
     });
-    suppExs.forEach(e=>{ html+=exRow(e); });
+    suppExs.forEach(e=>{ html+=exRow(e,true); });
   }
   // Main exercises sorted and grouped: Strength → Core → Running → Recovery
   const catRank=e=>e.cat==='core'?1:e.cat==='run'?2:e.cat==='rest'?3:0;
@@ -2868,7 +2909,7 @@ function renderExercises(s,interactive){
       html+=`<div class="ex-section-lbl">${lbl}</div>`;
       lastCat=cat;
     }
-    html+=exRow(e);
+    html+=exRow(e,false);
   });
   return html;
 }
