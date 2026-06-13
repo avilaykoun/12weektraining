@@ -565,8 +565,8 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .io-easy{background:#5fd6a0;color:#0a0a0f;font-size:11px;font-family:'Aptos',monospace;font-weight:600;display:flex;align-items:center;justify-content:center;min-width:0}
 .io-hard{background:#ff8a5c;color:#0a0a0f;font-size:11px;font-family:'Aptos',monospace;font-weight:600;display:flex;align-items:center;justify-content:center;min-width:0}
 .io-target{font-size:10px;color:var(--text3);font-family:'Aptos',monospace;text-align:center;margin-top:5px}
-.bm-sched-wrap{margin-bottom:14px}
-.bm-sched{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;margin-bottom:6px}
+.bm-sched-wrap{margin-bottom:10px}
+.bm-sched{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 10px;border:1px solid var(--border);border-radius:9px;margin-bottom:5px}
 .bm-sched.due{border-color:var(--accent);background:rgba(212,175,90,.08)}
 .bm-sched-l{font-size:12.5px;font-family:'Aptos',monospace;color:var(--text)}
 .bm-what{font-size:10px;color:var(--text3);margin-top:2px}
@@ -587,17 +587,16 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .bm-nudge{display:flex;gap:10px;align-items:center;background:rgba(212,175,90,.1);border:1px solid var(--accent);border-radius:12px;padding:11px 13px;margin-bottom:12px;cursor:pointer;font-size:12.5px;font-family:'Aptos',monospace;color:var(--text);line-height:1.4}
 .bm-nudge-tag{font-size:10px;font-weight:700;color:#0a0a0f;background:var(--accent);border-radius:6px;padding:4px 7px;white-space:nowrap}
 .bm-nudge-go{color:var(--accent);font-weight:600;white-space:nowrap}
-.bm-proto{margin:8px 0 10px}
-.bm-proto summary{font-size:11px;font-family:'Aptos',monospace;color:var(--accent);cursor:pointer;user-select:none;padding:4px 0;letter-spacing:.03em}
+.bm-proto{margin:5px 0 8px}
+.bm-proto summary{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text3);cursor:pointer;user-select:none;padding:3px 0;letter-spacing:.02em}
 .bm-proto summary::-webkit-details-marker{display:none}
 .bm-proto[open] summary::before{content:'▾ '}
 .bm-proto:not([open]) summary::before{content:'▸ '}
-.bm-proto-body{font-size:11.5px;font-family:'Aptos',monospace;color:var(--text2);line-height:1.65;padding:7px 0 2px}
-.bm-proto-body ol{margin:6px 0 6px 16px;padding:0}
-.bm-proto-body li{margin-bottom:3px}
-.bm-proto-norm{font-size:10.5px;color:var(--text3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
-.bm-video{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'Aptos',monospace;color:var(--accent);text-decoration:none;margin-top:6px;padding:4px 8px;border:1px solid rgba(212,175,90,.3);border-radius:7px}
-.bm-video::before{content:'▶';font-size:9px}
+.bm-proto-body{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);line-height:1.6;padding:6px 0 2px}
+.bm-proto-body ol{margin:5px 0 5px 14px;padding:0}
+.bm-proto-body li{margin-bottom:2px}
+.bm-proto-norm{font-size:10px;color:var(--text3);margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
+
 .accg{margin-bottom:12px}
 .accg>summary{list-style:none;cursor:pointer;padding:11px 4px;display:flex;align-items:center;font-family:'Aptos',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);font-weight:600;-webkit-tap-highlight-color:transparent}
 .accg>summary::-webkit-details-marker{display:none}
@@ -617,7 +616,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .pace-num{font-size:18px;font-family:'Aptos',monospace;font-weight:700;color:var(--text);letter-spacing:-.01em}
 .pace-km{font-size:11px;font-family:'Aptos',monospace;color:var(--text3);margin-top:2px}
 .pace-rep{font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);margin-top:3px;font-weight:600}
-.bm-section-hd{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 7px;font-weight:600;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
 .s1-tbl{width:100%;border-collapse:collapse;margin-top:10px}
@@ -2938,7 +2937,7 @@ function renderHRZones(){
   const zones=[['Zone 1 · Recovery',.5,.6],['Zone 2 · Aerobic base',.6,.7],['Zone 3 · Tempo',.7,.8],['Zone 4 · Threshold',.8,.9],['Zone 5 · VO₂max',.9,1]];
   const rows=zones.map(z=>'<div class="pc-line"><span class="k">'+z[0]+'</span><span class="v">'+bpm(z[1])+'–'+bpm(z[2])+' bpm</span></div>').join('');
   el.innerHTML='<div class="pc-res"><div class="pc-res-hd">Max HR ≈ '+hrmax+' bpm'+(useHRR?(' · resting '+rest):'')+'</div>'+rows
-    +'<div class="pc-note">Max HR via Tanaka (208 − 0.7 × age). '+(useHRR?'Zones use the Karvonen heart-rate-reserve method with your resting HR — more individualised.':'Add resting HR for individualised zones (Karvonen method).')+' For marathon base-building, keep most easy runs in Zone 2.</div></div>';
+    +'<div class="pc-note">Max HR via Tanaka (208 − 0.7 × age). '+(useHRR?'Zones use the Karvonen HRR method with your resting HR.':'Add resting HR for individualised zones.')+' For marathon base-building, keep most easy runs in Zone 2.</div></div>';
 }
 function renderMacros(){
   const wEl=document.getElementById('mac-weight'), gEl=document.getElementById('mac-goal'), el=document.getElementById('mac-results');
@@ -2957,7 +2956,7 @@ function renderMacros(){
     +'<div class="pc-line"><span class="k">Protein</span><span class="v">'+pro+' g ('+proKcal+' kcal)</span></div>'
     +'<div class="pc-line"><span class="k">Fat</span><span class="v">'+fat+' g ('+Math.round(fatKcal)+' kcal)</span></div>'
     +'<div class="pc-line"><span class="k">Baseline hydration</span><span class="v">≈ '+water+' L/day</span></div>'
-    +'<div class="pc-note">Rough estimates from body weight (≈'+cfg.kcal+' kcal/kg, '+cfg.pro+' g/kg protein, '+cfg.cho+' g/kg carbs for endurance). Add ~0.5 L fluid per hour of training. Not a substitute for a registered dietitian — adjust to hunger, energy and the scale over 2–3 weeks.</div></div>';
+    +'<div class="pc-note">Rough estimates from body weight (≈'+cfg.kcal+' kcal/kg, '+cfg.pro+' g/kg protein, '+cfg.cho+' g/kg carbs for endurance). Add ~0.5 L fluid per hour of training. Adjust to hunger, energy and scale over 2–3 weeks.</div></div>';
 }
 function pcPacingRecHTML(){
   const perKm=3600/pcSpeedKmh; const m=perKm/60;
@@ -3077,7 +3076,7 @@ function fitnessCardHTML(){
     +'<path d="'+lineFor('ctl')+'" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"></path>'
     +'<path d="'+lineFor('atl')+'" fill="none" stroke="var(--accent2)" stroke-width="1.6" stroke-dasharray="3 2" stroke-linejoin="round"></path></svg>';
   const legend='<div style="display:flex;gap:14px;justify-content:center;margin-top:2px;font-size:9px;font-family:\'Aptos\',monospace;color:var(--text3)"><span><span style="color:var(--accent)">━</span> Fitness (42d)</span><span><span style="color:var(--accent2)">┅</span> Fatigue (7d)</span></div>';
-  const note='<div class="pc-note" style="margin-top:8px">Form today: <strong style="color:'+band[0]+'">'+band[1]+'</strong>. Form (TSB = fitness − fatigue) positive ≈ fresh/tapered; moderately negative ≈ productive overload; deeply negative ≈ heavy fatigue. Built from your session-RPE load, so treat the trend (not the absolute number) as the signal. Ride form positive into race week.</div>';
+  const note='<div class="pc-note" style="margin-top:8px">Form today: <strong style="color:'+band[0]+'">'+band[1]+'</strong>. TSB = fitness − fatigue. Positive = fresh, moderately negative = productive overload, deeply negative = heavy fatigue. Trend matters more than the number.</div>';
   return wrap(cards+svg+legend+note);
 }
 // ===== TIER 2/3 FEATURE LOGIC =====
@@ -3127,7 +3126,7 @@ function racePredictCardHTML(){
   const row=(l,sec)=>'<tr><td class="p">'+l+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
   return wrap('<div style="text-align:center;margin-bottom:8px"><div style="font-size:34px;font-family:\'Aptos\',sans-serif;color:var(--accent);line-height:1">'+big+'</div><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">PREDICTED MARATHON</div></div>'
     +'<table class="s1-tbl"><tbody>'+row('Easy',p.easy)+row('Marathon',p.mp)+row('Threshold',p.thr)+row('Interval',p.int)+'</tbody></table>'
-    +'<div class="pc-note">From your '+(+fr.distKm.toFixed(1))+' km '+srcTxt+' ('+fmtPaceSec(paceSec)+'/km), via the Riegel model (exponent 1.06). It assumes marathon-specific endurance; without long-run training, real time runs slower. Updates as you log faster/longer runs.</div>');
+    +'<div class="pc-note">From your '+(+fr.distKm.toFixed(1))+' km '+srcTxt+' ('+fmtPaceSec(paceSec)+'/km), via the Riegel model (exponent 1.06). Updates with each run logged.</div>');
 }
 // ── Plate & warm-up calculator ──
 function platesFor(target,bar){ let per=(target-bar)/2; if(per<-0.01) return null; const plates=[25,20,15,10,5,2.5,1.25]; const out=[]; plates.forEach(p=>{ let c=0; while(per>=p-1e-9){ per-=p; c++; } if(c) out.push([p,c]); }); return {out,leftover:Math.round(per*100)/100}; }
@@ -3179,7 +3178,7 @@ function muscleCardHTML(){
   const rows=order.map(k=>{ const v=c[k]||0; const pct=Math.min(100,v/SC*100); const col=v===0?'var(--surface3)':(v<MEV?'#5aa6ff':(v<=MRV?'#5fd6a0':'#ff6b47'));
     return '<div class="mus-row"><div class="mus-top"><span>'+k+'</span><span>'+v+' sets</span></div><div class="mus-track"><div class="mus-fill" style="width:'+pct+'%;background:'+col+'"></div><span class="mus-mark" style="left:'+(MEV/SC*100)+'%"></span><span class="mus-mark" style="left:'+(MRV/SC*100)+'%"></span></div></div>';
   }).join('');
-  return wrap(rows+'<div class="pc-note">This week\u2019s hard sets per muscle. The two ticks mark MEV (~8, minimum to grow) and MRV (~20, recovery ceiling). Blue = under maintenance, green = productive, red = over the ceiling.</div>');
+  return wrap(rows+'<div class="pc-note">This week\u2019s hard sets per muscle. Ticks = MEV (~8 min) and MRV (~20 max). Blue = sub-maintenance, green = productive, red = over ceiling.</div>');
 }
 // ── Consistency ──
 function totalTonnage(){ let t=0; Object.keys(STATE.exerciseSets||{}).forEach(id=>{ t+=exVolume(id); }); return t; }
@@ -3627,36 +3626,9 @@ const BM_PROTOS={
     '30 m sprint (seconds)':'Mark start and 30 m on flat non-slip surface. Standing start, front foot on line. Record with phone slow-motion video or partner stopwatch. 3 attempts; rest 3 min; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.0 s · Good 4.0–4.4 · Average 4.5–5.0 · Needs work &gt;5.0</div>',
     '5-10-5 pro agility shuttle (seconds)':'3 cones in a line: 0 m, 5 m, 10 m. Start at middle cone (5 m). Sprint 5 m right, touch line; sprint 10 m left, touch line; sprint 5 m back through start. 3 attempts; record best.<div class="bm-proto-norm">Norms (male): Elite &lt;4.2 s · Good 4.2–4.6 · Average 4.7–5.2 · Needs work &gt;5.2</div>'
   }
-};
-const BM_VIDS={
-  end:{
-    'Push-ups AMRAP':'https://www.youtube.com/results?search_query=push+up+AMRAP+test+protocol+proper+form',
-    'Pull-ups AMRAP':'https://www.youtube.com/results?search_query=pull+up+max+reps+test+dead+hang+strict',
-    'McGill side bridge hold (seconds — best side)':'https://www.youtube.com/results?search_query=McGill+side+bridge+endurance+test+protocol',
-    'Plank hold (seconds)':'https://www.youtube.com/results?search_query=plank+hold+test+proper+form+assessment',
-    'Cooper 12-min test (metres)':'https://www.youtube.com/results?search_query=Cooper+12+minute+run+test+VO2max'
-  },
-  mob:{
-    'Overhead squat score (1–3)':'https://www.youtube.com/results?search_query=overhead+squat+assessment+FMS+screen',
-    'Ankle dorsiflexion knee-to-wall (cm)':'https://www.youtube.com/results?search_query=knee+to+wall+ankle+dorsiflexion+test+measurement',
-    'Hip 90/90 internal rotation gap (cm)':'https://www.youtube.com/results?search_query=hip+90+90+mobility+test+internal+rotation',
-    'Modified Thomas test score (1–3)':'https://www.youtube.com/results?search_query=modified+Thomas+test+hip+flexor+assessment',
-    'Active straight-leg raise (degrees)':'https://www.youtube.com/results?search_query=active+straight+leg+raise+test+hamstring+assessment'
-  },
-  pow:{
-    'Standing broad jump (cm)':'https://www.youtube.com/results?search_query=standing+broad+jump+test+protocol+measurement',
-    'Countermovement vertical jump (cm)':'https://www.youtube.com/results?search_query=countermovement+vertical+jump+test+how+to+measure'
-  },
-  spd:{
-    '30 m sprint (seconds)':'https://www.youtube.com/results?search_query=30m+sprint+test+protocol+timing+athletic+assessment',
-    '5-10-5 pro agility shuttle (seconds)':'https://www.youtube.com/results?search_query=5-10-5+pro+agility+shuttle+test+protocol'
-  }
-};
-function _bmShowProto(bodyId,cat,val){
+};function _bmShowProto(bodyId,cat,val){
   const b=document.getElementById(bodyId); if(!b) return;
-  const proto=(BM_PROTOS[cat]||{})[val]||'Select a test to see the protocol.';
-  const vid=(BM_VIDS[cat]||{})[val];
-  b.innerHTML=proto+(vid?'<br><a class="bm-video" href="'+vid+'" target="_blank" rel="noopener">Watch protocol video</a>':'');
+  b.innerHTML=(BM_PROTOS[cat]||{})[val]||'Select a test to see the protocol.';
 }
 function benchmarkLiftList(){
   const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Single-leg squat to box'];
@@ -3807,22 +3779,21 @@ function benchmarkCardHTML(){
   const runBtns=ebRun?'<button class="pc-apply" onclick="logBenchmarkRun()">Update run benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkRun()">Save run benchmark</button>';
   const strBtns=ebStr?'<button class="pc-apply" onclick="logBenchmarkStrength()">Update strength benchmark</button><button class="bm-cancel" onclick="cancelEditBenchmark()">Cancel edit</button>':'<button class="pc-apply" onclick="logBenchmarkStrength()">Save strength benchmark</button>';
 
-  const runLogger='<div class="bm-section-hd">Cardiovascular endurance · Run time-trial</div>'
-    +'<details class="bm-proto"><summary>Protocol &amp; video</summary><div class="bm-proto-body"><strong>Test:</strong> 5 km time trial on a flat, measured course (track preferred). A 2–5 km all-out effort is also accepted — the app predicts marathon time via the Riegel formula.<ol><li>Warm up 10–15 min at easy pace + 3 × 30-sec strides.</li><li>Run 5 km as fast as sustainably possible — even splits preferred.</li><li>Record finish time. App recalibrates all pacing zones immediately.</li><li>Alternative: Cooper 12-min test — mark start, run as far as possible in exactly 12:00 on a flat 400 m track. Record total metres.</li></ol><div class="bm-proto-norm"><strong>Norms (5 km):</strong> Elite ≤ 18:00 · Good 18–22 min · Average 23–28 min · Beginner &gt; 28 min</div><a class="bm-video" href="https://www.youtube.com/results?search_query=5km+time+trial+pacing+strategy+running" target="_blank" rel="noopener">Watch: 5 km time-trial pacing guide</a></div></details>'
+  const runLogger='<div class="bm-section-hd">Run · Time-trial</div>'
+    +'<details class="bm-proto"><summary>Protocol &amp; norms</summary><div class="bm-proto-body"><strong>Test:</strong> 5 km time trial on a flat, measured course (track preferred). A 2–5 km all-out effort is also accepted — the app predicts marathon time via the Riegel formula.<ol><li>Warm up 10–15 min at easy pace + 3 × 30-sec strides.</li><li>Run 5 km as fast as sustainably possible — even splits preferred.</li><li>Record finish time. App recalibrates all pacing zones immediately.</li><li>Alternative: Cooper 12-min test — mark start, run as far as possible in exactly 12:00 on a flat 400 m track. Record total metres.</li></ol><div class="bm-proto-norm"><strong>Norms (5 km):</strong> Elite ≤ 18:00 · Good 18–22 min · Average 23–28 min · Beginner &gt; 28 min</div></div></details>'
     +'<div class="pc-field"><label>Distance &amp; time</label><div class="pc-input-row" style="gap:6px"><input id="bm-run-km" type="number" inputmode="decimal" step="0.1" placeholder="5" value="'+rkv+'" style="flex:1"><span class="pc-unit">km</span><input id="bm-run-min" type="number" inputmode="numeric" placeholder="min" value="'+rmv+'" style="flex:1"><input id="bm-run-sec" type="number" inputmode="numeric" placeholder="sec" value="'+rsv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-run-block" '+selCss+'>'+runBlockOpts+'</select></div></div>'
     +runBtns;
 
-  const strLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular strength · 1RM testing</div>'
-    +'<details class="bm-proto"><summary>NSCA 1RM protocol &amp; video</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don&#39;t need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div><a class="bm-video" href="https://www.youtube.com/results?search_query=1RM+testing+protocol+strength+NSCA" target="_blank" rel="noopener">Watch: 1RM testing protocol</a></div></details>'
+  const strLogger='<div class="bm-section-hd">Strength · 1RM</div>'
+    +'<details class="bm-proto"><summary>Protocol &amp; norms (NSCA)</summary><div class="bm-proto-body"><strong>Warm-up sequence (per lift):</strong><ol><li>5–10 min general warm-up (row, bike, or light run).</li><li>Set 1: 50% est. 1RM × 8–10 reps — 2 min rest.</li><li>Set 2: 70% × 4–5 reps — 2 min rest.</li><li>Set 3: 80% × 2–3 reps — 3 min rest.</li><li>Set 4: 90% × 1 rep — 3–5 min rest.</li><li>Attempt 1RM: increase by 2–5%. Allow up to 3 attempts; rest 3–5 min between.</li><li>Log your best set (weight × reps) — app calculates e1RM via Epley formula.</li></ol>You don&#39;t need to hit a true 1RM — a heavy 3–5RM set gives an accurate estimate.<br><strong>Bodyweight lifts:</strong> log 0 kg for BW only; enter added load if weighted. Body weight must be logged in Tools for e1RM to include bodyweight.<div class="bm-proto-norm"><strong>Norms (back squat, male):</strong> Elite &gt; 2× BW · Intermediate 1.5× BW · Beginner 1× BW</div></div></details>'
     +'<div class="pc-field"><label>Lift</label><div class="pc-input-row"><select id="bm-str-lift" '+selCss+'>'+liftOpts+'</select></div></div>'
     +'<div class="pc-field"><label>Best set</label><div class="pc-input-row" style="gap:6px"><input id="bm-str-kg" type="number" inputmode="decimal" step="2.5" placeholder="kg (0 = BW)" value="'+skv+'" style="flex:1"><span class="pc-unit">\xd7</span><input id="bm-str-reps" type="number" inputmode="numeric" placeholder="reps" value="'+srv+'" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
     +strBtns;
 
   const endTests=['Push-ups AMRAP','Pull-ups AMRAP','Single-leg calf raise AMRAP (per leg)','Plank hold (seconds)','McGill side bridge hold (seconds — best side)','Dead hang (seconds)','Isometric wall sit (seconds)','Cooper 12-min test (metres)'];
-  const endSelId='bm-end-test';
-  const endLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular endurance &amp; aerobic capacity</div>'
+  const endLogger='<div class="bm-section-hd">Muscular endurance</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-end-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
     +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+' onchange="_bmShowProto(\'bm-end-proto-body\',\'end\',this.value)">'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-end-val" type="text" inputmode="numeric" placeholder="reps / seconds / metres" style="flex:1"></div></div>'
@@ -3830,7 +3801,7 @@ function benchmarkCardHTML(){
     +'<button class="pc-apply" onclick="logBenchmarkEndurance()">Save endurance test</button>';
 
   const mobTests=['Overhead squat score (1–3)','Ankle dorsiflexion knee-to-wall (cm)','Hip 90/90 internal rotation gap (cm)','Modified Thomas test score (1–3)','Active straight-leg raise (degrees)'];
-  const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Joint mobility assessment</div>'
+  const flexLogger='<div class="bm-section-hd">Mobility</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-mob-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
     +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+' onchange="_bmShowProto(\'bm-mob-proto-body\',\'mob\',this.value)">'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="score / cm / degrees" style="flex:1"></div></div>'
@@ -3838,7 +3809,7 @@ function benchmarkCardHTML(){
     +'<button class="pc-apply" onclick="logBenchmarkMobility()">Save mobility test</button>';
 
   const powTests=['Standing broad jump (cm)','Countermovement vertical jump (cm)'];
-  const powLogger='<div class="bm-section-hd" style="margin-top:14px">Power · Explosive output</div>'
+  const powLogger='<div class="bm-section-hd">Power &amp; speed</div>'
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-pow-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
     +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-pow-test" '+selCss+' onchange="_bmShowProto(\'bm-pow-proto-body\',\'pow\',this.value)">'+powTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result (cm)</label><div class="pc-input-row" style="gap:6px"><input id="bm-pow-val" type="number" inputmode="decimal" step="1" placeholder="centimetres" style="flex:1"></div></div>'
@@ -3846,7 +3817,7 @@ function benchmarkCardHTML(){
     +'<button class="pc-apply" onclick="logBenchmarkPower()">Save power test</button>';
 
   const spdTests=['30 m sprint (seconds)','5-10-5 pro agility shuttle (seconds)'];
-  const spdLogger='<div class="bm-section-hd" style="margin-top:14px">Speed &amp; agility</div>'
+  const spdLogger=''
     +'<details class="bm-proto"><summary>Protocols &amp; norms</summary><div id="bm-spd-proto-body" class="bm-proto-body">Select a test above to see protocol.</div></details>'
     +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-spd-test" '+selCss+' onchange="_bmShowProto(\'bm-spd-proto-body\',\'spd\',this.value)">'+spdTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result (seconds)</label><div class="pc-input-row" style="gap:6px"><input id="bm-spd-val" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 4.35" style="flex:1"></div></div>'
@@ -4922,12 +4893,12 @@ function pcOutputs(){
             + '<div class="pc-line"><span class="k">Flat-equivalent speed</span><span class="v">'+gapKmh.toFixed(1)+' km/h</span></div>' : '')
     + '<div class="pc-line"><span class="k">Est. VO₂ / intensity</span><span class="v">'+vo2.toFixed(1)+' ml/kg/min · '+mets.toFixed(1)+' METs</span></div>'
     + calRows
-    + '<div class="pc-note">Incline maths uses the ACSM walking/running metabolic equations. "Effort-equivalent flat pace" is the flat speed that costs the same oxygen as running this grade.</div>'
+    + '<div class="pc-note">Incline maths uses the ACSM walking/running metabolic equations. "Effort-equivalent flat pace" matches the same O₂ cost on flat ground.</div>'
     + '</div>'
     + '<div class="pc-res">'
     + '<div class="pc-res-hd">Time on the belt</div>'
     + splitRows
-    + '<div class="pc-note">Distances are belt distance at '+pcSpeedKmh.toFixed(1)+' km/h. Tip: type a goal pace in the pace box to get the speed to set the treadmill.</div>'
+    + '<div class="pc-note">Distances are belt distance at '+pcSpeedKmh.toFixed(1)+' km/h. Tip: type a goal pace to get the matching treadmill speed.</div>'
     + '</div>'
     + pcPacingRecHTML()
     + '<button class="pc-apply" onclick="applyToTodayRun()">↗ Apply '+pcSpeedKmh.toFixed(1)+' km/h to today\u2019s run</button>'
@@ -5217,7 +5188,7 @@ function poCalc(){
   out.innerHTML='<div class="pc-res"><div class="pc-res-hd">Next session target · '+plan.label+'</div>'
     +'<div class="pc-big"><div class="pc-big-card"><div class="pc-big-v">'+s1Fmt(next.weight)+'</div><div class="pc-big-l">kg · +'+s1Fmt(next.delta)+' kg</div></div></div>'
     +'<table class="s1-tbl"><tbody>'+ladder+'</tbody></table>'
-    +'<div class="pc-note">Sport-science guidance (ACSM): when you beat the target by 1–2 reps on two sessions in a row, add ~2–10% — about 2–5% upper-body, 5–10% lower-body. Smaller, frequent jumps stick better than big ones. Plan a lighter deload every 4–6 weeks and re-test. General guidance, not individualised advice.</div></div>';
+    +'<div class="pc-note">Beat target by 1–2 reps two sessions running → add ~5% (lower-body) or ~2.5% (upper). Deload every 4–6 weeks.</div></div>';
   if(btn){ btn.disabled=false; btn.textContent='Apply '+s1Fmt(next.weight)+' kg → today’s '+plan.ex; }
   if(msg) msg.textContent='Next step is +'+s1Fmt(next.delta)+' kg ('+plan.type+'-body). Fills today’s set loads.';
 }
@@ -5298,7 +5269,7 @@ function ssCalc(){
     : 'Straight sets at a rep-matched intensity are simple and effective when paired with progressive overload week to week.';
   out.innerHTML='<div class="pc-res"><div class="pc-res-hd">'+names[plan.scheme]+' · '+plan.sets+' × '+plan.reps+'</div>'
     +'<table class="s1-tbl"><tbody>'+rows+'</tbody></table>'
-    +'<div class="pc-note">'+principle+' Loads rounded to 2.5 kg. General guidance, not individualised advice — adjust to how the sets actually feel.</div></div>';
+    +'<div class="pc-note">'+principle+' Loads rounded to 2.5 kg. Adjust to feel.</div></div>';
   if(btn){ btn.disabled=false; btn.textContent='Apply set plan → today’s '+plan.name; }
   if(msg) msg.textContent=names[plan.scheme]+': fills each of today’s '+plan.sets+' sets individually.';
 }
@@ -5468,7 +5439,7 @@ function rpCalc(){
   out.innerHTML='<div class="pc-res">'+pacesHTML
     +'<div class="pc-res-hd" style="margin:14px 0 6px">Weekly volume ramp</div>'
     +'<table class="s1-tbl"><tbody>'+volRows+'</tbody></table>'
-    +'<div class="pc-note">Progressive overload for endurance: raise weekly volume by ~10% at most, with a cutback week (~−25%) every 4th week to absorb the load. Keep ~80% of running easy and ~20% hard (threshold/intervals). Build the long run toward ~32 km, then taper 2–3 weeks out. General guidance — back off if niggles appear.</div></div>';
+    +'<div class="pc-note">Raise volume ≤10%/week; cutback (−25%) every 4th week. 80% easy, 20% hard. Long run → 32 km, taper 2–3 weeks out.</div></div>';
   if(btn) btn.disabled=!plan.paces;
   if(msg) msg.textContent = plan.paces ? 'Pick a pace zone and apply it to today’s run.' : 'Enter a goal time to enable pace targets.';
 }
