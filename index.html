@@ -142,9 +142,11 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:7px 0 calc(6px + var(--safe));z-index:20;display:flex;justify-content:space-around}
-.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 3px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
+.bottom-nav{flex:none;width:100%;background:rgba(28,44,77,.96);background:color-mix(in srgb, var(--surface) 96%, transparent);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 calc(5px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 2px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0}
 .bnav-btn.active{color:var(--accent)}
+.bnav-btn.active .bnav-icon{position:relative}
+.bnav-btn.active .bnav-icon::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--accent);border-radius:99px}
 .bnav-icon{font-size:19px;line-height:1}
 .bnav-lbl{font-size:8px;font-family:'Aptos',monospace;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 
@@ -170,7 +172,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .phase-pill{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Aptos',monospace;font-size:10px;cursor:pointer;letter-spacing:.04em;transition:all .15s}
 .phase-pill.active{background:var(--accent2);color:#000;border-color:var(--accent2);font-weight:500}
 
-.section-title{font-family:'Aptos',sans-serif;font-size:18px;letter-spacing:1.5px;margin-bottom:12px;padding-top:4px}
+.section-title{font-family:'Aptos',sans-serif;font-size:18px;letter-spacing:1.5px;margin-bottom:14px;padding-top:6px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .divider{height:1px;background:var(--border);margin:16px 0}
 
 .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
@@ -616,13 +618,19 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .pace-num{font-size:18px;font-family:'Aptos',monospace;font-weight:700;color:var(--text);letter-spacing:-.01em}
 .pace-km{font-size:11px;font-family:'Aptos',monospace;color:var(--text3);margin-top:2px}
 .pace-rep{font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);margin-top:3px;font-weight:600}
+.nutr-hero{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 8px;margin-bottom:10px;align-items:center}
+.nutr-hero-cell{text-align:center}
+.nutr-hero-val{font-family:'Aptos',sans-serif;font-size:20px;color:var(--accent);font-weight:600;line-height:1}
+.nutr-hero-lbl{font-size:9px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+.nutr-hero-sep{width:1px;height:30px;background:var(--border);margin:0 4px}
+.nutr-hint{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-align:center;letter-spacing:.04em;margin-bottom:10px;opacity:.7}
 .nutr-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px}
-.nutr-card-hd{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.nutr-card-hd{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .nutr-card-icon{font-size:20px;flex-shrink:0}
 .nutr-card-title{font-weight:500;font-size:14px;flex:1}
 .nutr-card-sub{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.03em}
-.nutr-card-body{display:none;border-top:1px solid var(--border);padding:14px 16px}
-.nutr-card-body.open{display:block}
+.nutr-card-body{max-height:0;overflow:hidden;padding:0 16px;border-top:0px solid transparent;transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .2s ease,border-top-width .2s ease}
+.nutr-card-body.open{max-height:5000px;padding:14px 16px;border-top:1px solid var(--border)}
 .nutr-phase-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px}
 .nutr-phase-cell{background:var(--surface2);border-radius:10px;padding:8px 10px;text-align:center}
 .nutr-phase-cell .npc-val{font-size:13px;font-weight:600;color:var(--accent);font-family:'Aptos',monospace}
@@ -631,7 +639,7 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 .nutr-macro-cell{background:var(--surface2);border-radius:10px;padding:10px 8px;text-align:center}
 .nutr-macro-val{font-size:16px;font-weight:600;color:var(--accent);font-family:'Aptos',monospace}
 .nutr-macro-lbl{font-size:9px;color:var(--text3);font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px;text-transform:uppercase}
-.nutr-day-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none}
+.nutr-day-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
 .nutr-day-tabs::-webkit-scrollbar{display:none}
 .nutr-day-tab{flex-shrink:0;padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Aptos',monospace;font-size:11px;cursor:pointer;transition:all .15s}
 .nutr-day-tab.active{background:var(--accent2);color:#000;border-color:var(--accent2);font-weight:500}
@@ -678,7 +686,6 @@ body{display:flex;flex-direction:column;max-width:430px;margin:0 auto;position:r
 /* ---- Slightly larger text for visibility (Aptos) ---- */
 .hdr-sub,.ex-detail,.tool-sub,.pc-note,.ls-sub,.tl-method,.rec-tip,.run-target,.wk-group-hdr .wk-meta,.srch-sub,.note-note{font-size:12px}
 .countdown-lbl,.ls-k,.rec-hd,.tl-lbl,.pc-res-hd,.pc-big-l,.pc-field label,label,.rpe-lbl,.wt-lbl{font-size:11px}
-.bnav-lbl{font-size:9px}
 .nav-btn,.session-type,.pc-line .k,.rpe-sel,.data-btn,.timer-tab,.preset-b,.dur-badge,.s1-tbl .z,.zone{font-size:13px}
 .ex-name,.session-name,.pc-line,.pc-line .v,.s1-tbl td,.rec-txt,.ex-note-input,.setw-inp,.wt-inp,.timer-btn,.pc-apply,.calc-btn,.tool-h,.srch-name,.prog-day-hdr{font-size:14px}
 .session-name{font-size:16px}
@@ -1062,6 +1069,16 @@ input[type=number]{-moz-appearance:textfield}
 <!-- NUTRITION -->
 <div class="section" id="section-nutrition">
   <div class="section-title">NUTRITION</div>
+  <div class="nutr-hero">
+    <div class="nutr-hero-cell"><div class="nutr-hero-val">172g</div><div class="nutr-hero-lbl">Protein / day</div></div>
+    <div class="nutr-hero-sep"></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val">86kg</div><div class="nutr-hero-lbl">Body weight</div></div>
+    <div class="nutr-hero-sep"></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val">4,400</div><div class="nutr-hero-lbl">Peak kcal</div></div>
+    <div class="nutr-hero-sep"></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val">90g</div><div class="nutr-hero-lbl">Carbs/hr run</div></div>
+  </div>
+  <div class="nutr-hint">Tap any card to expand</div>
 
   <!-- Daily targets card -->
   <div class="nutr-card">
@@ -1070,7 +1087,7 @@ input[type=number]{-moz-appearance:textfield}
       <div><div class="nutr-card-title">Daily targets by training type</div><div class="nutr-card-sub">Personalised for 86 kg male · one previous marathon</div></div>
       <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
-    <div class="nutr-card-body open">
+    <div class="nutr-card-body">
       <div class="nutr-tip">Protein is fixed at <strong>172 g/day</strong> (2.0 g/kg × 86 kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.</div>
       <table class="nutr-table">
         <tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>
@@ -1089,9 +1106,9 @@ input[type=number]{-moz-appearance:textfield}
     <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
       <div class="nutr-card-icon">🍽️</div>
       <div><div class="nutr-card-title">Meal templates</div><div class="nutr-card-sub">Tap a day type to see the full plan</div></div>
-      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s;transform:rotate(90deg)">›</span>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
-    <div class="nutr-card-body open">
+    <div class="nutr-card-body">
       <div class="nutr-day-tabs">
         <button class="nutr-day-tab active" onclick="nutrShowDay('strength',this)">Strength day</button>
         <button class="nutr-day-tab" onclick="nutrShowDay('longrun',this)">Long run day</button>
@@ -1460,6 +1477,9 @@ input[type=number]{-moz-appearance:textfield}
   </button>
   <button class="bnav-btn" onclick="showSection('progress',null,'progress-btn')" id="bn-progress">
     <div class="bnav-icon">📈</div><div class="bnav-lbl">Progress</div>
+  </button>
+  <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
+    <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
   </button>
 </div>
 
