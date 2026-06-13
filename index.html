@@ -211,6 +211,14 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .badge-mob{background:rgba(255,107,71,.15);color:var(--accent3)}
 
 .note-note{font-size:12px;color:var(--text2);background:var(--surface2);border-radius:8px;padding:8px 10px;line-height:1.55;margin:10px 16px 12px;border-left:2px solid var(--accent2)}
+.session-fueling-hint{margin:10px 16px 4px;background:rgba(71,255,160,.06);border:1px solid rgba(71,255,160,.2);border-radius:10px;padding:10px 12px}
+.sfh-title{font-size:10px;font-family:'Aptos',monospace;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;font-weight:600}
+.sfh-row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-top:1px solid rgba(71,255,160,.1)}
+.sfh-row:first-of-type{border-top:none}
+.sfh-lbl{font-size:11px;font-family:'Aptos',monospace;color:var(--text3)}
+.sfh-val{font-size:11px;font-family:'Aptos',monospace;color:var(--green);text-align:right;flex:1;margin-left:10px}
+.deload-banner{margin:0 16px 10px;background:rgba(232,198,107,.1);border:1px solid rgba(232,198,107,.25);border-radius:8px;padding:7px 12px;font-size:11px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.03em}
+.soften-banner{margin:0 16px 10px;background:rgba(71,168,255,.08);border:1px solid rgba(71,168,255,.2);border-radius:8px;padding:7px 12px;font-size:11px;font-family:'Aptos',monospace;color:var(--accent2);letter-spacing:.03em}
 
 /* EXERCISE DEMO */
 .ex-info-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:transparent;color:var(--accent2);font-size:13px;font-family:'Aptos',monospace;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;transition:all .15s;-webkit-tap-highlight-color:transparent}
@@ -1106,12 +1114,12 @@ input[type=number]{-moz-appearance:textfield}
 <!-- NUTRITION -->
 <div class="section" id="section-nutrition">
   <div class="section-title">NUTRITION</div>
-  <div class="nutr-hero">
-    <div class="nutr-hero-cell"><div class="nutr-hero-val">172g</div><div class="nutr-hero-lbl">Protein / day</div></div>
+  <div class="nutr-hero" id="nutr-hero">
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-protein">172g</div><div class="nutr-hero-lbl">Protein / day</div></div>
     <div class="nutr-hero-sep"></div>
-    <div class="nutr-hero-cell"><div class="nutr-hero-val">86kg</div><div class="nutr-hero-lbl">Body weight</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-weight">86kg</div><div class="nutr-hero-lbl">Body weight</div></div>
     <div class="nutr-hero-sep"></div>
-    <div class="nutr-hero-cell"><div class="nutr-hero-val">4,400</div><div class="nutr-hero-lbl">Peak kcal</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-kcal">4,400</div><div class="nutr-hero-lbl">Peak kcal</div></div>
     <div class="nutr-hero-sep"></div>
     <div class="nutr-hero-cell"><div class="nutr-hero-val">90g</div><div class="nutr-hero-lbl">Carbs/hr run</div></div>
   </div>
@@ -1125,8 +1133,8 @@ input[type=number]{-moz-appearance:textfield}
       <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
     <div class="nutr-card-body">
-      <div class="nutr-tip">Protein is fixed at <strong>172 g/day</strong> (2.0 g/kg × 86 kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.</div>
-      <table class="nutr-table">
+      <div class="nutr-tip" id="nutr-protein-tip">Protein is fixed at <strong>172 g/day</strong> (2.0 g/kg × 86 kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.</div>
+      <table class="nutr-table" id="nutr-targets-table">
         <tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>
         <tr><td>Full rest</td><td>270–310g</td><td>172g</td><td>95g</td><td>~2,650</td></tr>
         <tr><td>Easy run / upper session</td><td>400–440g</td><td>172g</td><td>95g</td><td>~3,200</td></tr>
@@ -1318,8 +1326,8 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-section-lbl">Days 7–4 before race (Mon–Thu)</div>
       <div class="nutr-meal-detail" style="margin-bottom:10px">Normal taper nutrition. Maintain carb intake — do not reduce just because training volume drops. The muscles are still absorbing the peak stimulus from weeks 8–9.</div>
       <div class="nutr-divider"></div>
-      <div class="nutr-section-lbl">Days 3–1 before race (Wed–Fri) — Carb load</div>
-      <div class="nutr-meal-detail">Target <strong>9–10 g carbohydrate per kg bodyweight</strong> = 774–860 g carbs/day (86 kg).<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.</div>
+      <div class="nutr-section-lbl">Days 3–1 before race — Carb load</div>
+      <div class="nutr-meal-detail" id="nutr-carbload-detail">Target <strong>9–10 g carbohydrate per kg bodyweight</strong> = 774–860 g carbs/day (86 kg).<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.</div>
       <div class="nutr-warn">Do not experiment with new foods during carb load. Stick to foods your gut knows well.</div>
       <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Race morning · 3 hrs before gun</div>
@@ -1331,8 +1339,8 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Race fuelling strategy</div>
       <div class="nutr-meal-detail">
-        <strong>First gel:</strong> km 8–10 (40–45 min in) — do not wait until you feel you need it.<br>
-        <strong>Frequency:</strong> every 35–40 min thereafter.<br>
+        <strong>First gel:</strong> km 6 (30 min in) — start early to maintain blood glucose; do not wait until you feel you need it.<br>
+        <strong>Frequency:</strong> every 25–30 min thereafter.<br>
         <strong>Target:</strong> 60–90 g carbohydrate per hour (use gels you have trained with).<br>
         <strong>Caffeine gel:</strong> consider one at km 30–35 if trained with caffeine — 3–6 mg/kg body weight.<br>
         <strong>Fluid:</strong> alternate water and sports drink at aid stations — do not take both simultaneously.<br>
@@ -2274,8 +2282,10 @@ function loadState(){
   return {};
 }
 var _saveWarned=false;
+let _historyDirty=true, _statsDirty=true;
 function saveState(s){
   s._lastSaved=Date.now();
+  _historyDirty=true; _statsDirty=true;
   try{
     const j=JSON.stringify(s);
     localStorage.setItem('mt_state',j);
@@ -2369,6 +2379,46 @@ function typeLabel(type){return type==='strength'?'Strength':type==='run'?'Run':
 // ─────────────────────────────────────────
 // COUNTDOWN
 // ─────────────────────────────────────────
+// ---- NUTRITION MACRO RENDERER ----
+const _NUTR_DAYS=[
+  {label:'Full rest',           cLo:3.14,cHi:3.60},
+  {label:'Easy run / upper',    cLo:4.65,cHi:5.12},
+  {label:'Strength (lower)',    cLo:5.58,cHi:6.16},
+  {label:'Intervals / threshold',cLo:6.16,cHi:6.74},
+  {label:'Long run (≥20 km)',   cLo:7.56,cHi:8.72},
+];
+function renderNutritionMacros(){
+  const bwArr=Object.entries(STATE.bodyweightLog||{});
+  const latestBW=bwArr.length?parseFloat(bwArr.sort((a,b)=>b[0].localeCompare(a[0]))[0][1]):null;
+  const w=(latestBW&&latestBW>0)?latestBW:((STATE.profile&&parseFloat(STATE.profile.weight))||86);
+  const prot=Math.round(w*2.0);
+  const fat=Math.round(w*1.1);
+  // hero vals
+  const nhp=document.getElementById('nh-protein'); if(nhp) nhp.textContent=prot+'g';
+  const nhw=document.getElementById('nh-weight'); if(nhw) nhw.textContent=w+'kg';
+  const nhk=document.getElementById('nh-kcal');
+  if(nhk){ const peakCarb=Math.round(w*(_NUTR_DAYS[4].cLo+_NUTR_DAYS[4].cHi)/2); nhk.textContent=(Math.round((peakCarb*4+prot*4+fat*9)/100)*100).toLocaleString(); }
+  // protein tip
+  const tip=document.getElementById('nutr-protein-tip');
+  if(tip) tip.innerHTML='Protein is fixed at <strong>'+prot+' g/day</strong> (2.0 g/kg × '+w+' kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.';
+  // daily targets table
+  const tbl=document.getElementById('nutr-targets-table');
+  if(tbl){
+    const rows=_NUTR_DAYS.map(d=>{
+      const cLo=Math.round(w*d.cLo),cHi=Math.round(w*d.cHi),cMid=(cLo+cHi)/2;
+      const kcal=Math.round((cMid*4+prot*4+fat*9)/100)*100;
+      return '<tr><td>'+d.label+'</td><td>'+cLo+'–'+cHi+'g</td><td>'+prot+'g</td><td>'+fat+'g</td><td>~'+kcal.toLocaleString()+'</td></tr>';
+    }).join('');
+    tbl.innerHTML='<tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>'+rows;
+  }
+  // carb load section
+  const cl=document.getElementById('nutr-carbload-detail');
+  if(cl){ const cLo=Math.round(w*9),cHi=Math.round(w*10); cl.innerHTML='Target <strong>9–10 g carbohydrate per kg bodyweight</strong> = '+cLo+'–'+cHi+' g carbs/day ('+w+' kg).<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.'; }
+  // card sub-label
+  const sub=document.querySelector('.nutr-card-hd .nutr-card-sub');
+  if(sub&&sub.textContent.includes('86 kg')) sub.textContent='Personalised for '+w+' kg · one previous marathon';
+}
+
 function toggleHdrCollapse(){
   const el=document.getElementById('hdr-collapsible');
   const btn=document.getElementById('hdr-collapse-btn');
@@ -2433,6 +2483,7 @@ function showSection(id,btn){
   else if(id==='stats') renderStats();
   else if(id==='pace') pcEnsureInit();
   else if(id==='progress') renderProgress();
+  else if(id==='nutrition') renderNutritionMacros();
   else if(id==='hub') renderHub();
 }
 
@@ -2491,8 +2542,9 @@ function renderHub(){
     {id:'history',icon:'📊',title:'Training log',detail:totalDone+' sessions done',color:green},
     {id:'stats',icon:'🏃',title:'Stats',detail:totKm.toFixed(0)+' km logged',color:green},
   ];
+  const _nw=(()=>{const bwA=Object.entries(STATE.bodyweightLog||{});const lb=bwA.length?parseFloat(bwA.sort((a,b)=>b[0].localeCompare(a[0]))[0][1]):null;return (lb&&lb>0)?lb:((STATE.profile&&parseFloat(STATE.profile.weight))||86);})();
   const healthCards=[
-    {id:'nutrition',icon:'🥗',title:'Nutrition',detail:'172g protein · 86 kg',color:green},
+    {id:'nutrition',icon:'🥗',title:'Nutrition',detail:Math.round(_nw*2)+'g protein · '+_nw+' kg',color:green},
     {id:'progress',icon:'📈',title:'Progress',detail:'PRs & benchmarks',color:gold},
     {id:'pace',icon:'🛠️',title:'Training tools',detail:'Pace · HR zones · splits',color:muted,full:true},
   ];
@@ -2564,6 +2616,30 @@ function renderToday(){
   container.innerHTML=out;
 }
 
+function sessionFuelingHint(s){
+  if(s.type!=='run'&&s.type!=='combo') return '';
+  const longEx=s.exercises.find(e=>{ const m=e.detail&&e.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i); return m&&parseFloat(m[2])>=18; });
+  if(!longEx) return '';
+  const m=longEx.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i);
+  const km=m?(parseFloat(m[1])+parseFloat(m[2]))/2:20;
+  const durMin=Math.round(km*5.5); // ~5:30/km easy long-run pace
+  let gels=0,t=30; while(t<=durMin){gels++;t+=30;}
+  return `<div class="session-fueling-hint">
+    <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min)</div>
+    <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — start early</span></div>
+    <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every 30 min → ${gels} gels total</span></div>
+    <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val">60–90 g/hr · use race gels</span></div>
+    <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes >90 min</span></div>
+  </div>`;
+}
+function sessionAdjustBanner(s){
+  const key=sessionKey(s);
+  const isDeload=STATE.deloadWeeks&&STATE.deloadWeeks[s.week];
+  const isSoften=STATE.softenDay&&STATE.softenDay[_ymd(new Date())]&&_sameDay(sessionDate(s),_startOfToday());
+  if(isDeload) return `<div class="deload-banner">⚡ Deload week — 1 fewer set per lift · aim 10% lighter · stop at 3–4 RIR</div>`;
+  if(isSoften) return `<div class="soften-banner">🩵 Eased mode — reduce load ~10%, add 2 RIR, skip final sets if needed</div>`;
+  return '';
+}
 function renderSessionCard(s,interactive){
   const key=sessionKey(s);
   const done=STATE.completedSessions[key];
@@ -2581,8 +2657,10 @@ function renderSessionCard(s,interactive){
     </div>
     ${done?`<div class="session-completed-banner">✓ COMPLETED · ${doneEx}/${totalEx} exercises logged</div>`:''}
     <div class="session-body" id="body-${key}">
+      ${sessionAdjustBanner(s)}
       ${renderExercises(s,interactive)}
       ${s.type!=='rest'?renderOptional(s):''}
+      ${sessionFuelingHint(s)}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
       <div class="session-footer">
@@ -2810,10 +2888,18 @@ function weekMonitorHTML(monday){
     + '<div class="tl-card"><div class="tl-val">'+(strain!=null?strain:'—')+'</div><div class="tl-lbl">Strain (AU)</div></div>'
     + '</div>';
   const reasonTxt = reasons.length? '<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);margin-top:6px">Flags: '+reasons.join(' · ')+'</div>' : '';
+  // surface active niggles logged against exercises this week
+  const niggSet=new Set();
+  for(let d=0;d<7;d++){const dt=new Date(monday);dt.setDate(monday.getDate()+d);getSessionsForDate(dt).forEach(s2=>s2.exercises.forEach(e=>{const n=STATE.niggles&&STATE.niggles[e.id];if(n)niggSet.add(e.name+': '+n);}));}
+  const niggleTxt=niggSet.size?'<div style="margin-top:8px;padding:8px 10px;background:rgba(255,138,92,.08);border-left:2px solid var(--accent3);border-radius:0 8px 8px 0">'
+    +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px">⚠ Active niggles this week</div>'
+    +[...niggSet].map(n=>'<div style="font-size:11px;font-family:\'Aptos\',monospace;color:var(--text2);margin-top:3px">• '+n+'</div>').join('')
+    +'</div>':'';
   const status='<div style="margin-top:4px;padding:11px 12px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)">'
     + '<span class="tl-band '+banner[0]+'">'+banner[1]+'</span>'
     + '<div style="font-size:12px;color:var(--text);margin-top:7px;line-height:1.5">'+banner[2]+'</div>'
-    + reasonTxt + '</div>';
+    + reasonTxt + '</div>'
+    + niggleTxt;
   return wrap(rows+status);
 }
 function toggleDeloadWeek(){
@@ -2954,6 +3040,7 @@ function toggleProgDay(id){
 // RENDER HISTORY
 // ─────────────────────────────────────────
 function renderHistory(){
+  if(!_historyDirty) return; _historyDirty=false;
   const completed=PROGRAM.filter(s=>STATE.completedSessions[sessionKey(s)]);
   const container=document.getElementById('history-view');
   if(completed.length===0){
@@ -4366,6 +4453,7 @@ function benchmarkCardHTML(){
 function renderBenchmarks(){ const el=document.getElementById('bm-card'); if(el) el.innerHTML=benchmarkCardHTML(); }
 function benchmarkNudgeHTML(){ const due=dueBenchmark(); if(!due) return ''; return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split('(')[0].toLowerCase().trim()+' and a strength check to recalibrate your training targets. <span class="bm-nudge-go">Open Tools ›</span></div></div>'; }
 function renderStats(){
+  if(!_statsDirty) return; _statsDirty=false;
   // ===== TIER 2/3 FEATURE LOGIC =====
   const done=totalCompleted();
   const pct=Math.round((done/84)*100);
@@ -5509,6 +5597,14 @@ function restStart(){
   timerRender(); setFabState();
 }
 function restReset(){ TM.restRunning=false; clearInterval(TM.iv); TM.restLeft=TM.restDur; timerRender(); setFabState(); }
+// Fire timer completion if screen was locked while timer ran out
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible'||!TM.restRunning) return;
+  const left=Math.max(0,(TM.restEndAt-Date.now())/1000);
+  TM.restLeft=left;
+  if(left<=0){ clearInterval(TM.iv); TM.restRunning=false; tBeep(880,.16,.3); setTimeout(()=>tBeep(1320,.22,.3),200); tVibrate([220,120,220]); setFabState(); }
+  timerRender();
+});
 function watchStart(){ if(TM.wRunning){ TM.wAcc+=Date.now()-TM.wStart; TM.wRunning=false; clearInterval(TM.iv); } else { tAudio(); TM.wStart=Date.now(); TM.wRunning=true; clearInterval(TM.iv); TM.iv=setInterval(()=>{ const d=document.getElementById('timer-display'); if(d) d.textContent=fmtWatch(watchElapsed()); },50); } timerRender(); setFabState(); }
 function watchLap(){ if(TM.wRunning||TM.wAcc) TM.laps.unshift(watchElapsed()); timerRender(); }
 function watchReset(){ TM.wRunning=false; clearInterval(TM.iv); TM.wAcc=0; TM.laps=[]; timerRender(); setFabState(); }
@@ -6086,6 +6182,7 @@ window.onload=function(){
   timerRender();
   updateCountdown();
   requestAnimationFrame(applyHdrCollapse);
+  renderNutritionMacros();
   renderHub();
   renderProgram(1);
   // pre-render today in background so it's fast when user taps Today
