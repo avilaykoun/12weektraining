@@ -317,6 +317,11 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 /* SEARCH */
 .hdr-search-btn{background:var(--surface);border:1px solid var(--border);color:var(--accent);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 .hdr-search-btn:active{background:var(--surface2)}
+.hdr-collapse-btn{background:transparent;border:none;color:var(--text3);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:transform .25s,color .15s;padding:0}
+.hdr-collapse-btn:active{color:var(--accent)}
+.hdr-collapsible{overflow:hidden;transition:max-height .3s ease,opacity .25s ease}
+.hdr-collapsible.collapsed{max-height:0!important;opacity:0;pointer-events:none}
+.hdr-collapsible.expanded{opacity:1}
 .search-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:150;flex-direction:column;align-items:center}
 .search-overlay.open{display:flex}
 .search-panel{background:var(--surface);width:100%;max-width:430px;height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,44px)}
@@ -756,16 +761,19 @@ input[type=number]{-moz-appearance:textfield}
         <div style="font-size:11px;font-family:'Aptos',monospace;color:var(--accent)" id="hdr-progress">0 / 84 sessions</div>
       </div>
       <button class="hdr-search-btn" onclick="openSearch()" aria-label="Search">🔍</button>
+      <button class="hdr-collapse-btn" id="hdr-collapse-btn" onclick="toggleHdrCollapse()" aria-label="Toggle countdown">⌃</button>
     </div>
   </div>
-  <div class="race-countdown" id="countdown-bar">
-    <div class="countdown-blk"><div class="countdown-num" id="cd-days">-</div><div class="countdown-lbl">days</div></div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-blk"><div class="countdown-num" id="cd-weeks">-</div><div class="countdown-lbl">weeks</div></div>
-    <div class="countdown-sep">:</div>
-    <div class="countdown-blk"><div class="countdown-num" id="cd-sessions">-</div><div class="countdown-lbl">sessions left</div></div>
+  <div class="hdr-collapsible expanded" id="hdr-collapsible">
+    <div class="race-countdown" id="countdown-bar">
+      <div class="countdown-blk"><div class="countdown-num" id="cd-days">-</div><div class="countdown-lbl">days</div></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-blk"><div class="countdown-num" id="cd-weeks">-</div><div class="countdown-lbl">weeks</div></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-blk"><div class="countdown-num" id="cd-sessions">-</div><div class="countdown-lbl">sessions left</div></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   <div class="nav" id="main-nav">
     <button class="nav-btn active" onclick="showSection('hub',this)">Menu</button>
     <button class="nav-btn" onclick="showSection('today',this)">Today</button>
@@ -2361,6 +2369,28 @@ function typeLabel(type){return type==='strength'?'Strength':type==='run'?'Run':
 // ─────────────────────────────────────────
 // COUNTDOWN
 // ─────────────────────────────────────────
+function toggleHdrCollapse(){
+  const el=document.getElementById('hdr-collapsible');
+  const btn=document.getElementById('hdr-collapse-btn');
+  const collapsed=el.classList.toggle('collapsed');
+  el.classList.toggle('expanded',!collapsed);
+  // set explicit max-height so the CSS transition has a target
+  if(!collapsed) el.style.maxHeight=el.scrollHeight+'px';
+  btn.style.transform=collapsed?'rotate(180deg)':'rotate(0deg)';
+  STATE.hdrCollapsed=collapsed;
+  saveState(STATE);
+}
+function applyHdrCollapse(){
+  const el=document.getElementById('hdr-collapsible');
+  const btn=document.getElementById('hdr-collapse-btn');
+  if(!el||!btn) return;
+  const collapsed=!!STATE.hdrCollapsed;
+  el.style.maxHeight=collapsed?'0':el.scrollHeight+'px';
+  el.classList.toggle('collapsed',collapsed);
+  el.classList.toggle('expanded',!collapsed);
+  btn.style.transform=collapsed?'rotate(180deg)':'rotate(0deg)';
+}
+
 function updateCountdown(){
   const now=new Date();
   const diff=RACE_DATE-now;
@@ -6055,6 +6085,7 @@ window.onload=function(){
   showRestoreBannerIfEmpty();
   timerRender();
   updateCountdown();
+  requestAnimationFrame(applyHdrCollapse);
   renderHub();
   renderProgram(1);
   // pre-render today in background so it's fast when user taps Today
