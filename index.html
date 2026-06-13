@@ -2317,8 +2317,8 @@ PROGRAM.forEach(s=>{
     if(rest){ rest.day='Sat'; s.day='Sun'; }
   }
 });
-// Keep each week's sessions in true chronological order (the plan's week runs Tue→Mon).
-(function(){ const ord={Tue:0,Wed:1,Thu:2,Fri:3,Sat:4,Sun:5,Mon:6}; PROGRAM.sort((a,b)=> a.week!==b.week ? a.week-b.week : (ord[a.day]-ord[b.day])); })();
+// Keep each week's sessions in true chronological order (Mon→Sun).
+(function(){ const ord={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6}; PROGRAM.sort((a,b)=> a.week!==b.week ? a.week-b.week : (ord[a.day]-ord[b.day])); })();
 // Runner-durability optionals (tib bar + reverse treadmill + eccentric calf + pogo) — idempotent
 (function(){
   PROGRAM.forEach(s=>{
