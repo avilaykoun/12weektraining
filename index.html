@@ -3962,11 +3962,12 @@ function renderProgress(){
     html+=_pcard('WEEKLY RUNNING VOLUME · KM','<div class="ls-hint">Log your run speed in Today (or import a GPX/TCX) and your weekly mileage will chart here.</div>');
   }
   const ls=liftSeries(); const names=Object.keys(ls).filter(k=>ls[k].length);
-  // Debug: show raw exerciseSets keys with data
+  // Debug: show raw exerciseSets keys with data AND liftSeries output
   const _dbgKeys=Object.keys(STATE.exerciseSets||{}).filter(id=>(STATE.exerciseSets[id]||[]).some(v=>parseFloat(v)>0));
   const _dbgMeta=exMetaMap();
-  const _dbgRows=_dbgKeys.map(id=>{ const m=_dbgMeta[id]; const vals=(STATE.exerciseSets[id]||[]).map(parseFloat).filter(x=>x>0); return (m?m.name:id)+': '+vals.join(', ')+' kg'; });
-  html+=_pcard('DEBUG · LOGGED EXERCISE DATA', '<div style="font-size:11px;font-family:monospace;color:var(--text2);white-space:pre-wrap">'+(_dbgRows.length?_dbgRows.join('\n'):'No exercise set data found in STATE.exerciseSets')+'</div>');
+  const _dbgRows=_dbgKeys.map(id=>{ const m=_dbgMeta[id]; const vals=(STATE.exerciseSets[id]||[]).map(parseFloat).filter(x=>x>0); const nm=m?m.name:id; const comp=_isCompound(nm); const e1=exE1RM(id); return nm+' [compound='+comp+' e1RM='+e1+']: '+vals.join(', ')+' kg'; });
+  const _lsOut=liftSeries(); const _lsNames=Object.keys(_lsOut).filter(k=>_lsOut[k].length);
+  html+=_pcard('DEBUG · LOGGED EXERCISE DATA', '<div style="font-size:11px;font-family:monospace;color:var(--text2);white-space:pre-wrap">'+(_dbgRows.length?_dbgRows.join('\n'):'No data')+'</div><div style="margin-top:8px;font-size:11px;font-family:monospace;color:var(--accent);white-space:pre-wrap">liftSeries keys ('+_lsNames.length+'): '+(_lsNames.length?_lsNames.join(', '):'EMPTY')+'</div>');
   if(names.length){
     const pal=['#e8c66b','#47a8ff','#ff6b47','#47ffa0','#b48bff','#ffb43c'];
     const series=names.slice(0,6).map((n,i)=>({name:n,color:pal[i%pal.length],points:ls[n].map(p=>({week:p.week,y:p.e1rm}))}));
