@@ -53,7 +53,8 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .content{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;background:#11203a;background:var(--bg)}
 
 .section{display:none}
-.section.active{display:block;flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:0 20px calc(80px + var(--safe));scrollbar-width:none}
+.section.active{display:block;flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:0 20px calc(82px + var(--safe));scrollbar-width:none}
+@media(min-width:768px){.section.active{padding-bottom:calc(100px + var(--safe))}}
 
 /* TODAY SECTION */
 .today-date{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
@@ -141,13 +142,26 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .streak-dot.today{border-color:var(--accent);color:var(--accent)}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:430px;margin:0 auto;background:rgba(17,32,58,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 0 calc(5px + var(--safe));z-index:20;display:flex;justify-content:space-around}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(17,32,58,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:0 0 var(--safe);z-index:20;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.bottom-nav.nav-hidden{transform:translateY(calc(100% - 14px))}
+.bnav-buttons{display:flex;justify-content:space-around;padding:6px 0}
+.bnav-handle{display:flex;justify-content:center;align-items:center;padding:5px 0 1px;cursor:pointer;touch-action:manipulation;user-select:none}
+.bnav-handle-pill{width:36px;height:4px;border-radius:99px;background:var(--border);transition:background .15s,width .15s}
+.bottom-nav:not(.nav-hidden) .bnav-handle-pill{background:rgba(152,160,189,.4)}
+.bottom-nav.nav-hidden .bnav-handle-pill{width:44px;background:var(--accent);opacity:.7}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 2px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0;touch-action:manipulation}
 .bnav-btn.active{color:var(--accent)}
 .bnav-btn.active .bnav-icon{position:relative}
 .bnav-btn.active .bnav-icon::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--accent);border-radius:99px}
 .bnav-icon{font-size:19px;line-height:1}
 .bnav-lbl{font-size:8px;font-family:'Aptos',monospace;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+@media(min-width:768px){
+  .bnav-icon{font-size:24px}
+  .bnav-lbl{font-size:10px;letter-spacing:.04em}
+  .bnav-btn{padding:6px 4px;gap:4px}
+  .bnav-handle-pill{width:44px;height:5px}
+  .bnav-buttons{padding:8px 0}
+}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:flex-end;justify-content:center}
@@ -1601,22 +1615,27 @@ input[type=number]{-moz-appearance:textfield}
 
 <div class="app-toast" id="app-toast"><span class="dot"></span><span id="app-toast-msg"></span></div>
 
-<div class="bottom-nav">
-  <button class="bnav-btn active" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
-    <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('today',null,'today-btn')" id="bn-today">
-    <div class="bnav-icon">⚡</div><div class="bnav-lbl">Today</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
-    <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
-    <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
-  </button>
-  <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
-    <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
-  </button>
+<div class="bottom-nav" id="bottom-nav">
+  <div class="bnav-handle" onclick="toggleNav()" aria-label="Toggle navigation">
+    <div class="bnav-handle-pill"></div>
+  </div>
+  <div class="bnav-buttons">
+    <button class="bnav-btn active" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
+      <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
+    </button>
+    <button class="bnav-btn" onclick="showSection('today',null,'today-btn')" id="bn-today">
+      <div class="bnav-icon">⚡</div><div class="bnav-lbl">Today</div>
+    </button>
+    <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
+      <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
+    </button>
+    <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
+      <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
+    </button>
+    <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
+      <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
+    </button>
+  </div>
 </div>
 
 <script>
@@ -2700,6 +2719,15 @@ function updateCountdown(){
 // ─────────────────────────────────────────
 let currentSection='today';
 var _progPhase=1;
+function toggleNav(){
+  const nav=document.getElementById('bottom-nav');
+  if(!nav) return;
+  const hidden=nav.classList.toggle('nav-hidden');
+  try{localStorage.setItem('navHidden',hidden?'1':'')}catch(e){}
+}
+function initNavState(){
+  try{if(localStorage.getItem('navHidden')==='1'){const nav=document.getElementById('bottom-nav');if(nav)nav.classList.add('nav-hidden');}}catch(e){}
+}
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('section-'+id).classList.add('active');
@@ -6513,6 +6541,7 @@ function appToast(m){
 
 window.onload=function(){
   initPWA();
+  initNavState();
   initSwipe();
   showRestoreBannerIfEmpty();
   timerRender();
