@@ -1158,6 +1158,7 @@ const PROGRAM = [
 
   // Week 2 ─────────────────────────────────────────────────────────────────
   {phase:1,week:2,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+    {id:'p1w2mon_wu',name:'Warm-up',detail:'5 min · hip circles, leg swings, glute bridges x10, air squats x10',cat:'core',supp:true},
     {id:'p1w2mon1',name:'Back squat',detail:'4 × 8 · add 2.5–5kg from week 1',cat:'strength'},
     {id:'p1w2mon2',name:'Barbell hip thrust',detail:'3 × 10 · add load · pause 1 sec at top',cat:'strength'},
     {id:'p1w2mon3',name:'Hang power clean',detail:'3 × 5 · add 2.5kg if bar speed is good',cat:'strength'},
@@ -1166,23 +1167,18 @@ const PROGRAM = [
     {id:'p1w2mon_s1',name:'Walking lunges',detail:'3 × 12/leg · add light DBs',cat:'strength',supp:true},
     {id:'p1w2mon_s2',name:'Single-leg calf raise (box)',detail:'3 × 15/leg',cat:'strength',supp:true},
     {id:'p1w2mon_s3',name:'Banded hip abduction',detail:'3 × 15',cat:'strength',supp:true},
-    {id:'p1w2mon6',name:'KB swings',detail:'4 × 15 · one extra set from week 1',cat:'core'},
+    {id:'p1w2mon6',name:'KB swings',detail:'4 × 15',cat:'core'},
     {id:'p1w2mon7',name:'Dead bug — slow',detail:'3 × 8/side · 4-sec hold each rep',cat:'core'},
     {id:'p1w2mon8',name:'Plank',detail:'3 × 45 sec',cat:'core'},
     {id:'p1w2monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
   ],note:'10 min hip flexor + hamstring mobility after'},
 
-  {phase:1,week:2,day:'Tue',name:'Easy run + upper pull',type:'combo',exercises:[
+  {phase:1,week:2,day:'Tue',name:'Easy run',type:'run',exercises:[
     {id:'p1w2tue1',name:'Easy run',detail:'7–9km @ zone 2',cat:'run'},
-    {id:'p1w2tue2',name:'Ring rows',detail:'3 × 10 · add tempo',cat:'strength'},
-    {id:'p1w2tue3',name:'Ring push-ups',detail:'3 × 12',cat:'strength'},
-    {id:'p1w2tue4',name:'Dead hang',detail:'3 × 35 sec',cat:'strength'},
-    {id:'p1w2tue5',name:'KB windmill',detail:'3 × 6/side · slightly heavier',cat:'core'},
-    {id:'p1w2tue6',name:'Side plank',detail:'3 × 30 sec/side',cat:'core'},
-    {id:'p1w2tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},
-  ],note:''},
+  ],note:'Run only — upper pull moves to Wednesday'},
 
-  {phase:1,week:2,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
+  {phase:1,week:2,day:'Wed',name:'Upper body B + upper pull + core',type:'strength',exercises:[
+    {id:'p1w2wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x15, face pulls x10, thoracic rotation x8/side',cat:'core',supp:true},
     {id:'p1w2wed1',name:'Barbell bench press',detail:'4 × 8 · add 2.5kg',cat:'strength'},
     {id:'p1w2wed2',name:'Weighted pull-ups',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p1w2wed3',name:'Overhead press (barbell)',detail:'3 × 8 · add 2.5kg',cat:'strength'},
@@ -1191,12 +1187,15 @@ const PROGRAM = [
     {id:'p1w2wed_s1',name:'DB lateral raise',detail:'3 × 12 · slightly heavier',cat:'strength',supp:true},
     {id:'p1w2wed_s2',name:'Ring face pulls',detail:'3 × 15',cat:'strength',supp:true},
     {id:'p1w2wed_s3',name:'Farmer carry (DBs)',detail:'3 × 35m · heavier DBs',cat:'strength',supp:true},
+    {id:'p1w2wed_p1',name:'Ring rows',detail:'3 × 10 · add tempo · upper pull',cat:'strength'},
+    {id:'p1w2wed_p2',name:'Dead hang',detail:'3 × 35 sec · grip + lat stretch',cat:'strength'},
+    {id:'p1w2wed_p3',name:'Landmine row',detail:'3 × 10/side · drive elbow back, squeeze the blade',cat:'strength'},
     {id:'p1w2wed6',name:'Turkish get-up (KB)',detail:'3 × 4/side · add 1 rep from wk 1',cat:'core'},
     {id:'p1w2wed7',name:'Hollow body hold',detail:'3 × 30 sec',cat:'core'},
     {id:'p1w2wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
   ],note:''},
 
-  {phase:1,week:2,day:'Thu',name:'Tempo run + core',type:'run',exercises:[
+  {phase:1,week:2,day:'Thu',name:'Tempo run',type:'run',exercises:[
     {id:'p1w2thu1',name:'Warm-up',detail:'2km easy',cat:'run'},
     {id:'p1w2thu2',name:'Tempo',detail:'5km @ zone 3–4 · +1km from week 1',cat:'run'},
     {id:'p1w2thu3',name:'Cool-down',detail:'2km easy',cat:'run'},
@@ -1205,13 +1204,14 @@ const PROGRAM = [
   ],note:'Hamstring + calf stretch after'},
 
   {phase:1,week:2,day:'Fri',name:'Lower body B + core',type:'strength',exercises:[
+    {id:'p1w2fri_wu',name:'Warm-up',detail:'5 min · hip flexor stretch, glute bridges, dead bugs x6/side, leg swings',cat:'core',supp:true},
     {id:'p1w2fri1',name:'Conventional deadlift',detail:'4 × 6 · add 2.5–5kg',cat:'strength'},
     {id:'p1w2fri2',name:'Romanian deadlift',detail:'3 × 10 · add load',cat:'strength'},
     {id:'p1w2fri3',name:'Box jumps',detail:'4 × 5',cat:'strength'},
     {id:'p1w2fri4',name:'Step-ups (DB)',detail:'3 × 10/leg · add load',cat:'strength'},
     {id:'p1w2fri5',name:'Single-leg RDL (DB)',detail:'3 × 8/leg · heavier DBs',cat:'strength'},
     {id:'p1w2fri_s1',name:'Goblet squat (KB)',detail:'3 × 10 · heavier KB',cat:'strength',supp:true},
-    {id:'p1w2fri_s2',name:'KB swings',detail:'4 × 15 · add 1 set',cat:'strength',supp:true},
+    {id:'p1w2fri_s2',name:'KB swings',detail:'4 × 15',cat:'strength',supp:true},
     {id:'p1w2fri_s3',name:'Nordic curl (eccentric)',detail:'3 × 7',cat:'strength',supp:true},
     {id:'p1w2fri6',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
     {id:'p1w2fri7',name:'Copenhagen plank',detail:'3 × 25 sec/side',cat:'core'},
@@ -1229,6 +1229,7 @@ const PROGRAM = [
 
   // Week 3 — Deload ─────────────────────────────────────────────────────────
   {phase:1,week:3,day:'Mon',name:'Lower body A — DELOAD',type:'strength',exercises:[
+    {id:'p1w3mon_wu',name:'Warm-up',detail:'5 min · easy hip circles, glute bridges, air squats',cat:'core',supp:true},
     {id:'p1w3mon1',name:'Back squat',detail:'3 × 8 · same weight as wk 2 · drop 1 set',cat:'strength'},
     {id:'p1w3mon2',name:'Barbell hip thrust',detail:'3 × 8 · same weight',cat:'strength'},
     {id:'p1w3mon3',name:'Hang power clean',detail:'2 × 4 · light · speed focus',cat:'strength'},
@@ -1246,12 +1247,15 @@ const PROGRAM = [
   ],note:'No hard running this week — deload'},
 
   {phase:1,week:3,day:'Wed',name:'Upper body — DELOAD',type:'strength',exercises:[
+    {id:'p1w3wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p1w3wed1',name:'Barbell bench press',detail:'3 × 6 · same weight · drop 1 set',cat:'strength'},
     {id:'p1w3wed2',name:'Weighted pull-ups',detail:'3 × 4 · same weight · drop 1 set',cat:'strength'},
     {id:'p1w3wed3',name:'Overhead press (barbell)',detail:'2 × 6 · deload',cat:'strength'},
     {id:'p1w3wed4',name:'Barbell bent-over row',detail:'3 × 6 · deload',cat:'strength'},
     {id:'p1w3wed5',name:'Ring dips',detail:'2 × 6 · bodyweight deload',cat:'strength'},
     {id:'p1w3wed_s1',name:'Ring face pulls',detail:'2 × 12 · keep shoulder health',cat:'strength',supp:true},
+    {id:'p1w3wed_p1',name:'Ring rows',detail:'2 × 8 · deload · bodyweight',cat:'strength'},
+    {id:'p1w3wed_p2',name:'Dead hang',detail:'2 × 25 sec · deload',cat:'strength'},
     {id:'p1w3wed6',name:'Turkish get-up (KB)',detail:'2 × 3/side',cat:'core'},
     {id:'p1w3wedlm',name:'Half-kneeling landmine press',detail:'2 × 6/side · light',cat:'strength'},
   ],note:''},
@@ -1261,6 +1265,7 @@ const PROGRAM = [
   ],note:''},
 
   {phase:1,week:3,day:'Fri',name:'Lower body B — DELOAD',type:'strength',exercises:[
+    {id:'p1w3fri_wu',name:'Warm-up',detail:'5 min · easy hip flexor + hamstring mobility',cat:'core',supp:true},
     {id:'p1w3fri1',name:'Conventional deadlift',detail:'3 × 5 · same weight · drop 1 set',cat:'strength'},
     {id:'p1w3fri2',name:'Romanian deadlift',detail:'2 × 8 · deload volume',cat:'strength'},
     {id:'p1w3fri3',name:'Box jumps',detail:'3 × 4',cat:'strength'},
@@ -1273,21 +1278,21 @@ const PROGRAM = [
   ],note:'10 min mobility'},
 
   {phase:1,week:3,day:'Sat',name:'Long run',type:'run',exercises:[
-    {id:'p1w3sat1',name:'Long run',detail:'12–14km · reduce 20% from week 2',cat:'run'},
+    {id:'p1w3sat1',name:'Long run',detail:'13–14km · reduce from week 2',cat:'run'},
   ],note:''},
   {phase:1,week:3,day:'Sun',name:'Rest + mobility',type:'rest',exercises:[
     {id:'p1w3sun1',name:'Full rest + mobility flow',detail:'20 min full mobility sequence',cat:'rest'},
   ],note:''},
 
   // ── PHASE 2 — Build (Weeks 4–7) ───────────────────────────────────────────
-  // Supp Phase 2: loaded accessories, strength building, power development
 
   // Week 4 ─────────────────────────────────────────────────────────────────
   {phase:2,week:4,day:'Mon',name:'Lower body A — strength phase',type:'strength',exercises:[
+    {id:'p2w4mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8, dead bugs x6/side',cat:'core',supp:true},
     {id:'p2w4mon1',name:'Back squat',detail:'4 × 5 @ 78–82% · force production',cat:'strength'},
     {id:'p2w4mon2',name:'Barbell hip thrust',detail:'4 × 8 · heavy · drive through heels',cat:'strength'},
-    {id:'p2w4mon3',name:'Hang power clean',detail:'4 × 4 · add load · bar speed priority',cat:'strength'},
-    {id:'p2w4mon4',name:'Nordic curl (eccentric)',detail:'3 × 8 · add band assist to lower if needed',cat:'strength'},
+    {id:'p2w4mon3',name:'Trap bar jump squat',detail:'4 × 4 · moderate load · full triple extension · land soft',cat:'strength'},
+    {id:'p2w4mon4',name:'Nordic curl (eccentric)',detail:'3 × 8 · add band assist if needed',cat:'strength'},
     {id:'p2w4mon5',name:'Bulgarian split squat (DB)',detail:'4 × 6/leg · heavier DBs',cat:'strength'},
     {id:'p2w4mon_s1',name:'Loaded calf raise',detail:'4 × 12/leg · hold DB · Achilles tendon loading',cat:'strength',supp:true},
     {id:'p2w4mon_s2',name:'Lateral band walk',detail:'3 × 15/side · glute med strength',cat:'strength',supp:true},
@@ -1298,17 +1303,15 @@ const PROGRAM = [
     {id:'p2w4monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
   ],note:'10 min hip + hamstring mobility — non-negotiable'},
 
-  {phase:2,week:4,day:'Tue',name:'Intervals + upper pull',type:'combo',exercises:[
+  {phase:2,week:4,day:'Tue',name:'Interval run',type:'run',exercises:[
     {id:'p2w4tue1',name:'Interval run',detail:'6 × 800m @ 5km pace · 90 sec jog recovery',cat:'run'},
-    {id:'p2w4tue2',name:'Weighted ring rows',detail:'3 × 6 · add load',cat:'strength'},
-    {id:'p2w4tue3',name:'Ring push-ups',detail:'3 × 10',cat:'strength'},
-    {id:'p2w4tue4',name:'Dead hang',detail:'3 × 40 sec',cat:'strength'},
-    {id:'p2w4tue5',name:'Pallof press',detail:'3 × 10/side · heavier than phase 1',cat:'core'},
-    {id:'p2w4tue6',name:'KB windmill',detail:'3 × 6/side',cat:'core'},
-    {id:'p2w4tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},
-  ],note:'5 min hip flexor stretch post-run'},
+    {id:'p2w4tue2',name:'Cool-down',detail:'5 min easy jog',cat:'run'},
+    {id:'p2w4tue3',name:'Pallof press',detail:'3 × 10/side',cat:'core'},
+    {id:'p2w4tue4',name:'Bird dog',detail:'2 × 10/side',cat:'core'},
+  ],note:'Run only — upper pull moves to Wednesday. 5 min hip flexor stretch post-run.'},
 
-  {phase:2,week:4,day:'Wed',name:'Upper body B — strength phase',type:'strength',exercises:[
+  {phase:2,week:4,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+    {id:'p2w4wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation x8/side',cat:'core',supp:true},
     {id:'p2w4wed1',name:'Barbell bench press',detail:'4 × 5 @ 80%',cat:'strength'},
     {id:'p2w4wed2',name:'Weighted pull-ups',detail:'4 × 5 · add weight',cat:'strength'},
     {id:'p2w4wed3',name:'Overhead press (barbell)',detail:'3 × 6 @ 72% · power development',cat:'strength'},
@@ -1316,7 +1319,9 @@ const PROGRAM = [
     {id:'p2w4wed5',name:'Ring dips',detail:'4 × 8 · add weight vest if available',cat:'strength'},
     {id:'p2w4wed_s1',name:'Incline DB press',detail:'3 × 10 · upper chest + shoulder',cat:'strength',supp:true},
     {id:'p2w4wed_s2',name:'Band pull-apart',detail:'3 × 20 · rear delt + scapular health',cat:'strength',supp:true},
-    {id:'p2w4wed_s3',name:'DB chest fly',detail:'3 × 12 · stretch-focused · light',cat:'strength',supp:true},
+    {id:'p2w4wed_p1',name:'Weighted ring rows',detail:'3 × 6 · add load · upper pull',cat:'strength'},
+    {id:'p2w4wed_p2',name:'Dead hang',detail:'3 × 40 sec · grip + lat stretch',cat:'strength'},
+    {id:'p2w4wed_p3',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},
     {id:'p2w4wed6',name:'Turkish get-up (KB)',detail:'3 × 4/side · heavier KB',cat:'core'},
     {id:'p2w4wed7',name:'Hollow body → V-up',detail:'3 × 10',cat:'core'},
     {id:'p2w4wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
@@ -1330,35 +1335,26 @@ const PROGRAM = [
     {id:'p2w4thu5',name:'Dead bug — slow',detail:'2 × 8/side · 4-sec hold',cat:'core'},
   ],note:'10 min hamstring + calf stretch'},
 
-  {phase:2,week:4,day:'Fri',name:'Lower body B — power',type:'strength',exercises:[
-    {id:'p2w4fri1',name:'Conventional deadlift',detail:'4 × 5 @ 80%',cat:'strength'},
-    {id:'p2w4fri2',name:'Romanian deadlift',detail:'4 × 8 · add load · 3-sec lower',cat:'strength'},
-    {id:'p2w4fri3',name:'Box jumps (max height)',detail:'4 × 5 · full triple extension',cat:'strength'},
-    {id:'p2w4fri4',name:'Step-ups (DB)',detail:'3 × 8/leg · heavier DBs',cat:'strength'},
-    {id:'p2w4fri5',name:'Single-leg RDL (DB)',detail:'4 × 6/leg · heavier',cat:'strength'},
-    {id:'p2w4fri_s1',name:'Hip thrust (barbell)',detail:'3 × 10 · bridge the gap to deadlift',cat:'strength',supp:true},
-    {id:'p2w4fri_s2',name:'Pause squat',detail:'3 × 5 @ 65% · 3-sec pause · strength in hole',cat:'strength',supp:true},
-    {id:'p2w4fri_s3',name:'KB swings — heavy',detail:'4 × 12 · hip power',cat:'strength',supp:true},
-    {id:'p2w4fri6',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
-    {id:'p2w4fri7',name:'Copenhagen plank',detail:'3 × 25 sec/side',cat:'core'},
-    {id:'p2w4fri8',name:'KB single-arm carry',detail:'3 × 30m/side · anti-lateral',cat:'core'},
-    {id:'p2w4frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:'10 min full lower body mobility'},
+  {phase:2,week:4,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p2w4fri1',name:'Full rest',detail:'Lower body needs 48hr recovery before Saturday long run',cat:'rest'},
+    {id:'p2w4fri2',name:'Optional gentle walk',detail:'20 min max · stay off feet otherwise',cat:'rest'},
+  ],note:'Rest day protects Saturday long run quality'},
 
   {phase:2,week:4,day:'Sat',name:'Long run',type:'run',exercises:[
-    {id:'p2w4sat1',name:'Long run',detail:'22–24km · easy zone 2',cat:'run'},
+    {id:'p2w4sat1',name:'Long run',detail:'18–20km · easy zone 2',cat:'run'},
     {id:'p2w4sat2',name:'Foam roll + mobility',detail:'15 min · within 1 hour of finishing',cat:'core'},
   ],note:'Practise race-day fuelling every 45 min'},
-  {phase:2,week:4,day:'Sun',name:'Rest + optional ring work',type:'rest',exercises:[
+  {phase:2,week:4,day:'Sun',name:'Rest + mobility',type:'rest',exercises:[
     {id:'p2w4sun1',name:'Active recovery',detail:'20 min walk',cat:'rest'},
     {id:'p2w4sun2',name:'Optional ring skill work',detail:'Hollow holds, L-sit · low intensity',cat:'core'},
   ],note:''},
 
   // Week 5 ─────────────────────────────────────────────────────────────────
   {phase:2,week:5,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+    {id:'p2w5mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8',cat:'core',supp:true},
     {id:'p2w5mon1',name:'Back squat',detail:'4 × 5 · add 2.5–5kg from week 4',cat:'strength'},
     {id:'p2w5mon2',name:'Barbell hip thrust',detail:'4 × 8 · add load',cat:'strength'},
-    {id:'p2w5mon3',name:'Hang power clean',detail:'4 × 4 · add 2.5kg',cat:'strength'},
+    {id:'p2w5mon3',name:'Trap bar jump squat',detail:'4 × 4 · add small load if movement is clean',cat:'strength'},
     {id:'p2w5mon4',name:'Nordic curl (eccentric)',detail:'3 × 8',cat:'strength'},
     {id:'p2w5mon5',name:'Bulgarian split squat (DB)',detail:'4 × 6/leg · heavier',cat:'strength'},
     {id:'p2w5mon_s1',name:'Loaded calf raise',detail:'4 × 15/leg · heavier hold',cat:'strength',supp:true},
@@ -1370,16 +1366,14 @@ const PROGRAM = [
     {id:'p2w5monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
   ],note:'10 min mobility after'},
 
-  {phase:2,week:5,day:'Tue',name:'Intervals + upper',type:'combo',exercises:[
-    {id:'p2w5tue1',name:'Interval run',detail:'6 × 800m @ 5km pace + optional 7th rep if feeling strong',cat:'run'},
-    {id:'p2w5tue2',name:'Weighted ring rows',detail:'3 × 6',cat:'strength'},
-    {id:'p2w5tue3',name:'Ring push-ups',detail:'3 × 12',cat:'strength'},
-    {id:'p2w5tue4',name:'Dead hang',detail:'3 × 40 sec',cat:'strength'},
-    {id:'p2w5tue5',name:'Pallof press',detail:'3 × 10/side',cat:'core'},
-    {id:'p2w5tuelm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
-  ],note:''},
+  {phase:2,week:5,day:'Tue',name:'Interval run',type:'run',exercises:[
+    {id:'p2w5tue1',name:'Interval run',detail:'6 × 800m @ 5km pace · optional 7th rep if feeling strong',cat:'run'},
+    {id:'p2w5tue2',name:'Cool-down',detail:'5 min easy jog',cat:'run'},
+    {id:'p2w5tue3',name:'Pallof press',detail:'3 × 10/side',cat:'core'},
+  ],note:'Run only — upper pull moves to Wednesday.'},
 
-  {phase:2,week:5,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
+  {phase:2,week:5,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+    {id:'p2w5wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation',cat:'core',supp:true},
     {id:'p2w5wed1',name:'Barbell bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w5wed2',name:'Weighted pull-ups',detail:'4 × 5 · add load',cat:'strength'},
     {id:'p2w5wed3',name:'Overhead press (barbell)',detail:'3 × 6 · add 2.5kg',cat:'strength'},
@@ -1387,7 +1381,9 @@ const PROGRAM = [
     {id:'p2w5wed5',name:'Ring dips',detail:'4 × 8 · add load',cat:'strength'},
     {id:'p2w5wed_s1',name:'Incline DB press',detail:'3 × 10 · heavier',cat:'strength',supp:true},
     {id:'p2w5wed_s2',name:'Band pull-apart',detail:'3 × 20',cat:'strength',supp:true},
-    {id:'p2w5wed_s3',name:'DB chest fly',detail:'3 × 12',cat:'strength',supp:true},
+    {id:'p2w5wed_p1',name:'Weighted ring rows',detail:'3 × 6 · add load',cat:'strength'},
+    {id:'p2w5wed_p2',name:'Dead hang',detail:'3 × 40 sec',cat:'strength'},
+    {id:'p2w5wed_p3',name:'Landmine row',detail:'3 × 10/side · drive elbow back, squeeze the blade',cat:'strength'},
     {id:'p2w5wed6',name:'Turkish get-up (KB)',detail:'3 × 4/side',cat:'core'},
     {id:'p2w5wed7',name:'Hollow body → V-up',detail:'3 × 12',cat:'core'},
     {id:'p2w5wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
@@ -1397,23 +1393,13 @@ const PROGRAM = [
     {id:'p2w5thu1',name:'Threshold',detail:'2km easy + 7km threshold + 2km easy',cat:'run'},
   ],note:''},
 
-  {phase:2,week:5,day:'Fri',name:'Lower body B + core',type:'strength',exercises:[
-    {id:'p2w5fri1',name:'Conventional deadlift',detail:'4 × 5 · add 2.5–5kg',cat:'strength'},
-    {id:'p2w5fri2',name:'Romanian deadlift',detail:'4 × 8 · add load',cat:'strength'},
-    {id:'p2w5fri3',name:'Box jumps',detail:'4 × 5',cat:'strength'},
-    {id:'p2w5fri4',name:'Step-ups (DB)',detail:'3 × 10/leg · add load',cat:'strength'},
-    {id:'p2w5fri5',name:'Single-leg RDL (DB)',detail:'4 × 6/leg · heavier',cat:'strength'},
-    {id:'p2w5fri_s1',name:'Hip thrust (barbell)',detail:'3 × 10 · heavier',cat:'strength',supp:true},
-    {id:'p2w5fri_s2',name:'Pause squat',detail:'3 × 5 @ 65% · 3-sec pause',cat:'strength',supp:true},
-    {id:'p2w5fri_s3',name:'KB swings — heavy',detail:'4 × 15',cat:'strength',supp:true},
-    {id:'p2w5fri6',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
-    {id:'p2w5fri7',name:'Copenhagen plank',detail:'3 × 30 sec/side',cat:'core'},
-    {id:'p2w5fri8',name:'Ring fallout',detail:'3 × 12',cat:'core'},
-    {id:'p2w5frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
+  {phase:2,week:5,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p2w5fri1',name:'Full rest',detail:'48hr recovery before Saturday long run',cat:'rest'},
+    {id:'p2w5fri2',name:'Optional gentle walk',detail:'20 min max',cat:'rest'},
   ],note:''},
 
   {phase:2,week:5,day:'Sat',name:'Long run',type:'run',exercises:[
-    {id:'p2w5sat1',name:'Long run',detail:'24–26km',cat:'run'},
+    {id:'p2w5sat1',name:'Long run',detail:'22–24km',cat:'run'},
   ],note:''},
   {phase:2,week:5,day:'Sun',name:'Rest',type:'rest',exercises:[
     {id:'p2w5sun1',name:'Rest + mobility',detail:'Full mobility flow',cat:'rest'},
@@ -1421,9 +1407,10 @@ const PROGRAM = [
 
   // Week 6 ─────────────────────────────────────────────────────────────────
   {phase:2,week:6,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+    {id:'p2w6mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8',cat:'core',supp:true},
     {id:'p2w6mon1',name:'Back squat',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w6mon2',name:'Barbell hip thrust',detail:'4 × 8 · add load · pause at top',cat:'strength'},
-    {id:'p2w6mon3',name:'Hang power clean',detail:'4 × 4 · add 2.5kg',cat:'strength'},
+    {id:'p2w6mon3',name:'Trap bar jump squat',detail:'4 × 4 · add 2.5kg · aggressive triple extension',cat:'strength'},
     {id:'p2w6mon4',name:'Nordic curl (eccentric)',detail:'3 × 9 · hold 2 sec at bottom',cat:'strength'},
     {id:'p2w6mon5',name:'Bulgarian split squat (DB)',detail:'4 × 6/leg · heaviest so far',cat:'strength'},
     {id:'p2w6mon_s1',name:'Loaded calf raise',detail:'4 × 15/leg · heaviest so far',cat:'strength',supp:true},
@@ -1435,16 +1422,14 @@ const PROGRAM = [
     {id:'p2w6monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
   ],note:''},
 
-  {phase:2,week:6,day:'Tue',name:'Intervals + upper',type:'combo',exercises:[
+  {phase:2,week:6,day:'Tue',name:'Interval run',type:'run',exercises:[
     {id:'p2w6tue1',name:'Interval run',detail:'8 × 600m @ 5km pace · 75 sec recovery',cat:'run'},
-    {id:'p2w6tue2',name:'Weighted pull-ups',detail:'3 × 6',cat:'strength'},
-    {id:'p2w6tue3',name:'Ring push-ups',detail:'3 × 12',cat:'strength'},
-    {id:'p2w6tue4',name:'Dead hang',detail:'3 × 45 sec',cat:'strength'},
-    {id:'p2w6tue5',name:'Pallof press',detail:'3 × 12/side',cat:'core'},
-    {id:'p2w6tuelm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
-  ],note:''},
+    {id:'p2w6tue2',name:'Cool-down',detail:'5 min easy jog',cat:'run'},
+    {id:'p2w6tue3',name:'Pallof press',detail:'3 × 12/side',cat:'core'},
+  ],note:'Run only — upper pull moves to Wednesday.'},
 
-  {phase:2,week:6,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
+  {phase:2,week:6,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+    {id:'p2w6wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation',cat:'core',supp:true},
     {id:'p2w6wed1',name:'Barbell bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w6wed2',name:'Weighted pull-ups',detail:'4 × 6 · add 1 rep',cat:'strength'},
     {id:'p2w6wed3',name:'Overhead press (barbell)',detail:'3 × 6 · add 2.5kg',cat:'strength'},
@@ -1452,7 +1437,9 @@ const PROGRAM = [
     {id:'p2w6wed5',name:'Ring dips',detail:'4 × 9',cat:'strength'},
     {id:'p2w6wed_s1',name:'Incline DB press',detail:'3 × 10 · heavier',cat:'strength',supp:true},
     {id:'p2w6wed_s2',name:'Band pull-apart',detail:'3 × 25',cat:'strength',supp:true},
-    {id:'p2w6wed_s3',name:'DB chest fly',detail:'3 × 12 · slow eccentric',cat:'strength',supp:true},
+    {id:'p2w6wed_p1',name:'Weighted pull-ups',detail:'3 × 6 · upper pull accessory',cat:'strength'},
+    {id:'p2w6wed_p2',name:'Dead hang',detail:'3 × 45 sec · grip strength',cat:'strength'},
+    {id:'p2w6wed_p3',name:'Landmine row',detail:'3 × 10/side · drive elbow back, squeeze the blade',cat:'strength'},
     {id:'p2w6wed6',name:'Turkish get-up (KB)',detail:'3 × 5/side · add rep',cat:'core'},
     {id:'p2w6wed7',name:'Ring fallout',detail:'3 × 10',cat:'core'},
     {id:'p2w6wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
@@ -1462,19 +1449,9 @@ const PROGRAM = [
     {id:'p2w6thu1',name:'Threshold',detail:'2km easy + 7km threshold + 2km easy',cat:'run'},
   ],note:''},
 
-  {phase:2,week:6,day:'Fri',name:'Lower body B + core',type:'strength',exercises:[
-    {id:'p2w6fri1',name:'Conventional deadlift',detail:'4 × 5 · add 2.5kg',cat:'strength'},
-    {id:'p2w6fri2',name:'Romanian deadlift',detail:'4 × 8 · 3-sec lower · controlled',cat:'strength'},
-    {id:'p2w6fri3',name:'Box jumps',detail:'4 × 5 · max height',cat:'strength'},
-    {id:'p2w6fri4',name:'Step-ups (DB)',detail:'3 × 10/leg · heavier',cat:'strength'},
-    {id:'p2w6fri5',name:'Single-leg RDL (DB)',detail:'4 × 6/leg · heavier',cat:'strength'},
-    {id:'p2w6fri_s1',name:'Hip thrust (barbell)',detail:'3 × 10 · heaviest yet',cat:'strength',supp:true},
-    {id:'p2w6fri_s2',name:'Pause squat',detail:'3 × 5 @ 68%',cat:'strength',supp:true},
-    {id:'p2w6fri_s3',name:'Hang power clean',detail:'3 × 4 · build on lower A pattern',cat:'strength',supp:true},
-    {id:'p2w6fri6',name:'KB around the world',detail:'3 × 10/direction',cat:'core'},
-    {id:'p2w6fri7',name:'Copenhagen plank',detail:'3 × 30 sec/side',cat:'core'},
-    {id:'p2w6fri8',name:'KB single-arm carry',detail:'3 × 35m/side',cat:'core'},
-    {id:'p2w6frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
+  {phase:2,week:6,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p2w6fri1',name:'Full rest',detail:'48hr recovery before Saturday long run',cat:'rest'},
+    {id:'p2w6fri2',name:'Optional gentle walk',detail:'20 min max',cat:'rest'},
   ],note:''},
 
   {phase:2,week:6,day:'Sat',name:'Long run',type:'run',exercises:[
@@ -1486,9 +1463,10 @@ const PROGRAM = [
 
   // Week 7 — Phase 2 Deload ─────────────────────────────────────────────────
   {phase:2,week:7,day:'Mon',name:'Lower body A — deload',type:'strength',exercises:[
+    {id:'p2w7mon_wu',name:'Warm-up',detail:'5 min · easy leg swings, hip circles, glute bridges',cat:'core',supp:true},
     {id:'p2w7mon1',name:'Back squat',detail:'3 × 5 · same weight · deload week',cat:'strength'},
     {id:'p2w7mon2',name:'Barbell hip thrust',detail:'3 × 8 · deload volume',cat:'strength'},
-    {id:'p2w7mon3',name:'Hang power clean',detail:'2 × 4 · light · technical only',cat:'strength'},
+    {id:'p2w7mon3',name:'Box jumps',detail:'2 × 4 · light · keep power pattern',cat:'strength'},
     {id:'p2w7mon4',name:'Nordic curl (eccentric)',detail:'2 × 6 · slow',cat:'strength'},
     {id:'p2w7mon5',name:'Bulgarian split squat (DB)',detail:'2 × 6/leg · lighter',cat:'strength'},
     {id:'p2w7mon_s1',name:'Loaded calf raise',detail:'2 × 12/leg · deload',cat:'strength',supp:true},
@@ -1502,12 +1480,14 @@ const PROGRAM = [
   ],note:''},
 
   {phase:2,week:7,day:'Wed',name:'Upper body — deload',type:'strength',exercises:[
+    {id:'p2w7wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p2w7wed1',name:'Barbell bench press',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7wed2',name:'Weighted pull-ups',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7wed3',name:'Overhead press (barbell)',detail:'2 × 5 · deload',cat:'strength'},
     {id:'p2w7wed4',name:'Barbell bent-over row',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7wed5',name:'Ring rows',detail:'2 × 8 · bodyweight only',cat:'strength'},
     {id:'p2w7wed_s1',name:'Ring face pulls',detail:'2 × 12 · keep shoulder health',cat:'strength',supp:true},
+    {id:'p2w7wed_p1',name:'Dead hang',detail:'2 × 30 sec · deload',cat:'strength'},
     {id:'p2w7wed6',name:'Turkish get-up (KB)',detail:'2 × 3/side · light',cat:'core'},
     {id:'p2w7wedlm',name:'Half-kneeling landmine press',detail:'2 × 6/side · light',cat:'strength'},
   ],note:''},
@@ -1516,17 +1496,10 @@ const PROGRAM = [
     {id:'p2w7thu1',name:'Easy run',detail:'5km easy',cat:'run'},
   ],note:''},
 
-  {phase:2,week:7,day:'Fri',name:'Lower body B — deload',type:'strength',exercises:[
-    {id:'p2w7fri1',name:'Conventional deadlift',detail:'3 × 5 · deload',cat:'strength'},
-    {id:'p2w7fri2',name:'Romanian deadlift',detail:'2 × 8 · light',cat:'strength'},
-    {id:'p2w7fri3',name:'Box jumps',detail:'3 × 4 · easy',cat:'strength'},
-    {id:'p2w7fri4',name:'Step-ups (DB)',detail:'2 × 8/leg · light',cat:'strength'},
-    {id:'p2w7fri5',name:'Single-leg RDL (DB)',detail:'2 × 6/leg · light',cat:'strength'},
-    {id:'p2w7fri_s1',name:'Goblet squat (KB)',detail:'2 × 8 · mobility focus',cat:'strength',supp:true},
-    {id:'p2w7fri6',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-    {id:'p2w7fri7',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
-    {id:'p2w7frilm',name:'Landmine reverse lunge',detail:'2 × 6/leg · light',cat:'strength'},
-  ],note:''},
+  {phase:2,week:7,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p2w7fri1',name:'Full rest',detail:'Deload rest day — body consolidating adaptations',cat:'rest'},
+    {id:'p2w7fri2',name:'Light mobility',detail:'20 min foam roll + stretching if desired',cat:'rest'},
+  ],note:'Deload: 2 strength sessions this week. Full rest Friday.'},
 
   {phase:2,week:7,day:'Sat',name:'Long run',type:'run',exercises:[
     {id:'p2w7sat1',name:'Long run',detail:'18–20km · reduce for deload',cat:'run'},
@@ -1536,13 +1509,12 @@ const PROGRAM = [
   ],note:''},
 
   // ── PHASE 3 — Peak (Weeks 8–10) ───────────────────────────────────────────
-  // Supp Phase 3: running-specific stability, maintenance, injury prevention
 
   // Week 8 ─────────────────────────────────────────────────────────────────
   {phase:3,week:8,day:'Mon',name:'Lower body — maintenance',type:'strength',exercises:[
-    {id:'p3w8mon1',name:'Back squat',detail:'3 × 5 @ 80% · hold your gains, no PRs',cat:'strength'},
+    {id:'p3w8mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, dead bugs x6/side',cat:'core',supp:true},
+    {id:'p3w8mon1',name:'Back squat',detail:'3 × 4–5 @ 80% · hold gains — no new PRs this phase',cat:'strength'},
     {id:'p3w8mon2',name:'Barbell hip thrust',detail:'3 × 6 · maintain strength',cat:'strength'},
-    {id:'p3w8mon3',name:'Hang power clean',detail:'3 × 4 · keep speed · do not grind',cat:'strength'},
     {id:'p3w8mon4',name:'Nordic curl (eccentric)',detail:'3 × 6 · resilience at high mileage',cat:'strength'},
     {id:'p3w8mon5',name:'Bulgarian split squat (DB)',detail:'3 × 6/leg · maintain',cat:'strength'},
     {id:'p3w8mon_s1',name:'Single-leg calf raise',detail:'3 × 15/leg · most important Achilles work',cat:'strength',supp:true},
@@ -1550,9 +1522,8 @@ const PROGRAM = [
     {id:'p3w8mon_s3',name:'Banded clamshell',detail:'2 × 15/side · glute med · hip stability',cat:'strength',supp:true},
     {id:'p3w8mon6',name:'KB swings',detail:'3 × 12',cat:'core'},
     {id:'p3w8mon7',name:'Dead bug',detail:'3 × 8/side',cat:'core'},
-    {id:'p3w8mon8',name:'Suitcase carry',detail:'2 × 30m/side',cat:'core'},
     {id:'p3w8monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:'10 min hip + hamstring mobility'},
+  ],note:'10 min hip + hamstring mobility · 2 strength sessions this week only'},
 
   {phase:3,week:8,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w8tue1',name:'Warm-up',detail:'2km easy',cat:'run'},
@@ -1563,14 +1534,16 @@ const PROGRAM = [
   ],note:'Stretch and refuel immediately'},
 
   {phase:3,week:8,day:'Wed',name:'Upper body — maintenance',type:'strength',exercises:[
-    {id:'p3w8wed1',name:'Barbell bench press',detail:'3 × 5 @ 80%',cat:'strength'},
+    {id:'p3w8wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12',cat:'core',supp:true},
+    {id:'p3w8wed1',name:'Barbell bench press',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w8wed2',name:'Weighted pull-ups',detail:'3 × 5 · maintain',cat:'strength'},
     {id:'p3w8wed3',name:'Overhead press (barbell)',detail:'3 × 5 @ 75% · maintain',cat:'strength'},
     {id:'p3w8wed4',name:'Barbell bent-over row',detail:'3 × 5 · maintain',cat:'strength'},
     {id:'p3w8wed5',name:'Ring dips',detail:'3 × 8 · maintain',cat:'strength'},
     {id:'p3w8wed_s1',name:'Ring face pulls',detail:'2 × 15 · shoulder health priority now',cat:'strength',supp:true},
     {id:'p3w8wed_s2',name:'DB lateral raise',detail:'2 × 12 · shoulder stability',cat:'strength',supp:true},
-    {id:'p3w8wed_s3',name:'Push-up plus',detail:'2 × 10 · serratus activation',cat:'strength',supp:true},
+    {id:'p3w8wed_p1',name:'Ring rows',detail:'2 × 10 · upper pull maintenance',cat:'strength'},
+    {id:'p3w8wed_p2',name:'Dead hang',detail:'2 × 30 sec',cat:'strength'},
     {id:'p3w8wed6',name:'Turkish get-up (KB)',detail:'2 × 4/side · keep the skill sharp',cat:'core'},
     {id:'p3w8wed7',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
     {id:'p3w8wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
@@ -1581,19 +1554,10 @@ const PROGRAM = [
     {id:'p3w8thu2',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
   ],note:'5 min calf + Achilles stretch'},
 
-  {phase:3,week:8,day:'Fri',name:'Lower power + core',type:'strength',exercises:[
-    {id:'p3w8fri1',name:'Conventional deadlift',detail:'3 × 5 @ 80%',cat:'strength'},
-    {id:'p3w8fri2',name:'Romanian deadlift',detail:'3 × 8 · maintain',cat:'strength'},
-    {id:'p3w8fri3',name:'Box jumps',detail:'3 × 5 · keep neuromuscular activation',cat:'strength'},
-    {id:'p3w8fri4',name:'Step-ups (DB)',detail:'3 × 8/leg · maintain',cat:'strength'},
-    {id:'p3w8fri5',name:'Single-leg RDL (DB)',detail:'3 × 6/leg · maintain',cat:'strength'},
-    {id:'p3w8fri_s1',name:'Single-leg calf raise',detail:'3 × 15/leg · Achilles resilience',cat:'strength',supp:true},
-    {id:'p3w8fri_s2',name:'Reverse lunge (DB)',detail:'2 × 8/leg · hip strength',cat:'strength',supp:true},
-    {id:'p3w8fri_s3',name:'Hip thrust (barbell)',detail:'2 × 10 · maintain glute strength',cat:'strength',supp:true},
-    {id:'p3w8fri6',name:'KB around the world',detail:'2 × 8/direction',cat:'core'},
-    {id:'p3w8fri7',name:'Copenhagen plank',detail:'2 × 25 sec/side',cat:'core'},
-    {id:'p3w8frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:'10 min full lower body mobility'},
+  {phase:3,week:8,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p3w8fri1',name:'Full rest',detail:'48hr recovery before peak long run — do not compromise Saturday',cat:'rest'},
+    {id:'p3w8fri2',name:'Optional gentle walk',detail:'20 min max',cat:'rest'},
+  ],note:'No strength this week on Friday — peak long run is Saturday'},
 
   {phase:3,week:8,day:'Sat',name:'Long run — PEAK',type:'run',exercises:[
     {id:'p3w8sat1',name:'Long run',detail:'28–30km · easy zone 2 throughout',cat:'run'},
@@ -1605,9 +1569,9 @@ const PROGRAM = [
 
   // Week 9 ─────────────────────────────────────────────────────────────────
   {phase:3,week:9,day:'Mon',name:'Lower body — maintenance',type:'strength',exercises:[
-    {id:'p3w9mon1',name:'Back squat',detail:'3 × 5 @ 80%',cat:'strength'},
+    {id:'p3w9mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, dead bugs x6/side',cat:'core',supp:true},
+    {id:'p3w9mon1',name:'Back squat',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w9mon2',name:'Barbell hip thrust',detail:'3 × 6 · maintain',cat:'strength'},
-    {id:'p3w9mon3',name:'Hang power clean',detail:'3 × 4 · speed focus',cat:'strength'},
     {id:'p3w9mon4',name:'Nordic curl (eccentric)',detail:'3 × 6',cat:'strength'},
     {id:'p3w9mon5',name:'Bulgarian split squat (DB)',detail:'3 × 6/leg',cat:'strength'},
     {id:'p3w9mon_s1',name:'Single-leg calf raise',detail:'3 × 15/leg',cat:'strength',supp:true},
@@ -1615,20 +1579,23 @@ const PROGRAM = [
     {id:'p3w9mon6',name:'KB swings',detail:'3 × 12',cat:'core'},
     {id:'p3w9mon7',name:'Dead bug',detail:'2 × 8/side',cat:'core'},
     {id:'p3w9monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:'10 min mobility'},
+  ],note:'10 min mobility · 2 strength sessions this week only'},
 
   {phase:3,week:9,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w9tue1',name:'Race-pace',detail:'2km + 3 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
 
   {phase:3,week:9,day:'Wed',name:'Upper body — maintenance',type:'strength',exercises:[
-    {id:'p3w9wed1',name:'Barbell bench press',detail:'3 × 5 @ 80%',cat:'strength'},
+    {id:'p3w9wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12',cat:'core',supp:true},
+    {id:'p3w9wed1',name:'Barbell bench press',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w9wed2',name:'Weighted pull-ups',detail:'3 × 5',cat:'strength'},
     {id:'p3w9wed3',name:'Overhead press (barbell)',detail:'3 × 5',cat:'strength'},
     {id:'p3w9wed4',name:'Barbell bent-over row',detail:'3 × 5',cat:'strength'},
     {id:'p3w9wed5',name:'Ring dips',detail:'3 × 8',cat:'strength'},
     {id:'p3w9wed_s1',name:'Ring face pulls',detail:'2 × 15',cat:'strength',supp:true},
     {id:'p3w9wed_s2',name:'DB lateral raise',detail:'2 × 12',cat:'strength',supp:true},
+    {id:'p3w9wed_p1',name:'Ring rows',detail:'2 × 10 · upper pull maintenance',cat:'strength'},
+    {id:'p3w9wed_p2',name:'Dead hang',detail:'2 × 30 sec',cat:'strength'},
     {id:'p3w9wed6',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
     {id:'p3w9wed7',name:'Hollow body hold',detail:'2 × 30 sec',cat:'core'},
     {id:'p3w9wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
@@ -1638,18 +1605,10 @@ const PROGRAM = [
     {id:'p3w9thu1',name:'Easy run',detail:'8km easy',cat:'run'},
   ],note:''},
 
-  {phase:3,week:9,day:'Fri',name:'Lower + core',type:'strength',exercises:[
-    {id:'p3w9fri1',name:'Conventional deadlift',detail:'3 × 5 @ 80%',cat:'strength'},
-    {id:'p3w9fri2',name:'Romanian deadlift',detail:'3 × 8',cat:'strength'},
-    {id:'p3w9fri3',name:'Box jumps',detail:'3 × 5',cat:'strength'},
-    {id:'p3w9fri4',name:'Step-ups (DB)',detail:'3 × 8/leg',cat:'strength'},
-    {id:'p3w9fri5',name:'Single-leg RDL (DB)',detail:'3 × 6/leg',cat:'strength'},
-    {id:'p3w9fri_s1',name:'Single-leg calf raise',detail:'3 × 15/leg',cat:'strength',supp:true},
-    {id:'p3w9fri_s2',name:'Hip thrust (barbell)',detail:'2 × 10 · maintain',cat:'strength',supp:true},
-    {id:'p3w9fri6',name:'Copenhagen plank',detail:'2 × 25 sec/side',cat:'core'},
-    {id:'p3w9fri7',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
-    {id:'p3w9frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:''},
+  {phase:3,week:9,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p3w9fri1',name:'Full rest',detail:'48hr recovery before peak long run — do not compromise Saturday',cat:'rest'},
+    {id:'p3w9fri2',name:'Optional gentle walk',detail:'20 min max · stay off feet',cat:'rest'},
+  ],note:'No strength — highest mileage week'},
 
   {phase:3,week:9,day:'Sat',name:'Long run — PEAK',type:'run',exercises:[
     {id:'p3w9sat1',name:'Long run',detail:'30–32km · your longest run · ceiling is 32km',cat:'run'},
@@ -1659,49 +1618,43 @@ const PROGRAM = [
     {id:'p3w9sun1',name:'Complete rest',detail:'',cat:'rest'},
   ],note:''},
 
-  // Week 10 ─────────────────────────────────────────────────────────────────
-  {phase:3,week:10,day:'Mon',name:'Lower body — maintenance',type:'strength',exercises:[
-    {id:'p3w10mon1',name:'Back squat',detail:'3 × 5 @ 80%',cat:'strength'},
-    {id:'p3w10mon2',name:'Barbell hip thrust',detail:'3 × 6',cat:'strength'},
-    {id:'p3w10mon3',name:'Hang power clean',detail:'3 × 4',cat:'strength'},
-    {id:'p3w10mon4',name:'Nordic curl (eccentric)',detail:'3 × 6',cat:'strength'},
-    {id:'p3w10mon5',name:'Bulgarian split squat (DB)',detail:'3 × 6/leg',cat:'strength'},
-    {id:'p3w10mon_s1',name:'Single-leg calf raise',detail:'3 × 15/leg',cat:'strength',supp:true},
-    {id:'p3w10mon6',name:'KB swings',detail:'3 × 12',cat:'core'},
+  // Week 10 — Strength deload, begin taper ──────────────────────────────────
+  {phase:3,week:10,day:'Mon',name:'Lower body — strength deload',type:'strength',exercises:[
+    {id:'p3w10mon_wu',name:'Warm-up',detail:'5 min · easy leg swings, hip circles, glute bridges',cat:'core',supp:true},
+    {id:'p3w10mon1',name:'Back squat',detail:'3 × 4 @ 75% · deload · volume drops entering taper',cat:'strength'},
+    {id:'p3w10mon2',name:'Barbell hip thrust',detail:'3 × 5 @ 70%',cat:'strength'},
+    {id:'p3w10mon4',name:'Nordic curl (eccentric)',detail:'2 × 6',cat:'strength'},
+    {id:'p3w10mon5',name:'Bulgarian split squat (DB)',detail:'2 × 5/leg · lighter',cat:'strength'},
+    {id:'p3w10mon_s1',name:'Single-leg calf raise',detail:'2 × 12/leg · keep Achilles primed',cat:'strength',supp:true},
+    {id:'p3w10mon6',name:'KB swings',detail:'2 × 12',cat:'core'},
     {id:'p3w10mon7',name:'Dead bug',detail:'2 × 8/side',cat:'core'},
-    {id:'p3w10monlm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
-  ],note:'Begin taper — week 10 long run reduces'},
+    {id:'p3w10monlm',name:'Landmine reverse lunge',detail:'2 × 6/leg · light',cat:'strength'},
+  ],note:'Strength deload — 2 sessions, volume drops. Running takes priority now.'},
 
   {phase:3,week:10,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w10tue1',name:'Race-pace',detail:'2km + 2 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
 
-  {phase:3,week:10,day:'Wed',name:'Upper body',type:'strength',exercises:[
-    {id:'p3w10wed1',name:'Barbell bench press',detail:'3 × 5',cat:'strength'},
-    {id:'p3w10wed2',name:'Weighted pull-ups',detail:'3 × 5',cat:'strength'},
-    {id:'p3w10wed3',name:'Overhead press (barbell)',detail:'3 × 5',cat:'strength'},
-    {id:'p3w10wed4',name:'Barbell bent-over row',detail:'3 × 5',cat:'strength'},
-    {id:'p3w10wed5',name:'Ring dips',detail:'3 × 8',cat:'strength'},
-    {id:'p3w10wed_s1',name:'Ring face pulls',detail:'2 × 15',cat:'strength',supp:true},
+  {phase:3,week:10,day:'Wed',name:'Upper body — strength deload',type:'strength',exercises:[
+    {id:'p3w10wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
+    {id:'p3w10wed1',name:'Barbell bench press',detail:'3 × 4 @ 75% · deload',cat:'strength'},
+    {id:'p3w10wed2',name:'Weighted pull-ups',detail:'3 × 4 · deload',cat:'strength'},
+    {id:'p3w10wed3',name:'Overhead press (barbell)',detail:'2 × 4 @ 70% · deload',cat:'strength'},
+    {id:'p3w10wed4',name:'Barbell bent-over row',detail:'3 × 4 · deload',cat:'strength'},
+    {id:'p3w10wed5',name:'Ring rows',detail:'2 × 8 · easy',cat:'strength'},
+    {id:'p3w10wed_s1',name:'Ring face pulls',detail:'2 × 15 · shoulder health',cat:'strength',supp:true},
     {id:'p3w10wed6',name:'Pallof press',detail:'2 × 10/side',cat:'core'},
     {id:'p3w10wed7',name:'Hollow body hold',detail:'2 × 30 sec',cat:'core'},
-    {id:'p3w10wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
+    {id:'p3w10wedlm',name:'Half-kneeling landmine press',detail:'2 × 6/side · light',cat:'strength'},
   ],note:''},
 
   {phase:3,week:10,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p3w10thu1',name:'Easy run',detail:'6km easy',cat:'run'},
   ],note:''},
 
-  {phase:3,week:10,day:'Fri',name:'Lower + core',type:'strength',exercises:[
-    {id:'p3w10fri1',name:'Conventional deadlift',detail:'3 × 5',cat:'strength'},
-    {id:'p3w10fri2',name:'Romanian deadlift',detail:'3 × 8',cat:'strength'},
-    {id:'p3w10fri3',name:'Box jumps',detail:'3 × 4',cat:'strength'},
-    {id:'p3w10fri4',name:'Step-ups (DB)',detail:'3 × 8/leg',cat:'strength'},
-    {id:'p3w10fri5',name:'Single-leg RDL (DB)',detail:'3 × 6/leg',cat:'strength'},
-    {id:'p3w10fri_s1',name:'Single-leg calf raise',detail:'3 × 15/leg',cat:'strength',supp:true},
-    {id:'p3w10fri6',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-    {id:'p3w10fri7',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
-    {id:'p3w10frilm',name:'Landmine reverse lunge',detail:'3 × 8/leg · knee tracks toes',cat:'strength'},
+  {phase:3,week:10,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p3w10fri1',name:'Full rest',detail:'Entering taper — protect the long run and the legs',cat:'rest'},
+    {id:'p3w10fri2',name:'Light mobility',detail:'20 min foam roll + stretching if desired',cat:'rest'},
   ],note:''},
 
   {phase:3,week:10,day:'Sat',name:'Long run — begin taper',type:'run',exercises:[
@@ -1712,13 +1665,12 @@ const PROGRAM = [
   ],note:''},
 
   // ── PHASE 4 — Taper (Weeks 11–12) ─────────────────────────────────────────
-  // Supp Phase 4: minimal — priming only, no new stimulus
 
   // Week 11 ─────────────────────────────────────────────────────────────────
   {phase:4,week:11,day:'Mon',name:'Lower body — reduced',type:'strength',exercises:[
+    {id:'p4w11mon_wu',name:'Warm-up',detail:'5 min · easy hip circles, glute bridges, air squats',cat:'core',supp:true},
     {id:'p4w11mon1',name:'Back squat',detail:'2 × 5 @ 75% · volume halved',cat:'strength'},
     {id:'p4w11mon2',name:'Barbell hip thrust',detail:'2 × 6 · maintain',cat:'strength'},
-    {id:'p4w11mon3',name:'Hang power clean',detail:'2 × 4 · keep the speed · not heavy',cat:'strength'},
     {id:'p4w11mon4',name:'Nordic curl (eccentric)',detail:'2 × 5 · keep this — protective',cat:'strength'},
     {id:'p4w11mon5',name:'Bulgarian split squat (DB)',detail:'2 × 5/leg · light',cat:'strength'},
     {id:'p4w11mon_s1',name:'Calf raise',detail:'2 × 12/leg · light · keep Achilles primed',cat:'strength',supp:true},
@@ -1734,6 +1686,7 @@ const PROGRAM = [
   ],note:''},
 
   {phase:4,week:11,day:'Wed',name:'Upper — light',type:'strength',exercises:[
+    {id:'p4w11wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p4w11wed1',name:'Barbell bench press',detail:'2 × 5 @ 70%',cat:'strength'},
     {id:'p4w11wed2',name:'Weighted pull-ups',detail:'2 × 5 · light',cat:'strength'},
     {id:'p4w11wed3',name:'Overhead press (barbell)',detail:'2 × 4 @ 65% · light prime',cat:'strength'},
@@ -1751,16 +1704,9 @@ const PROGRAM = [
     {id:'p4w11thu3',name:'Easy bookend',detail:'2km easy',cat:'run'},
   ],note:''},
 
-  {phase:4,week:11,day:'Fri',name:'Lower — very light',type:'strength',exercises:[
-    {id:'p4w11fri1',name:'Conventional deadlift',detail:'2 × 5 @ 70%',cat:'strength'},
-    {id:'p4w11fri2',name:'Romanian deadlift',detail:'2 × 6 · light',cat:'strength'},
-    {id:'p4w11fri3',name:'Box jumps',detail:'2 × 3 · minimal, neurological priming only',cat:'strength'},
-    {id:'p4w11fri4',name:'Step-ups (DB)',detail:'2 × 6/leg · light',cat:'strength'},
-    {id:'p4w11fri5',name:'Single-leg RDL (DB)',detail:'2 × 5/leg · light',cat:'strength'},
-    {id:'p4w11fri_s1',name:'Calf raise',detail:'2 × 10/leg · easy · Achilles priming',cat:'strength',supp:true},
-    {id:'p4w11fri6',name:'Copenhagen plank',detail:'2 × 20 sec/side',cat:'core'},
-    {id:'p4w11fri7',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
-    {id:'p4w11frilm',name:'Landmine reverse lunge',detail:'2 × 5/leg · light',cat:'strength'},
+  {phase:4,week:11,day:'Fri',name:'Rest',type:'rest',exercises:[
+    {id:'p4w11fri1',name:'Full rest',detail:'Pre-long run rest — fresh legs for Saturday',cat:'rest'},
+    {id:'p4w11fri2',name:'Light mobility',detail:'15 min foam roll if desired',cat:'rest'},
   ],note:''},
 
   {phase:4,week:11,day:'Sat',name:'Last medium long run',type:'run',exercises:[
