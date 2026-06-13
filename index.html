@@ -3590,13 +3590,13 @@ function logBenchmarkRun(){
 }
 // Standard benchmark lifts: 4 main compounds + key bodyweight + common program lifts
 function benchmarkLiftList(){
-  const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Dips (AMRAP)','Ring push-ups (AMRAP)'];
+  const CORE=['Back squat','Barbell bench press','Deadlift','Overhead press (barbell)','Barbell bent-over row','Romanian deadlift','Bulgarian split squat','Barbell hip thrust','Pull-ups','Push-ups (AMRAP)','Single-leg squat to box'];
   const prog=typeof s1Lifts==='function'?s1Lifts():[];
   const out=[...CORE];
   prog.forEach(l=>{ if(!out.some(x=>x.toLowerCase()===l.toLowerCase())) out.push(l); });
   return out;
 }
-function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring.?push|ring row|inverted row|muscle.?up|pistol|nordic|\bdead.?hang|fallout|face ?pull|amrap/i.test(name||''); }
+function isBodyweightLift(name){ return /pull.?up|chin.?up|\bdip\b|push.?up|ring.?push|ring row|inverted row|muscle.?up|pistol|single.?leg.*squat|nordic|\bdead.?hang|fallout|face ?pull|amrap/i.test(name||''); }
 function logBenchmarkStrength(){
   const lift=(document.getElementById('bm-str-lift')||{}).value;
   const kg=parseFloat(String((document.getElementById('bm-str-kg')||{}).value).replace(',','.'))||0;
@@ -3634,7 +3634,7 @@ function logBenchmarkEndurance(){
   if(!test||!rawVal.trim()){ if(msg) msg.textContent='Select a test and enter a value.'; return; }
   // Cooper test: value is meters; timed holds: value is seconds; reps: integer
   const isCooper=/cooper/i.test(test);
-  const isTimed=/plank|wall sit|dead hang/i.test(test);
+  const isTimed=/plank|mcgill|bridge|isometric|dead hang|hold/i.test(test);
   let val, unit;
   if(isCooper){ val=parseInt(rawVal,10)||0; unit='m'; if(!(val>0)){ if(msg) msg.textContent='Enter distance in metres.'; return; } }
   else if(isTimed){
@@ -3654,19 +3654,18 @@ function logBenchmarkEndurance(){
   const _ev=document.getElementById('bm-end-val'); if(_ev) _ev.value='';
   const _bmm1=document.getElementById('bm-msg'); if(_bmm1){ _bmm1.textContent=''; }
 }
-function logBenchmarkFlexibility(){
+function logBenchmarkMobility(){
   const test=(document.getElementById('bm-flex-test')||{}).value;
   const rawVal=String((document.getElementById('bm-flex-val')||{}).value).trim();
   const block=(document.getElementById('bm-flex-block')||{}).value||defaultBlock();
   const msg=document.getElementById('bm-msg');
   if(!test||!rawVal){ if(msg) msg.textContent='Select a test and enter a value.'; return; }
   const val=parseFloat(rawVal.replace(',','.')); if(isNaN(val)){ if(msg) msg.textContent='Enter a number.'; return; }
-  const unit=/sit.and.reach|ankle/i.test(test)?'cm':/score|angle/i.test(test)?'pts':'cm';
+  const unit=/score|squat|thomas/i.test(test)?'score':/ankle|dorsi|90.90|gap/i.test(test)?'cm':/slr|straight.leg|degree/i.test(test)?'deg':'cm';
   if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
-  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'flexibility',block,date:_ymd(new Date()),test,val,unit});
+  STATE.benchmarks.push({id:'bm_'+Date.now(),kind:'mobility',block,date:_ymd(new Date()),test,val,unit});
   saveState(STATE); renderBenchmarks();
-  const el=document.getElementById('bm-flex-val'); if(el) el.value='';
-  if(typeof appToast==='function') appToast('Flexibility test saved ✓ — '+val+' '+unit);
+  if(typeof appToast==='function') appToast('Mobility test saved ✓ — '+val+' '+unit);
   const _ft=document.getElementById('bm-flex-test'); if(_ft) _ft.value='';
   const _fv=document.getElementById('bm-flex-val'); if(_fv) _fv.value='';
   const _bmm2=document.getElementById('bm-msg'); if(_bmm2){ _bmm2.textContent=''; }
@@ -3676,13 +3675,13 @@ function benchmarkHistoryHTML(){
   const runs=(STATE.benchmarks||[]).filter(b=>b.kind==='run').sort((a,b)=>new Date(a.date)-new Date(b.date));
   const strs=(STATE.benchmarks||[]).filter(b=>b.kind==='strength').sort((a,b)=>new Date(a.date)-new Date(b.date));
   const ends=(STATE.benchmarks||[]).filter(b=>b.kind==='endurance').sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const flexs=(STATE.benchmarks||[]).filter(b=>b.kind==='flexibility').sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const flexs=(STATE.benchmarks||[]).filter(b=>b.kind==='mobility'||b.kind==='flexibility').sort((a,b)=>new Date(a.date)-new Date(b.date));
   const btns=id=>'<div class="bm-hbtns"><button class="bm-edit" onclick="editBenchmark(\''+id+'\')">&#10000;</button><button class="bm-del" onclick="deleteBenchmark(\''+id+'\')">&#x2715;</button></div>';
   let out='';
   if(runs.length){ out+='<div class="bm-h2">Run time-trials</div>'+runs.map((r,i)=>{ const prev=runs[i-1]; const dPred=prev?r.predSec-prev.predSec:null; const delta=dPred!=null?(' <small style="color:'+(dPred<0?'#5fd6a0':'#ff6b47')+'">'+(dPred<0?'▼':'▲')+' '+_hms(Math.abs(dPred))+'</small>'):''; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+r.block+' \xb7 '+(+r.distKm.toFixed(1))+'k \xb7 '+_hms(r.durationSec)+'</div><div class="bm-hs">'+fmtPaceSec(r.paceSec)+'/km \xb7 '+_shortDate(r.date)+' → '+_hms(r.predSec)+' marathon'+delta+'</div></div>'+btns(r.id)+'</div>'; }).join(''); }
   if(strs.length){ out+='<div class="bm-h2" style="margin-top:10px">Strength checks</div>'+strs.map((s,i)=>{ const prevSame=strs.slice(0,i).reverse().find(x=>x.lift===s.lift); let delta=''; if(prevSame){ if(s.e1rm!=null&&prevSame.e1rm!=null){ const d=s.e1rm-prevSame.e1rm; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' kg</small>'; } else if(s.reps&&prevSame.reps){ const d=s.reps-prevSame.reps; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' reps</small>'; } } const main=s.e1rm!=null?(s.e1rm+' kg e1RM'):(s.reps+' reps'); const sub=s.bodyweight?(s.weight>0?('BW+'+s.weight+'\xd7'+s.reps):('BW \xd7 '+s.reps)):(s.weight+'\xd7'+s.reps); return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+s.lift+' \xb7 '+main+'</div><div class="bm-hs">'+sub+' \xb7 '+s.block+' \xb7 '+_shortDate(s.date)+delta+'</div></div>'+btns(s.id)+'</div>'; }).join(''); }
   if(ends.length){ out+='<div class="bm-h2" style="margin-top:10px">Endurance tests</div>'+ends.map((e,i)=>{ const prevSame=ends.slice(0,i).reverse().find(x=>x.test===e.test); let delta=''; if(prevSame){ const d=e.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+e.unit+'</small>'; } const disp=e.unit==='s'?_hms(e.val):e.val+' '+e.unit; return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+e.test+' \xb7 '+disp+'</div><div class="bm-hs">'+e.block+' \xb7 '+_shortDate(e.date)+delta+'</div></div>'+btns(e.id)+'</div>'; }).join(''); }
-  if(flexs.length){ out+='<div class="bm-h2" style="margin-top:10px">Flexibility tests</div>'+flexs.map((f,i)=>{ const prevSame=flexs.slice(0,i).reverse().find(x=>x.test===f.test); let delta=''; if(prevSame){ const d=f.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+f.unit+'</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+f.test+' \xb7 '+f.val+' '+f.unit+'</div><div class="bm-hs">'+f.block+' \xb7 '+_shortDate(f.date)+delta+'</div></div>'+btns(f.id)+'</div>'; }).join(''); }
+  if(flexs.length){ out+='<div class="bm-h2" style="margin-top:10px">Mobility tests</div>'+flexs.map((f,i)=>{ const prevSame=flexs.slice(0,i).reverse().find(x=>x.test===f.test); let delta=''; if(prevSame){ const d=f.val-prevSame.val; delta=' <small style="color:'+(d>=0?'#5fd6a0':'#ff6b47')+'">'+(d>=0?'+':'')+d+' '+f.unit+'</small>'; } return '<div class="bm-hrow"><div class="bm-hl"><div class="bm-ht">'+f.test+' \xb7 '+f.val+' '+f.unit+'</div><div class="bm-hs">'+f.block+' \xb7 '+_shortDate(f.date)+delta+'</div></div>'+btns(f.id)+'</div>'; }).join(''); }
   return out||'<div class="ls-hint">No benchmarks logged yet — your test history and recalibration deltas will appear here.</div>';
 }
 function benchmarkCardHTML(){
@@ -3717,21 +3716,27 @@ function benchmarkCardHTML(){
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-str-block" '+selCss+'>'+strBlockOpts+'</select></div></div>'
     +strBtns;
 
-  const endTests=['Push-ups AMRAP','Pull-ups AMRAP','Dips AMRAP','Ring push-ups AMRAP','Plank hold (seconds)','Dead hang (seconds)','Wall sit (seconds)','Cooper 12-min test (metres)'];
+  const endTests=['Push-ups AMRAP','Pull-ups AMRAP','Single-leg calf raise AMRAP (per leg)','Plank hold (seconds)','McGill side bridge hold (seconds — best side)','Dead hang (seconds)','Isometric wall sit (seconds)','Cooper 12-min test (metres)'];
   const endLogger='<div class="bm-section-hd" style="margin-top:14px">Muscular endurance &amp; aerobic capacity</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">AMRAP = as many reps as possible in one set. Plank / dead hang = hold time in seconds. Cooper test = total metres run in 12 minutes.</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">AMRAP = max reps, one set, no rest. Timed holds = enter seconds (or mm:ss). Single-leg calf raise: max reps per leg, knee straight. McGill side bridge: hold time on best side. Cooper test = metres run in 12 min.</div>'
     +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-end-test" '+selCss+'>'+endTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
     +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-end-val" type="text" inputmode="numeric" placeholder="reps / seconds / metres" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-end-block" '+selCss+'>'+endBlockOpts+'</select></div></div>'
     +'<button class="pc-apply" onclick="logBenchmarkEndurance()">Save endurance test</button>';
 
-  const flexTests=['Sit and reach (cm — positive = past toes)','Hip flexor score (1–5: 1=very tight, 5=excellent)','Ankle dorsiflexion (cm — heel-to-wall knee touch)','Hamstring flexibility (cm — straight-leg raise angle as score 0–180)'];
-  const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Flexibility &amp; mobility</div>'
-    +'<div class="pc-note" style="margin-bottom:8px">Sit and reach: sit, legs straight, reach forward — measure cm past or before toes (positive = past). Hip flexor score: self-rate 1 (very tight) to 5 (full range). Relevant for your hip, knee, and low-back niggles.</div>'
-    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+'>'+flexTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
-    +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="value" style="flex:1"></div></div>'
+  const mobTests=[
+    'Overhead squat score (1–3 — 3=full depth arms vertical)',
+    'Ankle dorsiflexion knee-to-wall (cm — best leg, heel must stay flat)',
+    'Hip 90/90 internal rotation gap (cm — front shin to floor)',
+    'Modified Thomas test score (1–3 — hip flexor length)',
+    'Active straight-leg raise (degrees — best leg, knee straight)'
+  ];
+  const flexLogger='<div class="bm-section-hd" style="margin-top:14px">Joint mobility assessment</div>'
+    +'<div class="pc-note" style="margin-bottom:8px">Standard S&amp;C mobility screen. Overhead squat: stand, arms overhead, squat to depth — score 3=full depth arms stay vertical; 2=depth with forward lean or arm drift; 1=can\'t reach parallel. Ankle dorsiflexion: lunge stance, move heel back until knee just touches wall — measure heel-to-wall cm (aim &gt;9 cm). Hip 90/90: sit with both hips at 90°, lower front shin toward floor — measure gap in cm (&lt;5 cm = good). Thomas test: lie on bench edge, hug one knee to chest — 3=free leg stays flat; 2=10–20° rise; 1=&gt;20°. Active SLR: lie flat, raise straight leg — degrees of hip flexion before knee bends (aim 70°+).</div>'
+    +'<div class="pc-field"><label>Test</label><div class="pc-input-row"><select id="bm-flex-test" '+selCss+'>'+mobTests.map(t=>'<option>'+t+'</option>').join('')+'</select></div></div>'
+    +'<div class="pc-field"><label>Result</label><div class="pc-input-row" style="gap:6px"><input id="bm-flex-val" type="number" inputmode="decimal" step="0.5" placeholder="score / cm / degrees" style="flex:1"></div></div>'
     +'<div class="pc-field"><label>Block</label><div class="pc-input-row"><select id="bm-flex-block" '+selCss+'>'+flexBlockOpts+'</select></div></div>'
-    +'<button class="pc-apply" onclick="logBenchmarkFlexibility()">Save flexibility test</button>';
+    +'<button class="pc-apply" onclick="logBenchmarkMobility()">Save mobility test</button>';
 
   return '<div class="bm-sched-wrap">'+sched+'</div>'
     +runLogger+strLogger+endLogger+flexLogger
