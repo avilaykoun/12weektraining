@@ -2604,10 +2604,18 @@ function fmtLastSets(rec){
 // ── Benchmark-seeded weight prescription ──
 function benchmarkE1RMForLift(name){
   if(!name) return null;
-  const norm=n=>n.toLowerCase().replace(/^barbell\s+/,'').replace(/\s*\(.*?\)/g,'').trim();
+  const norm=n=>n.toLowerCase().replace(/^barbell\s+/,'').replace(/^weighted\s+/,'').replace(/\s*\(.*?\)/g,'').trim();
   const n=norm(name);
   const bms=(STATE.benchmarks||[]).filter(b=>b.kind==='strength'&&b.e1rm).sort((a,b)=>new Date(b.date)-new Date(a.date));
   for(const b of bms){ if(norm(b.lift||'')===n) return b.e1rm; }
+  return null;
+}
+function benchmarkForLift(name){
+  if(!name) return null;
+  const norm=n=>n.toLowerCase().replace(/^barbell\s+/,'').replace(/^weighted\s+/,'').replace(/\s*\(.*?\)/g,'').trim();
+  const n=norm(name);
+  const bms=(STATE.benchmarks||[]).filter(b=>b.kind==='strength'&&b.e1rm).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  for(const b of bms){ if(norm(b.lift||'')===n) return b; }
   return null;
 }
 function parsePrescriptionPct(detail){
@@ -2630,8 +2638,13 @@ function suggestNextLoad(name){
     const bmE1=benchmarkE1RMForLift(name); if(!bmE1) return null;
     let bestPct={lo:65,hi:70};
     PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.name===name){ const p=parsePrescriptionPct(e.detail); if(p) bestPct=p; } }));
-    const suggested=roundKg(bmE1*bestPct.lo/100);
-    const suggestedHi=roundKg(bmE1*bestPct.hi/100);
+    let suggested=roundKg(bmE1*bestPct.lo/100);
+    let suggestedHi=roundKg(bmE1*bestPct.hi/100);
+    const _bmObj=benchmarkForLift(name);
+    if(_bmObj&&_bmObj.bodyweight&&_bmObj.bw>0){
+      suggested=roundKg(Math.max(0,bmE1*bestPct.lo/100-_bmObj.bw));
+      suggestedHi=roundKg(Math.max(0,bmE1*bestPct.hi/100-_bmObj.bw));
+    }
     return {rec:null,last:null,next:suggested,nextHi:suggestedHi,action:'bm',rpe:null,bmE1,pct:bestPct};
   }
   const wsraw=(STATE.exerciseSets[rec.id]||[]); const ws=wsraw.map(parseFloat).filter(x=>x>0); if(!ws.length) return null;
