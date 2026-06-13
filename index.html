@@ -3554,7 +3554,8 @@ function trainingLoadCardHTML(){
 // ═══════════════════════════════════════════
 // STRENGTH LOGGING · VOLUME · ESTIMATED 1RM
 // ═══════════════════════════════════════════
-const COMPOUND_LIFTS=['back squat','front squat','goblet squat','bulgarian split squat','bench press','overhead press','db overhead press','dumbbell overhead press','push press','deadlift','romanian deadlift','single-leg rdl','barbell row','pull-ups','hang power clean','landmine press','half-kneeling landmine press','landmine row','landmine squat','landmine reverse lunge','walking lunges','step-ups'];
+const COMPOUND_LIFTS=['back squat','front squat','goblet squat','bulgarian split squat','bench press','overhead press','db overhead press','dumbbell overhead press','push press','deadlift','romanian deadlift','single-leg rdl','barbell row','bent-over row','pull-ups','hang power clean','hip thrust','incline','landmine press','half-kneeling landmine press','landmine row','landmine squat','landmine reverse lunge','reverse lunge','walking lunges','step-ups'];
+function _isCompound(name){ const n=name.toLowerCase(); return COMPOUND_LIFTS.some(c=>n.includes(c)); }
 function parsePrescription(detail){ const m=String(detail||'').match(/(\d+)\s*[x×]\s*(\d+)/i); return m?{sets:+m[1],reps:+m[2]}:null; }
 function isLoggableLift(e){ return e.cat==='strength' && !!parsePrescription(e.detail); }
 function exPrescriptionById(exId){ for(const s of PROGRAM){ const e=s.exercises.find(x=>x.id===exId); if(e) return parsePrescription(e.detail); } return null; }
@@ -3709,7 +3710,7 @@ function weightControlHTML(e,sessKey){
       +'<input class="setw-reps'+miss+'" id="setr-'+e.id+'-'+i+'" type="number" inputmode="numeric" value="'+rdisp+'" oninput="setSetReps(\''+e.id+'\',\''+sessKey+'\','+i+',this.value)">'
       +'<button class="stp-b" onclick="stepReps(\''+e.id+'\',\''+sessKey+'\','+i+',1)">+</button></div></div>';
   }
-  const isComp=COMPOUND_LIFTS.includes(e.name.toLowerCase());
+  const isComp=_isCompound(e.name);
   const e1=exE1RM(e.id);
   let hist='';
   const sug=suggestNextLoad(e.name,e.detail);
@@ -3851,7 +3852,7 @@ function stepRun(exId,sessKey,delta){
 function weeklyStrengthVolume(){ const byWeek={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; })); return byWeek; }
 function liftSeries(){
   const map={};
-  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(!COMPOUND_LIFTS.includes(e.name.toLowerCase())) return; const e1=exE1RM(e.id); if(e1){ (map[e.name]=map[e.name]||[]).push({week:s.week,e1rm:e1}); } }));
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(!_isCompound(e.name)) return; const e1=exE1RM(e.id); if(e1){ (map[e.name]=map[e.name]||[]).push({week:s.week,e1rm:e1}); } }));
   Object.keys(map).forEach(k=>{ const byW={}; map[k].forEach(p=>byW[p.week]=Math.max(byW[p.week]||0,p.e1rm)); map[k]=Object.keys(byW).map(w=>({week:+w,e1rm:byW[w]})).sort((a,b)=>a.week-b.week); });
   return map;
 }
