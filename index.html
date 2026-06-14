@@ -1578,13 +1578,31 @@ input[type=number]{-moz-appearance:textfield}
       <div id="fdy-out"><div class="ls-hint">Add foods below to see your daily macros.</div></div>
       <div class="nutr-divider"></div>
       <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
+        <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name (DB or custom)…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
         <datalist id="fdy-food-list"></datalist>
         <input id="fdy-grams" type="number" inputmode="decimal" step="10" placeholder="g" style="width:70px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace;text-align:center" oninput="fdyPreview()">
       </div>
-      <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:18px;margin-bottom:8px"></div>
+      <div id="fdy-macros" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+        <div style="flex:1;min-width:72px">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">kcal</div>
+          <input id="fdy-kcal" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box">
+        </div>
+        <div style="flex:1;min-width:72px">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Protein g</div>
+          <input id="fdy-pro" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
+        </div>
+        <div style="flex:1;min-width:72px">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Carbs g</div>
+          <input id="fdy-cho" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
+        </div>
+        <div style="flex:1;min-width:72px">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Fat g</div>
+          <input id="fdy-fat" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
+        </div>
+      </div>
+      <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:16px;margin-bottom:8px"></div>
       <button class="btn-complete pending" style="width:100%;padding:11px;border-radius:10px" onclick="fdyAdd()">Add to diary</button>
-      <div class="pc-note" style="margin-top:8px">Values are per-100g estimates. Tap ✕ to remove. Targets use your saved bodyweight (performance goal).</div>
+      <div class="pc-note" style="margin-top:8px">Select a food from the list + enter grams, or type any name and fill in the macros directly. Tap ✕ to remove entries.</div>
     </div>
   </div>
 
@@ -2624,23 +2642,56 @@ function fdyInit(){
   dl.innerHTML=Object.keys(FOOD_DB).map(k=>'<option value="'+k+'">').join('');
   const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
 }
+function fdyCalcKcal(){
+  const pro=parseFloat(document.getElementById('fdy-pro')?.value)||0;
+  const cho=parseFloat(document.getElementById('fdy-cho')?.value)||0;
+  const fat=parseFloat(document.getElementById('fdy-fat')?.value)||0;
+  const kcal=Math.round(pro*4+cho*4+fat*9);
+  const k=document.getElementById('fdy-kcal'); if(k) k.value=kcal||'';
+}
 function fdyPreview(){
   const fi=document.getElementById('fdy-food'),gi=document.getElementById('fdy-grams'),pv=document.getElementById('fdy-preview');
-  if(!fi||!pv) return;
-  const info=FOOD_DB[fi.value]; const g=parseFloat((gi&&gi.value)||'');
-  if(!info||!(g>0)){ pv.textContent=info?'Enter grams to see estimate':'Type or select a food above'; return; }
-  pv.textContent=g+'g → '+Math.round(g/100*info.kcal)+' kcal · '+Math.round(g/100*info.pro*10)/10+'g protein · '+Math.round(g/100*info.cho*10)/10+'g carbs · '+Math.round(g/100*info.fat*10)/10+'g fat';
+  const mw=document.getElementById('fdy-macros');
+  if(!fi) return;
+  const food=fi.value.trim();
+  // Show macro fields as soon as food name is entered
+  if(mw) mw.style.display=food?'flex':'none';
+  if(!food){ if(pv) pv.textContent=''; return; }
+  const info=FOOD_DB[food]; const g=parseFloat((gi&&gi.value)||'');
+  if(info&&g>0){
+    // Auto-fill macro fields from DB
+    const calc=(v)=>Math.round(g/100*v*10)/10;
+    const k=document.getElementById('fdy-kcal'),p=document.getElementById('fdy-pro'),c=document.getElementById('fdy-cho'),f=document.getElementById('fdy-fat');
+    if(k) k.value=Math.round(g/100*info.kcal);
+    if(p) p.value=calc(info.pro);
+    if(c) c.value=calc(info.cho);
+    if(f) f.value=calc(info.fat);
+    if(pv) pv.textContent='DB match · macros auto-filled — edit if needed';
+  } else if(info){
+    if(pv) pv.textContent='Enter grams above to auto-fill macros, or type them directly';
+  } else {
+    if(pv) pv.textContent='Custom food — enter macros directly below';
+  }
 }
 function fdyAdd(){
-  const fi=document.getElementById('fdy-food'),gi=document.getElementById('fdy-grams');
-  const food=(fi&&fi.value.trim())||''; const g=parseFloat((gi&&gi.value)||'');
-  const info=FOOD_DB[food]; if(!info||!(g>0)){ if(typeof appToast==='function') appToast('Select a food from the list and enter grams'); return; }
+  const fi=document.getElementById('fdy-food');
+  const food=(fi&&fi.value.trim())||'';
+  if(!food){ if(typeof appToast==='function') appToast('Enter a food name'); return; }
+  // Read macros from the editable fields (auto-filled or manually entered)
+  const kcal=parseFloat(document.getElementById('fdy-kcal')?.value||'0')||0;
+  const pro=parseFloat(document.getElementById('fdy-pro')?.value||'0')||0;
+  const cho=parseFloat(document.getElementById('fdy-cho')?.value||'0')||0;
+  const fat=parseFloat(document.getElementById('fdy-fat')?.value||'0')||0;
+  const grams=parseFloat(document.getElementById('fdy-grams')?.value||'0')||0;
+  if(kcal<=0&&pro<=0&&cho<=0&&fat<=0){ if(typeof appToast==='function') appToast('Enter macros or select a DB food + grams'); return; }
   if(!STATE.foodDiary) STATE.foodDiary={};
   const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
   if(!STATE.foodDiary[ymd]) STATE.foodDiary[ymd]=[];
-  STATE.foodDiary[ymd].push({food,grams:g,kcal:Math.round(g/100*info.kcal),pro:Math.round(g/100*info.pro*10)/10,cho:Math.round(g/100*info.cho*10)/10,fat:Math.round(g/100*info.fat*10)/10});
+  STATE.foodDiary[ymd].push({food,grams:grams||null,kcal:Math.round(kcal),pro:Math.round(pro*10)/10,cho:Math.round(cho*10)/10,fat:Math.round(fat*10)/10});
   saveState(STATE);
-  if(fi) fi.value=''; if(gi) gi.value='';
+  // Clear all inputs
+  ['fdy-food','fdy-grams','fdy-kcal','fdy-pro','fdy-cho','fdy-fat'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const mw=document.getElementById('fdy-macros'); if(mw) mw.style.display='none';
   const pv=document.getElementById('fdy-preview'); if(pv) pv.textContent='';
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
   renderFoodDiary();
@@ -2664,7 +2715,8 @@ function renderFoodDiary(){
   const bar=(v,t,col)=>'<div class="fdy-track"><div class="fdy-fill" style="width:'+pct(v,t)+'%;background:'+col+'"></div></div>';
   let html='<div>';
   items.forEach((it,i)=>{
-    html+='<div class="fdy-item"><span class="fdy-food">'+it.food+' · '+it.grams+'g</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
+    const gramsLabel=it.grams?(' · '+it.grams+'g'):'';
+    html+='<div class="fdy-item"><span class="fdy-food">'+it.food+gramsLabel+'</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
   });
   html+='</div>';
   html+='<div class="fdy-total">'
