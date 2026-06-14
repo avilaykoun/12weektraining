@@ -4740,10 +4740,14 @@ function weeklyRunKm(){
   });
   PROGRAM.forEach(s=>s.exercises.forEach(e=>{
     if(e.cat!=='run') return;
-    const kmh=parseFloat((STATE.runLog||{})[e.id]);
-    if(!(kmh>0)) return;
     // Skip if this session's date is covered by an imported run
     if(importedDates.has(_ymd(sessionDate(s)))) return;
+    const kmh=parseFloat((STATE.runLog||{})[e.id]);
+    const actualKm=parseFloat((STATE.actualRunKm||{})[e.id]);
+    // Require either a logged speed or explicit actual km to count the exercise
+    if(!(kmh>0)&&!(actualKm>0)) return;
+    // Explicit "actual km run" field takes priority over description parsing
+    if(actualKm>0){byWeek[s.week]=(byWeek[s.week]||0)+actualKm;return;}
     // Interval reps: "6 × 800m" → total metres
     const repM=e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
     if(repM){const dist=repM[3].toLowerCase()==='km'?+repM[2]:+repM[2]/1000;byWeek[s.week]=(byWeek[s.week]||0)+(+repM[1]*dist);return;}
