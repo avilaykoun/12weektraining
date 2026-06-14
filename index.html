@@ -770,6 +770,8 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .fdy-bar-row>span:last-child{width:96px;text-align:right;flex-shrink:0;color:var(--text3)}
 .fdy-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
 .fdy-fill{height:100%;border-radius:3px;transition:width .3s}
+.fdy-quick-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:11px;font-family:'Aptos',monospace;padding:4px 10px;cursor:pointer;transition:background .15s,color .15s}
+.fdy-quick-btn:hover,.fdy-quick-btn:active{background:var(--accent);color:#000;border-color:var(--accent)}
 .bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
@@ -1354,6 +1356,7 @@ input[type=number]{-moz-appearance:textfield}
           <div class="nutr-meal-detail">Chicken or beef + large portion of rice or roast potatoes + roasted vegetables + olive oil.</div>
           <div class="nutr-meal-macros"><span class="nutr-m-chip carb">100g carb</span><span class="nutr-m-chip prot">48g prot</span><span class="nutr-m-chip fat">28g fat</span><span class="nutr-m-chip">~1,000 kcal</span></div>
         </div>
+        <div class="nutr-warn"><strong>Alcohol note:</strong> Even 0.5 g/kg body weight (approximately 2 standard drinks for most athletes) consumed within 4 hours of a long run reduces glycogen resynthesis rate by ~25% and impairs protein synthesis. If celebrating a training milestone, eat your recovery meal first and minimise intake on peak training days.</div>
       </div>
       <div id="nutr-day-quality" style="display:none">
         <div class="nutr-tip">Never run intervals or threshold fasted. A depleted athlete trains a depleted athlete — you adapt to the state you train in.</div>
@@ -1498,6 +1501,34 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-meal-detail" style="margin-bottom:10px">Protect recovery between sessions. Post-session carb+protein window is non-negotiable. Sleep 8–9 hrs is as important as any meal. Do not cut calories — this is the highest energy demand period of the 12 weeks. Build in-run carbs to 90 g/hour.</div>
       <div class="nutr-section-lbl">Phase 4 · Taper (Weeks 10–12)</div>
       <div class="nutr-meal-detail">Do not reduce carbohydrates proportionally with the training volume cut. The muscles are still absorbing the peak stimulus. Maintain carb intake, slightly reduce total calories by trimming fat. Begin the full 3-day carb load in the final days before the race.</div>
+      <div class="nutr-divider"></div>
+      <div class="nutr-section-lbl">Gut Training Protocol — Progressive Carb Adaptation</div>
+      <div class="nutr-tip">~30–50% of recreational marathon DNFs are GI-related. The gut adapts to high-carb intake just like muscles adapt to training — it requires consistent practice. GI distress at 90 g/hr in Week 1 is normal; GI comfort at 90 g/hr in Week 9 is the goal.</div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 1 (Weeks 1–3) · 45–60 g carbs/hr</div>
+          <div class="nutr-supp-detail">Start with 1 gel every 45 min on long runs. Use the brand you will race with — gut adaptation is brand-specific. Never skip fuelling on runs over 60 min.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 2 (Weeks 4–7) · Build to 75–80 g/hr</div>
+          <div class="nutr-supp-detail">Add a second carb source (e.g. dates + gel = mixed glucose and fructose sugars). Mixed-sugar products increase maximum gut absorption. Never skip fuelling on runs over 60 min.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 3 (Weeks 8–10) · Target 90 g/hr</div>
+          <div class="nutr-supp-detail">Use 2:1 glucose:fructose ratio products. Two gut transporters absorb glucose and fructose via separate pathways — mixing them unlocks the 90 g/hr ceiling. Train the gut to absorb this consistently through repetition.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Race Day · Execute exactly what you practised</div>
+          <div class="nutr-supp-detail">Stick to every product, timing, and volume you trained with. Never try a new product on race day — not a new gel brand, new electrolyte, new volume, or new timing.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Rule #1</span>
+      </div>
     </div>
   </div>
 
@@ -1557,6 +1588,51 @@ input[type=number]{-moz-appearance:textfield}
     </div>
   </div>
 
+  <!-- Iron & Ferritin card -->
+  <div class="nutr-card">
+    <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <div class="nutr-card-icon">🩸</div>
+      <div><div class="nutr-card-title">Iron &amp; Ferritin — Runner Priority</div><div class="nutr-card-sub">The most common hidden performance limiter in distance runners</div></div>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
+    </div>
+    <div class="nutr-card-body">
+      <div class="nutr-warn" style="margin-bottom:10px">Foot-strike haemolysis during running destroys red blood cells with each footfall. Combined with sweat losses, distance runners are at high risk of iron depletion even without obvious symptoms.</div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Optimal ferritin for performance</div>
+          <div class="nutr-supp-detail">&gt;50 µg/L minimum; ideally &gt;80 µg/L. Below 30 µg/L will measurably impair VO2max and running economy.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Target</span>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Symptoms of latent deficiency</div>
+          <div class="nutr-supp-detail">Elevated HR at same effort · unexplained performance plateau · persistent fatigue not resolved by rest. These symptoms appear before anaemia — ferritin can be dangerously low while haemoglobin is still normal.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Watch for</span>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Test frequency</div>
+          <div class="nutr-supp-detail">Every 8–12 weeks during heavy training — not just annually. Request ferritin specifically; standard iron panels often miss early deficiency.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Supplementation (if confirmed deficient)</div>
+          <div class="nutr-supp-detail">Ferrous sulfate 100–200 mg · taken with Vitamin C (100 mg+) to enhance absorption · away from coffee, tea, and calcium by at least 2 hours · take on alternate days — daily dosing reduces absorption via hepcidin upregulation.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Food sources</div>
+          <div class="nutr-supp-detail">Lean red meat 3–4×/week · lentils and legumes · dark leafy greens (spinach, kale) · fortified cereals. Haem iron from meat absorbs 3× more efficiently than non-haem iron from plants.</div>
+        </div>
+      </div>
+      <div class="nutr-warn">Do not supplement iron without confirmed bloodwork. Excess iron is pro-oxidant and harmful. Always test first.</div>
+    </div>
+  </div>
+
   <!-- Food diary card -->
   <div class="nutr-card">
     <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':'';renderFoodDiary()">
@@ -1575,6 +1651,14 @@ input[type=number]{-moz-appearance:textfield}
         <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name (DB or custom)…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
         <datalist id="fdy-food-list"></datalist>
         <input id="fdy-grams" type="number" inputmode="decimal" step="10" placeholder="g" style="width:70px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace;text-align:center" oninput="fdyPreview()">
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='1';fdyPreview()">1 serve</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='100';fdyPreview()">100g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='150';fdyPreview()">150g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='200';fdyPreview()">200g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='250';fdyPreview()">250g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='330';fdyPreview()">330ml</button>
       </div>
       <div id="fdy-macros" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:10px">
         <div style="flex:1;min-width:72px">
@@ -2794,19 +2878,50 @@ function fdyRemove(ymd,idx){
   STATE.foodDiary[ymd].splice(idx,1);
   saveState(STATE); renderFoodDiary();
 }
+function _fdyDayTarget(ymd,wt){
+  // Map the scheduled session for ymd to the appropriate _NUTR_DAYS entry
+  const goalFatAdj=((STATE.profile&&STATE.profile.goal)||'performance')==='lose'?-0.15:((STATE.profile&&STATE.profile.goal)||'performance')==='build'?0.05:0;
+  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const prot=Math.round(wt*protMult);
+  // Parse ymd to a Date
+  const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  const sessions=getSessionsForDate(d);
+  // Determine day classification
+  let nutrIdx=0; let sessionLabel='Rest day';
+  if(sessions.length){
+    const s=sessions[0];
+    const sName=(s.name||'').toLowerCase();
+    if(s.type==='rest'){ nutrIdx=0; sessionLabel='Rest day'; }
+    else if(/long run/.test(sName)){ nutrIdx=4; sessionLabel='Long Run day'; }
+    else if(/interval|threshold/.test(sName)){ nutrIdx=3; sessionLabel='Intervals/Threshold day'; }
+    else if(/lower/.test(sName) && s.type==='strength'){ nutrIdx=2; sessionLabel='Strength (Lower) day'; }
+    else if(s.type==='combo'){ nutrIdx=1; sessionLabel='Easy Run + Upper day'; }
+    else if(s.type==='strength'){ nutrIdx=1; sessionLabel='Strength (Upper) day'; }
+    else if(s.type==='run'){ nutrIdx=1; sessionLabel='Easy Run day'; }
+    else { nutrIdx=0; sessionLabel='Rest day'; }
+  }
+  const nd=_NUTR_DAYS[nutrIdx];
+  const cMid=Math.round(wt*(nd.cLo+nd.cHi)/2);
+  const fat=Math.round(wt*(nd.fatMult+goalFatAdj));
+  const kcal=Math.round((cMid*4+prot*4+fat*9)/100)*100;
+  return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:prot,fat};
+}
 function renderFoodDiary(){
   const el=document.getElementById('fdy-out'); if(!el) return;
   fdyInit();
   if(!STATE.foodDiary) STATE.foodDiary={};
   const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
   const items=STATE.foodDiary[ymd]||[];
-  if(!items.length){ el.innerHTML='<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
-  const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const wt=(STATE.profile&&parseFloat(STATE.profile.weight))||86;
-  const tgt={kcal:Math.round(wt*38),pro:Math.round(wt*2),cho:Math.round(wt*6),fat:Math.round(wt*38*0.25/9)};
+  // Compute session-aware target
+  const tgtInfo=_fdyDayTarget(ymd,wt);
+  const tgt={kcal:tgtInfo.kcal,pro:tgtInfo.pro,cho:tgtInfo.cho,fat:tgtInfo.fat};
+  const dayBanner='<div class="nutr-tip" style="margin-bottom:8px">Today\'s target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
+  if(!items.length){ el.innerHTML=dayBanner+'<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
+  const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const pct=(v,t)=>Math.min(100,t>0?Math.round(v/t*100):0);
   const bar=(v,t,col)=>'<div class="fdy-track"><div class="fdy-fill" style="width:'+pct(v,t)+'%;background:'+col+'"></div></div>';
-  let html='<div>';
+  let html=dayBanner+'<div>';
   items.forEach((it,i)=>{
     const gramsLabel=it.grams?(' · '+it.grams+'g'):'';
     html+='<div class="fdy-item"><span class="fdy-food">'+it.food+gramsLabel+'</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
@@ -2818,7 +2933,7 @@ function renderFoodDiary(){
     +'<div class="fdy-bar-row"><span>Protein</span>'+bar(tot.pro,tgt.pro,'#5fd6a0')+'<span>'+Math.round(tot.pro*10)/10+' / '+tgt.pro+'g</span></div>'
     +'<div class="fdy-bar-row"><span>Carbs</span>'+bar(tot.cho,tgt.cho,'#5aa6ff')+'<span>'+Math.round(tot.cho*10)/10+' / '+tgt.cho+'g</span></div>'
     +'<div class="fdy-bar-row"><span>Fat</span>'+bar(tot.fat,tgt.fat,'#e8c66b')+'<span>'+Math.round(tot.fat*10)/10+' / '+tgt.fat+'g</span></div>'
-    +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+'kg × 38 kcal/kg (performance). Adjust goal in Daily fuel &amp; hydration card.</div>'
+    +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+' kg · '+tgtInfo.nutrLabel+' · adjust in Daily fuel &amp; hydration card.</div>'
     +'</div>';
   el.innerHTML=html;
 }
@@ -2863,7 +2978,8 @@ function renderNutritionMacros(){
   const hydEl=document.getElementById('nutr-hydration-out');
   if(hydEl){
     const hrows=_NUTR_DAYS.map(d=>`<tr><td>${d.label}</td><td>${d.fluidL.toFixed(1)}L+</td><td>${d.sodMg.toLocaleString()}mg+</td></tr>`).join('');
-    hydEl.innerHTML='<details style="margin-top:4px"><summary style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.05em">FLUID &amp; SODIUM TARGETS ▸</summary><table class="nutr-table" style="margin-top:6px"><tr><th>Day type</th><th>Fluid</th><th>Sodium</th></tr>'+hrows+'</table><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:6px">Add 500ml fluid per 30 min of intense running. Long runs: 400–600ml/hr + electrolyte tabs (300–500mg sodium/hr).</div></details>';
+    hydEl.innerHTML='<details style="margin-top:4px"><summary style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.05em">FLUID &amp; SODIUM TARGETS ▸</summary><table class="nutr-table" style="margin-top:6px"><tr><th>Day type</th><th>Fluid</th><th>Sodium</th></tr>'+hrows+'</table><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:6px">Add 500ml fluid per 30 min of intense running. Long runs: 400–600ml/hr + electrolyte tabs (300–500mg sodium/hr).</div></details>'
+      +'<div class="nutr-warn" style="margin-top:8px"><strong>Sydney summer &amp; hot days (&gt;25°C):</strong> Start pre-hydrating 500 ml in the 2 hrs before morning runs. Begin electrolyte drink earlier — from 20 min into runs rather than 40 min. Weigh yourself before and after a long run and replace 1.5× the weight lost as fluid over the next 4 hours. Sweat rates in heat can reach 1.5–2 L/hr; generic guidance significantly underestimates fluid needs in Sydney\'s December–March conditions.</div>';
   }
   // race week carb load — per-day stepped protocol
   const cl=document.getElementById('nutr-carbload-detail');
