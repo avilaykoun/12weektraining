@@ -3429,17 +3429,8 @@ function renderHub(){
   const totalSched=PROGRAM.filter(s=>s.type!=='rest'&&sessionDate(s)<=new Date()).length;
   const pct=totalSched?Math.round(totalDone/Math.max(totalSched,1)*100):0;
   const raceDays=Math.max(0,Math.ceil((RACE_DATE-new Date())/864e5));
-  // total distance from run logs
-  let totKm=0;
-  PROGRAM.forEach(s=>s.exercises.forEach(e=>{
-    if(e.cat!=='run') return;
-    const v=parseFloat((STATE.runLog||{})[e.id]);
-    if(v>0){
-      const m=e.detail&&e.detail.match(/(\d+(?:\.\d+)?)\s*(?:–|-)\s*(\d+(?:\.\d+)?)\s*km/i);
-      if(m) totKm+=(parseFloat(m[1])+parseFloat(m[2]))/2;
-    }
-  }));
-  (STATE.importedRuns||[]).forEach(r=>{if(r&&r.distKm>0)totKm+=r.distKm;});
+  // total distance — reuse weeklyRunKm() which handles actualRunKm + dedup correctly
+  const totKm=Object.values(weeklyRunKm()).reduce((a,b)=>a+b,0);
 
   // Welcome / status area
   const welEl=document.getElementById('hub-welcome-area');
@@ -3502,7 +3493,9 @@ function todayProgressHTML(){
   const today=new Date();today.setHours(0,0,0,0);
   const past=PROGRAM.filter(s=>s.type!=='rest'&&sessionDate(s)<=today).sort((a,b)=>sessionDate(b)-sessionDate(a));
   for(const s of past){if(STATE.completedSessions[sessionKey(s)])streak++;else break;}
-  return `<div class="today-progress">
+  const rkMap=weeklyRunKm(); const wkKm=rkMap[wk]||0;
+  const wkKmStr=wkKm>=1?wkKm.toFixed(1)+' km run':'';
+  return `<div class="today-progress" id="today-progress-card">
     <div class="tpb-row">
       <span class="tpb-week">Week ${wk} of 12</span>
       <span class="tpb-pct">${pct}% complete</span>
@@ -3510,7 +3503,7 @@ function todayProgressHTML(){
     <div class="tpb-phase">${pi.name} phase · ${pi.rir}</div>
     <div class="tpb-track"><div class="tpb-fill" style="width:${pct}%"></div></div>
     <div class="tpb-stats">
-      <span>This week: ${wkDone}/${wkSched} sessions</span>
+      <span>This week: ${wkDone}/${wkSched} sessions${wkKmStr?' · '+wkKmStr:''}</span>
       ${streak>1?'<span>'+streak+'-session streak</span>':''}
     </div>
   </div>`;
@@ -4717,6 +4710,9 @@ function setActualKm(exId,val){
   if(isNaN(km)||km<=0) delete STATE.actualRunKm[exId]; else STATE.actualRunKm[exId]=km;
   saveState(STATE);
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  // Refresh the Today tab progress card live so weekly km updates as you type
+  const card=document.getElementById('today-progress-card');
+  if(card) card.outerHTML=todayProgressHTML();
 }
 function stepRun(exId,sessKey,delta){
   let cur=parseFloat(STATE.runLog[exId]); if(isNaN(cur)) cur=0;
