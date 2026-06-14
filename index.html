@@ -59,6 +59,10 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 /* TODAY SECTION */
 .today-date{font-size:11px;font-family:'Aptos',monospace;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 .session-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;overflow:clip;margin-bottom:12px}
+.session-card[data-type="run"]{border-left:3px solid var(--accent2)}
+.session-card[data-type="combo"]{border-left:3px solid var(--accent)}
+.session-card[data-type="strength"]{border-left:3px solid var(--green)}
+.session-card[data-type="rest"]{border-left:3px solid var(--border);opacity:.8}
 .session-hdr{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;touch-action:manipulation}
 .session-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .dot-strength{background:var(--accent2)}
@@ -770,6 +774,8 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .fdy-bar-row>span:last-child{width:96px;text-align:right;flex-shrink:0;color:var(--text3)}
 .fdy-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
 .fdy-fill{height:100%;border-radius:3px;transition:width .3s}
+.fdy-quick-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:11px;font-family:'Aptos',monospace;padding:4px 10px;cursor:pointer;transition:background .15s,color .15s}
+.fdy-quick-btn:hover,.fdy-quick-btn:active{background:var(--accent);color:#000;border-color:var(--accent)}
 .bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
@@ -822,6 +828,7 @@ input[type=number]{-moz-appearance:textfield}
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
         <div class="hdr-build">Build 2026-06-10 · v38</div>
+        <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
         <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text2)">PROGRESS</div>
@@ -1354,6 +1361,7 @@ input[type=number]{-moz-appearance:textfield}
           <div class="nutr-meal-detail">Chicken or beef + large portion of rice or roast potatoes + roasted vegetables + olive oil.</div>
           <div class="nutr-meal-macros"><span class="nutr-m-chip carb">100g carb</span><span class="nutr-m-chip prot">48g prot</span><span class="nutr-m-chip fat">28g fat</span><span class="nutr-m-chip">~1,000 kcal</span></div>
         </div>
+        <div class="nutr-warn"><strong>Alcohol note:</strong> Even 0.5 g/kg body weight (approximately 2 standard drinks for most athletes) consumed within 4 hours of a long run reduces glycogen resynthesis rate by ~25% and impairs protein synthesis. If celebrating a training milestone, eat your recovery meal first and minimise intake on peak training days.</div>
       </div>
       <div id="nutr-day-quality" style="display:none">
         <div class="nutr-tip">Never run intervals or threshold fasted. A depleted athlete trains a depleted athlete — you adapt to the state you train in.</div>
@@ -1498,6 +1506,34 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-meal-detail" style="margin-bottom:10px">Protect recovery between sessions. Post-session carb+protein window is non-negotiable. Sleep 8–9 hrs is as important as any meal. Do not cut calories — this is the highest energy demand period of the 12 weeks. Build in-run carbs to 90 g/hour.</div>
       <div class="nutr-section-lbl">Phase 4 · Taper (Weeks 10–12)</div>
       <div class="nutr-meal-detail">Do not reduce carbohydrates proportionally with the training volume cut. The muscles are still absorbing the peak stimulus. Maintain carb intake, slightly reduce total calories by trimming fat. Begin the full 3-day carb load in the final days before the race.</div>
+      <div class="nutr-divider"></div>
+      <div class="nutr-section-lbl">Gut Training Protocol — Progressive Carb Adaptation</div>
+      <div class="nutr-tip">~30–50% of recreational marathon DNFs are GI-related. The gut adapts to high-carb intake just like muscles adapt to training — it requires consistent practice. GI distress at 90 g/hr in Week 1 is normal; GI comfort at 90 g/hr in Week 9 is the goal.</div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 1 (Weeks 1–3) · 45–60 g carbs/hr</div>
+          <div class="nutr-supp-detail">Start with 1 gel every 45 min on long runs. Use the brand you will race with — gut adaptation is brand-specific. Never skip fuelling on runs over 60 min.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 2 (Weeks 4–7) · Build to 75–80 g/hr</div>
+          <div class="nutr-supp-detail">Add a second carb source (e.g. dates + gel = mixed glucose and fructose sugars). Mixed-sugar products increase maximum gut absorption. Never skip fuelling on runs over 60 min.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Phase 3 (Weeks 8–10) · Target 90 g/hr</div>
+          <div class="nutr-supp-detail">Use 2:1 glucose:fructose ratio products. Two gut transporters absorb glucose and fructose via separate pathways — mixing them unlocks the 90 g/hr ceiling. Train the gut to absorb this consistently through repetition.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Race Day · Execute exactly what you practised</div>
+          <div class="nutr-supp-detail">Stick to every product, timing, and volume you trained with. Never try a new product on race day — not a new gel brand, new electrolyte, new volume, or new timing.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Rule #1</span>
+      </div>
     </div>
   </div>
 
@@ -1557,6 +1593,51 @@ input[type=number]{-moz-appearance:textfield}
     </div>
   </div>
 
+  <!-- Iron & Ferritin card -->
+  <div class="nutr-card">
+    <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
+      <div class="nutr-card-icon">🩸</div>
+      <div><div class="nutr-card-title">Iron &amp; Ferritin — Runner Priority</div><div class="nutr-card-sub">The most common hidden performance limiter in distance runners</div></div>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
+    </div>
+    <div class="nutr-card-body">
+      <div class="nutr-warn" style="margin-bottom:10px">Foot-strike haemolysis during running destroys red blood cells with each footfall. Combined with sweat losses, distance runners are at high risk of iron depletion even without obvious symptoms.</div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Optimal ferritin for performance</div>
+          <div class="nutr-supp-detail">&gt;50 µg/L minimum; ideally &gt;80 µg/L. Below 30 µg/L will measurably impair VO2max and running economy.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Target</span>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Symptoms of latent deficiency</div>
+          <div class="nutr-supp-detail">Elevated HR at same effort · unexplained performance plateau · persistent fatigue not resolved by rest. These symptoms appear before anaemia — ferritin can be dangerously low while haemoglobin is still normal.</div>
+        </div>
+        <span class="nutr-supp-badge badge-caution">Watch for</span>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Test frequency</div>
+          <div class="nutr-supp-detail">Every 8–12 weeks during heavy training — not just annually. Request ferritin specifically; standard iron panels often miss early deficiency.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Supplementation (if confirmed deficient)</div>
+          <div class="nutr-supp-detail">Ferrous sulfate 100–200 mg · taken with Vitamin C (100 mg+) to enhance absorption · away from coffee, tea, and calcium by at least 2 hours · take on alternate days — daily dosing reduces absorption via hepcidin upregulation.</div>
+        </div>
+      </div>
+      <div class="nutr-supp-row">
+        <div>
+          <div class="nutr-supp-name">Food sources</div>
+          <div class="nutr-supp-detail">Lean red meat 3–4×/week · lentils and legumes · dark leafy greens (spinach, kale) · fortified cereals. Haem iron from meat absorbs 3× more efficiently than non-haem iron from plants.</div>
+        </div>
+      </div>
+      <div class="nutr-warn">Do not supplement iron without confirmed bloodwork. Excess iron is pro-oxidant and harmful. Always test first.</div>
+    </div>
+  </div>
+
   <!-- Food diary card -->
   <div class="nutr-card">
     <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':'';renderFoodDiary()">
@@ -1575,6 +1656,14 @@ input[type=number]{-moz-appearance:textfield}
         <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name (DB or custom)…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
         <datalist id="fdy-food-list"></datalist>
         <input id="fdy-grams" type="number" inputmode="decimal" step="10" placeholder="g" style="width:70px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace;text-align:center" oninput="fdyPreview()">
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='1';fdyPreview()">1 serve</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='100';fdyPreview()">100g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='150';fdyPreview()">150g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='200';fdyPreview()">200g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='250';fdyPreview()">250g</button>
+        <button class="fdy-quick-btn" onclick="document.getElementById('fdy-grams').value='330';fdyPreview()">330ml</button>
       </div>
       <div id="fdy-macros" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:10px">
         <div style="flex:1;min-width:72px">
@@ -1719,7 +1808,7 @@ const PROGRAM = [
   // Supp Phase 1: activation, pattern work, connective tissue
 
   // Week 1 ─────────────────────────────────────────────────────────────────
-  {phase:1,week:1,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+  {phase:1,week:1,day:'Wed',name:'Lower body A + core',type:'strength',exercises:[
     {id:'p1w1mon1',name:'Back squat',detail:'4 × 8 @ 65–70% 1RM · 3-sec descent',cat:'strength'},
     {id:'p1w1mon2',name:'Romanian deadlift',detail:'3 × 10 · hip hinge focus',cat:'strength'},
     {id:'p1w1mon3',name:'Walking lunges',detail:'3 × 12/leg · bodyweight or light DBs',cat:'strength'},
@@ -1741,7 +1830,7 @@ const PROGRAM = [
     {id:'p1w1tuelm',name:'Landmine row',detail:'3 × 10/side · drive the elbow back, squeeze the blade',cat:'strength'},
   ],note:'5 min hamstring stretch before lifting'},
 
-  {phase:1,week:1,day:'Wed',name:'Upper body B + core',type:'strength',exercises:[
+  {phase:1,week:1,day:'Mon',name:'Upper body B + core',type:'strength',exercises:[
     {id:'p1w1wed1',name:'Barbell bench press',detail:'4 × 8 @ 65% · full range',cat:'strength'},
     {id:'p1w1wed2',name:'Barbell bent-over row',detail:'4 × 8 · hip hinge throughout',cat:'strength'},
     {id:'p1w1wed3',name:'DB overhead press',detail:'3 × 10 · scapular stability',cat:'strength'},
@@ -1783,7 +1872,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 2 ─────────────────────────────────────────────────────────────────
-  {phase:1,week:2,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+  {phase:1,week:2,day:'Wed',name:'Lower body A + core',type:'strength',exercises:[
     {id:'p1w2mon_wu',name:'Warm-up',detail:'5 min · hip circles, leg swings, glute bridges x10, air squats x10',cat:'core',supp:true},
     {id:'p1w2mon1',name:'Back squat',detail:'4 × 8 · add 2.5–5kg from week 1',cat:'strength'},
     {id:'p1w2mon2',name:'Barbell hip thrust',detail:'3 × 10 · add load · pause 1 sec at top',cat:'strength'},
@@ -1801,9 +1890,10 @@ const PROGRAM = [
 
   {phase:1,week:2,day:'Tue',name:'Easy run',type:'run',exercises:[
     {id:'p1w2tue1',name:'Easy run',detail:'7–9km @ zone 2',cat:'run'},
-  ],note:'Run only — upper pull moves to Wednesday'},
+    {id:'p1w2tue2',name:'Strides',detail:'4 × 20 sec · controlled acceleration to mile pace · full recovery walk between · relaxed, not sprinting',cat:'run'},
+  ],note:'Finish with 4 strides — build running economy at zero fatigue cost. Run only — upper pull moves to Monday.'},
 
-  {phase:1,week:2,day:'Wed',name:'Upper body B + upper pull + core',type:'strength',exercises:[
+  {phase:1,week:2,day:'Mon',name:'Upper body B + upper pull + core',type:'strength',exercises:[
     {id:'p1w2wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x15, face pulls x10, thoracic rotation x8/side',cat:'core',supp:true},
     {id:'p1w2wed1',name:'Barbell bench press',detail:'4 × 8 · add 2.5kg',cat:'strength'},
     {id:'p1w2wed2',name:'Weighted pull-ups',detail:'4 × 5 · add 2.5kg',cat:'strength'},
@@ -1854,7 +1944,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 3 — Deload ─────────────────────────────────────────────────────────
-  {phase:1,week:3,day:'Mon',name:'Lower body A — DELOAD',type:'strength',exercises:[
+  {phase:1,week:3,day:'Wed',name:'Lower body A — DELOAD',type:'strength',exercises:[
     {id:'p1w3mon_wu',name:'Warm-up',detail:'5 min · easy hip circles, glute bridges, air squats',cat:'core',supp:true},
     {id:'p1w3mon1',name:'Back squat',detail:'3 × 8 · same weight as wk 2 · drop 1 set',cat:'strength'},
     {id:'p1w3mon2',name:'Barbell hip thrust',detail:'3 × 8 · same weight',cat:'strength'},
@@ -1870,9 +1960,10 @@ const PROGRAM = [
 
   {phase:1,week:3,day:'Tue',name:'Easy run',type:'run',exercises:[
     {id:'p1w3tue1',name:'Easy run',detail:'5–6km · easy zone 2',cat:'run'},
-  ],note:'No hard running this week — deload'},
+    {id:'p1w3tue2',name:'Strides',detail:'4 × 20 sec · controlled · full walk recovery · deload week so keep effort relaxed',cat:'run'},
+  ],note:'Deload week — keep everything easy including strides'},
 
-  {phase:1,week:3,day:'Wed',name:'Upper body — DELOAD',type:'strength',exercises:[
+  {phase:1,week:3,day:'Mon',name:'Upper body — DELOAD',type:'strength',exercises:[
     {id:'p1w3wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p1w3wed1',name:'Barbell bench press',detail:'3 × 6 · same weight · drop 1 set',cat:'strength'},
     {id:'p1w3wed2',name:'Weighted pull-ups',detail:'3 × 4 · same weight · drop 1 set',cat:'strength'},
@@ -1913,7 +2004,7 @@ const PROGRAM = [
   // ── PHASE 2 — Build (Weeks 4–7) ───────────────────────────────────────────
 
   // Week 4 ─────────────────────────────────────────────────────────────────
-  {phase:2,week:4,day:'Mon',name:'Lower body A — strength phase',type:'strength',exercises:[
+  {phase:2,week:4,day:'Wed',name:'Lower body A — strength phase',type:'strength',exercises:[
     {id:'p2w4mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8, dead bugs x6/side',cat:'core',supp:true},
     {id:'p2w4mon1',name:'Back squat',detail:'4 × 5 @ 78–82% · force production',cat:'strength'},
     {id:'p2w4mon2',name:'Barbell hip thrust',detail:'4 × 8 · heavy · drive through heels',cat:'strength'},
@@ -1936,7 +2027,7 @@ const PROGRAM = [
     {id:'p2w4tue4',name:'Bird dog',detail:'2 × 10/side',cat:'core'},
   ],note:'Run only — upper pull moves to Wednesday. 5 min hip flexor stretch post-run.'},
 
-  {phase:2,week:4,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+  {phase:2,week:4,day:'Mon',name:'Upper body B + upper pull',type:'strength',exercises:[
     {id:'p2w4wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation x8/side',cat:'core',supp:true},
     {id:'p2w4wed1',name:'Barbell bench press',detail:'4 × 5 @ 80%',cat:'strength'},
     {id:'p2w4wed2',name:'Weighted pull-ups',detail:'4 × 5 · add weight',cat:'strength'},
@@ -1976,7 +2067,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 5 ─────────────────────────────────────────────────────────────────
-  {phase:2,week:5,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+  {phase:2,week:5,day:'Wed',name:'Lower body A + core',type:'strength',exercises:[
     {id:'p2w5mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8',cat:'core',supp:true},
     {id:'p2w5mon1',name:'Back squat',detail:'4 × 5 · add 2.5–5kg from week 4',cat:'strength'},
     {id:'p2w5mon2',name:'Barbell hip thrust',detail:'4 × 8 · add load',cat:'strength'},
@@ -1993,12 +2084,12 @@ const PROGRAM = [
   ],note:'10 min mobility after'},
 
   {phase:2,week:5,day:'Tue',name:'Interval run',type:'run',exercises:[
-    {id:'p2w5tue1',name:'Interval run',detail:'6 × 800m @ 5km pace · optional 7th rep if feeling strong',cat:'run'},
+    {id:'p2w5tue1',name:'Interval run',detail:'6 × 800m @ 5km pace · 90 sec jogging recovery (2.5–3 min/km) · optional 7th rep if feeling strong',cat:'run'},
     {id:'p2w5tue2',name:'Cool-down',detail:'5 min easy jog',cat:'run'},
     {id:'p2w5tue3',name:'Pallof press',detail:'3 × 10/side',cat:'core'},
   ],note:'Run only — upper pull moves to Wednesday.'},
 
-  {phase:2,week:5,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+  {phase:2,week:5,day:'Mon',name:'Upper body B + upper pull',type:'strength',exercises:[
     {id:'p2w5wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation',cat:'core',supp:true},
     {id:'p2w5wed1',name:'Barbell bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w5wed2',name:'Weighted pull-ups',detail:'4 × 5 · add load',cat:'strength'},
@@ -2032,7 +2123,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 6 ─────────────────────────────────────────────────────────────────
-  {phase:2,week:6,day:'Mon',name:'Lower body A + core',type:'strength',exercises:[
+  {phase:2,week:6,day:'Wed',name:'Lower body A + core',type:'strength',exercises:[
     {id:'p2w6mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, goblet squat x8',cat:'core',supp:true},
     {id:'p2w6mon1',name:'Back squat',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w6mon2',name:'Barbell hip thrust',detail:'4 × 8 · add load · pause at top',cat:'strength'},
@@ -2049,12 +2140,12 @@ const PROGRAM = [
   ],note:''},
 
   {phase:2,week:6,day:'Tue',name:'Interval run',type:'run',exercises:[
-    {id:'p2w6tue1',name:'Interval run',detail:'8 × 600m @ 5km pace · 75 sec recovery',cat:'run'},
+    {id:'p2w6tue1',name:'Interval run',detail:'8 × 600m @ 5km pace · 75 sec jogging recovery (2.5–3 min/km)',cat:'run'},
     {id:'p2w6tue2',name:'Cool-down',detail:'5 min easy jog',cat:'run'},
     {id:'p2w6tue3',name:'Pallof press',detail:'3 × 12/side',cat:'core'},
   ],note:'Run only — upper pull moves to Wednesday.'},
 
-  {phase:2,week:6,day:'Wed',name:'Upper body B + upper pull',type:'strength',exercises:[
+  {phase:2,week:6,day:'Mon',name:'Upper body B + upper pull',type:'strength',exercises:[
     {id:'p2w6wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12, thoracic rotation',cat:'core',supp:true},
     {id:'p2w6wed1',name:'Barbell bench press',detail:'4 × 5 · add 2.5kg',cat:'strength'},
     {id:'p2w6wed2',name:'Weighted pull-ups',detail:'4 × 6 · add 1 rep',cat:'strength'},
@@ -2088,7 +2179,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 7 — Phase 2 Deload ─────────────────────────────────────────────────
-  {phase:2,week:7,day:'Mon',name:'Lower body A — deload',type:'strength',exercises:[
+  {phase:2,week:7,day:'Wed',name:'Lower body A — deload',type:'strength',exercises:[
     {id:'p2w7mon_wu',name:'Warm-up',detail:'5 min · easy leg swings, hip circles, glute bridges',cat:'core',supp:true},
     {id:'p2w7mon1',name:'Back squat',detail:'3 × 5 · same weight · deload week',cat:'strength'},
     {id:'p2w7mon2',name:'Barbell hip thrust',detail:'3 × 8 · deload volume',cat:'strength'},
@@ -2105,7 +2196,7 @@ const PROGRAM = [
     {id:'p2w7tue1',name:'Easy run',detail:'6km easy zone 2',cat:'run'},
   ],note:''},
 
-  {phase:2,week:7,day:'Wed',name:'Upper body — deload',type:'strength',exercises:[
+  {phase:2,week:7,day:'Mon',name:'Upper body — deload',type:'strength',exercises:[
     {id:'p2w7wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p2w7wed1',name:'Barbell bench press',detail:'3 × 5 · deload',cat:'strength'},
     {id:'p2w7wed2',name:'Weighted pull-ups',detail:'3 × 5 · deload',cat:'strength'},
@@ -2137,7 +2228,7 @@ const PROGRAM = [
   // ── PHASE 3 — Peak (Weeks 8–10) ───────────────────────────────────────────
 
   // Week 8 ─────────────────────────────────────────────────────────────────
-  {phase:3,week:8,day:'Mon',name:'Lower body — maintenance',type:'strength',exercises:[
+  {phase:3,week:8,day:'Wed',name:'Lower body — maintenance',type:'strength',exercises:[
     {id:'p3w8mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, dead bugs x6/side',cat:'core',supp:true},
     {id:'p3w8mon1',name:'Back squat',detail:'3 × 4–5 @ 80% · hold gains — no new PRs this phase',cat:'strength'},
     {id:'p3w8mon2',name:'Barbell hip thrust',detail:'3 × 6 · maintain strength',cat:'strength'},
@@ -2159,7 +2250,7 @@ const PROGRAM = [
     {id:'p3w8tue5',name:'Side plank',detail:'2 × 30 sec/side',cat:'core'},
   ],note:'Stretch and refuel immediately'},
 
-  {phase:3,week:8,day:'Wed',name:'Upper body — maintenance',type:'strength',exercises:[
+  {phase:3,week:8,day:'Mon',name:'Upper body — maintenance',type:'strength',exercises:[
     {id:'p3w8wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12',cat:'core',supp:true},
     {id:'p3w8wed1',name:'Barbell bench press',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w8wed2',name:'Weighted pull-ups',detail:'3 × 5 · maintain',cat:'strength'},
@@ -2185,8 +2276,8 @@ const PROGRAM = [
     {id:'p3w8fri2',name:'Optional gentle walk',detail:'20 min max',cat:'rest'},
   ],note:'No strength this week on Friday — peak long run is Saturday'},
 
-  {phase:3,week:8,day:'Sun',name:'Long run — PEAK',type:'run',exercises:[
-    {id:'p3w8sat1',name:'Long run',detail:'28–30km · easy zone 2 throughout',cat:'run'},
+  {phase:3,week:8,day:'Sun',name:'Long run — PEAK (30–32 km)',type:'run',exercises:[
+    {id:'p3w8sat1',name:'Long run',detail:'30–32km · ceiling of program · zone 2 · fuel every 30 min · race day simulation',cat:'run'},
     {id:'p3w8sat2',name:'Foam roll',detail:'20 min minimum · mandatory',cat:'core'},
   ],note:'Simulate race day — same shoes, nutrition, kit'},
   {phase:3,week:8,day:'Sat',name:'Full rest',type:'rest',exercises:[
@@ -2194,7 +2285,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 9 ─────────────────────────────────────────────────────────────────
-  {phase:3,week:9,day:'Mon',name:'Lower body — maintenance',type:'strength',exercises:[
+  {phase:3,week:9,day:'Wed',name:'Lower body — maintenance',type:'strength',exercises:[
     {id:'p3w9mon_wu',name:'Warm-up',detail:'5 min · leg swings, hip circles, glute bridges x10, dead bugs x6/side',cat:'core',supp:true},
     {id:'p3w9mon1',name:'Back squat',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w9mon2',name:'Barbell hip thrust',detail:'3 × 6 · maintain',cat:'strength'},
@@ -2211,7 +2302,7 @@ const PROGRAM = [
     {id:'p3w9tue1',name:'Race-pace',detail:'2km + 3 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
 
-  {phase:3,week:9,day:'Wed',name:'Upper body — maintenance',type:'strength',exercises:[
+  {phase:3,week:9,day:'Mon',name:'Upper body — maintenance',type:'strength',exercises:[
     {id:'p3w9wed_wu',name:'Warm-up',detail:'5 min · arm circles, band pull-aparts x20, face pulls x12',cat:'core',supp:true},
     {id:'p3w9wed1',name:'Barbell bench press',detail:'3 × 4–5 @ 80%',cat:'strength'},
     {id:'p3w9wed2',name:'Weighted pull-ups',detail:'3 × 5',cat:'strength'},
@@ -2236,8 +2327,8 @@ const PROGRAM = [
     {id:'p3w9fri2',name:'Optional gentle walk',detail:'20 min max · stay off feet',cat:'rest'},
   ],note:'No strength — highest mileage week'},
 
-  {phase:3,week:9,day:'Sun',name:'Long run — PEAK',type:'run',exercises:[
-    {id:'p3w9sat1',name:'Long run',detail:'30–32km · your longest run · ceiling is 32km',cat:'run'},
+  {phase:3,week:9,day:'Sun',name:'Long run — taper begins',type:'run',exercises:[
+    {id:'p3w9sat1',name:'Long run',detail:'22–24km · volume reduction begins · strong easy effort · fuel every 40 min',cat:'run'},
     {id:'p3w9sat2',name:'Foam roll',detail:'20 min minimum',cat:'core'},
   ],note:''},
   {phase:3,week:9,day:'Sat',name:'Full rest',type:'rest',exercises:[
@@ -2245,7 +2336,7 @@ const PROGRAM = [
   ],note:''},
 
   // Week 10 — Strength deload, begin taper ──────────────────────────────────
-  {phase:3,week:10,day:'Mon',name:'Lower body — strength deload',type:'strength',exercises:[
+  {phase:4,week:10,day:'Wed',name:'Lower body — strength deload',type:'strength',exercises:[
     {id:'p3w10mon_wu',name:'Warm-up',detail:'5 min · easy leg swings, hip circles, glute bridges',cat:'core',supp:true},
     {id:'p3w10mon1',name:'Back squat',detail:'3 × 4 @ 75% · deload · volume drops entering taper',cat:'strength'},
     {id:'p3w10mon2',name:'Barbell hip thrust',detail:'3 × 5 @ 70%',cat:'strength'},
@@ -2257,11 +2348,11 @@ const PROGRAM = [
     {id:'p3w10monlm',name:'Landmine reverse lunge',detail:'2 × 6/leg · light',cat:'strength'},
   ],note:'Strength deload — 2 sessions, volume drops. Running takes priority now.'},
 
-  {phase:3,week:10,day:'Tue',name:'Race-pace run',type:'run',exercises:[
+  {phase:4,week:10,day:'Tue',name:'Race-pace run',type:'run',exercises:[
     {id:'p3w10tue1',name:'Race-pace',detail:'2km + 2 × 2km @ marathon pace + 2km',cat:'run'},
   ],note:''},
 
-  {phase:3,week:10,day:'Wed',name:'Upper body — strength deload',type:'strength',exercises:[
+  {phase:4,week:10,day:'Mon',name:'Upper body — strength deload',type:'strength',exercises:[
     {id:'p3w10wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p3w10wed1',name:'Barbell bench press',detail:'3 × 4 @ 75% · deload',cat:'strength'},
     {id:'p3w10wed2',name:'Weighted pull-ups',detail:'3 × 4 · deload',cat:'strength'},
@@ -2274,26 +2365,26 @@ const PROGRAM = [
     {id:'p3w10wedlm',name:'Half-kneeling landmine press',detail:'2 × 6/side · light',cat:'strength'},
   ],note:''},
 
-  {phase:3,week:10,day:'Thu',name:'Easy run',type:'run',exercises:[
+  {phase:4,week:10,day:'Thu',name:'Easy run',type:'run',exercises:[
     {id:'p3w10thu1',name:'Easy run',detail:'6km easy',cat:'run'},
   ],note:''},
 
-  {phase:3,week:10,day:'Fri',name:'Rest',type:'rest',exercises:[
+  {phase:4,week:10,day:'Fri',name:'Rest',type:'rest',exercises:[
     {id:'p3w10fri1',name:'Full rest',detail:'Entering taper — protect the long run and the legs',cat:'rest'},
     {id:'p3w10fri2',name:'Light mobility',detail:'20 min foam roll + stretching if desired',cat:'rest'},
   ],note:''},
 
-  {phase:3,week:10,day:'Sun',name:'Long run — begin taper',type:'run',exercises:[
+  {phase:4,week:10,day:'Sun',name:'Long run — begin taper',type:'run',exercises:[
     {id:'p3w10sat1',name:'Long run',detail:'20–22km · begin pulling back',cat:'run'},
   ],note:''},
-  {phase:3,week:10,day:'Sat',name:'Full rest',type:'rest',exercises:[
+  {phase:4,week:10,day:'Sat',name:'Full rest',type:'rest',exercises:[
     {id:'p3w10sun1',name:'Complete rest',detail:'',cat:'rest'},
   ],note:''},
 
-  // ── PHASE 4 — Taper (Weeks 11–12) ─────────────────────────────────────────
+  // ── PHASE 4 — Taper (Weeks 10–12) ─────────────────────────────────────────
 
   // Week 11 ─────────────────────────────────────────────────────────────────
-  {phase:4,week:11,day:'Mon',name:'Lower body — reduced',type:'strength',exercises:[
+  {phase:4,week:11,day:'Wed',name:'Lower body — reduced',type:'strength',exercises:[
     {id:'p4w11mon_wu',name:'Warm-up',detail:'5 min · easy hip circles, glute bridges, air squats',cat:'core',supp:true},
     {id:'p4w11mon1',name:'Back squat',detail:'2 × 5 @ 75% · volume halved',cat:'strength'},
     {id:'p4w11mon2',name:'Barbell hip thrust',detail:'2 × 6 · maintain',cat:'strength'},
@@ -2311,7 +2402,7 @@ const PROGRAM = [
     {id:'p4w11tue2',name:'Strides',detail:'4 × 20 sec surges @ 5km pace · keeps legs sharp',cat:'run'},
   ],note:''},
 
-  {phase:4,week:11,day:'Wed',name:'Upper — light',type:'strength',exercises:[
+  {phase:4,week:11,day:'Mon',name:'Upper — light',type:'strength',exercises:[
     {id:'p4w11wed_wu',name:'Warm-up',detail:'5 min · band pull-aparts x15, arm circles, face pulls',cat:'core',supp:true},
     {id:'p4w11wed1',name:'Barbell bench press',detail:'2 × 5 @ 70%',cat:'strength'},
     {id:'p4w11wed2',name:'Weighted pull-ups',detail:'2 × 5 · light',cat:'strength'},
@@ -2729,6 +2820,109 @@ const FOOD_DB={
   'Coconut water':{kcal:19,pro:0.7,cho:4.5,fat:0.2},
   'Full cream milk latte (cafe)':{kcal:58,pro:3.4,cho:5.2,fat:2.8},
   'Beer (lager, mid-strength)':{kcal:37,pro:0.3,cho:3,fat:0},
+  // — Sweeteners & condiments —
+  'Honey':{kcal:304,pro:0.3,cho:82,fat:0},
+  'Maple syrup':{kcal:260,pro:0,cho:67,fat:0},
+  'Jam / fruit spread':{kcal:250,pro:0.4,cho:63,fat:0},
+  'Milo (powder)':{kcal:383,pro:7.8,cho:76,fat:4.7},
+  'White sugar':{kcal:387,pro:0,cho:100,fat:0},
+  'Dark chocolate (70%+)':{kcal:546,pro:5,cho:60,fat:31},
+  'Milk chocolate':{kcal:535,pro:7.7,cho:59,fat:30},
+  // — Breads, wraps & crackers —
+  'Vita-Weat crackers':{kcal:393,pro:10,cho:72,fat:6},
+  'Rice cracker':{kcal:387,pro:7.5,cho:82,fat:2},
+  'Pita bread':{kcal:275,pro:9,cho:55,fat:1.2},
+  'Tortilla wrap (large)':{kcal:305,pro:8,cho:55,fat:6},
+  'English muffin':{kcal:227,pro:8.5,cho:42,fat:2},
+  // — Dairy & eggs —
+  'Butter':{kcal:717,pro:0.9,cho:0.1,fat:81},
+  'Cream cheese':{kcal:342,pro:6,cho:4,fat:34},
+  'Sour cream':{kcal:193,pro:2.4,cho:4,fat:19},
+  'Whipped cream':{kcal:257,pro:2,cho:3.5,fat:27},
+  'Ice cream (vanilla)':{kcal:207,pro:3.5,cho:24,fat:11},
+  'Yogurt (flavoured, low-fat)':{kcal:90,pro:4,cho:15,fat:1.3},
+  // — Cooked proteins —
+  'Canned salmon':{kcal:138,pro:20,cho:0,fat:6.5},
+  'Canned sardines (in oil)':{kcal:208,pro:25,cho:0,fat:12},
+  'Beef jerky':{kcal:325,pro:33,cho:11,fat:14},
+  'Rotisserie chicken (breast)':{kcal:161,pro:30,cho:0,fat:4},
+  'Deli turkey breast':{kcal:104,pro:18,cho:2,fat:2.5},
+  'Smoked salmon':{kcal:117,pro:18,cho:0,fat:4.3},
+  // — Grains & cereals —
+  'Weetbix + milk (30g + 200ml)':{kcal:215,pro:9,cho:35,fat:4},
+  'Corn flakes':{kcal:357,pro:7,cho:84,fat:0.4},
+  'Granola / toasted muesli':{kcal:450,pro:10,cho:65,fat:18},
+  'Noodles (instant, cooked)':{kcal:138,pro:3.5,cho:26,fat:3},
+  'Sushi rice':{kcal:168,pro:3,cho:38,fat:0.5},
+  'Couscous (cooked)':{kcal:112,pro:3.8,cho:23,fat:0.2},
+  // — Vegetables (extra) —
+  'Silverbeet / chard':{kcal:19,pro:1.8,cho:3.7,fat:0.2},
+  'Bok choy':{kcal:13,pro:1.5,cho:2.2,fat:0.2},
+  'Sweet corn (canned)':{kcal:86,pro:3.2,cho:19,fat:1.2},
+  'Baby spinach':{kcal:23,pro:2.9,cho:3.6,fat:0.4},
+  'Roma tomato':{kcal:18,pro:0.9,cho:3.9,fat:0.2},
+  'Cherry tomatoes':{kcal:18,pro:0.9,cho:3.9,fat:0.2},
+  'Iceberg lettuce':{kcal:14,pro:0.9,cho:2,fat:0.2},
+  'Spring onion / shallot':{kcal:32,pro:1.8,cho:7.3,fat:0.2},
+  'Garlic (raw)':{kcal:149,pro:6.4,cho:33,fat:0.5},
+  'Ginger (raw)':{kcal:80,pro:1.8,cho:18,fat:0.8},
+  'Chilli (fresh)':{kcal:40,pro:1.9,cho:8.8,fat:0.4},
+  'Leek':{kcal:61,pro:1.5,cho:14,fat:0.3},
+  'Fennel':{kcal:31,pro:1.2,cho:7,fat:0.2},
+  'Snow peas':{kcal:42,pro:2.8,cho:7.5,fat:0.2},
+  // — Fruit (extra) —
+  'Lemon (juice, per tbsp ~15ml)':{kcal:4,pro:0.1,cho:1.3,fat:0},
+  'Lime (juice, per tbsp ~15ml)':{kcal:3,pro:0.1,cho:1.1,fat:0},
+  'Fig':{kcal:74,pro:0.8,cho:19,fat:0.3},
+  'Pomegranate (seeds)':{kcal:83,pro:1.7,cho:19,fat:1.2},
+  'Lychee':{kcal:66,pro:0.8,cho:17,fat:0.4},
+  'Dragon fruit':{kcal:60,pro:1.2,cho:13,fat:0},
+  'Coconut (fresh, flesh)':{kcal:354,pro:3.3,cho:15,fat:33},
+  // — Fats & oils —
+  'Coconut oil':{kcal:862,pro:0,cho:0,fat:100},
+  'Butter (unsalted)':{kcal:717,pro:0.9,cho:0.1,fat:81},
+  'Ghee':{kcal:900,pro:0,cho:0,fat:99},
+  'Canola oil':{kcal:884,pro:0,cho:0,fat:100},
+  // — Legumes & plant protein —
+  'Tofu (silken)':{kcal:55,pro:5,cho:1.5,fat:3},
+  'Tempeh':{kcal:193,pro:19,cho:9,fat:11},
+  'Soy beans (cooked)':{kcal:173,pro:17,cho:10,fat:9},
+  'Red kidney beans (canned)':{kcal:127,pro:8.7,cho:23,fat:0.5},
+  'Four bean mix (canned)':{kcal:108,pro:7,cho:18,fat:0.5},
+  // — Snacks & Australian staples —
+  'Anzac biscuit':{kcal:433,pro:5.5,cho:67,fat:17},
+  'Lamington':{kcal:350,pro:5,cho:56,fat:12},
+  'Iced Vovo biscuit':{kcal:422,pro:4.5,cho:68,fat:15},
+  'Cabanossi / kabana':{kcal:430,pro:19,cho:0,fat:38},
+  'Dim sim (steamed)':{kcal:128,pro:7,cho:12,fat:5},
+  'Spring roll (fried)':{kcal:194,pro:4.5,cho:22,fat:10},
+  'Chicken nuggets (6)':{kcal:247,pro:14,cho:16,fat:14},
+  'Fish fillet (battered, fried)':{kcal:234,pro:14,cho:16,fat:12},
+  // — Drinks & beverages —
+  'Flat white (whole milk, 200ml)':{kcal:118,pro:6.8,cho:9.5,fat:5.6},
+  'Cappuccino (whole milk, 200ml)':{kcal:100,pro:5.5,cho:8,fat:5},
+  'Almond milk latte (200ml)':{kcal:60,pro:1.5,cho:5,fat:3.5},
+  'Kombucha (250ml)':{kcal:25,pro:0,cho:6,fat:0},
+  'Green tea (250ml)':{kcal:2,pro:0,cho:0.5,fat:0},
+  'Protein shake (homemade, 300ml)':{kcal:210,pro:30,cho:12,fat:4},
+  'Powerade (600ml bottle)':{kcal:148,pro:0,cho:37,fat:0},
+  'Red wine (150ml glass)':{kcal:125,pro:0.1,cho:4,fat:0},
+  'White wine (150ml glass)':{kcal:121,pro:0.1,cho:3.8,fat:0},
+  // — Sauces & dressings —
+  'Sweet chilli sauce':{kcal:141,pro:0.5,cho:35,fat:0.3},
+  'Oyster sauce':{kcal:80,pro:2,cho:18,fat:0.2},
+  'Fish sauce':{kcal:35,pro:5,cho:4,fat:0},
+  'Hoisin sauce':{kcal:220,pro:4,cho:49,fat:1.5},
+  'Caesar dressing':{kcal:394,pro:3,cho:6,fat:41},
+  'Balsamic vinegar':{kcal:88,pro:0.5,cho:17,fat:0},
+  'Dijon mustard':{kcal:66,pro:3.7,cho:6,fat:3.6},
+  'Mayonnaise':{kcal:680,pro:1,cho:2.5,fat:75},
+  // — Nuts & nut butters —
+  'Almond butter':{kcal:614,pro:21,cho:19,fat:56},
+  'Hazelnut spread (Nutella)':{kcal:539,pro:6,cho:57,fat:31},
+  'Mixed nuts':{kcal:607,pro:18,cho:20,fat:54},
+  'Peanuts (roasted)':{kcal:585,pro:25,cho:21,fat:49},
+  'Brazil nuts':{kcal:659,pro:14,cho:12,fat:67},
 };
 function fdyInit(){
   const dl=document.getElementById('fdy-food-list'); if(!dl) return;
@@ -2794,19 +2988,50 @@ function fdyRemove(ymd,idx){
   STATE.foodDiary[ymd].splice(idx,1);
   saveState(STATE); renderFoodDiary();
 }
+function _fdyDayTarget(ymd,wt){
+  // Map the scheduled session for ymd to the appropriate _NUTR_DAYS entry
+  const goalFatAdj=((STATE.profile&&STATE.profile.goal)||'performance')==='lose'?-0.15:((STATE.profile&&STATE.profile.goal)||'performance')==='build'?0.05:0;
+  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const prot=Math.round(wt*protMult);
+  // Parse ymd to a Date
+  const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  const sessions=getSessionsForDate(d);
+  // Determine day classification
+  let nutrIdx=0; let sessionLabel='Rest day';
+  if(sessions.length){
+    const s=sessions[0];
+    const sName=(s.name||'').toLowerCase();
+    if(s.type==='rest'){ nutrIdx=0; sessionLabel='Rest day'; }
+    else if(/long run/.test(sName)){ nutrIdx=4; sessionLabel='Long Run day'; }
+    else if(/interval|threshold/.test(sName)){ nutrIdx=3; sessionLabel='Intervals/Threshold day'; }
+    else if(/lower/.test(sName) && s.type==='strength'){ nutrIdx=2; sessionLabel='Strength (Lower) day'; }
+    else if(s.type==='combo'){ nutrIdx=1; sessionLabel='Easy Run + Upper day'; }
+    else if(s.type==='strength'){ nutrIdx=1; sessionLabel='Strength (Upper) day'; }
+    else if(s.type==='run'){ nutrIdx=1; sessionLabel='Easy Run day'; }
+    else { nutrIdx=0; sessionLabel='Rest day'; }
+  }
+  const nd=_NUTR_DAYS[nutrIdx];
+  const cMid=Math.round(wt*(nd.cLo+nd.cHi)/2);
+  const fat=Math.round(wt*(nd.fatMult+goalFatAdj));
+  const kcal=Math.round((cMid*4+prot*4+fat*9)/100)*100;
+  return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:prot,fat};
+}
 function renderFoodDiary(){
   const el=document.getElementById('fdy-out'); if(!el) return;
   fdyInit();
   if(!STATE.foodDiary) STATE.foodDiary={};
   const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
   const items=STATE.foodDiary[ymd]||[];
-  if(!items.length){ el.innerHTML='<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
-  const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const wt=(STATE.profile&&parseFloat(STATE.profile.weight))||86;
-  const tgt={kcal:Math.round(wt*38),pro:Math.round(wt*2),cho:Math.round(wt*6),fat:Math.round(wt*38*0.25/9)};
+  // Compute session-aware target
+  const tgtInfo=_fdyDayTarget(ymd,wt);
+  const tgt={kcal:tgtInfo.kcal,pro:tgtInfo.pro,cho:tgtInfo.cho,fat:tgtInfo.fat};
+  const dayBanner='<div class="nutr-tip" style="margin-bottom:8px">Today\'s target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
+  if(!items.length){ el.innerHTML=dayBanner+'<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
+  const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const pct=(v,t)=>Math.min(100,t>0?Math.round(v/t*100):0);
   const bar=(v,t,col)=>'<div class="fdy-track"><div class="fdy-fill" style="width:'+pct(v,t)+'%;background:'+col+'"></div></div>';
-  let html='<div>';
+  let html=dayBanner+'<div>';
   items.forEach((it,i)=>{
     const gramsLabel=it.grams?(' · '+it.grams+'g'):'';
     html+='<div class="fdy-item"><span class="fdy-food">'+it.food+gramsLabel+'</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
@@ -2818,7 +3043,7 @@ function renderFoodDiary(){
     +'<div class="fdy-bar-row"><span>Protein</span>'+bar(tot.pro,tgt.pro,'#5fd6a0')+'<span>'+Math.round(tot.pro*10)/10+' / '+tgt.pro+'g</span></div>'
     +'<div class="fdy-bar-row"><span>Carbs</span>'+bar(tot.cho,tgt.cho,'#5aa6ff')+'<span>'+Math.round(tot.cho*10)/10+' / '+tgt.cho+'g</span></div>'
     +'<div class="fdy-bar-row"><span>Fat</span>'+bar(tot.fat,tgt.fat,'#e8c66b')+'<span>'+Math.round(tot.fat*10)/10+' / '+tgt.fat+'g</span></div>'
-    +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+'kg × 38 kcal/kg (performance). Adjust goal in Daily fuel &amp; hydration card.</div>'
+    +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+' kg · '+tgtInfo.nutrLabel+' · adjust in Daily fuel &amp; hydration card.</div>'
     +'</div>';
   el.innerHTML=html;
 }
@@ -2863,7 +3088,8 @@ function renderNutritionMacros(){
   const hydEl=document.getElementById('nutr-hydration-out');
   if(hydEl){
     const hrows=_NUTR_DAYS.map(d=>`<tr><td>${d.label}</td><td>${d.fluidL.toFixed(1)}L+</td><td>${d.sodMg.toLocaleString()}mg+</td></tr>`).join('');
-    hydEl.innerHTML='<details style="margin-top:4px"><summary style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.05em">FLUID &amp; SODIUM TARGETS ▸</summary><table class="nutr-table" style="margin-top:6px"><tr><th>Day type</th><th>Fluid</th><th>Sodium</th></tr>'+hrows+'</table><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:6px">Add 500ml fluid per 30 min of intense running. Long runs: 400–600ml/hr + electrolyte tabs (300–500mg sodium/hr).</div></details>';
+    hydEl.innerHTML='<details style="margin-top:4px"><summary style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.05em">FLUID &amp; SODIUM TARGETS ▸</summary><table class="nutr-table" style="margin-top:6px"><tr><th>Day type</th><th>Fluid</th><th>Sodium</th></tr>'+hrows+'</table><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:6px">Add 500ml fluid per 30 min of intense running. Long runs: 400–600ml/hr + electrolyte tabs (300–500mg sodium/hr).</div></details>'
+      +'<div class="nutr-warn" style="margin-top:8px"><strong>Sydney summer &amp; hot days (&gt;25°C):</strong> Start pre-hydrating 500 ml in the 2 hrs before morning runs. Begin electrolyte drink earlier — from 20 min into runs rather than 40 min. Weigh yourself before and after a long run and replace 1.5× the weight lost as fluid over the next 4 hours. Sweat rates in heat can reach 1.5–2 L/hr; generic guidance significantly underestimates fluid needs in Sydney\'s December–March conditions.</div>';
   }
   // race week carb load — per-day stepped protocol
   const cl=document.getElementById('nutr-carbload-detail');
@@ -3284,7 +3510,7 @@ function renderSessionCard(s,interactive){
   const totalEx=s.exercises.length;
   const doneEx=s.exercises.filter(e=>STATE.completedExercises[e.id]).length;
   const dur=estimateDuration(s);
-  return `<div class="session-card" id="card-${key}">
+  return `<div class="session-card" id="card-${key}" data-type="${s.type}">
     <div class="session-hdr" onclick="toggleSession('${key}')">
       <div class="session-dot ${dotClass(s.type)}"></div>
       <div class="session-name">${s.name}</div>
@@ -3385,6 +3611,10 @@ function renderExercises(s,interactive){
     </div>`;
   };
   let html='';
+  // Barbell warm-up prompt for strength sessions
+  const hasBarbell=(s.type==='strength'||s.type==='combo')&&s.exercises.some(e=>/squat|deadlift|bench|press|row/i.test(e.name||''));
+  const sessionDone=STATE.completedSessions[sessionKey(s)];
+  if(hasBarbell&&!sessionDone) html+=`<div class="note-note" style="margin:8px 16px 4px;border-left-color:var(--accent2)"><strong>Warm-up:</strong> 5 min light cardio → bar × 10 → 40% × 5 → 60% × 3 → 75% × 1 → work sets. <span style="font-size:11px;color:var(--text2)">Ramp up to your first working weight before loading.</span></div>`;
   // Warm-up: prehab finishers (knee + shoulder) then supp/activation exercises
   const suppExs=s.exercises.filter(e=>e.supp);
   const optExs=s.type!=='rest'?getOptionalExercises(s):[];
@@ -4964,7 +5194,7 @@ function phaseIntent(week){
   week=week||_phaseWeek();
   if(week<=3) return {phase:1,name:'Foundation',intent:'Build the base — hypertrophy & technique',rir:'2–3 RIR',focus:'Volume up, stay 2–3 reps shy of failure; keep easy runs genuinely easy.'};
   if(week<=7) return {phase:2,name:'Build',intent:'Get strong — heavier mains, add quality',rir:'1–2 RIR',focus:'Push mains to 1–2 reps in reserve; long run extends, one quality run a week.'};
-  if(week<=10) return {phase:3,name:'Peak',intent:'Convert to power & race fitness',rir:'1 RIR, lower volume',focus:'Hold loads but cut sets; add jumps/plyo for reactive strength. Don\u2019t chase 1RMs.'};
+  if(week<=9) return {phase:3,name:'Peak',intent:'Convert to power & race fitness',rir:'1 RIR, lower volume',focus:'Hold loads but cut sets; add jumps/plyo for reactive strength. Don\u2019t chase 1RMs.'};
   return {phase:4,name:'Taper',intent:'Sharpen & freshen — maintain, don\u2019t build',rir:'2–3 RIR, low volume',focus:'Cut volume ~40–60%, keep a little race-pace intensity, prioritise sleep and fresh legs.'};
 }
 function phaseStripHTML(){ const p=phaseIntent(); return '<details class="phase-strip"><summary><span class="ps-tag">BLOCK '+p.phase+'</span><span class="ps-line"><strong>'+p.name+'</strong> · '+p.rir+'</span></summary><div class="ps-focus">'+p.intent+'. '+p.focus+'</div></details>'; }
@@ -6100,7 +6330,7 @@ function estimateDuration(s){
     else mins += 6; // strength
   });
   mins = Math.round(mins/5)*5;
-  return Math.max(40, Math.min(80, mins));
+  return Math.max(20, mins);
 }
 
 // ─────────────────────────────────────────
@@ -7021,6 +7251,9 @@ function appToast(m){
   clearTimeout(window._appToastT); window._appToastT=setTimeout(()=>el.classList.remove('show'),2800);
 }
 
+function _updateOnlineStatus(){const el=document.getElementById('offline-badge');if(el)el.style.display=navigator.onLine?'none':'inline-flex';}
+window.addEventListener('online',_updateOnlineStatus);
+window.addEventListener('offline',_updateOnlineStatus);
 window.onload=function(){
   initPWA();
   initNavState();
@@ -7028,6 +7261,7 @@ window.onload=function(){
   showRestoreBannerIfEmpty();
   timerRender();
   updateCountdown();
+  _updateOnlineStatus();
   requestAnimationFrame(applyHdrCollapse);
   renderNutritionMacros();
   renderHub();
