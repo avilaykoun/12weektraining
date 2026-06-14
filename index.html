@@ -4734,7 +4734,8 @@ function weeklyRunKm(){
     const diff=Math.floor((d-start)/86400000);
     if(diff<0||diff>=84) return;
     const wk=Math.floor(diff/7)+1;
-    importedByDate[r.date]={distKm:r.distKm,wk};
+    if(!importedByDate[r.date]) importedByDate[r.date]={distKm:0,wk};
+    importedByDate[r.date].distKm+=r.distKm;
   });
   const manualDates=new Set();
   PROGRAM.forEach(s=>{
