@@ -1589,15 +1589,15 @@ input[type=number]{-moz-appearance:textfield}
         </div>
         <div style="flex:1;min-width:72px">
           <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Protein g</div>
-          <input id="fdy-pro" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box">
+          <input id="fdy-pro" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
         </div>
         <div style="flex:1;min-width:72px">
           <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Carbs g</div>
-          <input id="fdy-cho" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box">
+          <input id="fdy-cho" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
         </div>
         <div style="flex:1;min-width:72px">
           <div style="font-size:10px;color:var(--text3);margin-bottom:3px;font-family:'Aptos',monospace;text-transform:uppercase;letter-spacing:.05em">Fat g</div>
-          <input id="fdy-fat" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box">
+          <input id="fdy-fat" type="number" inputmode="decimal" placeholder="0" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:13px;text-align:center;box-sizing:border-box" oninput="fdyCalcKcal()">
         </div>
       </div>
       <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:16px;margin-bottom:8px"></div>
@@ -2641,6 +2641,13 @@ function fdyInit(){
   const dl=document.getElementById('fdy-food-list'); if(!dl) return;
   dl.innerHTML=Object.keys(FOOD_DB).map(k=>'<option value="'+k+'">').join('');
   const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
+}
+function fdyCalcKcal(){
+  const pro=parseFloat(document.getElementById('fdy-pro')?.value)||0;
+  const cho=parseFloat(document.getElementById('fdy-cho')?.value)||0;
+  const fat=parseFloat(document.getElementById('fdy-fat')?.value)||0;
+  const kcal=Math.round(pro*4+cho*4+fat*9);
+  const k=document.getElementById('fdy-kcal'); if(k) k.value=kcal||'';
 }
 function fdyPreview(){
   const fi=document.getElementById('fdy-food'),gi=document.getElementById('fdy-grams'),pv=document.getElementById('fdy-preview');
