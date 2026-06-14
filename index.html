@@ -4518,6 +4518,8 @@ function setRunSpeed(exId,sessKey,val){
   saveState(STATE);
   const b=document.getElementById('rpace-'+exId);
   if(b) b.textContent=STATE.runLog[exId]?(fmtPaceSec(3600/STATE.runLog[exId])+' /km'):'';
+  const card=document.getElementById('today-progress-card');
+  if(card) card.outerHTML=todayProgressHTML();
 }
 function weightControlHTML(e,sessKey){
   if(!isLoggableLift(e)) return '';
