@@ -2153,8 +2153,8 @@ const PROGRAM = [
   ],note:''},
 
   {phase:2,week:5,day:'Sun',name:'Long run',type:'run',exercises:[
-    {id:'p2w5sat1',name:'Long run',detail:'22–24km',cat:'run'},
-  ],note:''},
+    {id:'p2w5sat1',name:'Long run',detail:'22–24km · zone 2 for first 19–21km · final 3km at marathon pace · first race-pace inclusion of the program',cat:'run'},
+  ],note:'First marathon-pace segment — the final 3km should feel controlled but purposeful, not all-out.'},
   {phase:2,week:5,day:'Sat',name:'Rest',type:'rest',exercises:[
     {id:'p2w5sun1',name:'Rest + mobility',detail:'Full mobility flow',cat:'rest'},
   ],note:''},
@@ -2209,8 +2209,8 @@ const PROGRAM = [
   ],note:''},
 
   {phase:2,week:6,day:'Sun',name:'Long run',type:'run',exercises:[
-    {id:'p2w6sat1',name:'Long run',detail:'26–28km',cat:'run'},
-  ],note:''},
+    {id:'p2w6sat1',name:'Long run',detail:'26–28km · zone 2 for first 22–23km · final 4–5km at marathon pace · fuel every 30 min throughout',cat:'run'},
+  ],note:'Longest zone-2/MP progression run. The final miles at marathon pace teach your body the feel of race pace on tired legs.'},
   {phase:2,week:6,day:'Sat',name:'Rest',type:'rest',exercises:[
     {id:'p2w6sun1',name:'Full rest + mobility',detail:'',cat:'rest'},
   ],note:''},
@@ -2229,8 +2229,9 @@ const PROGRAM = [
     {id:'p2w7monlm',name:'Landmine reverse lunge',detail:'2 × 6/leg · light',cat:'strength'},
   ],note:'Phase 2 deload — recover before peak phase'},
 
-  {phase:2,week:7,day:'Tue',name:'Easy run',type:'run',exercises:[
+  {phase:2,week:7,day:'Tue',name:'Easy run + strides',type:'run',exercises:[
     {id:'p2w7tue1',name:'Easy run',detail:'6km easy zone 2',cat:'run'},
+    {id:'p2w7tue_str',name:'Strides',detail:'4 × 20 sec · controlled acceleration to mile pace · full walk recovery · deload week so keep effort relaxed — not sprinting',cat:'run'},
   ],note:''},
 
   {phase:2,week:7,day:'Mon',name:'Upper body — deload',type:'strength',exercises:[
@@ -2246,8 +2247,9 @@ const PROGRAM = [
     {id:'p2w7wedlm',name:'Half-kneeling landmine press',detail:'2 × 6/side · light',cat:'strength'},
   ],note:''},
 
-  {phase:2,week:7,day:'Thu',name:'Easy run',type:'run',exercises:[
+  {phase:2,week:7,day:'Thu',name:'Easy run + strides',type:'run',exercises:[
     {id:'p2w7thu1',name:'Easy run',detail:'5km easy',cat:'run'},
+    {id:'p2w7thu_str',name:'Strides',detail:'4 × 20 sec · controlled · full walk recovery · maintains leg turnover during deload',cat:'run'},
   ],note:''},
 
   {phase:2,week:7,day:'Fri',name:'Rest',type:'rest',exercises:[
@@ -2303,8 +2305,9 @@ const PROGRAM = [
     {id:'p3w8wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
   ],note:''},
 
-  {phase:3,week:8,day:'Thu',name:'Easy run',type:'run',exercises:[
+  {phase:3,week:8,day:'Thu',name:'Easy run + strides',type:'run',exercises:[
     {id:'p3w8thu1',name:'Easy run',detail:'8–10km @ zone 2 · should feel effortless',cat:'run'},
+    {id:'p3w8thu_str',name:'Strides',detail:'6 × 20 sec · controlled acceleration to mile pace · full walk recovery · sharpens leg speed before peak long run',cat:'run'},
     {id:'p3w8thu2',name:'Bird dog',detail:'2 × 8/side',cat:'core'},
   ],note:'5 min calf + Achilles stretch'},
 
@@ -2355,8 +2358,9 @@ const PROGRAM = [
     {id:'p3w9wedlm',name:'Half-kneeling landmine press',detail:'3 × 8/side · scapula rotates up, ribs stay down',cat:'strength'},
   ],note:''},
 
-  {phase:3,week:9,day:'Thu',name:'Easy run',type:'run',exercises:[
+  {phase:3,week:9,day:'Thu',name:'Easy run + strides',type:'run',exercises:[
     {id:'p3w9thu1',name:'Easy run',detail:'8km easy',cat:'run'},
+    {id:'p3w9thu_str',name:'Strides',detail:'4 × 20 sec · controlled · full walk recovery · preserves leg turnover as taper begins',cat:'run'},
   ],note:''},
 
   {phase:3,week:9,day:'Fri',name:'Rest',type:'rest',exercises:[
@@ -3057,6 +3061,24 @@ function _fdyDayTarget(ymd,wt){
   const kcal=Math.round((cMid*4+protCombo*4+fat*9)/100)*100;
   return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:protCombo,fat};
 }
+function _fdy7DayStrip(selectedYmd){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html='<div style="display:flex;gap:4px;margin-bottom:10px">';
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(today.getDate()-i);
+    const ymd=_ymd(d);
+    const isSelected=ymd===selectedYmd;
+    const hasEntries=(STATE.foodDiary&&STATE.foodDiary[ymd]&&STATE.foodDiary[ymd].length>0);
+    const isToday=i===0;
+    html+='<button onclick="document.getElementById(\'fdy-date\').value=\''+ymd+'\';renderFoodDiary()" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:8px;border:1px solid '+(isSelected?'var(--accent)':'var(--border)')+';background:'+(isSelected?'rgba(232,198,107,.12)':'var(--surface2)')+';cursor:pointer;min-width:0">'
+      +'<span style="font-size:9px;font-family:\'Aptos\',monospace;color:'+(isSelected?'var(--accent)':isToday?'var(--text2)':'var(--text3)')+'">'+days[d.getDay()]+'</span>'
+      +'<span style="font-size:11px;font-weight:'+(isSelected?'700':'400')+';color:'+(isSelected?'var(--accent)':'var(--text)')+'">'+d.getDate()+'</span>'
+      +'<span style="width:5px;height:5px;border-radius:50%;background:'+(hasEntries?'var(--green)':'rgba(255,255,255,.08)')+';flex-shrink:0"></span>'
+      +'</button>';
+  }
+  return html+'</div>';
+}
 function _fdyTimingHTML(ymd){
   const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
   const sessions=getSessionsForDate(d); if(!sessions.length||sessions.every(s=>s.type==='rest')) return '';
@@ -3089,7 +3111,8 @@ function renderFoodDiary(){
   const tgtInfo=_fdyDayTarget(ymd,wt);
   const tgt={kcal:tgtInfo.kcal,pro:tgtInfo.pro,cho:tgtInfo.cho,fat:tgtInfo.fat};
   const timingHTML=_fdyTimingHTML(ymd);
-  const dayBanner=timingHTML+'<div class="nutr-tip" style="margin-bottom:8px">Today\'s target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
+  const stripHTML=_fdy7DayStrip(ymd);
+  const dayBanner=stripHTML+timingHTML+'<div class="nutr-tip" style="margin-bottom:8px">Target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
   if(!items.length){ el.innerHTML=dayBanner+'<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
   const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const pct=(v,t)=>Math.min(100,t>0?Math.round(v/t*100):0);
@@ -3529,14 +3552,22 @@ function sessionFuelingHint(s){
     const m=longEx.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i);
     const km=m?(parseFloat(m[1])+parseFloat(m[2]))/2:20;
     const durMin=Math.round(km*5.5);
-    let gels=0,t=30; while(t<=durMin){gels++;t+=30;}
+    // Phase-specific gut training carb targets
+    const wk=s.week||currentProgramWeek();
+    let carbTarget,gelFreqMin,gutNote;
+    if(wk<=3){carbTarget='45g/hr';gelFreqMin=45;gutNote='Week '+wk+'/12 gut training — building absorption. 1 gel per 45 min. Do not exceed this yet.';}
+    else if(wk<=5){carbTarget='60g/hr';gelFreqMin=35;gutNote='Mid-build gut capacity — 1 gel per 35 min. Your gut is adapting to higher intake.';}
+    else if(wk<=7){carbTarget='60–75g/hr';gelFreqMin=30;gutNote='Late build — push to 2 gels per hour if gut tolerates. Test what you\'ll use on race day.';}
+    else if(wk<=9){carbTarget='75–90g/hr';gelFreqMin=27;gutNote='Peak fuelling — race-simulation intake. 3 gels per hour. Use exact race-day brand and timing.';}
+    else{carbTarget='90g/hr';gelFreqMin=27;gutNote='Taper fuelling — maintain race-day practice. No experiments. Exact brand, exact timing.';}
+    let gels=0,t=gelFreqMin; while(t<=durMin){gels++;t+=gelFreqMin;}
     return `<div class="session-fueling-hint">
-      <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min)</div>
-      <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — start early</span></div>
-      <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every 30 min → ${gels} gels total</span></div>
-      <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val">60–90 g/hr · use race gels</span></div>
-      <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes >90 min</span></div>
-      <div class="sfh-row" style="border-top:1px solid rgba(232,198,107,.2);margin-top:6px;padding-top:6px"><span class="sfh-lbl" style="color:var(--accent)">🏃 Gut training</span><span class="sfh-val" style="color:var(--text2)">Use your race-day brand today — gut adaptation takes weeks of practice</span></div>
+      <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min) · Week ${wk}</div>
+      <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — always start early</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every ${gelFreqMin} min → ${gels} gels total</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val" style="color:var(--accent)">${carbTarget} · use race gels</span></div>
+      <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes &gt;90 min</span></div>
+      <div class="sfh-row" style="border-top:1px solid rgba(232,198,107,.2);margin-top:6px;padding-top:6px"><span class="sfh-lbl" style="color:var(--accent)">🏃 Gut training</span><span class="sfh-val" style="color:var(--text2)">${gutNote}</span></div>
     </div>`;
   }
   // Strength session ≥60 min intra-workout fueling
@@ -3644,7 +3675,8 @@ function renderSessionCard(s,interactive,startOpen){
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
       <div class="session-footer">
-        <textarea class="session-note-area" placeholder="Session notes…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
+        <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px">How did this session go?</div>
+        <textarea class="session-note-area" placeholder="e.g. Felt strong on squats, knee a bit tight on last set, nailed the tempo pace — legs responding well…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
         <button class="btn-complete ${done?'done':'pending'}" id="cbtn-${key}" onclick="toggleSessionComplete('${key}')">${done?'DONE ✓':'MARK DONE'}</button>
       </div>
     </div>
