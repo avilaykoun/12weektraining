@@ -943,6 +943,13 @@ input[type=number]{-moz-appearance:textfield}
       <span class="pc-unit">kg</span>
     </div>
   </div>
+  <div class="pc-field">
+    <label>Outdoor temperature — optional, for pace adjustment (°C)</label>
+    <div class="pc-input-row">
+      <input id="pc-temp" type="number" inputmode="decimal" step="1" oninput="pcOutputs()" placeholder="—">
+      <span class="pc-unit">°C</span>
+    </div>
+  </div>
   <div id="pc-results"></div>
 
   </div></details>
@@ -1455,6 +1462,16 @@ input[type=number]{-moz-appearance:textfield}
       </div>
       <div class="nutr-tip">You have one marathon in your legs — you know how your body responds at km 30+. Use that experience: if you bonked last time, add 15–20g more carbs per hour from Week 8 onwards. If GI was an issue, switch to chews or a liquid carb source.</div>
       <div class="nutr-divider"></div>
+      <div class="nutr-divider"></div>
+      <div class="nutr-section-lbl">Caffeine strategy</div>
+      <div class="nutr-meal-detail">
+        <strong>Dose:</strong> 3–6 mg per kg bodyweight (86 kg → 260–520 mg). Start at the lower end if caffeine-sensitive.<br>
+        <strong>Timing:</strong> 45–60 min before the gun — caffeine peaks in plasma at ~60 min.<br>
+        <strong>Source:</strong> caffeine tabs or a strong coffee (~80mg/cup). Avoid new sources on race day.<br>
+        <strong>Withdrawal trick:</strong> cut caffeine 7–10 days before the race, then reload on race morning — the re-sensitisation amplifies the performance benefit by ~15%.
+      </div>
+      <div class="nutr-warn">Only use caffeine if you have practised it in training. GI distress is a real risk on race day if your gut isn't adapted.</div>
+      <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Post-race recovery</div>
       <div class="nutr-meal-detail">Within 20 min of finishing: recovery shake or banana + milk. Within 2 hrs: full meal with protein and carbs. Prioritise rehydration with electrolytes — not plain water — for the first 2 hours.</div>
     </div>
@@ -1635,8 +1652,8 @@ input[type=number]{-moz-appearance:textfield}
     <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
       <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
     </button>
-    <button class="bnav-btn" onclick="showSection('history',null,'hist-btn')" id="bn-history">
-      <div class="bnav-icon">📊</div><div class="bnav-lbl">Log</div>
+    <button class="bnav-btn" onclick="showSection('progress')" id="bn-progress">
+      <div class="bnav-icon">📈</div><div class="bnav-lbl">Progress</div>
     </button>
   </div>
 </div>
@@ -2923,7 +2940,20 @@ function sessionFuelingHint(s){
   // Long run fueling
   if(s.type==='run'||s.type==='combo'){
     const longEx=s.exercises.find(e=>{ const m=e.detail&&e.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i); return m&&parseFloat(m[2])>=18; });
-    if(!longEx) return '';
+    // Quality (tempo/threshold/interval) run pre-fueling hint
+    const isQuality=s.exercises.some(e=>/tempo|threshold|interval|800m|1000m|1200m/i.test((e.name||'')+' '+(e.detail||'')));
+    if(!longEx){
+      if(isQuality){
+        return `<div class="session-fueling-hint">
+          <div class="sfh-title">⚡ Pre-session fuel · quality run</div>
+          <div class="sfh-row"><span class="sfh-lbl">2 hrs before</span><span class="sfh-val">Full meal — rice/oats + protein. No heavy fat.</span></div>
+          <div class="sfh-row"><span class="sfh-lbl">30 min before</span><span class="sfh-val">30–40g fast carbs: banana, dates, or 1 gel</span></div>
+          <div class="sfh-row"><span class="sfh-lbl">During (>60 min)</span><span class="sfh-val">1 gel or 30g carb drink at 45 min mark</span></div>
+          <div class="sfh-row" style="border-top:1px solid rgba(232,198,107,.2);margin-top:6px;padding-top:6px"><span class="sfh-lbl" style="color:var(--accent)">Key rule</span><span class="sfh-val" style="color:var(--text2)">Never run intervals or threshold depleted — glycogen is the fuel for fast work</span></div>
+        </div>`;
+      }
+      return '';
+    }
     const m=longEx.detail.match(/(\d+)\s*[–\-]\s*(\d+)\s*km/i);
     const km=m?(parseFloat(m[1])+parseFloat(m[2]))/2:20;
     const durMin=Math.round(km*5.5);
@@ -3978,9 +4008,22 @@ function renderProgress(){
       } else {
         spark='<div style="width:72px;text-align:right;font-size:19px;font-weight:700;color:var(--accent);font-family:Aptos,sans-serif;flex-shrink:0">'+cur.e1rm+'<span style="font-size:10px;font-weight:400;color:var(--text3)"> kg</span></div>';
       }
+      const bw=STATE.profile&&parseFloat(STATE.profile.weight);
+      const BW_STANDARDS={'barbell bench press':1.0,'back squat':1.5,'conventional deadlift':2.0,'deadlift':2.0,'overhead press':0.6,'barbell overhead press':0.6,'ohp':0.6,'db overhead press':0.6,'push press':0.75};
+      const normName=name.toLowerCase();
+      const bwStd=Object.entries(BW_STANDARDS).find(([k])=>normName.includes(k));
+      let bwStr='';
+      if(bw>0&&bwStd){
+        const target=Math.round(bw*bwStd[1]);
+        const ratio=(cur.e1rm/bw).toFixed(2);
+        const pct=Math.min(100,Math.round(cur.e1rm/target*100));
+        const stdLabel=bwStd[1]+'×BW';
+        bwStr='<div style="font-size:10px;color:var(--text3);margin-top:1px">'+ratio+'×BW · target '+stdLabel+' ('+target+'kg) <span style="color:'+(pct>=100?'var(--green)':'var(--accent)')+'">'+pct+'%</span></div>';
+      }
       return '<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--border)">'
         +'<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+name+'</div>'
-        +'<div style="font-size:10px;color:var(--text3);font-family:Aptos,monospace;margin-top:2px">e1RM <b style="color:var(--text);font-size:13px">'+cur.e1rm+'</b> kg · '+deltaStr+'</div></div>'
+        +'<div style="font-size:10px;color:var(--text3);font-family:Aptos,monospace;margin-top:2px">e1RM <b style="color:var(--text);font-size:13px">'+cur.e1rm+'</b> kg · '+deltaStr+'</div>'
+        +bwStr+'</div>'
         +spark+'</div>';
     }).join('');
     html+=_pcard('STRENGTH PROGRESS · ESTIMATED 1RM',liftRows+'<div class="tl-method" style="margin-top:10px">Epley formula: load × (1 + reps ÷ 30). Log weights in Today for each session — each lift gets its own row once data exists.</div>');
@@ -4028,7 +4071,13 @@ function renderMacros(){
     +'<div class="pc-line"><span class="k">Protein</span><span class="v">'+pro+' g ('+proKcal+' kcal)</span></div>'
     +'<div class="pc-line"><span class="k">Fat</span><span class="v">'+fat+' g ('+Math.round(fatKcal)+' kcal)</span></div>'
     +'<div class="pc-line"><span class="k">Baseline hydration</span><span class="v">≈ '+water+' L/day</span></div>'
-    +'<div class="pc-note">Rough estimates from body weight (≈'+cfg.kcal+' kcal/kg, '+cfg.pro+' g/kg protein, '+cfg.cho+' g/kg carbs for endurance). Add ~0.5 L fluid per hour of training. Adjust to hunger, energy and scale over 2–3 weeks.</div></div>';
+    +'<div class="pc-note">Rough estimates from body weight (≈'+cfg.kcal+' kcal/kg, '+cfg.pro+' g/kg protein, '+cfg.cho+' g/kg carbs for endurance). Add ~0.5 L fluid per hour of training. Adjust to hunger, energy and scale over 2–3 weeks.</div>'
+    +'<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="font-size:10px;font-family:Aptos,monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">CARB PERIODISATION · BY SESSION TYPE</div>'
+    +'<div class="pc-line"><span class="k">Rest / recovery day</span><span class="v">3–4 g/kg ('+Math.round(wt*3)+'–'+Math.round(wt*4)+'g)</span></div>'
+    +'<div class="pc-line"><span class="k">Easy / Zone 2 run</span><span class="v">5–6 g/kg ('+Math.round(wt*5)+'–'+Math.round(wt*6)+'g)</span></div>'
+    +'<div class="pc-line"><span class="k">Quality / strength day</span><span class="v">7–8 g/kg ('+Math.round(wt*7)+'–'+Math.round(wt*8)+'g)</span></div>'
+    +'<div class="pc-line"><span class="k">Long run (≥18km)</span><span class="v">8–10 g/kg ('+Math.round(wt*8)+'–'+Math.round(wt*10)+'g)</span></div>'
+    +'<div class="pc-note">Fuel hard days hard, rest days lean — this is carb periodisation. Don\'t cut carbs before quality sessions or long runs.</div></div></div>';
 }
 function pcPacingRecHTML(){
   const perKm=3600/pcSpeedKmh; const m=perKm/60;
@@ -4395,7 +4444,10 @@ function setSessionRPE(key,val){ if(!STATE.sessionRPE) STATE.sessionRPE={}; STAT
 function sessionRPEQuickHTML(s){
   const key=sessionKey(s); const cur=STATE.sessionRPE&&STATE.sessionRPE[key];
   let chips=''; for(let i=1;i<=10;i++) chips+='<button class="srpe-chip'+(cur===i?' on':'')+'" onclick="setSessionRPE(\''+key+'\','+i+')">'+i+'</button>';
-  return '<div class="srpe-wrap"><div class="srpe-lbl">Quick session effort (RPE) — overrides per-exercise</div><div class="srpe-row">'+chips+'</div></div>';
+  const highRPEHint=(cur>=9)
+    ?'<div style="margin-top:6px;padding:7px 10px;background:rgba(255,107,71,.08);border:1px solid rgba(255,107,71,.25);border-radius:8px;font-size:11px;color:var(--text2);line-height:1.5">⚠ RPE '+cur+' is near maximum. Autoregulate: drop weight 5–10%, add 1 RIR to remaining sets, and ensure tomorrow is easy. Sustained 9–10 RPE without recovery leads to injury, not adaptation.</div>'
+    :'';
+  return '<div class="srpe-wrap"><div class="srpe-lbl">Quick session effort (RPE) — overrides per-exercise</div><div class="srpe-row">'+chips+'</div>'+highRPEHint+'</div>';
 }
 // ── PR celebration ──
 function checkPR(exId){
@@ -4958,7 +5010,7 @@ function renderStats(){
       <div class="streak-bar">${last14.map(ld=>`<div class="streak-dot ${ld.anyDone?'done':''} ${ld.isToday&&!ld.anyDone?'today':''}">${ld.d.getDate()}</div>`).join('')}</div>
     </div>
     </details>
-    <details class="accg"><summary>Strength &amp; body</summary>
+    <details class="accg" open><summary>Strength &amp; body</summary>
     ${prCardHTML()}
     ${muscleCardHTML()}
     ${bodyCompCardHTML()}
@@ -5935,11 +5987,14 @@ function pcOutputs(){
   const el=document.getElementById('pc-results'); if(!el) return;
   const grade=parseFloat(document.getElementById('pc-incline').value)||0;
   const wt=parseFloat(document.getElementById('pc-weight').value);
+  const tempRaw=document.getElementById('pc-temp'); const tempC=(tempRaw&&tempRaw.value!=='')?parseFloat(tempRaw.value):null;
   const perKm=3600/pcSpeedKmh, perMi=perKm*MI_KM;
   const gapKmh=pcGapKmh(pcSpeedKmh,grade);
   const gapPerKm = gapKmh>0?3600/gapKmh:0, gapPerMi=gapPerKm*MI_KM;
   const vo2=acsmVO2(pcSpeedKmh,grade);
   const mets=vo2/3.5;
+  // Heat penalty: +6 s/km per °C above 20°C (Ely et al. 2007)
+  const tempAdj=(tempC!=null&&tempC>20)?Math.round((tempC-20)*6):null;
   const dists=[['1 km',1],['1 mile',MI_KM],['5K',5],['10K',10],['Half',21.0975],['Marathon',42.195]];
   const splitRows=dists.map(d=>{
     const t=(d[1]/pcSpeedKmh)*3600;
@@ -5950,18 +6005,22 @@ function pcOutputs(){
     const kcalMin = vo2*wt/1000*5;
     calRows='<div class="pc-line"><span class="k">Energy</span><span class="v">'+Math.round(kcalMin*60)+' kcal/h · '+Math.round(kcalMin*30)+' / 30 min</span></div>';
   }
+  const tempRow=tempAdj!=null
+    ?'<div class="pc-line" style="color:var(--accent)"><span class="k">Heat-adjusted pace ('+tempC+'°C)</span><span class="v">'+fmtPaceSec(perKm+tempAdj)+' /km <span style="color:var(--text3);font-size:11px">(+'+tempAdj+'s/km vs cool)</span></span></div>'
+    :(tempC!=null&&tempC<=20?'<div class="pc-line"><span class="k">Temperature ('+tempC+'°C)</span><span class="v" style="color:var(--green)">Ideal conditions — no pace adjustment needed</span></div>':'');
   el.innerHTML =
     '<div class="pc-res">'
-    + '<div class="pc-res-hd">At '+pcSpeedKmh.toFixed(1)+' km/h'+(grade?(' · '+grade+'% incline'):'')+'</div>'
+    + '<div class="pc-res-hd">At '+pcSpeedKmh.toFixed(1)+' km/h'+(grade?(' · '+grade+'% incline'):'')+(tempC!=null?' · '+tempC+'°C':'')+'</div>'
     + '<div class="pc-big">'
     + '<div class="pc-big-card"><div class="pc-big-v">'+fmtPaceSec(perKm)+'</div><div class="pc-big-l">min / km</div></div>'
     + '<div class="pc-big-card"><div class="pc-big-v">'+fmtPaceSec(perMi)+'</div><div class="pc-big-l">min / mile</div></div>'
     + '</div>'
     + (grade? '<div class="pc-line"><span class="k">Effort-equiv. flat pace</span><span class="v">'+fmtPaceSec(gapPerKm)+' /km · '+fmtPaceSec(gapPerMi)+' /mi</span></div>'
             + '<div class="pc-line"><span class="k">Flat-equivalent speed</span><span class="v">'+gapKmh.toFixed(1)+' km/h</span></div>' : '')
+    + tempRow
     + '<div class="pc-line"><span class="k">Est. VO₂ / intensity</span><span class="v">'+vo2.toFixed(1)+' ml/kg/min · '+mets.toFixed(1)+' METs</span></div>'
     + calRows
-    + '<div class="pc-note">Incline maths uses the ACSM walking/running metabolic equations. "Effort-equivalent flat pace" matches the same O₂ cost on flat ground.</div>'
+    + '<div class="pc-note">Incline maths uses the ACSM walking/running metabolic equations. "Effort-equivalent flat pace" matches the same O₂ cost on flat ground.'+(tempAdj!=null?' Heat penalty: ~6 s/km per °C above 20°C (Ely et al. 2007).':'')+'</div>'
     + '</div>'
     + '<div class="pc-res">'
     + '<div class="pc-res-hd">Time on the belt</div>'
