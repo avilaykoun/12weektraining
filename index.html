@@ -154,9 +154,9 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .bottom-nav:not(.nav-hidden) .bnav-handle-pill{background:rgba(152,160,189,.4)}
 .bottom-nav.nav-hidden .bnav-handle-pill{width:44px;background:var(--accent);opacity:.7}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:3px 2px;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:color .15s;flex:1;min-width:0;touch-action:manipulation}
-.bnav-btn.active{color:var(--accent)}
+.bnav-btn.active{color:var(--accent);background:rgba(232,198,107,.12);border-radius:10px}
 .bnav-btn.active .bnav-icon{position:relative}
-.bnav-btn.active .bnav-icon::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:16px;height:2px;background:var(--accent);border-radius:99px}
+.bnav-btn.active .bnav-icon::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--accent);border-radius:99px}
 .bnav-icon{font-size:19px;line-height:1}
 .bnav-lbl{font-size:8px;font-family:'Aptos',monospace;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
 @media(min-width:768px){
@@ -1771,6 +1771,43 @@ input[type=number]{-moz-appearance:textfield}
 </div>
 
 <div class="app-toast" id="app-toast"><span class="dot"></span><span id="app-toast-msg"></span></div>
+
+<!-- First-launch setup modal -->
+<div id="setup-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(10,14,26,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto">
+  <div style="min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px 16px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 20px;max-width:380px;width:100%">
+      <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Albert 12-Week Program</div>
+      <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">Let's set you up</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:20px">3 quick inputs unlock personalised targets across every session — paces, macros, and load progression all flow from these.</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <label style="font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px">Body weight (kg) <span style="color:var(--text3)">— sets macro &amp; load targets</span></label>
+          <input id="sl-wt" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 86" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:15px;font-family:'Aptos',monospace;box-sizing:border-box">
+        </div>
+        <div>
+          <label style="font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px">Goal marathon time <span style="color:var(--text3)">— optional, sets pace bands</span></label>
+          <input id="sl-goal" type="text" inputmode="text" placeholder="e.g. 3:30" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:15px;font-family:'Aptos',monospace;box-sizing:border-box">
+        </div>
+        <div>
+          <label style="font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px">Best recent run <span style="color:var(--text3)">— unlocks pace targets on every session</span></label>
+          <div style="display:flex;gap:8px">
+            <select id="sl-dist" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 8px;font-size:13px;font-family:'Aptos',monospace">
+              <option value="">Distance</option>
+              <option value="5">5 km</option>
+              <option value="10">10 km</option>
+              <option value="21.1">Half marathon</option>
+              <option value="42.2">Marathon</option>
+            </select>
+            <input id="sl-time" type="text" inputmode="text" placeholder="e.g. 25:30" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:15px;font-family:'Aptos',monospace">
+          </div>
+        </div>
+      </div>
+      <div id="sl-err" style="font-size:11px;color:#e87040;margin-top:10px;display:none"></div>
+      <button onclick="setupModalSave()" style="width:100%;margin-top:20px;background:var(--accent);color:#0a0e1a;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;font-family:'Aptos',monospace;cursor:pointer;letter-spacing:.04em">Get started →</button>
+      <button onclick="setupModalSkip()" style="width:100%;margin-top:10px;background:transparent;border:none;color:var(--text3);font-size:12px;font-family:'Aptos',monospace;cursor:pointer;padding:6px">Skip for now — I'll add this later</button>
+    </div>
+  </div>
+</div>
 
 <div class="bottom-nav" id="bottom-nav">
   <div class="bnav-handle" onclick="toggleNav()" aria-label="Toggle navigation">
@@ -3815,25 +3852,26 @@ function checkMilestones(key,done){
   if(!done) return;
   if(!STATE.celebratedMilestone) STATE.celebratedMilestone={};
   const s=PROGRAM.find(x=>sessionKey(x)===key); if(!s) return;
+  const now=Date.now();
   // First ever session completed
   const totalDone=Object.values(STATE.completedSessions).filter(Boolean).length;
   if(totalDone===1&&!STATE.celebratedMilestone.first_session){
-    STATE.celebratedMilestone.first_session=true;
+    STATE.celebratedMilestone.first_session=now;
     _milestoneToast('Session 1 logged. The hardest part was showing up — you did.');
   }
   // First long run ≥ 20 km
   if(!STATE.celebratedMilestone.first_20k&&(s.type==='run'||s.type==='combo')){
     const has20k=s.exercises.some(e=>{ const m=(e.detail||'').match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*km/i); return m&&parseFloat(m[2])>=20; });
-    if(has20k){ STATE.celebratedMilestone.first_20k=true; _milestoneToast('First 20 km+ long run done. You just ran further than most people ever will.'); }
+    if(has20k){ STATE.celebratedMilestone.first_20k=now; _milestoneToast('First 20 km+ long run done. You just ran further than most people ever will.'); }
   }
   // Peak week entry (week 8)
   if(!STATE.celebratedMilestone.peak_week&&s.week===8){
-    STATE.celebratedMilestone.peak_week=true;
+    STATE.celebratedMilestone.peak_week=now;
     _milestoneToast('Peak week. This is the summit of training — the hardest you\'ll go. Trust the process.');
   }
   // Taper start (week 10)
   if(!STATE.celebratedMilestone.taper_start&&s.week===10){
-    STATE.celebratedMilestone.taper_start=true;
+    STATE.celebratedMilestone.taper_start=now;
     _milestoneToast('Taper begins. Volume drops intentionally — your legs are loading up for race day now.');
   }
   // Week completion celebrations (every completed week)
@@ -3841,7 +3879,7 @@ function checkMilestones(key,done){
   if(!STATE.celebratedMilestone[wkKey]){
     const wkSessions=PROGRAM.filter(p=>p.week===s.week&&p.phase===s.phase&&p.type!=='rest');
     const wkDone=wkSessions.every(p=>STATE.completedSessions[sessionKey(p)]);
-    if(wkDone){ STATE.celebratedMilestone[wkKey]=true; _milestoneToast('Week '+s.week+' complete. '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
+    if(wkDone){ STATE.celebratedMilestone[wkKey]=now; _milestoneToast('Week '+s.week+' complete. '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
   }
   saveState(STATE);
 }
@@ -4541,12 +4579,34 @@ function runControlHTML(e,sessKey){
   const planKm=parseDistanceKm(e.detail)||parseDistanceKm(e.name);
   const actKm=(STATE.actualRunKm&&STATE.actualRunKm[e.id])||'';
   const kmHint=planKm?(' · planned '+planKm+' km'):'';
+  // Pace vs actual comparison — shown once speed is logged
+  let paceCompHTML='';
+  if(v&&parseFloat(v)>0){
+    const actualSec=Math.round(3600/parseFloat(v));
+    if(rp){
+      const lo=rp.sec-6, hi=rp.sec+(rp.z==='easy'?30:rp.z==='mp'?20:8);
+      const onTarget=actualSec>=lo-8&&actualSec<=hi+8;
+      const tooFast=actualSec<lo-8;
+      const col=onTarget?'var(--green)':tooFast?'#e87040':'var(--text3)';
+      const verdict=onTarget?'✓ on target':tooFast?'↑ above target zone — ease off next time':'↓ below target zone';
+      paceCompHTML='<div style="font-size:10px;color:'+col+';font-family:\'Aptos\',monospace;margin-top:4px;padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">'
+        +'Target '+fmtPaceSec(lo)+'–'+fmtPaceSec(hi)+'/km · actual '+fmtPaceSec(actualSec)+'/km · '+verdict+'</div>';
+    } else if(tgt){
+      const tgtSec=Math.round(3600/parseFloat(tgt.kmh));
+      const diff=actualSec-tgtSec;
+      const col=Math.abs(diff)<12?'var(--green)':diff<0?'#e87040':'var(--text3)';
+      const verdict=Math.abs(diff)<12?'✓ on target':diff<0?'↑ faster than target':'↓ slower than target';
+      paceCompHTML='<div style="font-size:10px;color:'+col+';font-family:\'Aptos\',monospace;margin-top:4px;padding:4px 0;border-top:1px solid rgba(255,255,255,.06)">'
+        +'Target '+tgt.pace+'/km · actual '+fmtPaceSec(actualSec)+'/km · '+verdict+'</div>';
+    }
+  }
   return paceHTML
     +'<div class="wt-wrap"><span class="wt-lbl">avg speed (km/h)</span><div class="stp">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',-0.1)">−</button>'
     +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="km/h" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',0.1)">+</button></div>'
     +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>'
+    +paceCompHTML
     +'<div class="wt-wrap" style="margin-top:4px"><span class="wt-lbl">actual km run'+kmHint+'</span>'
     +'<input class="wt-inp" style="width:80px;text-align:center" id="actkm-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+actKm+'" placeholder="km" oninput="setActualKm(\''+e.id+'\',this.value)"></div>';
 }
@@ -4763,6 +4823,30 @@ function renderProgress(){
   if(rWeeks.length){
     const pts=rWeeks.map(w=>({week:w,y:rs[w]}));
     html+=_pcard('RUN PACE PROGRESS', svgLines([{name:'speed',color:'#47a8ff',points:pts}])+'<div class="tl-method">Average logged run speed (km/h) per week — a rising line is faster running. Log "avg speed" on your run sessions to fill this in.</div>');
+  }
+  // Achievements log
+  const _m=STATE.celebratedMilestone||{};
+  const _MILESTONES=[
+    {key:'first_session',icon:'⚡',label:'First session completed'},
+    {key:'first_20k',icon:'🏃',label:'First 20 km+ long run'},
+    {key:'peak_week',icon:'🏔',label:'Peak week (Week 8) reached'},
+    {key:'taper_start',icon:'🕊',label:'Taper phase begun (Week 10)'},
+    ...Array.from({length:12},(_,i)=>({key:'week_'+(i+1)+'_done',icon:'✓',label:'Week '+(i+1)+' completed'}))
+  ];
+  const earned=_MILESTONES.filter(x=>_m[x.key]);
+  if(earned.length){
+    const rows=earned.map(x=>{
+      const ts=typeof _m[x.key]==='number'?_m[x.key]:null;
+      const dateStr=ts?new Date(ts).toLocaleDateString('en-AU',{day:'numeric',month:'short'}):'';
+      return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--border)">'
+        +'<span style="font-size:16px;width:24px;text-align:center;flex-shrink:0">'+x.icon+'</span>'
+        +'<span style="flex:1;font-size:12px;color:var(--text)">'+x.label+'</span>'
+        +(dateStr?'<span style="font-size:10px;color:var(--text3);font-family:\'Aptos\',monospace;flex-shrink:0">'+dateStr+'</span>':'')
+        +'</div>';
+    }).join('');
+    html+=_pcard('MILESTONES & ACHIEVEMENTS',rows+'<div class="tl-method" style="margin-top:6px">Unlocked automatically as you train through the program. Each one is saved permanently.</div>');
+  } else {
+    html+=_pcard('MILESTONES & ACHIEVEMENTS','<div class="ls-hint">Complete your first session to start earning milestones — they\'re saved here permanently as you train.</div>');
   }
   c.innerHTML=html||'<div class="ls-hint">Start logging weights and run speeds to see your progress here.</div>';
 }
@@ -5775,9 +5859,10 @@ function deloadNudgeHTML(){
   const wk=currentProgramWeek();
   const alreadyDeload=STATE.deloadWeeks&&STATE.deloadWeeks[wk];
   if(alreadyDeload) return '';
-  return '<div class="soften-banner" style="border-color:rgba(255,107,71,.4);color:#ff9f80;cursor:pointer" onclick="_phaseWeek()&&toggleDeload()">'
+  return '<div class="soften-banner" style="border-color:rgba(255,107,71,.4);color:#ff9f80">'
     +'<strong>Low readiness 2 days running ('+todayRs+' today, '+yestRs+' yesterday)</strong> — your body is signalling under-recovery. '
-    +'Consider setting <strong>Week '+wk+' to Deload</strong> (−1 set, −10% load). Tap here or use the Deload toggle in the Week tab.'
+    +'<button onclick="toggleDeloadWeek()" style="display:block;margin-top:8px;background:rgba(255,107,71,.2);border:1px solid rgba(255,107,71,.5);color:#ff9f80;border-radius:8px;padding:6px 14px;font-family:\'Aptos\',monospace;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em">'
+    +'Apply deload to Week '+wk+' — −1 set · −10% load</button>'
     +'</div>';
 }
 function renderStats(){
@@ -7494,6 +7579,46 @@ function appToast(m){
 function _updateOnlineStatus(){const el=document.getElementById('offline-badge');if(el)el.style.display=navigator.onLine?'none':'inline-flex';}
 window.addEventListener('online',_updateOnlineStatus);
 window.addEventListener('offline',_updateOnlineStatus);
+function _parseTimeToSec(t){
+  const p=String(t||'').trim().split(':').map(Number);
+  if(p.length===3) return p[0]*3600+p[1]*60+p[2];
+  if(p.length===2) return p[0]*60+p[1];
+  return NaN;
+}
+function setupModalSave(){
+  const wt=parseFloat(document.getElementById('sl-wt').value);
+  const goalRaw=document.getElementById('sl-goal').value.trim();
+  const dist=parseFloat(document.getElementById('sl-dist').value);
+  const timeRaw=document.getElementById('sl-time').value.trim();
+  const err=document.getElementById('sl-err');
+  if(!(wt>0&&wt<300)){ err.textContent='Please enter your body weight (e.g. 86)'; err.style.display=''; return; }
+  err.style.display='none';
+  if(!STATE.profile) STATE.profile={};
+  STATE.profile.weight=wt;
+  if(goalRaw){
+    const goalSec=_parseTimeToSec(goalRaw);
+    if(goalSec>0) STATE.profile.goalMarathonSec=goalSec;
+  }
+  if(dist>0&&timeRaw){
+    const timeSec=_parseTimeToSec(timeRaw);
+    if(timeSec>0){
+      if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+      const paceSec=timeSec/dist;
+      STATE.benchmarks.push({kind:'run',distKm:dist,timeSec,paceSec,date:new Date().toISOString().slice(0,10)});
+    }
+  }
+  STATE.profile.setupDone=true;
+  saveState(STATE);
+  document.getElementById('setup-modal').style.display='none';
+  renderToday();
+  if(typeof appToast==='function') appToast('Profile saved — pace targets and macro goals are now personalised');
+}
+function setupModalSkip(){
+  if(!STATE.profile) STATE.profile={};
+  STATE.profile.setupDone=true;
+  saveState(STATE);
+  document.getElementById('setup-modal').style.display='none';
+}
 window.onload=function(){
   initPWA();
   initNavState();
@@ -7506,6 +7631,9 @@ window.onload=function(){
   renderNutritionMacros();
   renderHub();
   renderProgram(1);
+  // Show first-launch setup modal for new users who haven't set weight or done setup
+  const needsSetup=!(STATE.profile&&(STATE.profile.setupDone||STATE.profile.weight));
+  if(needsSetup) setTimeout(()=>{ document.getElementById('setup-modal').style.display=''; },600);
   // pre-render today in background so it's fast when user taps Today
   setTimeout(renderToday, 0);
 
