@@ -2568,7 +2568,7 @@ function saveState(s){
 }
 const SCHEMA_VERSION=1;
 function ensureContainers(){
-  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks','badVideos','pinnedVideos'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
+  ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','celebratedMilestone','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks','badVideos','pinnedVideos'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
   if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
 }
 let STATE = loadState();
@@ -3020,6 +3020,27 @@ function _fdyDayTarget(ymd,wt){
   const kcal=Math.round((cMid*4+protCombo*4+fat*9)/100)*100;
   return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:protCombo,fat};
 }
+function _fdyTimingHTML(ymd){
+  const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  const sessions=getSessionsForDate(d); if(!sessions.length||sessions.every(s=>s.type==='rest')) return '';
+  const s=sessions[0]; const sName=(s.name||'').toLowerCase();
+  const isLong=/long run/.test(sName); const isInterval=/interval|threshold|tempo/.test(sName);
+  const isStrength=s.type==='strength'; const isCombo=s.type==='combo';
+  let rows=[];
+  if(isLong){
+    rows=[['3–4 hrs before','150–200g carbs · white toast + honey + banana + sports drink. Keep fat/fibre low.'],['15 min before','1 gel or 30g fast carbs — top up glycogen'],['During','Gel every 30 min from km 6. Target 60–90g carbs/hr + electrolytes.'],['Within 45 min after','40g protein + 80g fast carbs — glycogen window. Chocolate milk is ideal.']];
+  } else if(isInterval){
+    rows=[['2–3 hrs before','Full meal: rice/oats + protein. No heavy fat or fibre.'],['30 min before','30–40g fast carbs: banana, dates, or 1 gel'],['During (>60 min)','30g carb drink or gel at 45 min mark'],['Within 60 min after','40g protein + 60g fast carbs']];
+  } else if(isStrength||isCombo){
+    rows=[['1–2 hrs before','30–50g fast carbs · small protein serve'],['At 45 min mark (if >60 min)','30g carbs — banana, dates, or carb drink'],['Within 60 min after','40g protein + 50g fast carbs — muscle repair window']];
+  } else {
+    rows=[['1 hr before','Small carb snack — banana or toast if running fasted'],['After','30g protein + 40g carbs to cover recovery']];
+  }
+  return '<details style="margin-bottom:8px"><summary style="font-size:11px;font-family:\'Aptos\',monospace;color:var(--accent2);cursor:pointer;letter-spacing:.04em;text-transform:uppercase">Meal timing · '+s.name+' ▾</summary>'
+    +'<div style="margin-top:6px;padding:8px 10px;background:rgba(71,168,255,.06);border:1px solid rgba(71,168,255,.15);border-radius:8px">'
+    +rows.map(([t,v])=>'<div style="display:flex;gap:8px;padding:4px 0;border-top:1px solid rgba(255,255,255,.04)"><span style="font-size:10px;color:var(--text3);min-width:110px;flex-shrink:0;font-family:\'Aptos\',monospace">'+t+'</span><span style="font-size:11px;color:var(--text2);line-height:1.4">'+v+'</span></div>').join('')
+    +'</div></details>';
+}
 function renderFoodDiary(){
   const el=document.getElementById('fdy-out'); if(!el) return;
   fdyInit();
@@ -3030,7 +3051,8 @@ function renderFoodDiary(){
   // Compute session-aware target
   const tgtInfo=_fdyDayTarget(ymd,wt);
   const tgt={kcal:tgtInfo.kcal,pro:tgtInfo.pro,cho:tgtInfo.cho,fat:tgtInfo.fat};
-  const dayBanner='<div class="nutr-tip" style="margin-bottom:8px">Today\'s target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
+  const timingHTML=_fdyTimingHTML(ymd);
+  const dayBanner=timingHTML+'<div class="nutr-tip" style="margin-bottom:8px">Today\'s target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>';
   if(!items.length){ el.innerHTML=dayBanner+'<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
   const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
   const pct=(v,t)=>Math.min(100,t>0?Math.round(v/t*100):0);
@@ -3444,7 +3466,7 @@ function renderToday(){
     container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
     return;
   }
-  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
+  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+deloadNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -3746,6 +3768,7 @@ function toggleSessionComplete(key){
   const done=STATE.completedSessions[key]=!STATE.completedSessions[key];
   saveState(STATE);
   updateCountdown();
+  checkMilestones(key,done);
 
   // Surgical DOM update on the Today view — avoids full re-render so scroll
   // position and open inputs are preserved on mobile.
@@ -3781,6 +3804,47 @@ function toggleSessionComplete(key){
 }
 function saveSessionNote(key,val){STATE.sessionNotes[key]=val;saveState(STATE);}
 function saveExNote(exId,val){STATE.exerciseNotes[exId]=val;saveState(STATE);}
+
+function _milestoneToast(msg){
+  const el=document.getElementById('app-toast'); if(!el) return;
+  document.getElementById('app-toast-msg').textContent=msg; el.classList.add('show');
+  if(navigator.vibrate){try{navigator.vibrate([20,60,20,60,20]);}catch(e){}}
+  clearTimeout(window._appToastT); window._appToastT=setTimeout(()=>el.classList.remove('show'),5000);
+}
+function checkMilestones(key,done){
+  if(!done) return;
+  if(!STATE.celebratedMilestone) STATE.celebratedMilestone={};
+  const s=PROGRAM.find(x=>sessionKey(x)===key); if(!s) return;
+  // First ever session completed
+  const totalDone=Object.values(STATE.completedSessions).filter(Boolean).length;
+  if(totalDone===1&&!STATE.celebratedMilestone.first_session){
+    STATE.celebratedMilestone.first_session=true;
+    _milestoneToast('Session 1 logged. The hardest part was showing up — you did.');
+  }
+  // First long run ≥ 20 km
+  if(!STATE.celebratedMilestone.first_20k&&(s.type==='run'||s.type==='combo')){
+    const has20k=s.exercises.some(e=>{ const m=(e.detail||'').match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*km/i); return m&&parseFloat(m[2])>=20; });
+    if(has20k){ STATE.celebratedMilestone.first_20k=true; _milestoneToast('First 20 km+ long run done. You just ran further than most people ever will.'); }
+  }
+  // Peak week entry (week 8)
+  if(!STATE.celebratedMilestone.peak_week&&s.week===8){
+    STATE.celebratedMilestone.peak_week=true;
+    _milestoneToast('Peak week. This is the summit of training — the hardest you\'ll go. Trust the process.');
+  }
+  // Taper start (week 10)
+  if(!STATE.celebratedMilestone.taper_start&&s.week===10){
+    STATE.celebratedMilestone.taper_start=true;
+    _milestoneToast('Taper begins. Volume drops intentionally — your legs are loading up for race day now.');
+  }
+  // Week completion celebrations (every completed week)
+  const wkKey='week_'+s.week+'_done';
+  if(!STATE.celebratedMilestone[wkKey]){
+    const wkSessions=PROGRAM.filter(p=>p.week===s.week&&p.phase===s.phase&&p.type!=='rest');
+    const wkDone=wkSessions.every(p=>STATE.completedSessions[sessionKey(p)]);
+    if(wkDone){ STATE.celebratedMilestone[wkKey]=true; _milestoneToast('Week '+s.week+' complete. '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
+  }
+  saveState(STATE);
+}
 
 // ─────────────────────────────────────────
 // RPE (CR-10 / Reps-in-Reserve) + SESSION-RPE TRAINING LOAD (Foster's method)
@@ -4610,6 +4674,14 @@ function _pcard(title,inner){ return '<div style="background:var(--surface);bord
 function renderProgress(){
   const c=document.getElementById('progress-view'); if(!c) return;
   let html='';
+  // Benchmark unlock nudge — show when no run benchmark has ever been entered
+  const hasRunBm=(STATE.benchmarks||[]).some(b=>b.kind==='run'&&b.paceSec>0);
+  if(!hasRunBm){
+    html+=_pcard('UNLOCK PERSONALISED PACE TARGETS',
+      '<div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px">Enter a recent 5K, 10K, or half-marathon time in <strong>Tools → Benchmarks</strong> to unlock personalised Zone 2, threshold, interval and marathon pace targets. These appear on every run session card and adapt to your fitness as it improves.</div>'
+      +'<div style="font-size:11px;color:var(--text3)">Without benchmark data the pace guide on session cards cannot activate — this is the single highest-leverage input in the entire app.</div>'
+      +'<button class="data-btn" style="margin-top:10px" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()">Open Benchmarks →</button>');
+  }
   const volMap=weeklyStrengthVolume(); const vWeeks=Object.keys(volMap).map(Number).sort((a,b)=>a-b);
   if(vWeeks.length){
     const last=vWeeks[vWeeks.length-1], prev=vWeeks.length>1?vWeeks[vWeeks.length-2]:null;
@@ -4871,7 +4943,33 @@ function readinessBand(score){
   if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
   return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
 }
-function setReadiness(k,v){ const ymd=_ymd(new Date()); if(!STATE.readiness) STATE.readiness={}; if(!STATE.readiness[ymd]) STATE.readiness[ymd]={}; STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v); morningOpen=true; if(typeof hideRestoreBanner==='function') hideRestoreBanner(); const rs=readinessScore(STATE.readiness[ymd]); if(rs!=null&&rs<45){if(!STATE.softenDay) STATE.softenDay={}; if(!STATE.softenDay[ymd]){STATE.softenDay[ymd]=true; if(typeof appToast==='function') appToast('Low readiness — session eased');}} saveState(STATE); renderToday(); }
+function setReadiness(k,v){
+  const ymd=_ymd(new Date());
+  if(!STATE.readiness) STATE.readiness={};
+  if(!STATE.readiness[ymd]) STATE.readiness[ymd]={};
+  STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v);
+  morningOpen=true;
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  const rs=readinessScore(STATE.readiness[ymd]);
+  if(rs!=null&&rs<45){
+    if(!STATE.softenDay) STATE.softenDay={};
+    if(!STATE.softenDay[ymd]){ STATE.softenDay[ymd]=true; if(typeof appToast==='function') appToast('Low readiness — session eased'); }
+  }
+  // Readiness-triggered deload: two consecutive days < 40
+  if(rs!=null&&rs<40){
+    const yest=_ymd(new Date(Date.now()-86400000));
+    const yestRs=readinessScore((STATE.readiness&&STATE.readiness[yest])||{});
+    if(yestRs!=null&&yestRs<40){
+      if(!STATE.celebratedMilestone) STATE.celebratedMilestone={};
+      const dKey='deload_nudge_'+ymd;
+      if(!STATE.celebratedMilestone[dKey]){
+        STATE.celebratedMilestone[dKey]=true;
+        setTimeout(()=>{ if(typeof appToast==='function') appToast('2 consecutive low-readiness days — consider setting this week to Deload in the Week tab.'); },400);
+      }
+    }
+  }
+  saveState(STATE); renderToday();
+}
 function readinessCardHTML(date){
   const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
   const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
@@ -5663,7 +5761,25 @@ function benchmarkCardHTML(){
     +'<div class="bm-hist">'+benchmarkHistoryHTML()+'</div>';
 }
 function renderBenchmarks(){ const el=document.getElementById('bm-card'); if(el) el.innerHTML=benchmarkCardHTML(); }
-function benchmarkNudgeHTML(){ const due=dueBenchmark(); if(!due) return ''; return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split('(')[0].toLowerCase().trim()+' and a strength check to recalibrate your training targets. <span class="bm-nudge-go">Open Tools ›</span></div></div>'; }
+function benchmarkNudgeHTML(){
+  const hasAnyBm=(STATE.benchmarks||[]).length>0;
+  if(!hasAnyBm) return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">SETUP</span><div>No benchmarks yet — enter a recent 5K, 10K or half-marathon time to unlock personalised pace targets on every run session. <span class="bm-nudge-go">Open Benchmarks ›</span></div></div>';
+  const due=dueBenchmark(); if(!due) return '';
+  return '<div class="bm-nudge" onclick="var b=document.getElementById(\'bn-pace\');if(b)b.click()"><span class="bm-nudge-tag">TEST DUE</span><div>'+due.block+' benchmark — log a '+due.run.split('(')[0].toLowerCase().trim()+' and a strength check to recalibrate your training targets. <span class="bm-nudge-go">Open Tools ›</span></div></div>';
+}
+function deloadNudgeHTML(){
+  const ymd=_ymd(new Date()); const yest=_ymd(new Date(Date.now()-86400000));
+  const todayRs=readinessScore((STATE.readiness&&STATE.readiness[ymd])||{});
+  const yestRs=readinessScore((STATE.readiness&&STATE.readiness[yest])||{});
+  if(todayRs==null||todayRs>=40||yestRs==null||yestRs>=40) return '';
+  const wk=currentProgramWeek();
+  const alreadyDeload=STATE.deloadWeeks&&STATE.deloadWeeks[wk];
+  if(alreadyDeload) return '';
+  return '<div class="soften-banner" style="border-color:rgba(255,107,71,.4);color:#ff9f80;cursor:pointer" onclick="_phaseWeek()&&toggleDeload()">'
+    +'<strong>Low readiness 2 days running ('+todayRs+' today, '+yestRs+' yesterday)</strong> — your body is signalling under-recovery. '
+    +'Consider setting <strong>Week '+wk+' to Deload</strong> (−1 set, −10% load). Tap here or use the Deload toggle in the Week tab.'
+    +'</div>';
+}
 function renderStats(){
   if(!_statsDirty) return; _statsDirty=false;
   // ===== TIER 2/3 FEATURE LOGIC =====
