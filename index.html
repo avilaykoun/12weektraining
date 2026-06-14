@@ -4738,27 +4738,31 @@ function weeklyRunKm(){
     byWeek[wk]=(byWeek[wk]||0)+r.distKm;
     importedDates.add(r.date);
   });
-  PROGRAM.forEach(s=>s.exercises.forEach(e=>{
-    if(e.cat!=='run') return;
-    // Skip if this session's date is covered by an imported run
-    if(importedDates.has(_ymd(sessionDate(s)))) return;
-    const kmh=parseFloat((STATE.runLog||{})[e.id]);
-    const actualKm=parseFloat((STATE.actualRunKm||{})[e.id]);
-    // Require either a logged speed or explicit actual km to count the exercise
-    if(!(kmh>0)&&!(actualKm>0)) return;
-    // Explicit "actual km run" field takes priority over description parsing
-    if(actualKm>0){byWeek[s.week]=(byWeek[s.week]||0)+actualKm;return;}
-    // Interval reps: "6 × 800m" → total metres
-    const repM=e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
-    if(repM){const dist=repM[3].toLowerCase()==='km'?+repM[2]:+repM[2]/1000;byWeek[s.week]=(byWeek[s.week]||0)+(+repM[1]*dist);return;}
-    // Distance range: "16–18km" → midpoint
-    const rangeM=e.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
-    if(rangeM){byWeek[s.week]=(byWeek[s.week]||0)+(parseFloat(rangeM[1])+parseFloat(rangeM[2]))/2;return;}
-    // Simple distance before "@" to avoid "5km pace" being counted as distance
-    const beforeAt=e.detail.split('@')[0];
-    const simM=beforeAt.match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
-    if(simM) byWeek[s.week]=(byWeek[s.week]||0)+parseFloat(simM[1]);
-  }));
+  PROGRAM.forEach(s=>{
+    const runExes=s.exercises.filter(e=>e.cat==='run');
+    if(!runExes.length) return;
+    const sDate=_ymd(sessionDate(s));
+    if(importedDates.has(sDate)) return;
+    // If ANY exercise has actual km, use only actualRunKm values for this session
+    const hasAnyActual=runExes.some(e=>parseFloat((STATE.actualRunKm||{})[e.id])>0);
+    runExes.forEach(e=>{
+      const actualKm=parseFloat((STATE.actualRunKm||{})[e.id]);
+      if(actualKm>0){byWeek[s.week]=(byWeek[s.week]||0)+actualKm;return;}
+      if(hasAnyActual) return; // skip description fallback for this session
+      const kmh=parseFloat((STATE.runLog||{})[e.id]);
+      if(!(kmh>0)) return;
+      // Interval reps: "6 × 800m" → total metres
+      const repM=e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
+      if(repM){const dist=repM[3].toLowerCase()==='km'?+repM[2]:+repM[2]/1000;byWeek[s.week]=(byWeek[s.week]||0)+(+repM[1]*dist);return;}
+      // Distance range: "16–18km" → midpoint
+      const rangeM=e.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+      if(rangeM){byWeek[s.week]=(byWeek[s.week]||0)+(parseFloat(rangeM[1])+parseFloat(rangeM[2]))/2;return;}
+      // Simple distance before "@" to avoid "5km pace" being counted as distance
+      const beforeAt=e.detail.split('@')[0];
+      const simM=beforeAt.match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+      if(simM) byWeek[s.week]=(byWeek[s.week]||0)+parseFloat(simM[1]);
+    });
+  });
   return byWeek;
 }
 function weeklyLongRunKm(){
@@ -5448,11 +5452,14 @@ function weeklyReviewCardHTML(){
     s.exercises.forEach(e=>{ if(e.cat==='strength') ton+=exVolume(e.id); });
     // add actual or estimated run km when no GPS/manual entry exists for this day
     if((s.type==='run'||s.type==='combo')&&!importedDates.has(_ymd(d))){
-      s.exercises.forEach(e=>{
-        if(e.cat!=='run') return;
-        const actual=STATE.actualRunKm&&STATE.actualRunKm[e.id];
+      const runExes=s.exercises.filter(e=>e.cat==='run');
+      // If ANY exercise has actual km entered, only count actualRunKm values
+      // (prevents bookend warmup/cooldown distances being added on top of a total entered on the main set)
+      const hasAnyActual=runExes.some(e=>parseFloat((STATE.actualRunKm||{})[e.id])>0);
+      runExes.forEach(e=>{
+        const actual=parseFloat((STATE.actualRunKm||{})[e.id]);
         if(actual>0){ runKm+=actual; return; }
-        // fall back to planned distance if speed was logged (session was done)
+        if(hasAnyActual) return; // skip description fallback — another exercise already has actual km
         if(STATE.runLog[e.id]>0){
           const km=parseDistanceKm(e.detail)||parseDistanceKm(e.name);
           if(km) runKm+=km;
