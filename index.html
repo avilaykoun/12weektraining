@@ -784,13 +784,216 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .app-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-150%);background:var(--surface3);color:var(--text);border:1px solid var(--green);border-left:4px solid var(--green);border-radius:12px;padding:13px 16px;font-family:'Aptos',monospace;font-size:13px;max-width:380px;width:calc(100% - 32px);box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:9999;transition:transform .32s cubic-bezier(.2,.9,.3,1.2);display:flex;align-items:center;gap:10px}
 .app-toast.show{transform:translateX(-50%) translateY(0)}
 .app-toast .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
-/* ---- Larger text for readability ---- */
-.hdr-sub,.ex-detail,.tool-sub,.pc-note,.ls-sub,.tl-method,.rec-tip,.run-target,.wk-group-hdr .wk-meta,.srch-sub,.note-note{font-size:13px}
-.countdown-lbl,.ls-k,.rec-hd,.tl-lbl,.pc-res-hd,.pc-big-l,.pc-field label,label,.rpe-lbl,.wt-lbl{font-size:12px}
-.nav-btn,.session-type,.pc-line .k,.rpe-sel,.data-btn,.timer-tab,.preset-b,.dur-badge,.s1-tbl .z,.zone{font-size:14px}
-.ex-name,.session-name,.pc-line,.pc-line .v,.s1-tbl td,.rec-txt,.ex-note-input,.setw-inp,.wt-inp,.timer-btn,.pc-apply,.calc-btn,.tool-h,.srch-name,.prog-day-hdr{font-size:15px}
-.session-name{font-size:17px}
-.wk-group-hdr .wk-name{font-size:13px}
+/* ---- 2× text scale ---- */
+/* base */
+html,body{font-size:24px!important}
+/* display numbers – scale 1.5× so they don't eat the screen */
+.hdr-title{font-size:42px!important}
+.countdown-num{font-size:48px!important}
+.countdown-sep{font-size:36px!important}
+.stat-val{font-size:54px!important}
+.cal-sum-big{font-size:60px!important}
+.timer-display{font-size:80px!important}
+.bpm-val{font-size:64px!important}
+.pc-big-v{font-size:48px!important}
+.rd-score{font-size:48px!important}
+.rd-score-sm{font-size:40px!important}
+.tl-val{font-size:52px!important}
+.ls-v{font-size:38px!important}
+/* section/modal titles */
+.phase-title-txt{font-size:36px!important}
+.modal-title{font-size:40px!important}
+.demo-modal-title{font-size:44px!important}
+.cal-title{font-size:40px!important}
+/* icons */
+.bnav-icon{font-size:36px!important}
+.chev{font-size:30px!important}
+.hub-card-icon{font-size:48px!important}
+.hub-welcome-icon{font-size:60px!important}
+.empty-icon{font-size:72px!important}
+.fab{font-size:36px!important}
+.modal-close{font-size:28px!important}
+.demo-modal-close{font-size:32px!important}
+.hdr-search-btn,.hdr-collapse-btn{font-size:28px!important}
+/* nav & tabs */
+.bnav-lbl{font-size:18px!important}
+.session-type,.phase-pill,.dur-badge,.badge,.s-status{font-size:20px!important}
+.timer-tab,.preset-b{font-size:24px!important}
+/* session list */
+.session-name{font-size:32px!important}
+.today-date{font-size:22px!important}
+.wdr-day,.wdr-status{font-size:20px!important}
+.wdr-name{font-size:28px!important}
+.wk-group-hdr .wk-name{font-size:26px!important}
+.wk-group-hdr .wk-meta{font-size:20px!important}
+.wk-group-hdr .wk-chev{font-size:28px!important}
+/* exercises */
+.ex-section-lbl{font-size:20px!important}
+.ex-name,.prog-day-hdr,.srch-name,.tool-h,.rec-txt,.gd-title{font-size:28px!important}
+.ex-detail,.hdr-sub,.tool-sub,.srch-sub,.note-note,.run-target,.rec-tip,.mob-sub{font-size:24px!important}
+.ex-note-input,.session-note-area{font-size:24px!important}
+.ex-check.done::after{font-size:22px!important}
+/* set/weight inputs */
+.wt-lbl,.setw-lbl{font-size:20px!important}
+.wt-inp,.setw-inp,.setw-reps{font-size:26px!important}
+.setw-x{font-size:22px!important}
+.e1rm-badge{font-size:20px!important}
+.lasttime,.sug-apply{font-size:22px!important}
+.presc-band,.presc-apply{font-size:22px!important}
+/* buttons */
+.btn-complete{font-size:22px!important}
+.btn-primary,.inp,.search-input{font-size:26px!important}
+.data-btn,.timer-btn,.deload-btn,.pin-btn,.mob-btn,.mobalt,.gd-btn,.bm-cancel,.rd-chip{font-size:24px!important}
+.pc-apply,.calc-btn,.rb-restore,.rb-dismiss{font-size:26px!important}
+.search-cancel{font-size:24px!important}
+/* RPE */
+.rpe-lbl,.srpe-lbl{font-size:22px!important}
+.rpe-sel,.srpe-chip{font-size:24px!important}
+/* session banner */
+.session-completed-banner{font-size:24px!important}
+.deload-banner,.soften-banner{font-size:22px!important}
+/* history */
+.hist-date{font-size:20px!important}
+.hist-name{font-size:28px!important}
+.hist-stat{font-size:20px!important}
+.hist-note{font-size:22px!important}
+/* stats */
+.stat-lbl{font-size:20px!important}
+.stat-sub{font-size:22px!important}
+.streak-dot{font-size:18px!important}
+.tpb-week{font-size:26px!important}
+.tpb-pct,.tpb-phase{font-size:22px!important}
+.trend-lbl{font-size:22px!important}
+.trend-bar span{font-size:18px!important}
+/* hub/home */
+.hub-welcome-title{font-size:30px!important}
+.hub-welcome-sub{font-size:22px!important}
+.hub-section-lbl{font-size:20px!important}
+.hub-card-title{font-size:24px!important}
+.hub-card-detail{font-size:20px!important}
+.hub-card-arr{font-size:28px!important}
+/* phase strip */
+.phase-sub{font-size:22px!important}
+.ps-tag{font-size:20px!important}
+.ps-line{font-size:24px!important}
+.ps-focus{font-size:22px!important}
+.mc-sec{font-size:20px!important}
+/* calendar */
+.cal-dow-cell{font-size:20px!important}
+.cal-num,.cal-mark{font-size:24px!important}
+.cal-today-btn{font-size:20px!important}
+.cal-sum-lbl{font-size:20px!important}
+.cal-detail-date{font-size:22px!important}
+.cal-leg{font-size:20px!important}
+/* accordion */
+.acc>summary,.accg>summary{font-size:26px!important}
+.acc>summary::after,.accg>summary::after,.phase-strip>summary::after{font-size:28px!important}
+.swap-acc>summary,.swap-chip{font-size:24px!important}
+.swap-eq{font-size:18px!important}
+/* pace calculator */
+.pc-tg-btn{font-size:24px!important}
+.pc-field label,label{font-size:20px!important}
+.pc-input-row input{font-size:34px!important}
+.pc-unit{font-size:22px!important}
+.pc-res-hd{font-size:20px!important}
+.pc-big-l{font-size:18px!important}
+.pc-line,.pc-line .v{font-size:24px!important}
+.pc-line .k{font-size:24px!important}
+.pc-note{font-size:20px!important}
+.pace-card-hd{font-size:20px!important}
+.pace-lbl,.pace-val{font-size:24px!important}
+.pace-note{font-size:20px!important}
+/* load strip */
+.load-strip .ls-k{font-size:20px!important}
+.load-strip .ls-sub,.load-strip .ls-hint{font-size:22px!important}
+/* training load */
+.tl-band{font-size:18px!important}
+.tl-lbl{font-size:20px!important}
+.tl-method{font-size:22px!important}
+/* fueling */
+.sfh-title{font-size:22px!important}
+.sfh-lbl,.sfh-val{font-size:22px!important}
+.fuel-hd,.fuel-k{font-size:18px!important}
+.fuel-row{font-size:22px!important}
+.bn-row{font-size:22px!important}
+/* nutrition */
+.nutr-recipe-title{font-size:26px!important}
+.nutr-recipe-time,.nutr-recipe-badge{font-size:20px!important}
+.nutr-recipe-sect{font-size:18px!important}
+.nutr-recipe-list li{font-size:22px!important}
+.nutr-recipe-macros{font-size:22px!important}
+.nutr-rec-tab{font-size:22px!important}
+/* food diary */
+.fdy-item{font-size:22px!important}
+.fdy-mac{font-size:20px!important}
+.fdy-del{font-size:28px!important}
+.fdy-tot-hd{font-size:20px!important}
+.fdy-bar-row{font-size:22px!important}
+/* benchmarks */
+.bm-section-hd{font-size:20px!important}
+.bm-sched-l{font-size:24px!important}
+.bm-what,.bm-ok,.bm-due,.bm-up,.bm-miss{font-size:20px!important}
+.bm-h2{font-size:22px!important}
+.bm-ht{font-size:26px!important}
+.bm-hs{font-size:20px!important}
+.bm-nudge{font-size:24px!important}
+.bm-nudge-tag{font-size:20px!important}
+/* readiness */
+.rd-lbl,.rd-band,.rd-advice,.rd-hint{font-size:22px!important}
+.rd-sum-band{font-size:24px!important}
+.rd-sum-edit{font-size:20px!important}
+.plate-chip{font-size:24px!important}
+.mus-top{font-size:22px!important}
+/* guidance */
+.gd-advice,.gd-soft,.gd-adj{font-size:22px!important}
+.gd-reasons span,.gd-adj span{font-size:20px!important}
+/* recovery */
+.io-easy,.io-hard{font-size:22px!important}
+.io-target{font-size:20px!important}
+/* mobility */
+.mob-hd{font-size:20px!important}
+.mob-t{font-size:26px!important}
+.mob-f,.mob-d{font-size:22px!important}
+/* search */
+.srch-cat{font-size:20px!important}
+.srch-hint{font-size:22px!important}
+/* restore banner */
+.rb-txt{font-size:24px!important}
+/* timer */
+.timer-hd{font-size:22px!important}
+.timer-close{font-size:32px!important}
+.lap-list{font-size:22px!important}
+/* misc */
+.hdr-build{font-size:18px!important}
+.opt-count{font-size:18px!important}
+.demo-detail-lbl{font-size:22px!important}
+.demo-cue{font-size:24px!important}
+.demo-cue-num{font-size:34px!important}
+.demo-vid-cap{font-size:20px!important}
+.demo-link{font-size:22px!important}
+.demo-back,.demo-anim-note{font-size:22px!important}
+.demo-loading{font-size:22px!important}
+.demo-act{font-size:26px!important}
+.demo-search-txt{font-size:26px!important}
+.demo-search-sub{font-size:20px!important}
+.ri-top{font-size:24px!important}
+.ri-sub,.ri-tag{font-size:22px!important}
+.app-toast{font-size:24px!important}
+.empty-txt{font-size:26px!important}
+.pr-sub{font-size:20px!important}
+.pr-name{font-size:26px!important}
+.pr-val{font-size:28px!important}
+.pr-val small{font-size:20px!important}
+.pr-empty{font-size:22px!important}
+.s1-tbl td{font-size:24px!important}
+.s1-tbl .z{font-size:22px!important}
+.s1-tbl .z small{font-size:20px!important}
+.nig-lbl{font-size:26px!important}
+.nig-hint{font-size:22px!important}
+.nig-val{font-size:28px!important}
+.nig-b{font-size:24px!important}
+.zone{font-size:22px!important}
+.vh-dead-row{font-size:22px!important}
 /* ---- Personal Records ---- */
 .pr-sub{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .pr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--border)}
