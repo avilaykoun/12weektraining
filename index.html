@@ -759,6 +759,17 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .nutr-table tr:last-child td{border-bottom:none}
 .nutr-table td:first-child{color:var(--text);font-weight:500}
 .nutr-section-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600}
+.fdy-item{display:flex;align-items:center;gap:6px;padding:6px 0;border-top:1px solid var(--border);font-size:12px}
+.fdy-food{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.fdy-mac{flex-shrink:0;font-size:10px;font-family:'Aptos',monospace;color:var(--text3)}
+.fdy-del{flex-shrink:0;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;padding:2px 8px;line-height:1}
+.fdy-total{background:var(--surface2);border-radius:10px;padding:10px;margin-top:10px}
+.fdy-tot-hd{font-size:10px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.fdy-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:11px;font-family:'Aptos',monospace;color:var(--text)}
+.fdy-bar-row>span:first-child{width:52px;flex-shrink:0;color:var(--text2)}
+.fdy-bar-row>span:last-child{width:96px;text-align:right;flex-shrink:0;color:var(--text3)}
+.fdy-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.fdy-fill{height:100%;border-radius:3px;transition:width .3s}
 .bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
@@ -773,13 +784,13 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .app-toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-150%);background:var(--surface3);color:var(--text);border:1px solid var(--green);border-left:4px solid var(--green);border-radius:12px;padding:13px 16px;font-family:'Aptos',monospace;font-size:13px;max-width:380px;width:calc(100% - 32px);box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:9999;transition:transform .32s cubic-bezier(.2,.9,.3,1.2);display:flex;align-items:center;gap:10px}
 .app-toast.show{transform:translateX(-50%) translateY(0)}
 .app-toast .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
-/* ---- Slightly larger text for visibility (Aptos) ---- */
-.hdr-sub,.ex-detail,.tool-sub,.pc-note,.ls-sub,.tl-method,.rec-tip,.run-target,.wk-group-hdr .wk-meta,.srch-sub,.note-note{font-size:12px}
-.countdown-lbl,.ls-k,.rec-hd,.tl-lbl,.pc-res-hd,.pc-big-l,.pc-field label,label,.rpe-lbl,.wt-lbl{font-size:11px}
-.nav-btn,.session-type,.pc-line .k,.rpe-sel,.data-btn,.timer-tab,.preset-b,.dur-badge,.s1-tbl .z,.zone{font-size:13px}
-.ex-name,.session-name,.pc-line,.pc-line .v,.s1-tbl td,.rec-txt,.ex-note-input,.setw-inp,.wt-inp,.timer-btn,.pc-apply,.calc-btn,.tool-h,.srch-name,.prog-day-hdr{font-size:14px}
-.session-name{font-size:16px}
-.wk-group-hdr .wk-name{font-size:12px}
+/* ---- Larger text for readability ---- */
+.hdr-sub,.ex-detail,.tool-sub,.pc-note,.ls-sub,.tl-method,.rec-tip,.run-target,.wk-group-hdr .wk-meta,.srch-sub,.note-note{font-size:13px}
+.countdown-lbl,.ls-k,.rec-hd,.tl-lbl,.pc-res-hd,.pc-big-l,.pc-field label,label,.rpe-lbl,.wt-lbl{font-size:12px}
+.nav-btn,.session-type,.pc-line .k,.rpe-sel,.data-btn,.timer-tab,.preset-b,.dur-badge,.s1-tbl .z,.zone{font-size:14px}
+.ex-name,.session-name,.pc-line,.pc-line .v,.s1-tbl td,.rec-txt,.ex-note-input,.setw-inp,.wt-inp,.timer-btn,.pc-apply,.calc-btn,.tool-h,.srch-name,.prog-day-hdr{font-size:15px}
+.session-name{font-size:17px}
+.wk-group-hdr .wk-name{font-size:13px}
 /* ---- Personal Records ---- */
 .pr-sub{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
 .pr-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--border)}
@@ -1549,6 +1560,31 @@ input[type=number]{-moz-appearance:textfield}
       </div>
       <div class="nutr-divider"></div>
       <div class="nutr-warn"><strong>Avoid:</strong> pre-workout stimulant stacks, fat burners, and large antioxidant doses (Vitamin C/E over 1,000 mg/day). High-dose antioxidants blunt the adaptive signalling that makes training work.</div>
+    </div>
+  </div>
+
+  <!-- Food diary card -->
+  <div class="nutr-card">
+    <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':'';renderFoodDiary()">
+      <div class="nutr-card-icon">📓</div>
+      <div><div class="nutr-card-title">Food diary</div><div class="nutr-card-sub">Log meals · estimated macros vs target</div></div>
+      <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
+    </div>
+    <div class="nutr-card-body">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <input id="fdy-date" type="date" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Aptos',monospace" oninput="renderFoodDiary()">
+        <button class="data-btn" onclick="document.getElementById('fdy-date').value=_ymd(new Date());renderFoodDiary()">Today</button>
+      </div>
+      <div id="fdy-out"><div class="ls-hint">Add foods below to see your daily macros.</div></div>
+      <div class="nutr-divider"></div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
+        <datalist id="fdy-food-list"></datalist>
+        <input id="fdy-grams" type="number" inputmode="decimal" step="10" placeholder="g" style="width:70px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace;text-align:center" oninput="fdyPreview()">
+      </div>
+      <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:18px;margin-bottom:8px"></div>
+      <button class="btn-complete pending" style="width:100%;padding:11px;border-radius:10px" onclick="fdyAdd()">Add to diary</button>
+      <div class="pc-note" style="margin-top:8px">Values are per-100g estimates. Tap ✕ to remove. Targets use your saved bodyweight (performance goal).</div>
     </div>
   </div>
 
@@ -2457,6 +2493,8 @@ if(!STATE.setsMigrated){
 }
 if(!STATE.runLog) STATE.runLog={};
 if(!STATE.runTarget) STATE.runTarget={};
+if(!STATE.actualRunKm) STATE.actualRunKm={};
+if(!STATE.foodDiary) STATE.foodDiary={};
 if(!STATE.exerciseReps) STATE.exerciseReps={};
 if(!STATE.importedRuns) STATE.importedRuns=[];
 if(!STATE.readiness) STATE.readiness={};
@@ -2539,6 +2577,106 @@ const _NUTR_DAYS=[
   {label:'Intervals / threshold', cLo:6.16,cHi:6.74, fatMult:0.85, fluidL:4.0, sodMg:2500},
   {label:'Long run (≥20 km)',     cLo:7.56,cHi:8.72, fatMult:0.72, fluidL:5.0, sodMg:3200},
 ];
+// ─────────────────────────────────────────
+// FOOD DIARY
+// ─────────────────────────────────────────
+const FOOD_DB={
+  'Chicken breast (cooked)':{kcal:165,pro:31,cho:0,fat:3.6},
+  'Tuna (canned, drained)':{kcal:108,pro:23,cho:0,fat:1},
+  'Egg (whole)':{kcal:155,pro:13,cho:1,fat:11},
+  'Greek yogurt':{kcal:59,pro:10,cho:3.6,fat:0.4},
+  'Milk (full cream)':{kcal:61,pro:3.2,cho:4.8,fat:3.3},
+  'Salmon (cooked)':{kcal:208,pro:20,cho:0,fat:13},
+  'Beef mince (lean, cooked)':{kcal:215,pro:26,cho:0,fat:12},
+  'Tofu (firm)':{kcal:76,pro:8,cho:1.9,fat:4.2},
+  'Cottage cheese':{kcal:98,pro:11,cho:3.4,fat:4.3},
+  'Protein powder (1 scoop=30g)':{kcal:400,pro:83,cho:10,fat:7},
+  'Rice (white, cooked)':{kcal:130,pro:2.7,cho:28,fat:0.3},
+  'Oats (dry)':{kcal:389,pro:17,cho:66,fat:7},
+  'White bread':{kcal:265,pro:9,cho:49,fat:3},
+  'Sourdough bread':{kcal:258,pro:9,cho:48,fat:2.7},
+  'Sweet potato (cooked)':{kcal:86,pro:1.6,cho:20,fat:0.1},
+  'Pasta (cooked)':{kcal:131,pro:5,cho:25,fat:1.1},
+  'Potato (boiled)':{kcal:77,pro:2,cho:17,fat:0.1},
+  'Banana':{kcal:89,pro:1.1,cho:23,fat:0.3},
+  'Apple':{kcal:52,pro:0.3,cho:14,fat:0.2},
+  'Orange':{kcal:47,pro:0.9,cho:12,fat:0.1},
+  'Dates':{kcal:282,pro:2.5,cho:75,fat:0.4},
+  'Broccoli':{kcal:34,pro:2.8,cho:7,fat:0.4},
+  'Spinach':{kcal:23,pro:2.9,cho:3.6,fat:0.4},
+  'Mixed salad leaves':{kcal:15,pro:1.5,cho:2,fat:0.2},
+  'Avocado':{kcal:160,pro:2,cho:9,fat:15},
+  'Olive oil':{kcal:884,pro:0,cho:0,fat:100},
+  'Peanut butter':{kcal:588,pro:25,cho:20,fat:50},
+  'Almonds':{kcal:579,pro:21,cho:22,fat:50},
+  'Cheddar cheese':{kcal:402,pro:25,cho:1,fat:33},
+  'Sports gel (1 gel=40g)':{kcal:250,pro:0,cho:62,fat:0},
+  'Sports drink':{kcal:27,pro:0,cho:6.6,fat:0},
+  'Chocolate milk':{kcal:83,pro:3.4,cho:10,fat:3.3},
+  'Protein bar':{kcal:220,pro:20,cho:22,fat:7},
+  'Muesli (rolled oats mix)':{kcal:350,pro:10,cho:65,fat:7},
+  'Lentils (cooked)':{kcal:116,pro:9,cho:20,fat:0.4},
+  'Black beans (cooked)':{kcal:132,pro:8.9,cho:24,fat:0.5},
+  'Coffee (black, 250ml)':{kcal:5,pro:0.3,cho:0,fat:0},
+};
+function fdyInit(){
+  const dl=document.getElementById('fdy-food-list'); if(!dl) return;
+  dl.innerHTML=Object.keys(FOOD_DB).map(k=>'<option value="'+k+'">').join('');
+  const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
+}
+function fdyPreview(){
+  const fi=document.getElementById('fdy-food'),gi=document.getElementById('fdy-grams'),pv=document.getElementById('fdy-preview');
+  if(!fi||!pv) return;
+  const info=FOOD_DB[fi.value]; const g=parseFloat((gi&&gi.value)||'');
+  if(!info||!(g>0)){ pv.textContent=info?'Enter grams to see estimate':'Type or select a food above'; return; }
+  pv.textContent=g+'g → '+Math.round(g/100*info.kcal)+' kcal · '+Math.round(g/100*info.pro*10)/10+'g protein · '+Math.round(g/100*info.cho*10)/10+'g carbs · '+Math.round(g/100*info.fat*10)/10+'g fat';
+}
+function fdyAdd(){
+  const fi=document.getElementById('fdy-food'),gi=document.getElementById('fdy-grams');
+  const food=(fi&&fi.value.trim())||''; const g=parseFloat((gi&&gi.value)||'');
+  const info=FOOD_DB[food]; if(!info||!(g>0)){ if(typeof appToast==='function') appToast('Select a food from the list and enter grams'); return; }
+  if(!STATE.foodDiary) STATE.foodDiary={};
+  const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
+  if(!STATE.foodDiary[ymd]) STATE.foodDiary[ymd]=[];
+  STATE.foodDiary[ymd].push({food,grams:g,kcal:Math.round(g/100*info.kcal),pro:Math.round(g/100*info.pro*10)/10,cho:Math.round(g/100*info.cho*10)/10,fat:Math.round(g/100*info.fat*10)/10});
+  saveState(STATE);
+  if(fi) fi.value=''; if(gi) gi.value='';
+  const pv=document.getElementById('fdy-preview'); if(pv) pv.textContent='';
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
+  renderFoodDiary();
+}
+function fdyRemove(ymd,idx){
+  if(!STATE.foodDiary||!STATE.foodDiary[ymd]) return;
+  STATE.foodDiary[ymd].splice(idx,1);
+  saveState(STATE); renderFoodDiary();
+}
+function renderFoodDiary(){
+  const el=document.getElementById('fdy-out'); if(!el) return;
+  fdyInit();
+  if(!STATE.foodDiary) STATE.foodDiary={};
+  const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
+  const items=STATE.foodDiary[ymd]||[];
+  if(!items.length){ el.innerHTML='<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
+  const tot=items.reduce((t,x)=>({kcal:t.kcal+x.kcal,pro:t.pro+x.pro,cho:t.cho+x.cho,fat:t.fat+x.fat}),{kcal:0,pro:0,cho:0,fat:0});
+  const wt=(STATE.profile&&parseFloat(STATE.profile.weight))||86;
+  const tgt={kcal:Math.round(wt*38),pro:Math.round(wt*2),cho:Math.round(wt*6),fat:Math.round(wt*38*0.25/9)};
+  const pct=(v,t)=>Math.min(100,t>0?Math.round(v/t*100):0);
+  const bar=(v,t,col)=>'<div class="fdy-track"><div class="fdy-fill" style="width:'+pct(v,t)+'%;background:'+col+'"></div></div>';
+  let html='<div>';
+  items.forEach((it,i)=>{
+    html+='<div class="fdy-item"><span class="fdy-food">'+it.food+' · '+it.grams+'g</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
+  });
+  html+='</div>';
+  html+='<div class="fdy-total">'
+    +'<div class="fdy-tot-hd">DAILY TOTALS vs TARGET</div>'
+    +'<div class="fdy-bar-row"><span>Energy</span>'+bar(tot.kcal,tgt.kcal,'var(--accent)')+'<span>'+Math.round(tot.kcal)+' / '+tgt.kcal+' kcal</span></div>'
+    +'<div class="fdy-bar-row"><span>Protein</span>'+bar(tot.pro,tgt.pro,'#5fd6a0')+'<span>'+Math.round(tot.pro*10)/10+' / '+tgt.pro+'g</span></div>'
+    +'<div class="fdy-bar-row"><span>Carbs</span>'+bar(tot.cho,tgt.cho,'#5aa6ff')+'<span>'+Math.round(tot.cho*10)/10+' / '+tgt.cho+'g</span></div>'
+    +'<div class="fdy-bar-row"><span>Fat</span>'+bar(tot.fat,tgt.fat,'#e8c66b')+'<span>'+Math.round(tot.fat*10)/10+' / '+tgt.fat+'g</span></div>'
+    +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+'kg × 38 kcal/kg (performance). Adjust goal in Daily fuel &amp; hydration card.</div>'
+    +'</div>';
+  el.innerHTML=html;
+}
 function renderNutritionMacros(){
   const bwArr=Object.entries(STATE.bodyweightLog||{});
   const latestBW=bwArr.length?parseFloat(bwArr.sort((a,b)=>b[0].localeCompare(a[0]))[0][1]):null;
@@ -2978,6 +3116,13 @@ function sessionFuelingHint(s){
   }
   return '';
 }
+function lowerBodyAfterLongRun(s){
+  const isLowerBody=/lower body/i.test(s.name);
+  if(!isLowerBody||s.type!=='strength') return false;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const prevDay=days[(days.indexOf(s.day)+6)%7];
+  return PROGRAM.some(p=>p.phase===s.phase&&p.week===s.week&&p.day===prevDay&&(p.type==='run'||p.type==='combo')&&p.exercises.some(e=>/long run|22|24|26|28|18|20/i.test((e.name||'')+' '+(e.detail||''))));
+}
 function sessionAdjustBanner(s){
   const isDeload=STATE.deloadWeeks&&STATE.deloadWeeks[s.week];
   const isSoften=STATE.softenDay&&STATE.softenDay[_ymd(new Date())]&&_sameDay(sessionDate(s),_startOfToday());
@@ -2985,6 +3130,7 @@ function sessionAdjustBanner(s){
   if(isDeload) out+=`<div class="deload-banner">⚡ Deload week — 1 fewer set per lift · aim 10% lighter · stop at 3–4 RIR</div>`;
   else if(isSoften) out+=`<div class="soften-banner">🩵 Eased mode — reduce load ~10%, add 2 RIR, skip final sets if needed</div>`;
   if(upperBodyBeforeQualityRun(s)) out+=`<div class="soften-banner" style="border-color:rgba(232,198,107,.3);color:var(--accent)">⚠ Tomorrow is a quality run day — keep upper body intensity moderate if you feel residual fatigue going in</div>`;
+  if(lowerBodyAfterLongRun(s)) out+=`<div class="soften-banner" style="border-color:rgba(255,107,71,.3);color:#ff9f80">⚠ Long run yesterday — reduce load 10–15%, add 1–2 RIR, prioritise movement quality over max load. This sequence is intentional concurrent training stress; back off if legs feel very heavy.</div>`;
   return out;
 }
 function renderSessionCard(s,interactive){
@@ -3872,12 +4018,17 @@ function runControlHTML(e,sessKey){
   } else {
     paceHTML='<div class="run-sug muted" id="rsug-'+e.id+'">Add goal time in Tools → Run planner to get target paces.</div>';
   }
+  const planKm=parseDistanceKm(e.detail)||parseDistanceKm(e.name);
+  const actKm=(STATE.actualRunKm&&STATE.actualRunKm[e.id])||'';
+  const kmHint=planKm?(' · planned '+planKm+' km'):'';
   return paceHTML
-    +'<div class="wt-wrap"><span class="wt-lbl">km/h logged</span><div class="stp">'
+    +'<div class="wt-wrap"><span class="wt-lbl">avg speed (km/h)</span><div class="stp">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',-0.1)">−</button>'
-    +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="avg km/h" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
+    +'<input class="wt-inp" id="runi-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+v+'" placeholder="km/h" oninput="setRunSpeed(\''+e.id+'\',\''+sessKey+'\',this.value)">'
     +'<button class="stp-b" onclick="stepRun(\''+e.id+'\',\''+sessKey+'\',0.1)">+</button></div>'
-    +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>';
+    +'<span class="e1rm-badge" id="rpace-'+e.id+'">'+(v?(fmtPaceSec(3600/v)+' /km'):'')+'</span></div>'
+    +'<div class="wt-wrap" style="margin-top:4px"><span class="wt-lbl">actual km run'+kmHint+'</span>'
+    +'<input class="wt-inp" style="width:80px;text-align:center" id="actkm-'+e.id+'" type="number" inputmode="decimal" step="0.1" value="'+actKm+'" placeholder="km" oninput="setActualKm(\''+e.id+'\',this.value)"></div>';
 }
 function stepReps(exId,sessKey,idx,delta){
   const p=exPrescriptionById(exId); const goal=p?p.reps:1;
@@ -3892,6 +4043,13 @@ function stepSet(exId,sessKey,idx,delta){
   let next=Math.max(0,Math.round((cur+delta)*2)/2);
   setSetWeight(exId,sessKey,idx,next||'');
   const inp=document.getElementById('setw-'+exId+'-'+idx); if(inp) inp.value=next||'';
+}
+function setActualKm(exId,val){
+  const km=parseFloat(String(val).replace(',','.'));
+  if(!STATE.actualRunKm) STATE.actualRunKm={};
+  if(isNaN(km)||km<=0) delete STATE.actualRunKm[exId]; else STATE.actualRunKm[exId]=km;
+  saveState(STATE);
+  if(typeof hideRestoreBanner==='function') hideRestoreBanner();
 }
 function stepRun(exId,sessKey,delta){
   let cur=parseFloat(STATE.runLog[exId]); if(isNaN(cur)) cur=0;
@@ -4482,11 +4640,49 @@ function logManualRun(){
   if(typeof appToast==='function') appToast('Run logged: '+(+km.toFixed(2))+' km \u2713');
 }
 // ── Weekly review ──
+function _sessionEffectivelyDone(s){
+  const key=sessionKey(s);
+  if(STATE.completedSessions[key]) return true;
+  // run session: speed logged or exercise ticked counts as done
+  if(s.type==='run'||s.type==='combo'){
+    if(s.exercises.some(e=>e.cat==='run'&&(STATE.runLog[e.id]>0||STATE.completedExercises[e.id]))) return true;
+  }
+  // strength/combo: any set logged counts as done
+  if(s.exercises.some(e=>e.cat==='strength'&&exVolume(e.id)>0)) return true;
+  return false;
+}
 function weeklyReviewCardHTML(){
-  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">THIS WEEK\u2019S REVIEW</div>'+inner+'</div>';
+  const wk=_phaseWeek(); const ph=phaseIntent(wk);
+  const wrapHd='THIS WEEK\u2019S REVIEW \u00b7 WK '+wk+' OF 12 \u00b7 '+ph.name.toUpperCase();
+  const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">'+wrapHd+'</div>'+inner+'</div>';
   const {mon,sun}=weekRange(new Date()); let done=0,sched=0,ton=0,runKm=0;
-  PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(d<mon||d>sun) return; sched++; if(STATE.completedSessions[sessionKey(s)]) done++; s.exercises.forEach(e=>{ if(e.cat==='strength') ton+=exVolume(e.id); }); });
-  (STATE.importedRuns||[]).forEach(r=>{ const d=new Date(r.dateISO); if(d>=mon&&d<=sun) runKm+=r.distKm; });
+  const monYmd=_ymd(mon); const sunYmd=_ymd(sun);
+  // Build set of dates that have importedRun/manual entries (to avoid double-counting with runLog)
+  const importedDates=new Set();
+  (STATE.importedRuns||[]).forEach(r=>{
+    const rd=r.date||_ymd(new Date(r.dateISO));
+    if(rd>=monYmd&&rd<=sunYmd){ runKm+=r.distKm; importedDates.add(rd); }
+  });
+  PROGRAM.forEach(s=>{
+    if(s.type==='rest') return;
+    const d=sessionDate(s); if(d<mon||d>sun) return;
+    sched++;
+    if(_sessionEffectivelyDone(s)) done++;
+    s.exercises.forEach(e=>{ if(e.cat==='strength') ton+=exVolume(e.id); });
+    // add actual or estimated run km when no GPS/manual entry exists for this day
+    if((s.type==='run'||s.type==='combo')&&!importedDates.has(_ymd(d))){
+      s.exercises.forEach(e=>{
+        if(e.cat!=='run') return;
+        const actual=STATE.actualRunKm&&STATE.actualRunKm[e.id];
+        if(actual>0){ runKm+=actual; return; }
+        // fall back to planned distance if speed was logged (session was done)
+        if(STATE.runLog[e.id]>0){
+          const km=parseDistanceKm(e.detail)||parseDistanceKm(e.name);
+          if(km) runKm+=km;
+        }
+      });
+    }
+  });
   let rsum=0,rn=0; for(let d=new Date(mon); d<=sun; d.setDate(d.getDate()+1)){ const rr=STATE.readiness&&STATE.readiness[_ymd(d)]; if(rr){ const sc=readinessScore(rr); if(sc!=null){rsum+=sc;rn++;} } }
   const avgR=rn?Math.round(rsum/rn):null;
   const ser=fitnessSeries(); let formDelta=null;
