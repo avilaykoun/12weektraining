@@ -4723,9 +4723,10 @@ function stepRun(exId,sessKey,delta){
   const inp=document.getElementById('runi-'+exId); if(inp) inp.value=next||'';
 }
 function weeklyRunKm(){
+  // Priority: 1) manual actualRunKm entry, 2) GPS import, 3) speed log + description
   const byWeek={};
-  // Imported GPS runs take priority — track their dates to avoid double-counting
-  const importedDates=new Set();
+  // Collect GPS imports by date (used only when no manual actualRunKm exists for that session)
+  const importedByDate={};
   (STATE.importedRuns||[]).forEach(r=>{
     if(!r||!(r.distKm>0)||!r.date) return;
     const d=new Date(r.date);d.setHours(0,0,0,0);
@@ -4733,33 +4734,41 @@ function weeklyRunKm(){
     const diff=Math.floor((d-start)/86400000);
     if(diff<0||diff>=84) return;
     const wk=Math.floor(diff/7)+1;
-    byWeek[wk]=(byWeek[wk]||0)+r.distKm;
-    importedDates.add(r.date);
+    importedByDate[r.date]={distKm:r.distKm,wk};
   });
+  const manualDates=new Set();
   PROGRAM.forEach(s=>{
     const runExes=s.exercises.filter(e=>e.cat==='run');
     if(!runExes.length) return;
     const sDate=_ymd(sessionDate(s));
-    if(importedDates.has(sDate)) return;
-    // If ANY exercise has actual km, use only actualRunKm values for this session
+    // Priority 1: manual "actual km run" entries always win
     const hasAnyActual=runExes.some(e=>parseFloat((STATE.actualRunKm||{})[e.id])>0);
+    if(hasAnyActual){
+      runExes.forEach(e=>{
+        const actualKm=parseFloat((STATE.actualRunKm||{})[e.id]);
+        if(actualKm>0) byWeek[s.week]=(byWeek[s.week]||0)+actualKm;
+      });
+      manualDates.add(sDate);
+      return;
+    }
+    // Priority 2: GPS import covers this date — counted below after loop
+    if(importedByDate[sDate]) return;
+    // Priority 3: speed log + description parsing
     runExes.forEach(e=>{
-      const actualKm=parseFloat((STATE.actualRunKm||{})[e.id]);
-      if(actualKm>0){byWeek[s.week]=(byWeek[s.week]||0)+actualKm;return;}
-      if(hasAnyActual) return; // skip description fallback for this session
       const kmh=parseFloat((STATE.runLog||{})[e.id]);
       if(!(kmh>0)) return;
-      // Interval reps: "6 × 800m" → total metres
       const repM=e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
       if(repM){const dist=repM[3].toLowerCase()==='km'?+repM[2]:+repM[2]/1000;byWeek[s.week]=(byWeek[s.week]||0)+(+repM[1]*dist);return;}
-      // Distance range: "16–18km" → midpoint
       const rangeM=e.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
       if(rangeM){byWeek[s.week]=(byWeek[s.week]||0)+(parseFloat(rangeM[1])+parseFloat(rangeM[2]))/2;return;}
-      // Simple distance before "@" to avoid "5km pace" being counted as distance
       const beforeAt=e.detail.split('@')[0];
       const simM=beforeAt.match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
       if(simM) byWeek[s.week]=(byWeek[s.week]||0)+parseFloat(simM[1]);
     });
+  });
+  // Add GPS imports only for dates not already covered by manual entries
+  Object.entries(importedByDate).forEach(([date,{distKm,wk}])=>{
+    if(!manualDates.has(date)) byWeek[wk]=(byWeek[wk]||0)+distKm;
   });
   return byWeek;
 }
@@ -5437,27 +5446,36 @@ function weeklyReviewCardHTML(){
   const {mon,sun}=weekRange(new Date()); let done=0,sched=0,ton=0,runKm=0;
   const monYmd=_ymd(mon); const sunYmd=_ymd(sun);
   // Build set of dates that have importedRun/manual entries (to avoid double-counting with runLog)
-  const importedDates=new Set();
+  // Collect GPS imports by date (lower priority than manual actualRunKm)
+  const importedByDate={};
   (STATE.importedRuns||[]).forEach(r=>{
     const rd=r.date||_ymd(new Date(r.dateISO));
-    if(rd>=monYmd&&rd<=sunYmd){ runKm+=r.distKm; importedDates.add(rd); }
+    if(rd>=monYmd&&rd<=sunYmd) importedByDate[rd]=(importedByDate[rd]||0)+r.distKm;
   });
+  const manualDates=new Set();
   PROGRAM.forEach(s=>{
     if(s.type==='rest') return;
     const d=sessionDate(s); if(d<mon||d>sun) return;
     sched++;
     if(_sessionEffectivelyDone(s)) done++;
     s.exercises.forEach(e=>{ if(e.cat==='strength') ton+=exVolume(e.id); });
-    // add actual or estimated run km when no GPS/manual entry exists for this day
-    if((s.type==='run'||s.type==='combo')&&!importedDates.has(_ymd(d))){
+    if(s.type==='run'||s.type==='combo'){
+      const dYmd=_ymd(d);
       const runExes=s.exercises.filter(e=>e.cat==='run');
-      // If ANY exercise has actual km entered, only count actualRunKm values
-      // (prevents bookend warmup/cooldown distances being added on top of a total entered on the main set)
+      // Priority 1: manual actual km always wins over GPS import
       const hasAnyActual=runExes.some(e=>parseFloat((STATE.actualRunKm||{})[e.id])>0);
+      if(hasAnyActual){
+        runExes.forEach(e=>{
+          const actual=parseFloat((STATE.actualRunKm||{})[e.id]);
+          if(actual>0) runKm+=actual;
+        });
+        manualDates.add(dYmd);
+        return;
+      }
+      // Priority 2: GPS import — counted after loop
+      if(importedByDate[dYmd]) return;
+      // Priority 3: speed log + description
       runExes.forEach(e=>{
-        const actual=parseFloat((STATE.actualRunKm||{})[e.id]);
-        if(actual>0){ runKm+=actual; return; }
-        if(hasAnyActual) return; // skip description fallback — another exercise already has actual km
         if(STATE.runLog[e.id]>0){
           const km=parseDistanceKm(e.detail)||parseDistanceKm(e.name);
           if(km) runKm+=km;
@@ -5465,6 +5483,8 @@ function weeklyReviewCardHTML(){
       });
     }
   });
+  // Add GPS km for dates not covered by manual entries
+  Object.entries(importedByDate).forEach(([date,km])=>{ if(!manualDates.has(date)) runKm+=km; });
   let rsum=0,rn=0; for(let d=new Date(mon); d<=sun; d.setDate(d.getDate()+1)){ const rr=STATE.readiness&&STATE.readiness[_ymd(d)]; if(rr){ const sc=readinessScore(rr); if(sc!=null){rsum+=sc;rn++;} } }
   const avgR=rn?Math.round(rsum/rn):null;
   const ser=fitnessSeries(); let formDelta=null;
