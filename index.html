@@ -76,8 +76,8 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .type-combo{background:rgba(232,198,107,.15);color:var(--accent)}
 .type-rest{background:rgba(85,85,106,.2);color:var(--text3)}
 .chev{font-size:18px;color:var(--text3);transition:transform .2s}
-.session-body{display:none;border-top:1px solid var(--border)}
-.session-body.open{display:block}
+.session-body{max-height:0;overflow:hidden;opacity:0;border-top:1px solid var(--border);transition:max-height 0.3s ease,opacity 0.25s ease}
+.session-body.open{max-height:4000px;opacity:1}
 .ex-section-lbl{font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:12px 16px 6px}
 .ex-section-lbl.supp{color:var(--accent2);}
 .ex-row{display:flex;align-items:center;gap:10px;padding:8px 16px;border-top:1px solid rgba(42,42,56,.6)}
@@ -2674,11 +2674,12 @@ function saveNutrProfile(){
 }
 // ---- NUTRITION MACRO RENDERER ----
 const _NUTR_DAYS=[
-  {label:'Full rest',             cLo:3.14,cHi:3.60, fatMult:1.15, fluidL:2.5, sodMg:1400},
-  {label:'Easy run / upper',      cLo:4.65,cHi:5.12, fatMult:1.05, fluidL:3.2, sodMg:1800},
-  {label:'Strength (lower)',      cLo:5.58,cHi:6.16, fatMult:1.00, fluidL:3.5, sodMg:2000},
-  {label:'Intervals / threshold', cLo:6.16,cHi:6.74, fatMult:0.85, fluidL:4.0, sodMg:2500},
-  {label:'Long run (≥20 km)',     cLo:7.56,cHi:8.72, fatMult:0.72, fluidL:5.0, sodMg:3200},
+  {label:'Full rest',             cLo:3.25,cHi:3.75, fatMult:1.00, fluidL:2.5, sodMg:1400},
+  {label:'Easy run / upper',      cLo:4.75,cHi:5.25, fatMult:1.00, fluidL:3.2, sodMg:1800},
+  {label:'Strength (lower)',      cLo:5.75,cHi:6.25, fatMult:1.00, fluidL:3.5, sodMg:2000},
+  {label:'Intervals / threshold', cLo:5.75,cHi:6.25, fatMult:1.00, fluidL:4.0, sodMg:2500},
+  {label:'Long run (≥16 km)',     cLo:7.25,cHi:7.75, fatMult:0.90, fluidL:5.0, sodMg:3200},
+  {label:'Combo (run + strength)',cLo:6.25,cHi:6.75, fatMult:1.00, fluidL:3.8, sodMg:2200},
 ];
 // ─────────────────────────────────────────
 // FOOD DIARY
@@ -3005,7 +3006,7 @@ function _fdyDayTarget(ymd,wt){
     else if(/long run/.test(sName)){ nutrIdx=4; sessionLabel='Long Run day'; }
     else if(/interval|threshold/.test(sName)){ nutrIdx=3; sessionLabel='Intervals/Threshold day'; }
     else if(/lower/.test(sName) && s.type==='strength'){ nutrIdx=2; sessionLabel='Strength (Lower) day'; }
-    else if(s.type==='combo'){ nutrIdx=1; sessionLabel='Easy Run + Upper day'; }
+    else if(s.type==='combo'){ nutrIdx=5; sessionLabel='Combo (Run + Strength) day'; }
     else if(s.type==='strength'){ nutrIdx=1; sessionLabel='Strength (Upper) day'; }
     else if(s.type==='run'){ nutrIdx=1; sessionLabel='Easy Run day'; }
     else { nutrIdx=0; sessionLabel='Rest day'; }
@@ -3013,8 +3014,11 @@ function _fdyDayTarget(ymd,wt){
   const nd=_NUTR_DAYS[nutrIdx];
   const cMid=Math.round(wt*(nd.cLo+nd.cHi)/2);
   const fat=Math.round(wt*(nd.fatMult+goalFatAdj));
-  const kcal=Math.round((cMid*4+prot*4+fat*9)/100)*100;
-  return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:prot,fat};
+  // Combo sessions get slightly higher protein (2.2 g/kg vs 2.0 g/kg)
+  const comboProtBoost=nutrIdx===5?0.2:0;
+  const protCombo=Math.round(wt*(protMult+comboProtBoost));
+  const kcal=Math.round((cMid*4+protCombo*4+fat*9)/100)*100;
+  return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:protCombo,fat};
 }
 function renderFoodDiary(){
   const el=document.getElementById('fdy-out'); if(!el) return;
@@ -3440,7 +3444,7 @@ function renderToday(){
     container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
     return;
   }
-  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
+  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
 }
@@ -3504,12 +3508,65 @@ function sessionAdjustBanner(s){
   if(lowerBodyAfterLongRun(s)) out+=`<div class="soften-banner" style="border-color:rgba(255,107,71,.3);color:#ff9f80">⚠ Long run yesterday — reduce load 10–15%, add 1–2 RIR, prioritise movement quality over max load. This sequence is intentional concurrent training stress; back off if legs feel very heavy.</div>`;
   return out;
 }
-function renderSessionCard(s,interactive){
+function calcPaceTargets(){
+  const runs=(STATE.benchmarks||[]).filter(b=>b.kind==='run'&&b.paceSec>0&&b.distKm>0);
+  if(!runs.length) return null;
+  // Use fastest (lowest paceSec) benchmark run
+  const best=runs.reduce((a,b)=>b.paceSec<a.paceSec?b:a);
+  const p=best.paceSec; const km=best.distKm;
+  let threshold,zone2,interval,marathon;
+  if(km>=3&&km<=7){
+    // ~5km: fastest pace is close to threshold
+    threshold=p+45; zone2=threshold+60; interval=p-5; marathon=threshold+15;
+  } else if(km>7&&km<=13){
+    // ~10km
+    threshold=p+15; zone2=threshold+60; interval=p-15; marathon=threshold+5;
+  } else if(km>13&&km<=25){
+    // ~half marathon
+    threshold=p; zone2=p+60; interval=p-30; marathon=p+10;
+  } else {
+    // Default fallback
+    threshold=p+30; zone2=threshold+60; interval=p-10; marathon=threshold+10;
+  }
+  const band=15;
+  const fmt=sec=>fmtPaceSec(Math.round(sec))+'–'+fmtPaceSec(Math.round(sec+band));
+  return {
+    zone2:fmt(zone2)+'/km',
+    threshold:fmt(threshold)+'/km',
+    interval:fmt(interval)+'/km',
+    marathon:fmt(marathon)+'/km',
+  };
+}
+function renderSessionCard(s,interactive,startOpen){
   const key=sessionKey(s);
   const done=STATE.completedSessions[key];
   const totalEx=s.exercises.length;
   const doneEx=s.exercises.filter(e=>STATE.completedExercises[e.id]).length;
   const dur=estimateDuration(s);
+  // Pace guide for run/combo sessions
+  let paceGuideHTML='';
+  if(s.type==='run'||s.type==='combo'){
+    const pt=calcPaceTargets();
+    if(pt){
+      const sName=(s.name||'').toLowerCase();
+      const exText=s.exercises.map(e=>(e.name||'')+' '+(e.detail||'')).join(' ').toLowerCase();
+      const allText=sName+' '+exText;
+      let rows=[];
+      if(/interval|800m|1000m|1200m/.test(allText)){
+        rows=[['Intervals',pt.interval],['Threshold',pt.threshold]];
+      } else if(/threshold|tempo/.test(allText)){
+        rows=[['Threshold',pt.threshold],['Zone 2',pt.zone2]];
+      } else if(/long run/.test(sName)){
+        rows=[['Zone 2',pt.zone2],['Marathon',pt.marathon]];
+      } else {
+        rows=[['Zone 2',pt.zone2]];
+      }
+      paceGuideHTML='<div style="margin:0 16px 10px;padding:10px 12px;background:rgba(71,168,255,.08);border:1px solid rgba(71,168,255,.2);border-radius:8px">'
+        +'<div style="font-size:9px;font-family:Aptos,monospace;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">Target paces (from your benchmarks)</div>'
+        +rows.map(([lbl,val])=>'<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px"><span style="font-size:11px;color:var(--text2)">'+lbl+'</span><span style="font-size:12px;font-weight:600;color:var(--accent);font-family:Aptos,monospace">'+val+'</span></div>').join('')
+        +'</div>';
+    }
+  }
   return `<div class="session-card" id="card-${key}" data-type="${s.type}">
     <div class="session-hdr" onclick="toggleSession('${key}')">
       <div class="session-dot ${dotClass(s.type)}"></div>
@@ -3520,10 +3577,11 @@ function renderSessionCard(s,interactive){
       <div class="chev" id="chev-${key}">›</div>
     </div>
     ${done?`<div class="session-completed-banner">✓ COMPLETED · ${doneEx}/${totalEx} exercises logged</div>`:''}
-    <div class="session-body" id="body-${key}">
+    <div class="session-body${startOpen?' open':''}" id="body-${key}">
       ${sessionAdjustBanner(s)}
       ${renderExercises(s,interactive)}
       ${sessionFuelingHint(s)}
+      ${paceGuideHTML}
       ${s.note?`<div class="note-note">${s.note}</div>`:''}
       <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
       <div class="session-footer">
@@ -3865,12 +3923,36 @@ function deloadBtnHTML(){
   const on=STATE.deloadWeeks&&STATE.deloadWeeks[wk];
   return '<button class="deload-btn'+(on?' on':'')+'" onclick="toggleDeloadWeek()">'+(on?'✓ Deload week ON — lifts trimmed · tap to undo':'⤓ Make this a deload week')+'</button>';
 }
+function raceWeekCardHTML(){
+  const w=(STATE.profile&&parseFloat(STATE.profile.weight))||86;
+  const raceD=new Date(RACE_DATE);
+  const dayName=(offset)=>{ const d=new Date(raceD); d.setDate(raceD.getDate()-offset); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1); };
+  const d3=Math.round(w*10), d2=Math.round(w*9), d1=Math.round(w*8), d0=Math.round(w*3);
+  return '<div style="background:linear-gradient(135deg,rgba(71,168,255,.10),rgba(71,255,160,.07));border:1px solid rgba(71,168,255,.3);border-radius:12px;padding:14px;margin-bottom:12px">'
+    +'<div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">RACE WEEK — MARATHON SUNDAY 31 AUG</div>'
+    +'<div style="font-size:12px;color:var(--text);line-height:1.5;margin-bottom:10px">Final taper week. Volume drops but intensity is maintained on Tuesday. Prioritise sleep, food and stress management. No new shoes, no new foods, no heroics.</div>'
+    +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Carb-load protocol</div>'
+    +'<table style="width:100%;border-collapse:collapse;font-size:11px;font-family:\'Aptos\',monospace">'
+    +'<tr style="color:var(--text3)"><td style="padding:3px 0">Day</td><td>Date</td><td>Carbs</td><td>Notes</td></tr>'
+    +'<tr><td style="padding:3px 0;color:var(--text2)">Day −3</td><td>'+dayName(3)+'</td><td><strong style="color:var(--accent)">'+d3+'g</strong></td><td style="color:var(--text3)">Max load · normal fat & protein</td></tr>'
+    +'<tr><td style="padding:3px 0;color:var(--text2)">Day −2</td><td>'+dayName(2)+'</td><td><strong style="color:var(--accent)">'+d2+'g</strong></td><td style="color:var(--text3)">High · fat &lt;50g · reduce fibre</td></tr>'
+    +'<tr><td style="padding:3px 0;color:var(--text2)">Day −1</td><td>'+dayName(1)+'</td><td><strong style="color:var(--accent)">'+d1+'g</strong></td><td style="color:var(--text3)">Easy-digest · white rice/bread</td></tr>'
+    +'<tr><td style="padding:3px 0;color:var(--text2)">Race AM</td><td>'+dayName(0)+'</td><td><strong style="color:var(--green)">'+d0+'g</strong></td><td style="color:var(--text3)">3 hrs before gun · oats + banana</td></tr>'
+    +'</table>'
+    +'<div style="font-size:10px;color:var(--text3);margin-top:8px">'+Math.round(w)+' kg × 10/9/8/3 g carbs/kg. Stick to known foods — no experiments during carb load.</div>'
+    +'<div style="margin-top:8px;font-size:11px;color:var(--text2);line-height:1.5">'
+    +'<strong style="color:var(--text)">Daily checklist:</strong> 8+ hrs sleep · 3–4 L water · legs up for 20 min · no standing &gt;30 min at once · lay out race kit by Friday'
+    +'</div>'
+    +'</div>';
+}
 function renderWeek(){
   const today=new Date();
   const weekSessions=getWeekSessions(today);
   const container=document.getElementById('week-view');
   const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   let html=deloadBtnHTML();
+  // Race-week nutrition card (week 12)
+  if(currentProgramWeek()===12) html=raceWeekCardHTML()+html;
   weekSessions.forEach((wd,i)=>{
     const isToday=wd.date.toDateString()===today.toDateString();
     const isPast=wd.date<today&&!isToday;
@@ -3905,8 +3987,7 @@ function openDaySession(key){
   showSection('today',null);
   document.getElementById('today-date-lbl').textContent='WEEK '+s.week+' — '+s.day.toUpperCase();
   const container=document.getElementById('today-sessions');
-  container.innerHTML=renderSessionCard(s,true);
-  setTimeout(()=>toggleSession(key),100);
+  container.innerHTML=renderSessionCard(s,true,true);
 }
 
 // ─────────────────────────────────────────
@@ -4460,6 +4541,39 @@ function weeklyRunKm(){
   });
   return byWeek;
 }
+function weeklyLongRunKm(){
+  const byWeek={};
+  PROGRAM.forEach(s=>{
+    if(s.type!=='run'&&s.type!=='combo') return;
+    s.exercises.forEach(e=>{
+      if(e.cat!=='run') return;
+      const kmh=parseFloat((STATE.runLog||{})[e.id]);
+      if(!(kmh>0)) return;
+      // Only count single continuous distances (not interval reps)
+      const repM=e.detail&&e.detail.match(/(\d+)\s*[×x]\s*(\d+(?:\.\d+)?)\s*(m|km)\b/i);
+      if(repM) return; // skip interval sessions
+      const rangeM=e.detail&&e.detail.match(/(\d+(?:\.\d+)?)\s*[–\-]\s*(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+      let distKm=0;
+      if(rangeM){ distKm=(parseFloat(rangeM[1])+parseFloat(rangeM[2]))/2; }
+      else {
+        const beforeAt=(e.detail||'').split('@')[0];
+        const simM=beforeAt.match(/(\d+(?:\.\d+)?)\s*k(?:m|)\b/i);
+        if(simM) distKm=parseFloat(simM[1]);
+      }
+      if(distKm>0) byWeek[s.week]=Math.max(byWeek[s.week]||0,distKm);
+    });
+  });
+  (STATE.importedRuns||[]).forEach(r=>{
+    if(!r||!(r.distKm>0)||!r.date) return;
+    const d=new Date(r.date);d.setHours(0,0,0,0);
+    const start=new Date(PLAN_START);start.setHours(0,0,0,0);
+    const diff=Math.floor((d-start)/86400000);
+    if(diff<0||diff>=84) return;
+    const wk=Math.floor(diff/7)+1;
+    byWeek[wk]=Math.max(byWeek[wk]||0,r.distKm);
+  });
+  return byWeek;
+}
 function weeklyStrengthVolume(){ const byWeek={}; PROGRAM.forEach(s=>s.exercises.forEach(e=>{ const v=exVolume(e.id); if(v>0) byWeek[s.week]=(byWeek[s.week]||0)+v; })); return byWeek; }
 function liftSeries(){
   const map={};
@@ -4516,11 +4630,21 @@ function renderProgress(){
     const lastRkV=Math.round(rkMap[lastRkW]),prevRkV=prevRkW!=null?Math.round(rkMap[prevRkW]):null;
     const rkDelta=prevRkV?Math.round((lastRkV-prevRkV)/prevRkV*100):null;
     const rkVerdict=rkDelta==null?'First week logged':rkDelta>5?'Mileage building ↑':rkDelta<-5?'Volume dropped ↓':'Holding steady';
+    // Long run progression line overlay
+    const lrMap=weeklyLongRunKm(); const lrWeeks=Object.keys(lrMap).map(Number);
+    let longRunExtra='';
+    if(lrWeeks.length>0){
+      const lrPts=lrWeeks.sort((a,b)=>a-b).map(w=>({week:w,y:lrMap[w]}));
+      longRunExtra='<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 4px">Long run progression (km)</div>'
+        +svgLines([{name:'longrun',color:'#47ffa0',points:lrPts}])
+        +'<div class="tl-method" style="margin-top:4px">Longest single run per week — the key stimulus for marathon endurance. Target 1 long run every 7–10 days, building to race distance.</div>';
+    }
     html+=_pcard('WEEKLY RUNNING VOLUME · KM',
       '<div class="tl-grid"><div class="tl-card"><div class="tl-val">'+lastRkV+' km</div><div class="tl-lbl">Latest week total</div>'+(rkDelta!=null?'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:4px">'+(rkDelta>=0?'+':'')+rkDelta+'% vs prev week</div>':'')+'</div>'
       +'<div class="tl-card"><div class="tl-val" style="font-size:19px;line-height:1.15">'+rkVerdict+'</div><div class="tl-lbl">Mileage trend</div></div></div>'
       +svgBars(rkMap)
-      +'<div class="tl-method">Total km run per week from logged sessions and imported files. Safe increase is ≤10%/week — ramping too fast is the #1 cause of overuse injury.</div>');
+      +'<div class="tl-method">Total km run per week from logged sessions and imported files. Safe increase is ≤10%/week — ramping too fast is the #1 cause of overuse injury.</div>'
+      +longRunExtra);
   } else {
     html+=_pcard('WEEKLY RUNNING VOLUME · KM','<div class="ls-hint">Log your run speed in Today (or import a GPX/TCX) and your weekly mileage will chart here.</div>');
   }
