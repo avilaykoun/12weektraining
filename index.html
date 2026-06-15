@@ -781,6 +781,14 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .fdy-fill{height:100%;border-radius:3px;transition:width .3s}
 .fdy-quick-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:11px;font-family:'Aptos',monospace;padding:4px 10px;cursor:pointer;transition:background .15s,color .15s}
 .fdy-quick-btn:hover,.fdy-quick-btn:active{background:var(--accent);color:#000;border-color:var(--accent)}
+.fdy-suggest{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-top:4px;max-height:280px;overflow-y:auto;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.45);display:none}
+.fdy-suggest.open{display:block}
+.fdy-suggest-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.fdy-suggest-item:last-child{border-bottom:none}
+.fdy-suggest-item:hover,.fdy-suggest-item.fdy-si-active{background:rgba(232,198,107,.1)}
+.fdy-suggest-name{font-size:12.5px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fdy-suggest-mac{font-size:10px;color:var(--text3);font-family:'Aptos',monospace;flex-shrink:0;white-space:nowrap}
+.fdy-suggest-badge{font-size:9px;background:rgba(95,214,160,.15);color:#5fd6a0;border-radius:4px;padding:1px 5px;margin-left:5px;flex-shrink:0;vertical-align:middle}
 .bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
 .pc-apply:disabled{opacity:.4;cursor:not-allowed}
@@ -832,7 +840,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v76</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v77</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1644,8 +1652,10 @@ input[type=number]{-moz-appearance:textfield}
       <div id="fdy-out"><div class="ls-hint">Add foods below to see your daily macros.</div></div>
       <div class="nutr-divider"></div>
       <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input id="fdy-food" list="fdy-food-list" type="text" placeholder="Food name (DB or custom)…" autocomplete="off" style="flex:1;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdyPreview()">
-        <datalist id="fdy-food-list"></datalist>
+        <div style="position:relative;flex:1;min-width:0">
+          <input id="fdy-food" type="text" placeholder="Search food…" autocomplete="off" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace" oninput="fdySuggest(this.value)" onblur="setTimeout(fdySuggestClose,160)" onkeydown="fdySuggestKey(event)">
+          <div id="fdy-suggest" class="fdy-suggest" role="listbox" aria-label="Food suggestions"></div>
+        </div>
         <input id="fdy-grams" type="number" inputmode="decimal" step="10" placeholder="g" style="width:70px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-family:'Aptos',monospace;text-align:center" oninput="fdyPreview()">
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px">
@@ -1676,7 +1686,7 @@ input[type=number]{-moz-appearance:textfield}
       </div>
       <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:16px;margin-bottom:8px"></div>
       <button class="btn-complete pending" style="width:100%;padding:11px;border-radius:10px" onclick="fdyAdd()">Add to diary</button>
-      <div class="pc-note" style="margin-top:8px">Select a food from the list + enter grams, or type any name and fill in the macros directly. Tap ✕ to remove entries.</div>
+      <div class="pc-note" style="margin-top:8px">Type to search 300+ foods — tap a result to select. Enter grams for per-100g foods, or fill macros directly for custom entries. Custom foods are saved for next time. Tap ✕ to remove entries.</div>
       <div id="fdy-saved-wrap" style="margin-top:10px"></div>
     </div>
   </div>
@@ -3163,13 +3173,54 @@ const FOOD_DB={
   'Endura Rehydration sachet (25g in 250ml water)':{kcal:80,pro:0,cho:20,fat:0},
   'Vo2 Max protein bar (65g)':{kcal:218,pro:20,cho:22,fat:5},
 };
-let _lastFoodHash=0;
 function fdyInit(){
-  const dl=document.getElementById('fdy-food-list'); if(!dl) return;
-  const allFoods=Object.assign({},FOOD_DB,STATE.customFoods||{});
-  const h=Object.keys(allFoods).length;
-  if(h===_lastFoodHash&&dl.children.length>0){ /* skip rebuild — food list unchanged */ } else { _lastFoodHash=h; dl.innerHTML=Object.keys(allFoods).sort().map(k=>'<option value="'+k+'"'+(!(FOOD_DB[k])?' title="Your saved food"':'')+'></option>').join(''); }
   const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
+}
+// ── Food diary autocomplete ──────────────────────────────────────────────────
+let _fdySuggestIdx=-1;
+function fdySuggest(q){
+  const box=document.getElementById('fdy-suggest'); if(!box) return;
+  fdyPreview();
+  q=(q||'').trim().toLowerCase();
+  if(q.length<1){ fdySuggestClose(); return; }
+  const allFoods=Object.assign({},FOOD_DB,STATE.customFoods||{});
+  const keys=Object.keys(allFoods);
+  const starts=keys.filter(k=>k.toLowerCase().startsWith(q));
+  const contains=keys.filter(k=>!k.toLowerCase().startsWith(q)&&k.toLowerCase().includes(q));
+  const matches=[...starts,...contains].slice(0,14);
+  _fdySuggestIdx=-1;
+  if(!matches.length){
+    box.innerHTML='<div class="fdy-suggest-item" style="color:var(--text3);font-size:12px;cursor:default">No match — fill in macros below to log as custom</div>';
+    box.classList.add('open'); return;
+  }
+  box.innerHTML=matches.map((k,i)=>{
+    const info=allFoods[k]; const isCustom=!FOOD_DB[k];
+    const mac=info.flat?info.kcal+' kcal flat':(info.kcal+' kcal · P'+info.pro+' C'+info.cho+' F'+info.fat+' /100g');
+    return '<div class="fdy-suggest-item" role="option" data-i="'+i+'" onmousedown="fdySelect(\''+escAttr(k)+'\')">'
+      +'<span class="fdy-suggest-name">'+escHtml(k)+(isCustom?'<span class="fdy-suggest-badge">saved</span>':'')+'</span>'
+      +'<span class="fdy-suggest-mac">'+mac+'</span></div>';
+  }).join('');
+  box.classList.add('open');
+}
+function fdySuggestClose(){
+  const box=document.getElementById('fdy-suggest'); if(box){box.innerHTML='';box.classList.remove('open');} _fdySuggestIdx=-1;
+}
+function fdySuggestKey(e){
+  const box=document.getElementById('fdy-suggest'); if(!box||!box.classList.contains('open')) return;
+  const items=box.querySelectorAll('.fdy-suggest-item[data-i]');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){ e.preventDefault(); _fdySuggestIdx=Math.min(_fdySuggestIdx+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('fdy-si-active',i===_fdySuggestIdx)); items[_fdySuggestIdx].scrollIntoView({block:'nearest'}); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); _fdySuggestIdx=Math.max(_fdySuggestIdx-1,0); items.forEach((el,i)=>el.classList.toggle('fdy-si-active',i===_fdySuggestIdx)); items[_fdySuggestIdx].scrollIntoView({block:'nearest'}); }
+  else if(e.key==='Enter'){ if(_fdySuggestIdx>=0&&items[_fdySuggestIdx]){ e.preventDefault(); items[_fdySuggestIdx].dispatchEvent(new MouseEvent('mousedown')); } }
+  else if(e.key==='Escape'){ fdySuggestClose(); }
+}
+function fdySelect(name){
+  const fi=document.getElementById('fdy-food'); if(fi) fi.value=name;
+  fdySuggestClose();
+  fdyPreview();
+  const allFoods=Object.assign({},FOOD_DB,STATE.customFoods||{});
+  const info=allFoods[name];
+  if(info&&!info.flat){ const gi=document.getElementById('fdy-grams'); if(gi){ gi.focus(); gi.select(); } }
 }
 function fdyCalcKcal(){
   const pro=parseFloat(document.getElementById('fdy-pro')?.value)||0;
