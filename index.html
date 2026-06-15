@@ -27,6 +27,7 @@
   --safe: env(safe-area-inset-bottom, 0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 html,body{height:100%;overflow:hidden;background:#11203a;background:var(--bg);color:#f4f1e6;color:var(--text);font-family:'Aptos','Aptos Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:17px;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden}
 
@@ -45,9 +46,7 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .progress-bar{height:3px;background:var(--surface2);border-radius:99px;margin-bottom:12px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .5s ease}
 
-/* NAV TABS — hidden, bottom nav handles all navigation */
-.nav{display:none}
-.nav-btn{display:none}
+/* NAV TABS — removed; bottom nav handles all navigation */
 
 /* SCROLL CONTENT */
 /* overflow:clip (not hidden) avoids creating a ghost scroll container on iOS,
@@ -833,7 +832,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-14 · v70</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v71</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -849,18 +848,6 @@ input[type=number]{-moz-appearance:textfield}
       <div class="countdown-blk"><div class="countdown-num" id="cd-sessions">-</div><div class="countdown-lbl">sessions left</div></div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-  </div>
-  <div class="nav" id="main-nav">
-    <button class="nav-btn active" onclick="showSection('hub',this)">Menu</button>
-    <button class="nav-btn" onclick="showSection('today',this)">Today</button>
-    <button class="nav-btn" onclick="showSection('week',this)">This week</button>
-    <button class="nav-btn" onclick="showSection('calendar',this)">Calendar</button>
-    <button class="nav-btn" onclick="showSection('program',this)">Program</button>
-    <button class="nav-btn" onclick="showSection('history',this)">History</button>
-    <button class="nav-btn" onclick="showSection('stats',this)">Stats</button>
-    <button class="nav-btn" onclick="showSection('pace',this)">Tools</button>
-    <button class="nav-btn" onclick="showSection('progress',this)">Progress</button>
-    <button class="nav-btn" onclick="showSection('nutrition',this)">Nutrition</button>
   </div>
 </div>
 
@@ -983,6 +970,8 @@ input[type=number]{-moz-appearance:textfield}
       <option value="performance">Performance — heavy training</option>
       <option value="maintenance">Maintenance</option>
       <option value="recomp">Body recomposition</option>
+      <option value="lose">Lose fat — caloric deficit</option>
+      <option value="build">Build muscle — caloric surplus</option>
     </select></div>
   </div>
   <div id="mac-results"></div>
@@ -1234,11 +1223,11 @@ input[type=number]{-moz-appearance:textfield}
     </div>
   </div>
   <div class="nutr-hero" id="nutr-hero">
-    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-protein">172g</div><div class="nutr-hero-lbl">Protein / day</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-protein">—</div><div class="nutr-hero-lbl">Protein / day</div></div>
     <div class="nutr-hero-sep"></div>
-    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-weight">86kg</div><div class="nutr-hero-lbl">Body weight</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-weight">—</div><div class="nutr-hero-lbl">Body weight</div></div>
     <div class="nutr-hero-sep"></div>
-    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-kcal">4,400</div><div class="nutr-hero-lbl">Peak kcal</div></div>
+    <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-kcal">—</div><div class="nutr-hero-lbl">Peak kcal</div></div>
     <div class="nutr-hero-sep"></div>
     <div class="nutr-hero-cell"><div class="nutr-hero-val" id="nh-carbhr">90g</div><div class="nutr-hero-lbl">Carbs/hr run</div></div>
   </div>
@@ -1248,21 +1237,17 @@ input[type=number]{-moz-appearance:textfield}
   <div class="nutr-card">
     <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
       <div class="nutr-card-icon">🎯</div>
-      <div><div class="nutr-card-title">Daily targets by training type</div><div class="nutr-card-sub">Personalised for 86 kg male · one previous marathon</div></div>
+      <div><div class="nutr-card-title">Daily targets by training type</div><div class="nutr-card-sub">Personalised from your body weight above · one previous marathon</div></div>
       <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
     <div class="nutr-card-body">
-      <div class="nutr-tip" id="nutr-protein-tip">Protein is fixed at <strong>172 g/day</strong> (2.0 g/kg × 86 kg) regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.</div>
+      <div class="nutr-tip" id="nutr-protein-tip">Protein is calculated from your body weight above, regardless of training day. Carbohydrates are the lever — more on hard days, less on rest days. Fat fills the caloric gap and supports hormonal function.</div>
       <table class="nutr-table" id="nutr-targets-table">
         <tr><th>Day type</th><th>Carbs</th><th>Protein</th><th>Fat</th><th>kcal</th></tr>
-        <tr><td>Full rest</td><td>270–310g</td><td>172g</td><td>95g</td><td>~2,650</td></tr>
-        <tr><td>Easy run / upper session</td><td>400–440g</td><td>172g</td><td>95g</td><td>~3,200</td></tr>
-        <tr><td>Strength (lower / hard)</td><td>480–530g</td><td>172g</td><td>95g</td><td>~3,600</td></tr>
-        <tr><td>Intervals / threshold</td><td>530–580g</td><td>172g</td><td>95g</td><td>~3,800</td></tr>
-        <tr><td>Long run (≥20 km)</td><td>650–750g</td><td>172g</td><td>95g</td><td>~4,400</td></tr>
+        <tr><td colspan="5">(calculated from your body weight above)</td></tr>
       </table>
       <div id="nutr-hydration-out" style="margin-top:8px"></div>
-      <div class="nutr-warn">These targets are calculated for your bodyweight of 86 kg. You have one marathon in your legs — your gut and aerobic base are already trained. You can push the upper end of these carb ranges.</div>
+      <div class="nutr-warn">These targets are calculated from your body weight above. You have one marathon in your legs — your gut and aerobic base are already trained. You can push the upper end of these carb ranges.</div>
     </div>
   </div>
 
@@ -1358,7 +1343,7 @@ input[type=number]{-moz-appearance:textfield}
         <div class="nutr-meal">
           <div class="nutr-meal-time">Post-run · within 20 min — non-negotiable</div>
           <div class="nutr-meal-name">Recovery shake</div>
-          <div class="nutr-meal-detail">60g carbs + 25g protein. Commercial recovery drink OR banana + 300ml milk + 25g whey. Glycogen resynthesis is 150% faster in the first 30 min post-exercise.</div>
+          <div class="nutr-meal-detail">60g carbs + 25g protein. Commercial recovery drink OR banana + 300ml milk + 25g whey. Glycogen resynthesis is significantly faster in the first 30–60 min post-exercise.</div>
           <div class="nutr-meal-macros"><span class="nutr-m-chip carb">60g carb</span><span class="nutr-m-chip prot">25g prot</span><span class="nutr-m-chip">~360 kcal</span></div>
         </div>
         <div class="nutr-meal">
@@ -1487,7 +1472,7 @@ input[type=number]{-moz-appearance:textfield}
         <strong>Dose:</strong> 3–6 mg per kg bodyweight (86 kg → 260–520 mg). Start at the lower end if caffeine-sensitive.<br>
         <strong>Timing:</strong> 45–60 min before the gun — caffeine peaks in plasma at ~60 min.<br>
         <strong>Source:</strong> caffeine tabs or a strong coffee (~80mg/cup). Avoid new sources on race day.<br>
-        <strong>Withdrawal trick:</strong> cut caffeine 7–10 days before the race, then reload on race morning — the re-sensitisation amplifies the performance benefit by ~15%.
+        <strong>Withdrawal trick:</strong> cut caffeine 7–10 days before the race, then reload on race morning — the re-sensitisation can meaningfully amplify the performance benefit.
       </div>
       <div class="nutr-warn">Only use caffeine if you have practised it in training. GI distress is a real risk on race day if your gut isn't adapted.</div>
       <div class="nutr-divider"></div>
@@ -1514,7 +1499,7 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-meal-detail">Do not reduce carbohydrates proportionally with the training volume cut. The muscles are still absorbing the peak stimulus. Maintain carb intake, slightly reduce total calories by trimming fat. Begin the full 3-day carb load in the final days before the race.</div>
       <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Gut Training Protocol — Progressive Carb Adaptation</div>
-      <div class="nutr-tip">~30–50% of recreational marathon DNFs are GI-related. The gut adapts to high-carb intake just like muscles adapt to training — it requires consistent practice. GI distress at 90 g/hr in Week 1 is normal; GI comfort at 90 g/hr in Week 9 is the goal.</div>
+      <div class="nutr-tip">A significant proportion of recreational marathon DNFs are GI-related. The gut adapts to high-carb intake just like muscles adapt to training — it requires consistent practice. GI distress at 90 g/hr in Week 1 is normal; GI comfort at 90 g/hr in Week 9 is the goal.</div>
       <div class="nutr-supp-row">
         <div>
           <div class="nutr-supp-name">Phase 1 (Weeks 1–3) · 45–60 g carbs/hr</div>
@@ -1740,10 +1725,10 @@ input[type=number]{-moz-appearance:textfield}
 
 <!-- EXERCISE DEMO MODAL -->
 <div class="demo-modal-overlay" id="demo-overlay" onclick="closeDemoModal(event)">
-  <div class="demo-modal" id="demo-modal">
+  <div class="demo-modal" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-title">
     <div class="demo-modal-top">
       <div class="demo-modal-title" id="demo-title"></div>
-      <button class="demo-modal-close" onclick="closeDemoModal()">✕</button>
+      <button class="demo-modal-close" aria-label="Close" onclick="closeDemoModal()">✕</button>
     </div>
     <div class="demo-detail-lbl" id="demo-detail"></div>
     <div class="demo-anim-wrap" id="demo-anim"></div>
@@ -1753,7 +1738,7 @@ input[type=number]{-moz-appearance:textfield}
 
 <!-- SEARCH OVERLAY -->
 <div class="search-overlay" id="search-overlay" onclick="closeSearch(event)">
-  <div class="search-panel" onclick="event.stopPropagation()">
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search" onclick="event.stopPropagation()">
     <div class="search-bar-row">
       <input class="search-input" id="search-input" type="text" placeholder="Search exercises or weeks…" oninput="runSearch(this.value)" autocomplete="off">
       <button class="search-cancel" onclick="closeSearch()">Cancel</button>
@@ -1766,7 +1751,7 @@ input[type=number]{-moz-appearance:textfield}
 <!-- FLOATING TIMER -->
 <button class="fab" id="fab-timer" onclick="openTimer()" aria-label="Timer">⏱</button>
 <div class="timer-sheet" id="timer-sheet">
-  <button class="timer-close" onclick="closeTimer()">✕</button>
+  <button class="timer-close" aria-label="Close" onclick="closeTimer()">✕</button>
   <div class="timer-hd">TIMER &amp; METRONOME</div>
   <div class="timer-tabs">
     <button class="timer-tab active" id="tt-rest" onclick="timerMode('rest')">Rest</button>
@@ -1779,11 +1764,11 @@ input[type=number]{-moz-appearance:textfield}
 <div class="app-toast" id="app-toast"><span class="dot"></span><span id="app-toast-msg"></span></div>
 
 <!-- First-launch setup modal -->
-<div id="setup-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(10,14,26,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto">
+<div id="setup-modal" role="dialog" aria-modal="true" aria-labelledby="setup-modal-title" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(10,14,26,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto">
   <div style="min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px 16px">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:28px 20px;max-width:380px;width:100%">
       <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Albert 12-Week Program</div>
-      <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">Let's set you up</div>
+      <div id="setup-modal-title" style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px">Let's set you up</div>
       <div style="font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:20px">3 quick inputs unlock personalised targets across every session — paces, macros, and load progression all flow from these.</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div>
@@ -1821,19 +1806,19 @@ input[type=number]{-moz-appearance:textfield}
   </div>
   <div class="bnav-buttons">
     <button class="bnav-btn active" onclick="showSection('hub',null,'hub-btn')" id="bn-hub">
-      <div class="bnav-icon">☰</div><div class="bnav-lbl">Menu</div>
+      <div class="bnav-icon" aria-hidden="true">☰</div><div class="bnav-lbl">Menu</div>
     </button>
     <button class="bnav-btn" onclick="showSection('today',null,'today-btn')" id="bn-today">
-      <div class="bnav-icon">⚡</div><div class="bnav-lbl">Today</div>
+      <div class="bnav-icon" aria-hidden="true">⚡</div><div class="bnav-lbl">Today</div>
     </button>
     <button class="bnav-btn" onclick="showSection('program',null,'prog-btn')" id="bn-program">
-      <div class="bnav-icon">📋</div><div class="bnav-lbl">Program</div>
+      <div class="bnav-icon" aria-hidden="true">📋</div><div class="bnav-lbl">Program</div>
     </button>
     <button class="bnav-btn" onclick="showSection('nutrition',null,'nutrition-btn')" id="bn-nutrition">
-      <div class="bnav-icon">🥗</div><div class="bnav-lbl">Nutrition</div>
+      <div class="bnav-icon" aria-hidden="true">🥗</div><div class="bnav-lbl">Nutrition</div>
     </button>
     <button class="bnav-btn" onclick="showSection('progress')" id="bn-progress">
-      <div class="bnav-icon">📈</div><div class="bnav-lbl">Progress</div>
+      <div class="bnav-icon" aria-hidden="true">📈</div><div class="bnav-lbl">Progress</div>
     </button>
   </div>
 </div>
@@ -2614,7 +2599,27 @@ function saveState(s){
   // Also persist to IndexedDB async — survives localStorage quota limits
   _idbSave(s).catch(()=>{});
 }
-const SCHEMA_VERSION=1;
+const SCHEMA_VERSION=2;
+// Versioned migration runner. Each migration runs once per schema bump and is
+// idempotent (the inner flag guards keep older devices from re-running work).
+const MIGRATIONS=[
+  // v1→v2: already ran as ad-hoc flags; formalise them under the schema version.
+  {version:2,run(s){
+    if(!s.autoTickCleared){s.completedExercises={};s.autoTickCleared=true;}
+    if(!s.setsMigrated){
+      Object.keys(s.exerciseWeight||{}).forEach(id=>{
+        const w=s.exerciseWeight[id];
+        if(w>0&&!s.exerciseSets[id]){ const p=exPrescriptionById(id); s.exerciseSets[id]=Array(p?p.sets:1).fill(w); }
+      });
+      s.setsMigrated=true;
+    }
+  }},
+];
+function runMigrations(s){
+  const curV=s._schemaVersion||0;
+  MIGRATIONS.filter(m=>m.version>curV).forEach(m=>{m.run(s);s._schemaVersion=m.version;});
+  return s;
+}
 function ensureContainers(){
   ['completedExercises','completedSessions','sessionNotes','exerciseNotes','exerciseRPE','exerciseWeight','exerciseSets','runLog','runTarget','exerciseReps','readiness','bodyweightLog','sessionRPE','softenDay','celebratedPR','celebratedMilestone','recovery','profile','exerciseSwap','niggles','mobilityDone','restHRLog','deloadWeeks','badVideos','pinnedVideos'].forEach(k=>{ if(!STATE[k]||typeof STATE[k]!=='object') STATE[k]={}; });
   if(!Array.isArray(STATE.importedRuns)) STATE.importedRuns=[];
@@ -2625,23 +2630,14 @@ if(!STATE.completedSessions) STATE.completedSessions={};
 if(!STATE.sessionNotes) STATE.sessionNotes={};
 if(!STATE.exerciseNotes) STATE.exerciseNotes={};
 if(!STATE.exerciseRPE) STATE.exerciseRPE={};
-// One-time cleanup: older builds auto-ticked every exercise when a session was marked
-// "done", and those ticks were saved. Clear them once so exercise checks reflect only
-// your own taps from now on. Session "done" status and notes/RPE are preserved.
-if(!STATE.autoTickCleared){ STATE.completedExercises={}; STATE.autoTickCleared=true; saveState(STATE); }
 if(!STATE.exerciseWeight) STATE.exerciseWeight={};
 if(!STATE.exerciseSets) STATE.exerciseSets={};
-// Migrate older single-load entries into per-set arrays so nothing is lost
-if(!STATE.setsMigrated){
-  Object.keys(STATE.exerciseWeight).forEach(id=>{
-    const w=STATE.exerciseWeight[id];
-    if(w>0 && !STATE.exerciseSets[id]){
-      const p=exPrescriptionById(id); const n=p?p.sets:1;
-      STATE.exerciseSets[id]=Array(n).fill(w);
-    }
-  });
-  STATE.setsMigrated=true; saveState(STATE);
-}
+// Schema migration runner. Replaces the old ad-hoc autoTickCleared / setsMigrated
+// blocks: v1→v2 clears stale auto-ticked exercises and migrates single-load weight
+// entries into per-set arrays. Runs once per schema bump and is idempotent.
+const _preMigV=STATE._schemaVersion||0;
+STATE=runMigrations(STATE);
+if((STATE._schemaVersion||0)!==_preMigV) saveState(STATE);
 if(!STATE.runLog) STATE.runLog={};
 if(!STATE.runTarget) STATE.runTarget={};
 if(!STATE.actualRunKm) STATE.actualRunKm={};
@@ -2677,7 +2673,8 @@ function getSessionsForDate(date){
   if(week<1||week>12) return [];
   const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const dayOfWeek=dayNames[(d.getDay()+6)%7];
-  return PROGRAM.filter(s=>s.week===week&&s.day===dayOfWeek);
+  const phase=week<=3?1:week<=7?2:week<=9?3:4;
+  return PROGRAM.filter(s=>s.week===week&&s.day===dayOfWeek&&s.phase===phase);
 }
 function getWeekSessions(date){
   const d=new Date(date);d.setHours(0,0,0,0);
@@ -3040,9 +3037,11 @@ function fdyRemove(ymd,idx){
 }
 function _fdyDayTarget(ymd,wt){
   // Map the scheduled session for ymd to the appropriate _NUTR_DAYS entry
-  const goalFatAdj=((STATE.profile&&STATE.profile.goal)||'performance')==='lose'?-0.15:((STATE.profile&&STATE.profile.goal)||'performance')==='build'?0.05:0;
+  const goal=((STATE.profile&&STATE.profile.goal)||'performance');
+  const goalFatAdj=goal==='lose'?-0.15:goal==='build'?0.05:0;
+  const goalProtAdj=goal==='lose'?0.2:0;
   const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
-  const prot=Math.round(wt*protMult);
+  const prot=Math.round(wt*(protMult+goalProtAdj));
   // Parse ymd to a Date
   const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
   const sessions=getSessionsForDate(d);
@@ -3065,7 +3064,7 @@ function _fdyDayTarget(ymd,wt){
   const fat=Math.round(wt*(nd.fatMult+goalFatAdj));
   // Combo sessions get slightly higher protein (2.2 g/kg vs 2.0 g/kg)
   const comboProtBoost=nutrIdx===5?0.2:0;
-  const protCombo=Math.round(wt*(protMult+comboProtBoost));
+  const protCombo=Math.round(wt*(protMult+comboProtBoost+goalProtAdj));
   const kcal=Math.round((cMid*4+protCombo*4+fat*9)/100)*100;
   return {label:sessionLabel,nutrLabel:nd.label,kcal,cho:cMid,pro:protCombo,fat,fluidL:nd.fluidL};
 }
@@ -3137,7 +3136,7 @@ function renderFoodDiary(){
   let html=dayBanner+'<div>';
   items.forEach((it,i)=>{
     const gramsLabel=it.grams?(' · '+it.grams+'g'):'';
-    html+='<div class="fdy-item"><span class="fdy-food">'+it.food+gramsLabel+'</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
+    html+='<div class="fdy-item"><span class="fdy-food">'+escHtml(it.food)+gramsLabel+'</span><span class="fdy-mac">'+it.kcal+'kcal · P'+it.pro+' C'+it.cho+' F'+it.fat+'</span><button class="fdy-del" aria-label="Remove entry" onclick="fdyRemove(\''+ymd+'\','+i+')">✕</button></div>';
   });
   html+='</div>';
   html+='<div class="fdy-total">'
@@ -3297,7 +3296,7 @@ function renderNutrRecipes(w,goal){
     },
     rest:{
       pre:{title:'Salmon teriyaki bowl',time:'15 min',badge:'Lunch or dinner — rest day omega-3 priority',
-        items:[`${Math.max(150,Math.round(chicken*1.15/10)*10)}g Atlantic salmon fillet (Woolworths/Coles or Sydney Fish Market)`,'2 tbsp soy sauce + 2 tbsp mirin + 1 tbsp honey (teriyaki glaze)','80g edamame (frozen, from Woolworths freezer aisle)','80g baby spinach','1 tsp sesame oil + sesame seeds','Steamed rice or rice noodles (${Math.round(rice*0.7/5)*5}g dry — optional on rest day)'],
+        items:[`${Math.max(150,Math.round(chicken*1.15/10)*10)}g Atlantic salmon fillet (Woolworths/Coles or Sydney Fish Market)`,'2 tbsp soy sauce + 2 tbsp mirin + 1 tbsp honey (teriyaki glaze)','80g edamame (frozen, from Woolworths freezer aisle)','80g baby spinach','1 tsp sesame oil + sesame seeds',`Steamed rice or rice noodles (${Math.round(rice*0.7/5)*5}g dry — optional on rest day)`],
         steps:['Mix teriyaki glaze. Score salmon skin and marinate 5 min (or just pour over before cooking).','Pan-fry salmon skin-down on medium-high heat 4 min. Flip, pour glaze over, cook 2 min — it caramelises fast.','Microwave edamame 2 min. Wilt spinach 30 sec in the same pan. Assemble with sesame oil + seeds.'],
         macros:`~20g carbs · ${Math.round(Math.max(150,Math.round(chicken*1.15/10)*10)*0.20)}g protein · 22g fat · DHA + EPA for tissue repair`},
       post:{title:'Silken tofu with century egg & ginger',time:'5 min',badge:'Evening — slow protein before bed',
@@ -3643,30 +3642,27 @@ function sessionAdjustBanner(s){
 function calcPaceTargets(){
   const runs=(STATE.benchmarks||[]).filter(b=>b.kind==='run'&&b.paceSec>0&&b.distKm>0);
   if(!runs.length) return null;
-  // Use fastest (lowest paceSec) benchmark run
+  // Best benchmark = fastest pace (lowest sec/km)
   const best=runs.reduce((a,b)=>b.paceSec<a.paceSec?b:a);
-  const p=best.paceSec; const km=best.distKm;
-  let threshold,zone2,interval,marathon;
-  if(km>=3&&km<=7){
-    // ~5km: fastest pace is close to threshold
-    threshold=p+45; zone2=threshold+60; interval=p-5; marathon=threshold+15;
-  } else if(km>7&&km<=13){
-    // ~10km
-    threshold=p+15; zone2=threshold+60; interval=p-15; marathon=threshold+5;
-  } else if(km>13&&km<=25){
-    // ~half marathon
-    threshold=p; zone2=p+60; interval=p-30; marathon=p+10;
-  } else {
-    // Default fallback
-    threshold=p+30; zone2=threshold+60; interval=p-10; marathon=threshold+10;
-  }
+  const bestDur=best.durationSec||(best.paceSec*best.distKm);
+  // Riegel prediction: t2 = t1 × (d2/d1)^1.06 → marathon finish time.
+  const predSec=bestDur*Math.pow(42.195/best.distKm,1.06);
+  const mpSec=predSec/42.195; // predicted marathon pace sec/km
+  // If the user set a goal time, use the SLOWER of predicted vs goal (more conservative).
+  const goalSec=STATE.profile&&parseFloat(STATE.profile.goalMarathonSec);
+  const goalMP=goalSec>0?goalSec/42.195:null;
+  const mp=goalMP&&goalMP>mpSec?goalMP:mpSec;
+  // Derive zones from marathon pace.
+  const zone2=mp+60;       // easy / Zone 2 = MP + ~45–75 s/km
+  const threshold=mp-20;   // threshold = MP − ~15–25 s/km
+  const interval=mp-50;    // interval = MP − ~45–60 s/km
   const band=15;
   const fmt=sec=>fmtPaceSec(Math.round(sec))+'–'+fmtPaceSec(Math.round(sec+band));
   return {
     zone2:fmt(zone2)+'/km',
     threshold:fmt(threshold)+'/km',
     interval:fmt(interval)+'/km',
-    marathon:fmt(marathon)+'/km',
+    marathon:fmt(mp)+'/km',
   };
 }
 function renderSessionCard(s,interactive,startOpen){
@@ -3718,7 +3714,7 @@ function renderSessionCard(s,interactive,startOpen){
       <div class="load-strip" id="load-${key}">${loadStripInner(s)}</div>
       <div class="session-footer">
         <div style="font-size:10px;font-family:'Aptos',monospace;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px">How did this session go?</div>
-        <textarea class="session-note-area" placeholder="e.g. Felt strong on squats, knee a bit tight on last set, nailed the tempo pace — legs responding well…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${STATE.sessionNotes[key]||''}</textarea>
+        <textarea class="session-note-area" placeholder="e.g. Felt strong on squats, knee a bit tight on last set, nailed the tempo pace — legs responding well…" id="snote-${key}" oninput="saveSessionNote('${key}',this.value)">${escHtml(STATE.sessionNotes[key]||'')}</textarea>
         <button class="btn-complete ${done?'done':'pending'}" id="cbtn-${key}" onclick="toggleSessionComplete('${key}')">${done?'DONE ✓':'MARK DONE'}</button>
       </div>
     </div>
@@ -4285,8 +4281,8 @@ function renderHistory(){
         <span class="hist-stat">${doneEx}/${totalEx} exercises</span>
         ${note?'<span class="hist-stat">note logged</span>':''}
       </div>
-      ${exNotes.length>0?`<div style="margin-top:8px">${exNotes.map(e=>`<div style="font-size:11px;font-family:'Aptos',monospace;color:var(--text2);margin-top:3px">• ${e.name}: ${STATE.exerciseNotes[e.id]}</div>`).join('')}</div>`:''}
-      ${note?`<div class="hist-note">${note}</div>`:''}
+      ${exNotes.length>0?`<div style="margin-top:8px">${exNotes.map(e=>`<div style="font-size:11px;font-family:'Aptos',monospace;color:var(--text2);margin-top:3px">• ${escHtml(e.name)}: ${escHtml(STATE.exerciseNotes[e.id])}</div>`).join('')}</div>`:''}
+      ${note?`<div class="hist-note">${escHtml(note)}</div>`:''}
     </div>`;
   }).join('');
   container.innerHTML=html;
@@ -4475,7 +4471,12 @@ function suggestNextLoad(name,currentDetail){
   const p=parsePrescription(rec.ex.detail); const goal=p?p.reps:null;
   let allHit=true;
   for(let i=0;i<wsraw.length;i++){ const w=parseFloat(wsraw[i]); if(!(w>0)) continue; if(goal&&exReps(rec.id,i,goal)<goal) allHit=false; }
-  const rpe=STATE.exerciseRPE[rec.id]; const rpeOk=(rpe==null)||rpe<=8;
+  const rpe=STATE.exerciseRPE[rec.id];
+  // Phase-specific RPE gate (RIR-based). Phases 3–4 (Peak/Taper) hold load: volume drops.
+  const phWeek=_phaseWeek();
+  const maxProgressRPE=phWeek<=3?8:phWeek<=7?9:null; // P1: RPE≤8 (RIR≥2), P2: RPE≤9 (RIR≥1), P3/P4: null
+  if(maxProgressRPE===null) return {rec,last:topW,next:topW,action:'hold',rpe}; // hold in peak/taper
+  const rpeOk=(rpe==null)||rpe<=maxProgressRPE;
   const inc=(classifyLift(name)==='upper')?2.5:5;
   if(allHit&&rpeOk) return {rec,last:topW,next:roundKg(topW+inc),action:'up',rpe};
   return {rec,last:topW,next:topW,action:'hold',rpe};
@@ -4986,7 +4987,14 @@ function renderMacros(){
   const wt=parseFloat(wEl.value), goal=gEl.value;
   if(wEl.value) STATE.profile.weight=wt; STATE.profile.goal=goal; saveState(STATE);
   if(!wt||wt<=0||wt>300){ el.innerHTML='<div class="ls-hint">Enter your body weight to estimate daily fuel needs.</div>'; return; }
-  const cfg={performance:{kcal:38,pro:2.0,cho:6,lbl:'Performance (heavy training)'},maintenance:{kcal:33,pro:1.8,cho:4.5,lbl:'Maintenance'},recomp:{kcal:28,pro:2.2,cho:3.5,lbl:'Body recomposition (slight deficit)'}}[goal];
+  const cfgMap={
+    performance:{kcal:38,pro:2.0,cho:6,lbl:'Performance (heavy training)'},
+    maintenance:{kcal:33,pro:1.8,cho:4.5,lbl:'Maintenance'},
+    recomp:{kcal:28,pro:2.2,cho:3.5,lbl:'Body recomposition (slight deficit)'},
+    lose:{kcal:28,pro:2.4,cho:3.5,lbl:'Lose fat (caloric deficit)'},
+    build:{kcal:36,pro:2.2,cho:6,lbl:'Build muscle (caloric surplus)'}
+  };
+  const cfg=cfgMap[goal]||cfgMap.performance;
   const kcal=Math.round(wt*cfg.kcal), pro=Math.round(wt*cfg.pro), cho=Math.round(wt*cfg.cho);
   const proKcal=pro*4, choKcal=cho*4, fatKcal=Math.max(0,kcal-proKcal-choKcal), fat=Math.round(fatKcal/9);
   const water=(wt*0.035).toFixed(1);
@@ -7529,7 +7537,7 @@ function renderImportedRuns(){
     const zbar = zsum>0 ? '<div class="zbar">'+r.zoneSec.map((s,i)=>{ const pct=Math.round(s/zsum*100); return pct>0?'<span style="width:'+pct+'%;background:'+cols[i]+'" title="Z'+(i+1)+' '+pct+'%"></span>':''; }).join('')+'</div>' : '';
     const d=new Date(r.dateISO); const ds=d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2);
     const itag=runIntensityTag(r.paceSec); const itagHTML=itag?(' · <span class="ri-tag">≈ '+itag+'</span>'):'';
-    return '<div class="ri-row"><div class="ri-top">'+r.distKm+' km · '+pace+itagHTML+'<button class="ri-del" onclick="deleteImportedRun(\''+r.id+'\')">✕</button></div>'
+    return '<div class="ri-row"><div class="ri-top">'+r.distKm+' km · '+pace+itagHTML+'<button class="ri-del" aria-label="Delete run" onclick="deleteImportedRun(\''+r.id+'\')">✕</button></div>'
       +'<div class="ri-sub">'+ds+' · '+_fmtDur(r.durationSec)+(r.avgHR?(' · ♥ '+r.avgHR+(r.maxHR?('/'+r.maxHR):'')):'')+' · '+r.load+' AU'+(r.trimp?(' · TRIMP '+r.trimp):'')+'</div>'+zbar+'</div>';
   }).join('');
 }
@@ -7781,6 +7789,19 @@ window.onload=function(){
     }
   }).catch(()=>{});
 };
+
+// Global Escape: close any open modal/overlay.
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape') return;
+  const demo=document.getElementById('demo-overlay');
+  if(demo&&demo.classList.contains('open')){ if(typeof closeDemoModal==='function') closeDemoModal(); else demo.classList.remove('open'); return; }
+  const search=document.getElementById('search-overlay');
+  if(search&&search.classList.contains('open')){ if(typeof closeSearch==='function') closeSearch(); else search.classList.remove('open'); return; }
+  const setup=document.getElementById('setup-modal');
+  if(setup&&setup.style.display!=='none'&&!setup.classList.contains('hidden')){ setup.style.display='none'; return; }
+  const timer=document.getElementById('timer-sheet')||document.getElementById('timer-overlay');
+  if(timer&&timer.classList.contains('open')){ if(typeof closeTimer==='function') closeTimer(); else timer.classList.remove('open'); }
+});
 </script>
 </body>
 </html>
