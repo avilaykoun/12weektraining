@@ -832,7 +832,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v73</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v74</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1494,7 +1494,7 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-section-lbl">Phase 2 · Build (Weeks 4–7)</div>
       <div class="nutr-meal-detail" style="margin-bottom:10px">Fuel the quality sessions. Never run intervals or threshold in a depleted state. Increase carbs on Tue/Thu/Sat. Begin race-day simulation: gels every 40–45 min on long runs, target 60 g/hour. Test electrolyte products.</div>
       <div class="nutr-section-lbl">Phase 3 · Peak (Weeks 8–9)</div>
-      <div class="nutr-meal-detail" style="margin-bottom:10px">Protect recovery between sessions. Post-session carb+protein window is non-negotiable. Sleep 8–9 hrs is as important as any meal. Do not cut calories — this is the highest energy demand period of the 12 weeks. Build in-run carbs to 90 g/hour.</div>
+      <div class="nutr-meal-detail" style="margin-bottom:10px">Protect recovery between sessions. Post-session carb+protein window is non-negotiable. Sleep 8–9 hrs is as important as any meal. Do not cut calories — this is the highest energy demand period of the 12 weeks. Build in-run carbs to 90 g/hour. <strong>Protein:</strong> consider increasing to 2.2–2.4 g/kg during peak weeks — back-to-back high-intensity sessions create the highest muscle repair demand of the entire program.</div>
       <div class="nutr-section-lbl">Phase 4 · Taper (Weeks 10–12)</div>
       <div class="nutr-meal-detail">Do not reduce carbohydrates proportionally with the training volume cut. The muscles are still absorbing the peak stimulus. Maintain carb intake, slightly reduce total calories by trimming fat. Begin the full 3-day carb load in the final days before the race.</div>
       <div class="nutr-divider"></div>
@@ -1514,7 +1514,7 @@ input[type=number]{-moz-appearance:textfield}
       </div>
       <div class="nutr-supp-row">
         <div>
-          <div class="nutr-supp-name">Phase 3 (Weeks 8–10) · Target 90 g/hr</div>
+          <div class="nutr-supp-name">Phase 3 (Weeks 8–9) · Target 90 g/hr</div>
           <div class="nutr-supp-detail">Use 2:1 glucose:fructose ratio products. Two gut transporters absorb glucose and fructose via separate pathways — mixing them unlocks the 90 g/hr ceiling. Train the gut to absorb this consistently through repetition.</div>
         </div>
       </div>
@@ -1568,7 +1568,7 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-supp-row">
         <div>
           <div class="nutr-supp-name">Caffeine</div>
-          <div class="nutr-supp-detail">3–6 mg/kg body weight · 45 min before key sessions and race · largest single-dose performance booster in endurance sport</div>
+          <div class="nutr-supp-detail">3–6 mg/kg body weight · 45 min before key sessions and race · largest single-dose performance booster in endurance sport · start at 2–3 mg/kg if new to caffeine</div>
         </div>
         <span class="nutr-supp-badge badge-strong">Strong</span>
       </div>
@@ -2256,7 +2256,7 @@ const PROGRAM = [
     {id:'p2w7sun1',name:'Full rest + mobility',detail:'',cat:'rest'},
   ],note:''},
 
-  // ── PHASE 3 — Peak (Weeks 8–10) ───────────────────────────────────────────
+  // ── PHASE 3 — Peak (Weeks 8–9) ────────────────────────────────────────────
 
   // Week 8 ─────────────────────────────────────────────────────────────────
   {phase:3,week:8,day:'Wed',name:'Lower body — maintenance',type:'strength',exercises:[
@@ -3524,15 +3524,10 @@ function initNavState(){
 function showSection(id,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.getElementById('section-'+id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   const bnMap={today:'bn-today',week:'bn-week',calendar:'bn-calendar',program:'bn-program',history:'bn-history',stats:'bn-stats',pace:'bn-pace',progress:'bn-progress',nutrition:'bn-nutrition',hub:'bn-hub'};
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
-  const navBtns=document.querySelectorAll('.nav-btn');
-  const order=['hub','today','week','calendar','program','history','stats','pace','progress','nutrition'];
-  const idx=order.indexOf(id);
-  if(idx>=0&&navBtns[idx]) navBtns[idx].classList.add('active');
   currentSection=id;
   const _sec=document.getElementById('section-'+id); if(_sec) _sec.scrollTop=0;
   if(id==='today') renderToday();
@@ -4178,11 +4173,17 @@ function weekMonitorHTML(monday){
   if(cur.sum===0){
     return wrap('<div class="ls-hint">No training load logged for this week yet. Add an RPE to each exercise and the weekly total, ramp and overtraining risk will appear here.</div>');
   }
-  // prior up to 4 weeks for chronic baseline & week-over-week
+  // prior up to 4 weeks for chronic baseline (exclude programmed deload weeks)
   const prevSums=[];
-  for(let w=1;w<=4;w++){ const pm=new Date(monday); pm.setDate(monday.getDate()-7*w); prevSums.push(_weekLoadSum(pm).sum); }
-  const lastWk=prevSums[0];
-  const priorNZ=prevSums.filter(v=>v>0);
+  for(let w=1;w<=4;w++){
+    const pm=new Date(monday); pm.setDate(monday.getDate()-7*w);
+    const ps=new Date(PLAN_START); ps.setHours(0,0,0,0);
+    const wkNum=Math.max(1,Math.min(12,Math.floor((pm-ps)/864e5/7)+1));
+    const isDeload=STATE.deloadWeeks&&STATE.deloadWeeks[wkNum];
+    prevSums.push(isDeload?null:_weekLoadSum(pm).sum);
+  }
+  const lastWk=prevSums[0]!=null?prevSums[0]:0;
+  const priorNZ=prevSums.filter(v=>v!=null&&v>0);
   const chronicAvg=priorNZ.length? priorNZ.reduce((a,b)=>a+b,0)/priorNZ.length : 0;
   const ratio = chronicAvg>0 ? cur.sum/chronicAvg : null;     // weekly acute:chronic
   const wow = lastWk>0 ? (cur.sum-lastWk)/lastWk*100 : null;   // week-over-week %
@@ -4316,7 +4317,7 @@ function openDaySession(key){
 // ─────────────────────────────────────────
 function renderProgram(phase){
   _progPhase=phase;
-  const phases=[{n:1,label:'Phase 1 — Foundation',sub:'Weeks 1–3 · 8 Jun – 28 Jun'},{n:2,label:'Phase 2 — Build',sub:'Weeks 4–7 · 29 Jun – 26 Jul'},{n:3,label:'Phase 3 — Peak',sub:'Weeks 8–10 · 27 Jul – 16 Aug'},{n:4,label:'Phase 4 — Taper',sub:'Weeks 11–12 · 17–30 Aug'}];
+  const phases=[{n:1,label:'Phase 1 — Foundation',sub:'Weeks 1–3 · 8 Jun – 28 Jun'},{n:2,label:'Phase 2 — Build',sub:'Weeks 4–7 · 29 Jun – 26 Jul'},{n:3,label:'Phase 3 — Peak',sub:'Weeks 8–9 · 27 Jul – 9 Aug'},{n:4,label:'Phase 4 — Taper',sub:'Weeks 11–12 · 17–30 Aug'}];
   // Render phase selector
   const selEl=document.getElementById('phase-sel');
   selEl.innerHTML=phases.map(p=>`<button class="phase-pill ${p.n===phase?'active':''}" onclick="renderProgram(${p.n})">${p.label.split(' — ')[0]+' — '+p.label.split(' — ')[1]}</button>`).join('');
@@ -4535,7 +4536,7 @@ function exPrescriptionById(exId){ for(const s of PROGRAM){ const e=s.exercises.
 function epley1RM(w,reps){ return w*(1+reps/30); }
 function exSetList(exId){ return (STATE.exerciseSets[exId]||[]).map(x=>parseFloat(x)).filter(x=>!isNaN(x)&&x>0); }
 function exReps(exId,idx,fallback){ const a=STATE.exerciseReps&&STATE.exerciseReps[exId]; const r=a?parseInt(a[idx],10):NaN; return (r>0)?r:fallback; }
-function exSetPairs(exId){ const p=exPrescriptionById(exId); if(!p) return []; const ws=STATE.exerciseSets[exId]||[]; const out=[]; for(let i=0;i<ws.length;i++){ const w=parseFloat(ws[i]); if(!(w>0)) continue; out.push({w,reps:exReps(exId,i,p.reps)}); } return out; }
+function exSetPairs(exId){ const p=exPrescriptionById(exId); if(!p) return []; const ws=STATE.exerciseSets[exId]||[]; const out=[]; for(let i=0;i<ws.length;i++){ const raw=parseFloat(ws[i]); const w=raw>0?raw:(raw===0?(latestBW()||0):NaN); if(!(w>0)) continue; out.push({w,reps:exReps(exId,i,p.reps)}); } return out; }
 function exE1RM(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return null; return Math.round(Math.max.apply(null,pairs.map(s=>epley1RM(s.w,s.reps)))); }
 function exVolume(exId){ const pairs=exSetPairs(exId); if(!pairs.length) return 0; return pairs.reduce((a,s)=>a+s.reps*s.w,0); }
 function _startOfToday(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
@@ -5396,7 +5397,7 @@ function muscleCardHTML(){
   if(!order.some(k=>c[k]>0)) return wrap('<div class="ls-hint">Log or complete strength sets this week to see weekly volume per muscle against productive landmarks (MEV–MRV).</div>');
   const MEV_MAP={'Quads':10,'Posterior chain':10,'Chest':10,'Back':12,'Shoulders':10,'Arms':10,'Core':10};
   const MRV_MAP={'Quads':20,'Posterior chain':20,'Chest':18,'Back':22,'Shoulders':16,'Arms':14,'Core':16};
-  const SC=24;
+  const SC=28;
   const rows=order.map(k=>{ const v=c[k]||0; const mev=MEV_MAP[k]||8; const mrv=MRV_MAP[k]||20; const pct=Math.min(100,v/SC*100); const col=v===0?'var(--surface3)':(v<mev?'#5aa6ff':(v<=mrv?'#5fd6a0':'#ff6b47'));
     return '<div class="mus-row"><div class="mus-top"><span>'+k+'</span><span>'+v+' sets</span></div><div class="mus-track"><div class="mus-fill" style="width:'+pct+'%;background:'+col+'"></div><span class="mus-mark" style="left:'+(mev/SC*100)+'%"></span><span class="mus-mark" style="left:'+(mrv/SC*100)+'%"></span></div></div>';
   }).join('');
@@ -5446,11 +5447,12 @@ function bodyCompCardHTML(){
   return wrap(head+input+rel);
 }
 // ── Calendar (.ics) export + backup recency ──
+function _icsFold(line){ if(line.length<=75) return line; let out=''; while(line.length>75){ out+=line.slice(0,75)+'\r\n '; line=line.slice(75); } return out+line; }
 function exportICS(){
   const pad=n=>String(n).padStart(2,'0');
   const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN'];
   PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
-    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>e.name).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,'),'END:VEVENT');
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'@albert12','DTSTART;VALUE=DATE:'+dt,_icsFold('SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,')),_icsFold('DESCRIPTION:'+((s.exercises||[]).map(e=>e.name).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,')),'END:VEVENT');
   });
   lines.push('END:VCALENDAR');
   const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
@@ -5765,7 +5767,7 @@ function exportWeekICS(){
   const pad=n=>String(n).padStart(2,'0'); const {mon,sun}=weekRange(new Date());
   const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN']; let n=0;
   PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(d<mon||d>sun) return; const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
-    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'wk@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>exDisplayName(e)).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,'),'END:VEVENT'); n++; });
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'wk@albert12','DTSTART;VALUE=DATE:'+dt,_icsFold('SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,')),_icsFold('DESCRIPTION:'+((s.exercises||[]).map(e=>exDisplayName(e)).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,')),'END:VEVENT'); n++; });
   lines.push('END:VCALENDAR');
   if(!n){ if(typeof appToast==='function') appToast('No sessions scheduled this week'); return; }
   const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
@@ -6688,6 +6690,7 @@ function parseYTUrl(s){
 }
 function pinKeyEx(name){ return 'ex:'+String(name||'').toLowerCase().trim(); }
 function getPinned(key){ return (STATE.pinnedVideos&&STATE.pinnedVideos[key])||null; }
+function isBadVideo(id){ const e=STATE.badVideos&&STATE.badVideos[id]; if(!e) return false; if(e===true) return true; return (Date.now()-e.t)<7*864e5; }
 function pinVideoPrompt(key,label,after){
   const cur=getPinned(key);
   const url=prompt('Paste a YouTube link for \u201c'+label+'\u201d'+(cur?'\n(currently pinned: '+cur+')':'')+'\n\nThis video will play inside the app.', '');
@@ -6719,7 +6722,7 @@ function playExVideo(){
   const chain=[];
   const pin=getPinned(pinKey); if(pin) chain.push({id:pin,title:'Pinned video — '+c.name});
   if(c.data&&c.data.id&&(!pin||pin!==c.data.id)) chain.push({id:c.data.id,title:c.data.title});
-  const playable=chain.filter(x=>!STATE.badVideos[x.id]);
+  const playable=chain.filter(x=>!isBadVideo(x.id));
   if(!playable.length){
     // Nothing currently playable in-app: offer the search card + pinning.
     animEl.innerHTML = '<a class="demo-searchcard" href="'+c.searchUrl+'" target="_blank" rel="noopener"><div class="demo-play">▶</div><div class="demo-search-txt">Watch demos — '+c.name+'</div><div class="demo-search-sub">Opens YouTube · top form videos</div></a>'
@@ -6747,7 +6750,7 @@ function playExVideo(){
       let started=false;
       const fail=function(){
         if(token!==_demoToken) return;
-        STATE.badVideos[v.id]=true; saveState(STATE); // remember — skip instantly next time
+        STATE.badVideos[v.id]={t:Date.now()}; saveState(STATE); // remember for 7 days
         attempt(i+1);
       };
       try{
@@ -6796,7 +6799,7 @@ async function runVideoHealthCheck(){
     const rs=await Promise.all(batch.map(_probeVideo));
     rs.forEach((r,j)=>{ const id=batch[j];
       if(r==='ok') okN++;
-      else if(r==='dead'){ STATE.badVideos[id]=true; deadList.push(byId[id][0]); }
+      else if(r==='dead'){ STATE.badVideos[id]={t:Date.now()}; deadList.push(byId[id][0]); }
       else unkN++;
     });
     i+=batch.length;
@@ -6853,7 +6856,7 @@ function renderMobPlayer(){
   const opt=c.r.opts[c.opt];
   const key='mob:'+opt.q;
   const pin=getPinned(key);
-  if(!pin || STATE.badVideos[pin]){ mobFallback(); return; }
+  if(!pin || isBadVideo(pin)){ mobFallback(); return; }
   // A pinned routine plays INSIDE the app
   const anim=document.getElementById('demo-anim');
   const su='https://www.youtube.com/results?search_query='+encodeURIComponent(opt.q);
@@ -6864,7 +6867,7 @@ function renderMobPlayer(){
   whenYTApi(function(){
     if(token!==_demoToken) return;
     if(_ytApiState==='failed' || !(window.YT&&window.YT.Player)){ mobFallback(); return; }
-    const fail=function(){ if(token!==_demoToken) return; STATE.badVideos[pin]=true; saveState(STATE); mobFallback(); };
+    const fail=function(){ if(token!==_demoToken) return; STATE.badVideos[pin]={t:Date.now()}; saveState(STATE); mobFallback(); };
     try{
       _demoPlayer=new YT.Player('demo-yt-mount',{ videoId:pin, host:'https://www.youtube-nocookie.com',
         playerVars:{ rel:0, modestbranding:1, playsinline:1, autoplay:1 },
@@ -7034,7 +7037,7 @@ function runSearch(q){
         const ico=e.cat==='run'?'🏃':e.cat==='core'?'🌀':e.cat==='rest'?'🧘':'🏋️';
         return '<div class="srch-item" onclick="searchOpenDemo(\''+escAttr(e.name)+'\',\''+escAttr(e.detail)+'\')">'
           +'<span class="srch-ico">'+ico+'</span>'
-          +'<div><div class="srch-name">'+e.name+'</div><div class="srch-sub">'+e.detail+'</div></div></div>';
+          +'<div><div class="srch-name">'+escHtml(e.name)+'</div><div class="srch-sub">'+escHtml(e.detail)+'</div></div></div>';
       }).join('');
     }
   }
@@ -7229,6 +7232,8 @@ function applyToTodayRun(){
 let TM={mode:'rest',restDur:90,restLeft:90,restRunning:false,restEndAt:0,
         wAcc:0,wStart:0,wRunning:false,laps:[],
         bpm:175,metroOn:false,iv:null,metroIv:null,audio:null};
+function _tmSave(){ try{ sessionStorage.setItem('tm_dur',TM.restDur); sessionStorage.setItem('tm_bpm',TM.bpm); }catch(e){} }
+function _tmLoad(){ try{ const d=parseInt(sessionStorage.getItem('tm_dur'),10); if(d>0){ TM.restDur=d; TM.restLeft=d; } const b=parseInt(sessionStorage.getItem('tm_bpm'),10); if(b>0) TM.bpm=b; }catch(e){} }
 function tAudio(){ if(!TM.audio){ try{ TM.audio=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } if(TM.audio&&TM.audio.state==='suspended') TM.audio.resume(); return TM.audio; }
 function tBeep(freq,dur,vol){ const a=tAudio(); if(!a) return; const o=a.createOscillator(),g=a.createGain(); o.type='sine'; o.frequency.value=freq||880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(vol||0.2,a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+(dur||0.12)); o.start(); o.stop(a.currentTime+(dur||0.12)); }
 function tVibrate(p){ if(navigator.vibrate){ try{navigator.vibrate(p);}catch(e){} } }
@@ -7273,7 +7278,7 @@ function timerRender(){
       +'<div class="pc-note" style="text-align:center">Most distance runners target ~170–180 strides/min. Match each footfall to a click.</div>';
   }
 }
-function restSet(sec){ TM.restDur=sec; TM.restLeft=sec; TM.restRunning=false; clearInterval(TM.iv); timerRender(); setFabState(); }
+function restSet(sec){ TM.restDur=sec; TM.restLeft=sec; TM.restRunning=false; clearInterval(TM.iv); _tmSave(); timerRender(); setFabState(); }
 function restStart(){
   if(TM.restRunning){ TM.restRunning=false; clearInterval(TM.iv); TM.restLeft=Math.max(0,(TM.restEndAt-Date.now())/1000); }
   else { if(TM.restLeft<=0) TM.restLeft=TM.restDur; tAudio(); TM.restEndAt=Date.now()+TM.restLeft*1000; TM.restRunning=true; clearInterval(TM.iv);
@@ -7294,7 +7299,7 @@ function watchStart(){ if(TM.wRunning){ TM.wAcc+=Date.now()-TM.wStart; TM.wRunni
 function watchLap(){ if(TM.wRunning||TM.wAcc) TM.laps.unshift(watchElapsed()); timerRender(); }
 function watchReset(){ TM.wRunning=false; clearInterval(TM.iv); TM.wAcc=0; TM.laps=[]; timerRender(); setFabState(); }
 function metroToggle(){ if(TM.metroOn){ TM.metroOn=false; clearInterval(TM.metroIv); } else { tAudio(); TM.metroOn=true; tClick(); clearInterval(TM.metroIv); TM.metroIv=setInterval(tClick,60000/TM.bpm); } timerRender(); setFabState(); }
-function metroBpm(d){ TM.bpm=Math.max(40,Math.min(240,TM.bpm+d)); const v=document.getElementById('bpm-val'); if(v) v.textContent=TM.bpm; if(TM.metroOn){ clearInterval(TM.metroIv); TM.metroIv=setInterval(tClick,60000/TM.bpm); } }
+function metroBpm(d){ TM.bpm=Math.max(40,Math.min(240,TM.bpm+d)); const v=document.getElementById('bpm-val'); if(v) v.textContent=TM.bpm; if(TM.metroOn){ clearInterval(TM.metroIv); TM.metroIv=setInterval(tClick,60000/TM.bpm); } _tmSave(); }
 function tClick(){ tBeep(1600,.045,.32); tVibrate(12); }
 // ═══════════════════════════════════════════
 // DATA: BACKUP / RESTORE + STORAGE HARDENING
@@ -7306,8 +7311,10 @@ function copyBackup(){
   else _fallbackCopy(json,done);
 }
 function _fallbackCopy(text,cb){
-  try{ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }catch(e){}
-  if(cb) cb();
+  let ok=false;
+  try{ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select(); ok=document.execCommand('copy'); document.body.removeChild(ta); }catch(e){}
+  if(ok&&cb) cb();
+  else if(!ok){ const m=document.getElementById('data-msg'); if(m) m.textContent='Copy failed — use Export JSON button to save a backup.'; }
 }
 function exportData(){
   try{
@@ -7910,6 +7917,7 @@ window.onload=function(){
   initNavState();
   initSwipe();
   showRestoreBannerIfEmpty();
+  _tmLoad();
   timerRender();
   updateCountdown();
   _updateOnlineStatus();
