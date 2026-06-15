@@ -26,6 +26,7 @@
   --green: #5fd6a0;
   --safe: env(safe-area-inset-bottom, 0px);
 }
+body.light-mode{--bg:#eef1f7;--surface:#ffffff;--surface2:#e4e8f0;--surface3:#d8dde8;--border:rgba(0,0,0,.13);--text:#1a1e2a;--text2:#383c50;--text3:#606478}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 html,body{height:100%;overflow:hidden;background:#11203a;background:var(--bg);color:#f4f1e6;color:var(--text);font-family:'Aptos','Aptos Display','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:17px;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -831,6 +832,7 @@ input[type=number]{-moz-appearance:textfield}
   <!-- Always visible: search + collapse toggle only -->
   <div class="hdr-top-strip">
     <button class="hdr-search-btn" onclick="openSearch()" aria-label="Search">🔍</button>
+    <button id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode" style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px 6px;color:var(--text3)">☀️</button>
     <button class="hdr-collapse-btn" id="hdr-collapse-btn" onclick="toggleHdrCollapse()" aria-label="Toggle header">▾</button>
   </div>
   <!-- Collapsible: title, countdown, progress bar -->
@@ -839,7 +841,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v78</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v79</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1227,6 +1229,16 @@ input[type=number]{-moz-appearance:textfield}
       </div>
       <button class="btn-complete done" style="width:100%;margin-top:10px" onclick="saveNutrProfile()">Save &amp; recalculate</button>
       <div id="npf-msg" style="font-size:11px;font-family:'Aptos',monospace;color:var(--green);text-align:center;margin-top:6px;min-height:16px"></div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text2)">Training reminders</span>
+          <button id="notif-toggle" onclick="toggleNotifications()" style="font-size:11px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer">Enable</button>
+        </div>
+        <div id="notif-time-row" style="display:none;gap:8px;align-items:center">
+          <span style="font-size:11px;color:var(--text3)">Reminder time:</span>
+          <input id="notif-time" type="time" value="07:00" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text);font-size:12px" onchange="saveNotifTime(this.value)">
+        </div>
+      </div>
     </div>
   </div>
   <div class="nutr-hero" id="nutr-hero">
@@ -1687,6 +1699,14 @@ input[type=number]{-moz-appearance:textfield}
       <button class="btn-complete pending" style="width:100%;padding:11px;border-radius:10px" onclick="fdyAdd()">Add to diary</button>
       <div class="pc-note" style="margin-top:8px">Type to search 300+ foods — tap a result to select. Enter grams for per-100g foods, or fill macros directly for custom entries. Custom foods are saved for next time. Tap ✕ to remove entries.</div>
       <div id="fdy-saved-wrap" style="margin-top:10px"></div>
+      <!-- Meal Templates -->
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer;font-size:12px;color:var(--text2);padding:6px 0;list-style:none;display:flex;align-items:center;gap:6px"><span>📋</span> Meal Templates <span style="font-size:10px;color:var(--text3)">(save today's foods for reuse)</span></summary>
+        <div style="margin-top:8px">
+          <div id="meal-template-list"></div>
+          <button onclick="saveMealTemplate()" style="margin-top:8px;font-size:12px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer;width:100%">Save today's foods as template…</button>
+        </div>
+      </details>
     </div>
   </div>
 
@@ -2667,6 +2687,10 @@ if(!STATE.niggles) STATE.niggles={};
 if(!STATE.mobilityDone) STATE.mobilityDone={};
 if(!STATE.restHRLog) STATE.restHRLog={};
 if(!Array.isArray(STATE.benchmarks)) STATE.benchmarks=[];
+if(!STATE.shoes) STATE.shoes={};
+if(!STATE.hrvLog) STATE.hrvLog={};
+if(!Array.isArray(STATE.injuries)) STATE.injuries=[];
+if(!STATE.mealTemplates) STATE.mealTemplates={};
 ensureContainers();
 
 // ─────────────────────────────────────────
@@ -3436,6 +3460,7 @@ function renderFoodDiary(){
     +'<div class="fdy-bar-row"><span>Carbs</span>'+bar(tot.cho,tgt.cho,'#5aa6ff')+'<span>'+Math.round(tot.cho*10)/10+' / '+tgt.cho+'g</span></div>'
     +'<div class="fdy-bar-row"><span>Fat</span>'+bar(tot.fat,tgt.fat,'#e8c66b')+'<span>'+Math.round(tot.fat*10)/10+' / '+tgt.fat+'g</span></div>'
     +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+' kg · '+tgtInfo.nutrLabel+' · adjust in Daily fuel &amp; hydration card.</div>'
+    +_fdyGapBanner(tot,tgt)
     +'</div>';
   el.innerHTML=html;
   renderFdySaved();
@@ -3684,14 +3709,14 @@ function showSection(id,btn){
   const bnId=bnMap[id];if(bnId){const b=document.getElementById(bnId);if(b)b.classList.add('active');}
   currentSection=id;
   const _sec=document.getElementById('section-'+id); if(_sec) _sec.scrollTop=0;
-  if(id==='today') renderToday();
+  if(id==='today'){_todayOffset=0;renderToday();}
   else if(id==='week') renderWeek();
   else if(id==='calendar') renderCalendar();
   else if(id==='history') renderHistory();
   else if(id==='stats') renderStats();
   else if(id==='pace') pcEnsureInit();
   else if(id==='progress') renderProgress();
-  else if(id==='nutrition') renderNutritionMacros();
+  else if(id==='nutrition'){renderNutritionMacros();setTimeout(renderMealTemplates,50);}
   else if(id==='hub') renderHub();
 }
 
@@ -3845,18 +3870,35 @@ function trainingPacesTodayHTML(sessions){
     +rows.map(r=>'<div class="pace-row"><span class="pace-lbl">'+r[0]+'</span><span class="pace-val">'+r[1]+' /km<small>'+r[2]+'</small></span></div>').join('')
     +'<div class="pace-note">Riegel model from your best logged run · update by logging a run in Tools</div></div>';
 }
+let _todayOffset=0;
+function _todayNavHTML(){
+  const labels={'-1':'← Yesterday','0':'Today','1':'Tomorrow →'};
+  const o=_todayOffset;
+  return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+    +'<button onclick="_shiftTodayOffset(-1)" style="font-size:12px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer">‹ Prev</button>'
+    +'<span style="font-size:12px;font-family:\'Aptos\',monospace;color:var(--text3)">'+(o===0?'Today':o===-1?'Yesterday':o===1?'Tomorrow':(o<0?Math.abs(o)+' days ago':o+' days ahead'))+'</span>'
+    +'<button onclick="_shiftTodayOffset(1)" style="font-size:12px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer">Next ›</button>'
+    +'</div>';
+}
+function _shiftTodayOffset(d){ _todayOffset+=d; renderToday(); }
 function renderToday(){
-  const today=new Date();
-  document.getElementById('today-date-lbl').textContent=formatDate(today).toUpperCase();
+  const base=new Date(); base.setDate(base.getDate()+_todayOffset);
+  const today=base;
+  const lbl=_todayOffset===0?formatDate(today).toUpperCase():(formatDate(today).toUpperCase()+(_todayOffset<0?' (past)':' (future)'));
+  document.getElementById('today-date-lbl').textContent=lbl;
   const sessions=getSessionsForDate(today);
   const container=document.getElementById('today-sessions');
+  const navHTML=_todayNavHTML();
+  const weatherHTML='<div id="weather-strip" style="display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border-radius:10px;margin-bottom:10px;font-size:12px"></div>';
   if(sessions.length===0){
-    container.innerHTML=phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled today.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
+    container.innerHTML=navHTML+weatherHTML+phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
+    if(_todayOffset===0) _fetchWeather();
     return;
   }
-  let out=todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+deloadNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
+  let out=navHTML+weatherHTML+todayProgressHTML()+phaseStripHTML()+benchmarkNudgeHTML()+deloadNudgeHTML()+guidanceCardHTML(today)+morningCardHTML(today)+trainingPacesTodayHTML(sessions)+sessions.map(s=>renderSessionCard(s,true,true)).join('')+(sessions.every(s=>s.type==='rest')?mobilityCardHTML():'');
   if(sessions.some(s=>s.type==='rest')) out+=recoveryPanelHTML(today);
   container.innerHTML=out;
+  if(_todayOffset===0) _fetchWeather();
 }
 
 function sessionFuelingHint(s){
@@ -5258,6 +5300,9 @@ function renderProgress(){
   } else {
     html+=_pcard('MILESTONES & ACHIEVEMENTS','<div class="ls-hint">Complete your first session to start earning milestones — they\'re saved here permanently as you train.</div>');
   }
+  html+=marathonTrendCardHTML();
+  html+=zoneDistCardHTML();
+  html+=shoesCardHTML();
   c.innerHTML=html||'<div class="ls-hint">Start logging weights and run speeds to see your progress here.</div>';
 }
 // ═══════════════════════════════════════════
@@ -5323,8 +5368,17 @@ function recoveryPanelHTML(date){
   const ymd=_ymd(date); const r=STATE.recovery[ymd]||{};
   const items=[['sleep','7–9 h of quality sleep — your biggest recovery lever'],['hydrate','Hydrate well across the day (~35 ml/kg)'],['mobility','10 min easy mobility / stretching (hips & hamstrings)'],['walk','Optional easy walk — gentle blood flow, no intensity'],['fuel','Eat enough protein to repair (≈1.8–2.2 g/kg)']];
   const rows=items.map(it=>'<div class="rec-item" onclick="toggleRecovery(\''+ymd+'\',\''+it[0]+'\')"><div class="rec-check'+(r[it[0]]?' on':'')+'" id="rec-'+ymd+'-'+it[0]+'">✓</div><div class="rec-txt">'+it[1]+'</div></div>').join('');
+  const injuries=(STATE.injuries||[]);
+  const injList=injuries.length?injuries.map((inj,i)=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-top:1px solid var(--border);font-size:11px"><span style="color:var(--text)">'+escHtml(inj.label)+'</span><span style="color:var(--text3);margin:0 8px">'+inj.start+(inj.end?' → '+inj.end:' → ongoing')+'</span><button onclick="removeInjury('+i+')" style="color:#ff6b47;background:none;border:none;cursor:pointer;font-size:11px">✕</button></div>').join(''):'<div style="font-size:11px;color:var(--text3);padding:4px 0">None logged.</div>';
+  const injForm='<details style="margin-top:10px"><summary style="font-size:11px;color:var(--text2);cursor:pointer;padding:4px 0">+ Log injury / illness period</summary>'
+    +'<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px">'
+    +'<input id="inj-start" type="date" style="padding:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px">'
+    +'<input id="inj-end" type="date" style="padding:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px"></div>'
+    +'<input id="inj-label" type="text" placeholder="e.g. Right IT band, Cold" style="width:100%;margin-top:6px;padding:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;box-sizing:border-box">'
+    +'<button onclick="addInjury()" style="width:100%;margin-top:6px;padding:6px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:11px;cursor:pointer">Save period</button></details>';
   return '<div class="rec-panel"><div class="rec-hd">REST &amp; RECOVERY CHECKLIST</div>'+rows
-    +'<div class="rec-tip">Rest days are when adaptation actually happens. Prioritise sleep and food over "doing more" — chasing extra sessions when tired is how overtraining starts. Keep any movement genuinely easy.</div></div>';
+    +'<div class="rec-tip">Rest days are when adaptation actually happens. Prioritise sleep and food over "doing more" — chasing extra sessions when tired is how overtraining starts. Keep any movement genuinely easy.</div>'
+    +'<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">🩹 Injury / Illness Log</div>'+injList+injForm+'</div></div>';
 }
 function toggleRecovery(ymd,key){
   if(!STATE.recovery[ymd]) STATE.recovery[ymd]={};
@@ -5592,7 +5646,7 @@ function bodyCompCardHTML(){
   const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">BODY WEIGHT &amp; RELATIVE STRENGTH</div>'+inner+'</div>';
   const bw=latestBW(); const log=STATE.bodyweightLog||{}; const ks=Object.keys(log).sort();
   let spark='';
-  if(ks.length>=2){ const vals=ks.map(k=>log[k]); const mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals); const W=300,H=46; const X=i=>i/(ks.length-1)*W; const Y=v=>mx===mn?H/2:(H-4)-((v-mn)/(mx-mn))*(H-8); const line=vals.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' '); spark='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="46" preserveAspectRatio="none"><path d="'+line+'" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linejoin="round"/></svg>'; }
+  if(ks.length>=2){ const vals=ks.map(k=>log[k]); const mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals); const W=300,H=46; const X=i=>i/(ks.length-1)*W; const Y=v=>mx===mn?H/2:(H-4)-((v-mn)/(mx-mn))*(H-8); const line=vals.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' '); const maVals=vals.map((_,i)=>{const sl=vals.slice(Math.max(0,i-6),i+1);return sl.reduce((a,b)=>a+b,0)/sl.length;}); const maLine=maVals.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' '); spark='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="46" preserveAspectRatio="none"><path d="'+line+'" fill="none" stroke="var(--accent2)" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="3 2" opacity=".5"/><path d="'+maLine+'" fill="none" stroke="var(--accent2)" stroke-width="2" stroke-linejoin="round"/></svg><div style="font-size:9px;color:var(--text3);margin-top:2px">━ 7-day avg · ╌ daily</div>'; }
   const input='<div class="pc-input-row" style="margin-top:8px"><input id="bw-in" type="number" inputmode="decimal" step="0.1" placeholder="'+(bw?bw+' kg':'kg')+'" style="flex:1"><button class="sug-apply" style="margin-left:8px" onclick="logBodyweight()">Log today</button></div>';
   let rel='';
   if(bw){ const pr=computePRs().strength;
@@ -5959,7 +6013,8 @@ function morningCardHTML(date){
   const body='<div class="mc-sec">How you feel</div>'+rdRows
     +'<div class="mc-sec">Niggles &amp; recovery <span class="mc-sub">0 none → 10 sharp</span></div>'+nigRows
     +'<div class="nig-row"><span class="nig-lbl">Mobility done?</span><button class="mob-btn'+(mob?' on':'')+'" onclick="toggleMobility()">'+(mob?'✓ Done':'Mark done')+'</button></div>'
-    +'<div class="nig-row"><span class="nig-lbl">Morning resting HR</span><div class="pc-input-row" style="width:128px"><input id="rhr-in" type="number" inputmode="numeric" placeholder="bpm" value="'+rhr+'" oninput="logRestHRToday(this.value)" style="flex:1"><span class="pc-unit">bpm</span></div></div>';
+    +'<div class="nig-row"><span class="nig-lbl">Morning resting HR</span><div class="pc-input-row" style="width:128px"><input id="rhr-in" type="number" inputmode="numeric" placeholder="bpm" value="'+rhr+'" oninput="logRestHRToday(this.value)" style="flex:1"><span class="pc-unit">bpm</span></div></div>'
+    +'<div class="nig-row"><span class="nig-lbl">Morning HRV <span style="font-size:9px;color:var(--text3)">(ms)</span></span><div class="pc-input-row" style="width:128px"><input id="hrv-in" type="number" inputmode="numeric" min="10" max="200" placeholder="e.g. 68" value="'+((STATE.hrvLog&&STATE.hrvLog[ymd])||'')+'" oninput="logHRV(this.value)" style="flex:1"><span class="pc-unit">ms</span></div></div>';
   const logged = rscore!=null || Object.keys(n).length>0 || mob || rhr;
   if(!logged) return '<div class="rd-card"><div class="rd-hd">MORNING CHECK-IN</div>'+body+'</div>';
   const b=rscore!=null?readinessBand(rscore):null; const mn=maxNiggleToday(); const re=rhrElevated();
@@ -8029,6 +8084,215 @@ function appToast(m){
 function _updateOnlineStatus(){const el=document.getElementById('offline-badge');if(el)el.style.display=navigator.onLine?'none':'inline-flex';}
 window.addEventListener('online',_updateOnlineStatus);
 window.addEventListener('offline',_updateOnlineStatus);
+
+// ── Dark/Light Mode ──
+function toggleTheme(){
+  const light=document.body.classList.toggle('light-mode');
+  STATE.lightMode=light; saveState(STATE);
+  const btn=document.getElementById('theme-toggle');
+  if(btn) btn.textContent=light?'🌙':'☀️';
+}
+function _restoreTheme(){
+  if(STATE.lightMode){ document.body.classList.add('light-mode'); const btn=document.getElementById('theme-toggle'); if(btn) btn.textContent='🌙'; }
+}
+
+// ── Push Notifications ──
+async function toggleNotifications(){
+  if(!('Notification' in window)){alert('Notifications not supported in this browser.');return;}
+  if(STATE.notifsEnabled){STATE.notifsEnabled=false;saveState(STATE);_updateNotifUI();return;}
+  const p=await Notification.requestPermission();
+  if(p==='granted'){STATE.notifsEnabled=true;saveState(STATE);_scheduleNotification();}
+  else appToast('Permission denied — enable notifications in browser settings');
+  _updateNotifUI();
+}
+function saveNotifTime(v){STATE.notifTime=v;saveState(STATE);}
+function _updateNotifUI(){
+  const btn=document.getElementById('notif-toggle');if(!btn)return;
+  const on=STATE.notifsEnabled&&typeof Notification!=='undefined'&&Notification.permission==='granted';
+  btn.textContent=on?'Disable':'Enable';
+  const row=document.getElementById('notif-time-row');if(row) row.style.display=on?'flex':'none';
+  const ti=document.getElementById('notif-time');if(ti) ti.value=STATE.notifTime||'07:00';
+}
+let _notifTimer=null;
+function _scheduleNotification(){
+  if(_notifTimer) clearTimeout(_notifTimer);
+  if(!STATE.notifsEnabled||typeof Notification==='undefined'||Notification.permission!=='granted') return;
+  const now=new Date(); const [h,m]=(STATE.notifTime||'07:00').split(':').map(Number);
+  const next=new Date(now); next.setHours(h,m,0,0);
+  if(next<=now) next.setDate(next.getDate()+1);
+  _notifTimer=setTimeout(()=>{
+    try{
+      const todaySess=getSessionsForDate(new Date());
+      const body=todaySess.length&&todaySess[0].type!=='rest'?(todaySess[0].name||'Training session today'):'Rest / recovery day';
+      new Notification('Albert 12 Week — Today\'s plan',{body,icon:'./icon-192.png'});
+    }catch(e){}
+    _scheduleNotification();
+  },next-now);
+}
+
+// ── HRV logging ──
+function logHRV(val){
+  const v=parseInt(val); if(!(v>=10&&v<=200)) return;
+  if(!STATE.hrvLog) STATE.hrvLog={};
+  STATE.hrvLog[_ymd(new Date())]=v; saveState(STATE);
+}
+
+// ── Injury / Illness log ──
+function addInjury(){
+  const start=document.getElementById('inj-start'); const end=document.getElementById('inj-end'); const label=document.getElementById('inj-label');
+  if(!start||!label||!start.value||!label.value.trim()) return;
+  if(!Array.isArray(STATE.injuries)) STATE.injuries=[];
+  STATE.injuries.push({start:start.value,end:end.value||'',label:label.value.trim()});
+  saveState(STATE); label.value=''; renderToday();
+}
+function removeInjury(i){
+  if(!Array.isArray(STATE.injuries)||!STATE.injuries[i]) return;
+  STATE.injuries.splice(i,1); saveState(STATE); renderToday();
+}
+
+// ── Gap-to-Target Nutrition Banner ──
+function _fdyGapBanner(tot,tgt){
+  const gaps=[];
+  const pGap=Math.round((tgt.pro||0)-tot.pro); if(pGap>5) gaps.push(pGap+'g protein');
+  const cGap=Math.round((tgt.cho||0)-tot.cho); if(cGap>10) gaps.push(cGap+'g carbs');
+  const fGap=Math.round((tgt.fat||0)-tot.fat); if(fGap>5) gaps.push(fGap+'g fat');
+  const met=!gaps.length;
+  const bg=met?'rgba(95,214,160,.12)':'rgba(232,198,107,.08)';
+  const col=met?'var(--green)':'var(--text2)';
+  const msg=met?'✓ All macro targets met for today':'Still needed: <strong>'+gaps.join(' · ')+'</strong>';
+  return '<div style="margin-top:8px;padding:8px 10px;background:'+bg+';border-radius:8px;font-size:12px;color:'+col+'">'+msg+'</div>';
+}
+
+// ── Meal Templates ──
+function renderMealTemplates(){
+  const el=document.getElementById('meal-template-list');if(!el)return;
+  const t=STATE.mealTemplates||{};const keys=Object.keys(t);
+  if(!keys.length){el.innerHTML='<div style="font-size:11px;color:var(--text3);padding:4px 0">No templates saved yet.</div>';return;}
+  el.innerHTML=keys.map(name=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)">'
+    +'<span style="font-size:12px;color:var(--text)">'+escHtml(name)+'</span>'
+    +'<div style="display:flex;gap:6px"><button onclick="applyMealTemplate(\''+escAttr(name)+'\')" style="font-size:10px;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer">Apply</button>'
+    +'<button onclick="deleteMealTemplate(\''+escAttr(name)+'\')" style="font-size:10px;padding:3px 6px;background:none;border:none;color:#ff6b47;cursor:pointer">✕</button></div></div>').join('');
+}
+function saveMealTemplate(){
+  const name=prompt('Template name (e.g. "Pre-run breakfast"):');if(!name||!name.trim())return;
+  const di=document.getElementById('fdy-date');const ymd=(di&&di.value)||_ymd(new Date());
+  const foods=(STATE.foodDiary&&STATE.foodDiary[ymd])||[];
+  if(!foods.length){appToast('No foods logged today to save as template.');return;}
+  if(!STATE.mealTemplates) STATE.mealTemplates={};
+  STATE.mealTemplates[name.trim()]=foods.map(f=>({...f}));
+  saveState(STATE);renderMealTemplates();appToast('Template "'+name.trim()+'" saved ✓');
+}
+function applyMealTemplate(name){
+  const t=(STATE.mealTemplates||{})[name];if(!t)return;
+  const di=document.getElementById('fdy-date');const ymd=(di&&di.value)||_ymd(new Date());
+  if(!STATE.foodDiary) STATE.foodDiary={};
+  if(!STATE.foodDiary[ymd]) STATE.foodDiary[ymd]=[];
+  t.forEach(f=>STATE.foodDiary[ymd].push({...f}));
+  saveState(STATE);renderFoodDiary();appToast('Template applied ✓');
+}
+function deleteMealTemplate(name){
+  if(!confirm('Delete template "'+name+'"?'))return;
+  delete STATE.mealTemplates[name];saveState(STATE);renderMealTemplates();
+}
+
+// ── Live Weather ──
+async function _fetchWeather(){
+  const el=document.getElementById('weather-strip');if(!el)return;
+  if(!navigator.geolocation){el.style.display='none';return;}
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    try{
+      const{latitude:lat,longitude:lon}=pos.coords;
+      const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,apparent_temperature,precipitation_probability,weathercode,windspeed_10m&wind_speed_unit=kmh&temperature_unit=celsius&timezone=auto');
+      if(!r.ok) throw new Error();
+      const d=await r.json();const c=d.current;
+      const codes={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',75:'🌨',80:'🌦',81:'🌧',82:'🌧',95:'⛈',96:'⛈',99:'⛈'};
+      const icon=codes[c.weathercode]||'🌡';
+      el.innerHTML='<span style="font-size:18px">'+icon+'</span><span style="font-size:12px;color:var(--text2)">'+Math.round(c.temperature_2m)+'°C feels '+Math.round(c.apparent_temperature)+'°C · '+Math.round(c.windspeed_10m)+' km/h · '+c.precipitation_probability+'% rain</span>';
+      el.style.display='flex';
+    }catch(e){el.style.display='none';}
+  },()=>el.style.display='none',{timeout:5000});
+}
+
+// ── Shoe Mileage Tracker ──
+function shoesCardHTML(){
+  const shoes=STATE.shoes||{};
+  const keys=Object.keys(shoes);
+  const inner=!keys.length?'<div class="ls-hint">No shoes added. Add your running shoes to track mileage and know when to replace them.</div>'
+    :keys.map(name=>{
+      const km=shoes[name]||0;const pct=Math.min(100,Math.round(km/750*100));
+      const col=km>700?'#ff6b47':km>500?'#e8c66b':'#5fd6a0';
+      return '<div style="margin-bottom:10px">'
+        +'<div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;color:var(--text)">'+escHtml(name)+'</span><span style="font-size:12px;color:'+col+';font-weight:600">'+km.toFixed(0)+' km'+(km>700?' ⚠️':'')+'</span></div>'
+        +'<div style="background:var(--surface2);border-radius:4px;height:5px;margin-bottom:6px"><div style="background:'+col+';height:5px;border-radius:4px;width:'+pct+'%;transition:width .4s"></div></div>'
+        +'<div style="display:flex;gap:6px">'
+        +'<button onclick="logShoeKm(\''+escAttr(name)+'\')" style="font-size:11px;padding:3px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer">+ km</button>'
+        +'<button onclick="removeShoe(\''+escAttr(name)+'\')" style="font-size:11px;padding:3px 8px;background:none;border:none;color:#ff6b47;cursor:pointer">Remove</button>'
+        +'</div></div>';
+    }).join('');
+  const addForm='<div style="display:flex;gap:8px;margin-top:10px">'
+    +'<input id="shoe-name-inp" type="text" placeholder="Shoe name…" style="flex:1;padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px">'
+    +'<button onclick="addShoe()" style="padding:7px 14px;background:var(--accent);color:#111;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600">Add</button></div>';
+  return _pcard('👟 SHOE MILEAGE TRACKER',inner+addForm+'<div class="tl-method">Replace shoes every 700–800 km to reduce injury risk. Log km manually or note the distance after each run.</div>');
+}
+function addShoe(){
+  const inp=document.getElementById('shoe-name-inp');if(!inp)return;
+  const name=inp.value.trim();if(!name)return;
+  if(!STATE.shoes) STATE.shoes={};
+  if(!STATE.shoes[name]) STATE.shoes[name]=0;
+  inp.value='';saveState(STATE);renderProgress();
+}
+function logShoeKm(name){
+  const km=parseFloat(prompt('Add km to "'+name+'":'));
+  if(!(km>0))return;
+  if(!STATE.shoes) STATE.shoes={};
+  STATE.shoes[name]=(STATE.shoes[name]||0)+km;
+  saveState(STATE);renderProgress();
+}
+function removeShoe(name){
+  if(!confirm('Remove "'+name+'" from shoe tracker?'))return;
+  delete STATE.shoes[name];saveState(STATE);renderProgress();
+}
+
+// ── HR Zone Distribution ──
+function zoneDistCardHTML(){
+  const runs=STATE.importedRuns||[];
+  const zones=[0,0,0,0,0];
+  runs.forEach(r=>{if(r.zoneSec&&Array.isArray(r.zoneSec)) r.zoneSec.forEach((s,i)=>{if(i<5&&s>0) zones[i]+=s;});});
+  const total=zones.reduce((a,b)=>a+b,0);
+  if(!total) return _pcard('❤️ HR ZONE DISTRIBUTION','<div class="ls-hint">Import GPX/TCX runs with heart-rate data to see your zone distribution. Aim for 75–80% of time in Zone 1–2.</div>');
+  const cols=['#4a9eff','#5fd6a0','#e8c66b','#e87a3c','#e05050'];
+  const labels=['Z1','Z2','Z3','Z4','Z5'];
+  const W=320,H=44;
+  let bars='';let x=0;
+  zones.forEach((s,i)=>{
+    const bw=Math.round(s/total*W);
+    bars+='<rect x="'+x+'" y="0" width="'+bw+'" height="'+H+'" fill="'+cols[i]+'" rx="'+(i===0?4:0)+'"/>';
+    if(bw>20) bars+='<text x="'+(x+bw/2)+'" y="27" text-anchor="middle" fill="#111" font-size="11" font-family="Aptos,monospace" font-weight="600">'+labels[i]+'</text>';
+    x+=bw;
+  });
+  const svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="44" style="border-radius:6px;overflow:hidden">'+bars+'</svg>';
+  const legend='<div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">'+labels.map((l,i)=>'<span style="font-size:11px;color:var(--text2)"><span style="color:'+cols[i]+'">■</span> '+l+' '+Math.round(zones[i]/60)+' min ('+Math.round(zones[i]/total*100)+'%)</span>').join('')+'</div>';
+  const z2pct=Math.round((zones[0]+zones[1])/total*100);
+  const note='<div class="pc-note" style="margin-top:8px;color:'+(z2pct>=75?'var(--green)':'var(--accent)')+'">Z1+Z2: '+z2pct+'% of total run time — '+(z2pct>=75?'great aerobic base work.':'aim for 75–80% in Z1/Z2 for optimal marathon adaptation.')+'</div>';
+  return _pcard('❤️ HR ZONE DISTRIBUTION',svg+legend+note);
+}
+
+// ── Predicted Marathon Time Trend ──
+function marathonTrendCardHTML(){
+  const runBms=(STATE.benchmarks||[]).filter(b=>b.kind==='run'&&b.predSec>0&&b.date).sort((a,b)=>a.date.localeCompare(b.date));
+  if(runBms.length<2) return _pcard('🏃 MARATHON PREDICTION TREND','<div class="ls-hint">Log at least two benchmark runs in Tools → Benchmarks to see your predicted marathon time improving over the 12 weeks.</div>');
+  const preds=runBms.map(b=>b.predSec);const minP=Math.min(...preds)-120,maxP=Math.max(...preds)+120;
+  const W=320,H=80,pad=10;
+  const xS=i=>pad+(i/Math.max(runBms.length-1,1))*(W-pad*2);
+  const yS=v=>H-pad-(v-minP)/(maxP-minP||1)*(H-pad*2);
+  const pts=runBms.map((b,i)=>xS(i).toFixed(1)+','+yS(b.predSec).toFixed(1)).join(' ');
+  const dots=runBms.map((b,i)=>{const h=Math.floor(b.predSec/3600),m=Math.floor((b.predSec%3600)/60);return '<circle cx="'+xS(i).toFixed(1)+'" cy="'+yS(b.predSec).toFixed(1)+'" r="4" fill="var(--accent)"/><text x="'+xS(i).toFixed(1)+'" y="'+(yS(b.predSec)-8).toFixed(1)+'" text-anchor="middle" fill="rgba(244,241,230,.7)" font-size="9" font-family="Aptos,monospace">'+h+':'+String(m).padStart(2,'0')+'</text>';}).join('');
+  const svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="80"><polyline points="'+pts+'" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>'+dots+'</svg>';
+  const first=runBms[0],last=runBms[runBms.length-1];
+  const improveSec=first.predSec-last.predSec;const improveMin=Math.floor(Math.abs(improveSec)/60);
+  const trend=improveSec>30?'↓ '+improveMin+' min faster over '+runBms.length+' benchmarks — fitness is improving.':improveSec<-30?'↑ '+improveMin+' min slower — review training load.':'Holding steady.';
+  return _pcard('🏃 MARATHON PREDICTION TREND','<div style="font-size:11px;color:var(--text3);margin-bottom:6px">Predicted finish time from each benchmark run (lower = better)</div>'+svg+'<div class="pc-note" style="color:'+(improveSec>30?'var(--green)':'var(--text2)')+'">'+trend+'</div>');
+}
 function _parseTimeToSec(t){
   const p=String(t||'').trim().split(':').map(Number);
   if(p.length===3) return p[0]*3600+p[1]*60+p[2];
@@ -8078,6 +8342,9 @@ window.onload=function(){
   timerRender();
   updateCountdown();
   _updateOnlineStatus();
+  _restoreTheme();
+  _updateNotifUI();
+  _scheduleNotification();
   requestAnimationFrame(applyHdrCollapse);
   renderNutritionMacros();
   renderHub();
