@@ -832,7 +832,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v75</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v76</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1638,7 +1638,7 @@ input[type=number]{-moz-appearance:textfield}
     </div>
     <div class="nutr-card-body">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-        <input id="fdy-date" type="date" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Aptos',monospace" oninput="renderFoodDiary()">
+        <input id="fdy-date" type="date" min="2026-06-08" max="2026-08-30" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 10px;font-size:13px;font-family:'Aptos',monospace" oninput="renderFoodDiary()">
         <button class="data-btn" onclick="document.getElementById('fdy-date').value=_ymd(new Date());renderFoodDiary()">Today</button>
       </div>
       <div id="fdy-out"><div class="ls-hint">Add foods below to see your daily macros.</div></div>
@@ -2592,8 +2592,8 @@ function saveState(s){
   try{
     const j=JSON.stringify(s);
     localStorage.setItem('mt_state',j);
-    const t=Date.now(); const lb=+(localStorage.getItem('mt_bak_at')||0);
-    if(t-lb>864e5){ try{ localStorage.setItem('mt_state_bak',j); localStorage.setItem('mt_bak_at',String(t)); }catch(_){} }
+    const t=Date.now(); const lb=+(localStorage.getItem('mt_bak_at')||0); const _existingBak=localStorage.getItem('mt_state_bak');
+    if(!_existingBak||t-lb>864e5){ try{ localStorage.setItem('mt_state_bak',j); localStorage.setItem('mt_bak_at',String(t)); }catch(_){} }
   }catch(e){
     if(!_saveWarned){ _saveWarned=true; try{ if(typeof appToast==='function') appToast('⚠️ Storage full — export a backup soon (Tools → Data)'); }catch(_){} }
   }
@@ -3163,10 +3163,12 @@ const FOOD_DB={
   'Endura Rehydration sachet (25g in 250ml water)':{kcal:80,pro:0,cho:20,fat:0},
   'Vo2 Max protein bar (65g)':{kcal:218,pro:20,cho:22,fat:5},
 };
+let _lastFoodHash=0;
 function fdyInit(){
   const dl=document.getElementById('fdy-food-list'); if(!dl) return;
   const allFoods=Object.assign({},FOOD_DB,STATE.customFoods||{});
-  dl.innerHTML=Object.keys(allFoods).sort().map(k=>'<option value="'+k+'"'+(!(FOOD_DB[k])?' title="Your saved food"':'')+'></option>').join('');
+  const h=Object.keys(allFoods).length;
+  if(h===_lastFoodHash&&dl.children.length>0){ /* skip rebuild — food list unchanged */ } else { _lastFoodHash=h; dl.innerHTML=Object.keys(allFoods).sort().map(k=>'<option value="'+k+'"'+(!(FOOD_DB[k])?' title="Your saved food"':'')+'></option>').join(''); }
   const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
 }
 function fdyCalcKcal(){
@@ -3272,14 +3274,14 @@ function fdyDeleteCustom(name){
   if(!STATE.customFoods) return;
   delete STATE.customFoods[name];
   saveState(STATE); fdyInit(); renderFdySaved();
-  if(typeof appToast==='function') appToast('Removed "'+name+'" from saved foods');
+  if(typeof appToast==='function') appToast('Removed "'+escHtml(name)+'" from saved foods');
 }
 function _fdyDayTarget(ymd,wt){
   // Map the scheduled session for ymd to the appropriate _NUTR_DAYS entry
   const goal=((STATE.profile&&STATE.profile.goal)||'performance');
   const goalFatAdj=goal==='lose'?-0.15:goal==='build'?0.05:0;
   const goalProtAdj=goal==='lose'?0.2:0;
-  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const _pm1=parseFloat(STATE.profile&&STATE.profile.protMultiplier); const protMult=(!isNaN(_pm1)&&_pm1>0)?_pm1:2.0;
   const prot=Math.round(wt*(protMult+goalProtAdj));
   // Parse ymd to a Date
   const parts=ymd.split('-'); const d=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
@@ -3365,7 +3367,7 @@ function renderFoodDiary(){
     +'<span style="font-size:11px;color:var(--text2);min-width:60px;flex-shrink:0">Hydration</span>'
     +'<div class="fdy-track" style="flex:1"><div class="fdy-fill" style="width:'+fluidPct+'%;background:#47b8ff"></div></div>'
     +'<input type="number" inputmode="decimal" step="0.1" value="'+(fluidLogged||'')+'" placeholder="0.0" style="width:58px;padding:4px 6px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;text-align:center;font-family:\'Aptos\',monospace" oninput="setFluidLog(\''+ymd+'\',this.value)">'
-    +'<span style="font-size:10px;color:var(--text3);min-width:38px">/ '+fluidTarget+' L</span>'
+    +'<span style="font-size:10px;color:var(--text3);min-width:38px">/ '+fluidTarget.toFixed(1)+' L</span>'
     +'</div>';
   const dayBanner=stripHTML+timingHTML+'<div class="nutr-tip" style="margin-bottom:8px">Target (<strong>'+tgtInfo.label+'</strong>): ~'+tgt.kcal.toLocaleString()+' kcal · '+tgt.cho+'g carbs · '+tgt.pro+'g protein · '+tgt.fat+'g fat</div>'+hydHTML;
   if(!items.length){ el.innerHTML=dayBanner+'<div class="ls-hint">No entries for this day yet. Add foods below.</div>'; return; }
@@ -3413,9 +3415,9 @@ function openFoodDiaryForDate(ymd){
 function renderNutritionMacros(){
   const bwArr=Object.entries(STATE.bodyweightLog||{});
   const latestBW=bwArr.length?parseFloat(bwArr.sort((a,b)=>b[0].localeCompare(a[0]))[0][1]):null;
-  const w=(latestBW&&latestBW>0)?latestBW:((STATE.profile&&parseFloat(STATE.profile.weight))||86);
-  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
-  const carbsPerHr=(STATE.profile&&parseFloat(STATE.profile.carbsPerHr))||90;
+  const _w0=parseFloat(STATE.profile&&STATE.profile.weight); const w=(latestBW&&latestBW>0)?latestBW:((!isNaN(_w0)&&_w0>0)?_w0:86);
+  const _pm2=parseFloat(STATE.profile&&STATE.profile.protMultiplier); const protMult=(!isNaN(_pm2)&&_pm2>0)?_pm2:2.0;
+  const _ch=parseFloat(STATE.profile&&STATE.profile.carbsPerHr); const carbsPerHr=(!isNaN(_ch)&&_ch>0)?_ch:90;
   const goalStr=(STATE.profile&&STATE.profile.goal)||'performance';
   const goalFatAdj=goalStr==='lose'?-0.15:goalStr==='build'?0.05:0;
   const prot=Math.round(w*protMult);
@@ -3458,7 +3460,7 @@ function renderNutritionMacros(){
   const cl=document.getElementById('nutr-carbload-detail');
   if(cl){
     const d3=Math.round(w*10), d2=Math.round(w*9), d1=Math.round(w*8);
-    const raceD=new Date(RACE_DATE);
+    const raceD=new Date(RACE_DATE.getTime());
     const dayName=(offset)=>{ const d=new Date(raceD); d.setDate(raceD.getDate()-offset); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1); };
     cl.innerHTML=`<table class="nutr-table" style="margin-bottom:8px">
       <tr><th>Day</th><th>Date</th><th>Carbs</th><th>Notes</th></tr>
@@ -3495,7 +3497,7 @@ function nutrShowRecipe(key,btn){
   btn.classList.add('active');
 }
 function renderNutrRecipes(w,goal){
-  const protMult=(STATE.profile&&parseFloat(STATE.profile.protMultiplier))||2.0;
+  const _pm3=parseFloat(STATE.profile&&STATE.profile.protMultiplier); const protMult=(!isNaN(_pm3)&&_pm3>0)?_pm3:2.0;
   const prot=Math.round(w*protMult);
   const mealP=Math.round(prot/5);
   const oats=Math.round(w*0.8/5)*5;
@@ -3594,8 +3596,8 @@ function updateCountdown(){
   const now=new Date();
   const diff=RACE_DATE-now;
   if(diff<=0){document.getElementById('cd-days').textContent='0';document.getElementById('cd-weeks').textContent='0';document.getElementById('cd-sessions').textContent='0';return;}
-  const days=Math.ceil(diff/(1000*60*60*24));
-  const weeks=Math.ceil(days/7);
+  const days=Math.max(0,Math.ceil(diff/(1000*60*60*24)));
+  const weeks=Math.max(0,Math.ceil(days/7));
   const done=totalCompleted();
   const remaining=Math.max(0,84-done);
   document.getElementById('cd-days').textContent=days;
@@ -3840,11 +3842,13 @@ function sessionFuelingHint(s){
     let gels=0,t=gelFreqMin; while(t<=durMin){gels++;t+=gelFreqMin;}
     return `<div class="session-fueling-hint">
       <div class="sfh-title">⛽ Fuelling plan · ${Math.round(km)} km (~${durMin} min) · Week ${wk}</div>
+      <div class="pc-note" style="margin-bottom:4px">Estimate based on 5:30/km training pace — adjust if your race pace differs significantly.</div>
       <div class="sfh-row"><span class="sfh-lbl">First gel</span><span class="sfh-val">km 6 / 30 min — always start early</span></div>
       <div class="sfh-row"><span class="sfh-lbl">Frequency</span><span class="sfh-val">every ${gelFreqMin} min → ${gels} gels total</span></div>
       <div class="sfh-row"><span class="sfh-lbl">Carbs target</span><span class="sfh-val" style="color:var(--accent)">${carbTarget} · use race gels</span></div>
       <div class="sfh-row"><span class="sfh-lbl">Fluids</span><span class="sfh-val">500–750 ml/hr · electrolytes &gt;90 min</span></div>
       <div class="sfh-row" style="border-top:1px solid rgba(232,198,107,.2);margin-top:6px;padding-top:6px"><span class="sfh-lbl" style="color:var(--accent)">🏃 Gut training</span><span class="sfh-val" style="color:var(--text2)">${gutNote}</span></div>
+      <div class="nutr-warn" style="margin-top:6px"><strong>Sydney heat (&gt;25°C):</strong> Start first gel at km 4 (20 min) instead of km 6–8. Increase electrolyte strength to 600–700 mg sodium/hr. Begin sipping fluid from the first km.</div>
     </div>`;
   }
   // Strength session ≥60 min intra-workout fueling
@@ -4108,6 +4112,7 @@ function toggleExercise(exId,sessKey){
   }
 }
 function toggleSessionComplete(key){
+  const s=PROGRAM.find(x=>sessionKey(x)===key); if(!s) return;
   const done=STATE.completedSessions[key]=!STATE.completedSessions[key];
   saveState(STATE);
   updateCountdown();
@@ -4185,7 +4190,7 @@ function checkMilestones(key,done){
   if(!STATE.celebratedMilestone[wkKey]){
     const wkSessions=PROGRAM.filter(p=>p.week===s.week&&p.phase===s.phase&&p.type!=='rest');
     const wkDone=wkSessions.length>0&&wkSessions.every(p=>STATE.completedSessions[sessionKey(p)]);
-    if(wkDone){ STATE.celebratedMilestone[wkKey]=now; _milestoneToast('Week '+s.week+' complete. '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
+    if(wkDone){ STATE.celebratedMilestone[wkKey]=now; _milestoneToast('Week '+s.week+' complete! '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
   }
   saveState(STATE);
 }
@@ -4274,11 +4279,11 @@ function weekMonitorHTML(monday){
     +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em">WEEK LOAD · OVERTRAINING MONITOR</div>'
     +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">'+range+'</div></div>'+inner+'</div>';
   if(cur.sum===0){
-    return wrap('<div class="ls-hint">No training load logged for this week yet. Add an RPE to each exercise and the weekly total, ramp and overtraining risk will appear here.</div>');
+    return wrap('<div class="ls-hint">No training load logged for this week yet. Add an RPE to each exercise and the weekly total, ramp and overtraining risk will appear here. Rate each exercise with RPE or set a session RPE to start tracking load.</div>');
   }
   // prior up to 4 weeks for chronic baseline (exclude programmed deload weeks)
   const prevSums=[];
-  for(let w=1;w<=4;w++){
+  for(let w=1;w<=4;w++){ // 4-week chronic window
     const pm=new Date(monday); pm.setDate(monday.getDate()-7*w);
     const ps=new Date(PLAN_START); ps.setHours(0,0,0,0);
     const wkNum=Math.max(1,Math.min(12,Math.floor((pm-ps)/864e5/7)+1));
@@ -4348,7 +4353,7 @@ function deloadBtnHTML(){
 }
 function raceWeekCardHTML(){
   const w=(STATE.profile&&parseFloat(STATE.profile.weight))||86;
-  const raceD=new Date(RACE_DATE);
+  const raceD=new Date(RACE_DATE.getTime());
   const dayName=(offset)=>{ const d=new Date(raceD); d.setDate(raceD.getDate()-offset); return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1); };
   const dayYmd=(offset)=>{ const d=new Date(raceD); d.setDate(raceD.getDate()-offset); return _ymd(d); };
   const d3=Math.round(w*10), d2=Math.round(w*9), d1=Math.round(w*8), d0=Math.round(w*3);
@@ -4376,8 +4381,8 @@ function renderWeek(){
   const container=document.getElementById('week-view');
   const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   let html=deloadBtnHTML();
-  // Race-week nutrition card (week 12)
-  if(currentProgramWeek()===12) html=raceWeekCardHTML()+html;
+  // Race-week nutrition card (weeks 11–12)
+  const _cw=currentProgramWeek(); if(_cw>=11&&_cw<=12) html=raceWeekCardHTML()+html;
   weekSessions.forEach((wd,i)=>{
     const isToday=wd.date.toDateString()===today.toDateString();
     const isPast=wd.date<today&&!isToday;
@@ -4554,7 +4559,7 @@ function loadWindow(days){
   for(let i=days-1;i>=0;i--){ const d=new Date(end); d.setDate(end.getDate()-i); arr.push({d:new Date(d), load:m[_ymd(d)]||0}); }
   return arr;
 }
-function _sd(arr){ if(arr.length<1) return 0; const m=arr.reduce((a,b)=>a+b,0)/arr.length; const v=arr.reduce((a,b)=>a+(b-m)*(b-m),0)/arr.length; return Math.sqrt(v); }
+function _sd(arr){ if(!arr||arr.length<2) return 0; const m=arr.reduce((a,b)=>a+b,0)/arr.length; const v=arr.reduce((a,b)=>a+(b-m)*(b-m),0)/arr.length; return Math.sqrt(v); }
 function _gp(cx,cy,r,deg){ const a=(deg-180)*Math.PI/180; return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
 function _garc(cx,cy,r,d0,d1,color,w){ const p0=_gp(cx,cy,r,d0),p1=_gp(cx,cy,r,d1); const large=(d1-d0)>180?1:0; return '<path d="M '+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+' A '+r+' '+r+' 0 '+large+' 1 '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+'" fill="none" stroke="'+color+'" stroke-width="'+w+'"></path>'; }
 function acwrGauge(acwr, band){
@@ -4608,7 +4613,7 @@ function trainingLoadCardHTML(){
   else if(acwr<=1.3) acwrBand=['tl-ok','Sweet spot'];
   else if(acwr<=1.5) acwrBand=['tl-warn','Caution'];
   else acwrBand=['tl-bad','Spike risk'];
-  let monBand = monotony==null?['tl-low','—'] : monotony<1.5?['tl-ok','Good variety'] : monotony<=2?['tl-warn','Moderate'] : ['tl-bad','Too steady'];
+  let monBand = monotony==null?['tl-low','—'] : monotony<1.5?['tl-ok','Good variety'] : monotony<=2?['tl-warn','Moderate — normal for marathon training (1.4–1.8 is expected with high easy-run volume)'] : ['tl-bad','Too steady'];
   const maxL=Math.max(1,...w14.map(x=>x.load));
   const bars=w14.map(x=>{
     const h=Math.round((x.load/maxL)*100);
@@ -5102,7 +5107,7 @@ function renderProgress(){
   if(vWeeks.length){
     const last=vWeeks[vWeeks.length-1], prev=vWeeks.length>1?vWeeks[vWeeks.length-2]:null;
     const lastV=Math.round(volMap[last]), prevV=prev!=null?Math.round(volMap[prev]):null;
-    const delta=prevV?((lastV-prevV)/prevV*100):null;
+    const delta=(prevV!=null&&prevV>0)?((lastV-prevV)/prevV*100):null;
     const verdict = delta==null?'First week logged' : delta>2?'Progressing ↑' : delta<-2?'Volume dropped ↓' : 'Holding steady';
     html+=_pcard('PROGRESSIVE OVERLOAD · WEEKLY VOLUME',
       '<div class="tl-grid"><div class="tl-card"><div class="tl-val">'+lastV.toLocaleString()+'</div><div class="tl-lbl">Latest week volume (kg)</div>'+(delta!=null?'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3);margin-top:4px">'+(delta>=0?'+':'')+Math.round(delta)+'% vs prev week</div>':'')+'</div>'
@@ -5116,7 +5121,7 @@ function renderProgress(){
   if(rkWeeks.length){
     const lastRkW=rkWeeks[rkWeeks.length-1],prevRkW=rkWeeks.length>1?rkWeeks[rkWeeks.length-2]:null;
     const lastRkV=Math.round(rkMap[lastRkW]),prevRkV=prevRkW!=null?Math.round(rkMap[prevRkW]):null;
-    const rkDelta=prevRkV?Math.round((lastRkV-prevRkV)/prevRkV*100):null;
+    const rkDelta=(prevRkV!=null&&prevRkV>0)?Math.round((lastRkV-prevRkV)/prevRkV*100):null;
     const rkVerdict=rkDelta==null?'First week logged':rkDelta>5?'Mileage building ↑':rkDelta<-5?'Volume dropped ↓':'Holding steady';
     // Long run progression line overlay
     const lrMap=weeklyLongRunKm(); const lrWeeks=Object.keys(lrMap).map(Number);
@@ -5429,11 +5434,11 @@ var rdOpen=false;
 function parseRunDistanceKm(t){ const m=String(t||'').match(/(\d+(?:\.\d+)?)\s*(?:[–-]\s*(\d+(?:\.\d+)?))?\s*km/i); if(!m) return 0; const a=parseFloat(m[1]); const b=m[2]?parseFloat(m[2]):a; return (a+b)/2; }
 function runLogCandidates(){
   const out=[];
-  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat!=='run') return; const kmh=parseFloat(STATE.runLog[e.id]); if(!(kmh>0)) return; const dist=parseRunDistanceKm(e.detail||e.name); if(!(dist>=3)) return; out.push({distKm:dist, durationSec:Math.round(dist/kmh*3600), source:'treadmill'}); }));
+  PROGRAM.forEach(s=>s.exercises.forEach(e=>{ if(e.cat!=='run') return; const kmh=parseFloat(STATE.runLog[e.id]); if(!(kmh>0&&kmh<50)) return; const dist=parseRunDistanceKm(e.detail||e.name); if(!(dist>=3)) return; out.push({distKm:dist, durationSec:Math.round(dist/kmh*3600), source:'treadmill'}); }));
   return out;
 }
 function predictMarathon(){
-  const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=3&&r.durationSec>0).concat(runLogCandidates());
+  const runs=(STATE.importedRuns||[]).filter(r=>r&&r.distKm>=5&&r.durationSec>0).concat(runLogCandidates().filter(r=>r.distKm>=5)); // Riegel accurate ≥5km
   if(!runs.length) return null;
   let best=null;
   runs.forEach(r=>{ const pred=r.durationSec*Math.pow(42.195/r.distKm,1.06); if(!best||pred<best.pred) best={pred,run:r}; });
@@ -5442,14 +5447,14 @@ function predictMarathon(){
 function racePredictCardHTML(){
   const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">RACE PREDICTOR 🏁</div>'+inner+'</div>';
   const pm=predictMarathon();
-  if(!pm) return wrap('<div class="ls-hint">Import a run of 3 km or longer (Tools → Import a run) and I\u2019ll predict your marathon finish and training paces from it.</div>');
+  if(!pm) return wrap('<div class="ls-hint">Log a run of 5 km or more to unlock race time prediction (Riegel equation requires ≥ 5 km for accuracy). Import a run via Tools → Import a run, or log treadmill speed on a 5 km+ session.</div>');
   const t=pm.sec, hh=Math.floor(t/3600), mm=Math.round((t%3600)/60); const big=hh+':'+String(mm).padStart(2,'0');
   const p=rpPaces(t);
   const fr=pm.from; const paceSec=fr.paceSec||(fr.durationSec/fr.distKm); const srcTxt=fr.source==='treadmill'?'treadmill run':(fr.dateISO?('run on '+(d=>d.getDate()+'/'+(d.getMonth()+1))(new Date(fr.dateISO))):'logged run');
   const row=(l,sec)=>'<tr><td class="p">'+l+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
   return wrap('<div style="text-align:center;margin-bottom:8px"><div style="font-size:34px;font-family:\'Aptos\',sans-serif;color:var(--accent);line-height:1">'+big+'</div><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">PREDICTED MARATHON</div></div>'
     +'<table class="s1-tbl"><tbody>'+row('Easy',p.easy)+row('Marathon',p.mp)+row('Threshold',p.thr)+row('Interval',p.int)+'</tbody></table>'
-    +(fr.distKm<5?'<div class="pc-note" style="color:var(--accent3)">⚠ Based on a short run ('+fr.distKm.toFixed(1)+' km) — the Riegel model extrapolates aggressively from short efforts; log a 5 km+ run for a more reliable prediction.</div>':'')
+    +(fr.distKm<10?'<div class="pc-note" style="color:var(--accent3)">⚠ Prediction accuracy improves with longer training runs (10 km+). Based on '+fr.distKm.toFixed(1)+' km — log a 10 km+ effort for a more reliable prediction.</div>':'')
     +'<div class="pc-note">From your '+(+fr.distKm.toFixed(1))+' km '+srcTxt+' ('+fmtPaceSec(paceSec)+'/km), via the Riegel model (exponent 1.06). Updates with each run logged.</div>');
 }
 // ── Plate & warm-up calculator ──
@@ -6345,7 +6350,7 @@ function calInitMonth(){
   const base = today<ps ? ps : today;
   calMonth = new Date(base.getFullYear(), base.getMonth(), 1);
 }
-function calShift(delta){ calInitMonth(); calMonth=new Date(calMonth.getFullYear(), calMonth.getMonth()+delta, 1); renderCalendar(); }
+function calShift(delta){ calInitMonth(); calMonth=new Date(calMonth.getFullYear(), calMonth.getMonth()+delta, 1); calSelected=null; renderCalendar(); }
 function calPrev(){ calShift(-1); }
 function calNext(){ calShift(1); }
 function calJumpToday(){ calMonth=null; calSelected=_ymd(new Date()); calInitMonth(); renderCalendar(); }
@@ -7514,7 +7519,7 @@ function importData(input){
       const looksOurs = obj&&typeof obj==='object'&&(obj._app==='albert12'||obj.completedSessions||obj.exerciseSets||obj.profile||obj.importedRuns);
       const importedV = obj._v||obj._schemaVersion||0;
       if(looksOurs && importedV > SCHEMA_VERSION+1){ if(m) m.textContent='Backup is from a newer app version — please update the app before restoring.'; return; }
-      if(looksOurs){ for(const k in STATE){ delete STATE[k]; } Object.assign(STATE,obj); delete STATE._app; delete STATE._v; ensureContainers(); saveState(STATE);
+      if(looksOurs){ for(const k in STATE){ delete STATE[k]; } const KNOWN_KEYS=new Set(Object.keys(STATE)); Object.keys(obj).forEach(k=>{ if(!KNOWN_KEYS.has(k)&&k!=='_app'&&k!=='_v'&&k!=='_lastSaved'&&k!=='_schemaVersion') delete obj[k]; }); Object.assign(STATE,obj); delete STATE._app; delete STATE._v; ensureContainers(); saveState(STATE);
         if(m) m.textContent='Backup restored ✓'; hideRestoreBanner(); if(typeof appToast==='function') appToast('Backup restored — your sessions are back ✓'); renderToday(); if(currentSection==='stats') renderStats(); if(currentSection==='progress') renderProgress(); }
       else { if(m) m.textContent='That file does not look like an Albert 12 Week backup.'; }
     }catch(e){ if(m) m.textContent='Could not read that file.'; } };
@@ -7527,7 +7532,7 @@ function initPWA(){
     // Hosted (e.g. GitHub Pages): real manifest + service worker → installable, offline, in-place updates
     try{ const l=document.createElement('link'); l.rel='manifest'; l.href='manifest.json'; document.head.appendChild(l); }catch(e){}
     try{ const a=document.createElement('link'); a.rel='apple-touch-icon'; a.href='icon-180.png'; document.head.appendChild(a); }catch(e){}
-    try{ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js'); }catch(e){}
+    try{ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW registration failed:',e)); }catch(e){}
   } else {
     // Opened as a plain file: keep the lightweight blob manifest so Add-to-Home-Screen still looks right
     try{ const man={name:'AV Fitness',short_name:'AV Fitness',display:'standalone',orientation:'portrait',background_color:'#11203a',theme_color:'#11203a',start_url:'.'};
