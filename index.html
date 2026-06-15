@@ -832,7 +832,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v71</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v72</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1445,7 +1445,7 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-meal-detail" style="margin-bottom:10px">Normal taper nutrition. Maintain carb intake — do not reduce just because training volume drops. The muscles are still absorbing the peak stimulus from weeks 8–9.</div>
       <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Days 3–1 before race — Carb load</div>
-      <div class="nutr-meal-detail" id="nutr-carbload-detail">Target <strong>9–10 g carbohydrate per kg bodyweight</strong> = 774–860 g carbs/day (86 kg).<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.</div>
+      <div class="nutr-meal-detail" id="nutr-carbload-detail">Target <strong>9–10 g carbohydrate per kg bodyweight</strong> — calculated from your body weight above.<br><br>Practical approach: add 100–150g extra rice or pasta to each of your three main meals. Reduce fat and fibre to ease digestion and GI comfort on race day. Continue normal protein intake.</div>
       <div class="nutr-warn">Do not experiment with new foods during carb load. Stick to foods your gut knows well.</div>
       <div class="nutr-divider"></div>
       <div class="nutr-section-lbl">Race morning · 3 hrs before gun</div>
@@ -1491,9 +1491,9 @@ input[type=number]{-moz-appearance:textfield}
     <div class="nutr-card-body">
       <div class="nutr-section-lbl">Phase 1 · Foundation (Weeks 1–3)</div>
       <div class="nutr-meal-detail" style="margin-bottom:10px">You have one marathon completed — your gut microbiome and aerobic base are already adapted to long-duration fuelling. Use this phase to lock in meal timing around sessions and refine your gel tolerance. Hit protein every day. Begin practising gel intake on Saturday runs from Week 1, not Week 4.</div>
-      <div class="nutr-section-lbl">Phase 2 · Build (Weeks 4–6)</div>
+      <div class="nutr-section-lbl">Phase 2 · Build (Weeks 4–7)</div>
       <div class="nutr-meal-detail" style="margin-bottom:10px">Fuel the quality sessions. Never run intervals or threshold in a depleted state. Increase carbs on Tue/Thu/Sat. Begin race-day simulation: gels every 40–45 min on long runs, target 60 g/hour. Test electrolyte products.</div>
-      <div class="nutr-section-lbl">Phase 3 · Peak (Weeks 7–9)</div>
+      <div class="nutr-section-lbl">Phase 3 · Peak (Weeks 8–9)</div>
       <div class="nutr-meal-detail" style="margin-bottom:10px">Protect recovery between sessions. Post-session carb+protein window is non-negotiable. Sleep 8–9 hrs is as important as any meal. Do not cut calories — this is the highest energy demand period of the 12 weeks. Build in-run carbs to 90 g/hour.</div>
       <div class="nutr-section-lbl">Phase 4 · Taper (Weeks 10–12)</div>
       <div class="nutr-meal-detail">Do not reduce carbohydrates proportionally with the training volume cut. The muscles are still absorbing the peak stimulus. Maintain carb intake, slightly reduce total calories by trimming fat. Begin the full 3-day carb load in the final days before the race.</div>
@@ -1540,7 +1540,7 @@ input[type=number]{-moz-appearance:textfield}
       <div class="nutr-supp-row">
         <div>
           <div class="nutr-supp-name">Creatine monohydrate</div>
-          <div class="nutr-supp-detail">3–5 g/day · any time (consistency matters) · supports strength and running economy</div>
+          <div class="nutr-supp-detail">3–5 g/day · any time (consistency matters) · supports strength and high-intensity interval recovery</div>
         </div>
         <span class="nutr-supp-badge badge-strong">Strong</span>
       </div>
@@ -1701,7 +1701,7 @@ input[type=number]{-moz-appearance:textfield}
         <div><div class="nutr-supp-name">Do not undereat during taper</div><div class="nutr-supp-detail">The most common race-week mistake. Training volume drops but the muscles are still loading glycogen from weeks of peak work. Feed them.</div></div>
       </div>
       <div class="nutr-supp-row">
-        <div><div class="nutr-supp-name">Protein every single day</div><div class="nutr-supp-detail">Muscle protein synthesis and connective tissue repair happen primarily during rest, not during training. 172 g/day is not negotiable — not on rest days, not in taper.</div></div>
+        <div><div class="nutr-supp-name">Protein every single day</div><div class="nutr-supp-detail">Muscle protein synthesis and connective tissue repair happen primarily during rest, not during training. Protein target is not negotiable — not on rest days, not in taper — calculated from your body weight above.</div></div>
       </div>
       <div class="nutr-supp-row">
         <div><div class="nutr-supp-name">Sleep is nutrition</div><div class="nutr-supp-detail">GH and testosterone peak during slow-wave sleep. 8–9 hrs in peak weeks (8–9) matters as much as any food strategy. Prioritise sleep over extra training volume every time.</div></div>
@@ -3243,7 +3243,7 @@ function renderNutritionMacros(){
   }
   // card sub-label
   const sub=document.querySelector('.nutr-card-hd .nutr-card-sub');
-  if(sub&&sub.textContent.includes('86 kg')) sub.textContent='Personalised for '+w+' kg · one previous marathon';
+  if(sub) sub.textContent='Personalised for '+w+' kg · one previous marathon';
   renderNutrRecipes(w,goalStr);
 }
 
@@ -3479,6 +3479,7 @@ function renderHub(){
   if(tg) tg.innerHTML=trainCards.map(cardHTML).join('');
   if(hg) hg.innerHTML=healthCards.map(cardHTML).join('');
 }
+// For HTML content nodes only — use escAttr() for attribute values
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 // ─────────────────────────────────────────
@@ -3787,14 +3788,14 @@ function renderExercises(s,interactive){
       <div class="ex-info">
         <div class="ex-name" style="${done?'text-decoration:line-through;opacity:.5':''}">${dispName}</div>
         <div class="ex-detail">${deloadDisplayDetail(e.detail,s)}</div>
-        <input class="ex-note-input" type="text" placeholder="Session notes (optional)…" value="${STATE.exerciseNotes[e.id]||''}" oninput="saveExNote('${e.id}',this.value)">
+        <input class="ex-note-input" type="text" placeholder="Session notes (optional)…" value="${escAttr(STATE.exerciseNotes[e.id]||'')}" oninput="saveExNote('${e.id}',this.value)">
         ${rpeControlHTML(e.id, sessionKey(s))}
         ${weightControlHTML(e, sessionKey(s))}
         ${runControlHTML(e, sessionKey(s))}
         ${e.cat==='run'&&/long run/i.test(e.name)?fuelingHTML(e):''}
         ${interactive&&(e.cat==='strength'||e.cat==='core')?swapControlHTML(e):''}
       </div>
-      <button class="ex-info-btn" onclick="showExDemo('${dispName.replace(/'/g,"\\'")}','${e.detail.replace(/'/g,"\\'")}')">ⓘ</button>
+      <button class="ex-info-btn" onclick="showExDemo('${escAttr(dispName)}','${escAttr(e.detail)}')">ⓘ</button>
     </div>`;
   };
   let html='';
@@ -3815,10 +3816,10 @@ function renderExercises(s,interactive){
         +'<div class="ex-info">'
         +'<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
         +'<div class="ex-detail">'+e.detail+'</div>'
-        +'<input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="'+(STATE.exerciseNotes[e.id]||'')+'" oninput="saveExNote(\''+e.id+'\',this.value)">'
+        +'<input class="ex-note-input" type="text" placeholder="Weight / reps / notes…" value="'+escAttr(STATE.exerciseNotes[e.id]||'')+'" oninput="saveExNote(\''+e.id+'\',this.value)">'
         +rpeControlHTML(e.id, sessionKey(s))
         +'</div>'
-        +'<button class="ex-info-btn" onclick="showExDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">ⓘ</button>'
+        +'<button class="ex-info-btn" onclick="showExDemo(\''+escAttr(e.name)+'\',\''+escAttr(e.detail)+'\')">ⓘ</button>'
         +'</div>';
     });
     suppExs.forEach(e=>{ html+=exRow(e,true); });
@@ -3948,7 +3949,7 @@ function checkMilestones(key,done){
   const wkKey='week_'+s.week+'_done';
   if(!STATE.celebratedMilestone[wkKey]){
     const wkSessions=PROGRAM.filter(p=>p.week===s.week&&p.phase===s.phase&&p.type!=='rest');
-    const wkDone=wkSessions.every(p=>STATE.completedSessions[sessionKey(p)]);
+    const wkDone=wkSessions.length>0&&wkSessions.every(p=>STATE.completedSessions[sessionKey(p)]);
     if(wkDone){ STATE.celebratedMilestone[wkKey]=now; _milestoneToast('Week '+s.week+' complete. '+(s.week===12?'You made it — race day is yours.':s.week>=10?'Taper week '+s.week+' in the books.':s.week>=8?'Peak week '+s.week+' done. Legs are loaded.':'Week '+s.week+' banked — keep building.')); }
   }
   saveState(STATE);
@@ -4112,7 +4113,7 @@ function raceWeekCardHTML(){
   const d3=Math.round(w*10), d2=Math.round(w*9), d1=Math.round(w*8), d0=Math.round(w*3);
   const logBtn=(off)=>'<button class="data-btn" style="font-size:9px;padding:2px 7px" onclick="openFoodDiaryForDate(\''+dayYmd(off)+'\')">log food</button>';
   return '<div style="background:linear-gradient(135deg,rgba(71,168,255,.10),rgba(71,255,160,.07));border:1px solid rgba(71,168,255,.3);border-radius:12px;padding:14px;margin-bottom:12px">'
-    +'<div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">RACE WEEK — MARATHON SUNDAY 31 AUG</div>'
+    +'<div style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent);text-transform:uppercase;margin-bottom:6px">RACE WEEK — MARATHON SUNDAY 30 AUG</div>'
     +'<div style="font-size:12px;color:var(--text);line-height:1.5;margin-bottom:10px">Final taper week. Volume drops but intensity is maintained on Tuesday. Prioritise sleep, food and stress management. No new shoes, no new foods, no heroics.</div>'
     +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Carb-load protocol</div>'
     +'<table style="width:100%;border-collapse:collapse;font-size:11px;font-family:\'Aptos\',monospace">'
@@ -5207,6 +5208,7 @@ function racePredictCardHTML(){
   const row=(l,sec)=>'<tr><td class="p">'+l+'</td><td class="r">'+fmtPaceSec(sec)+' /km<small>'+(3600/sec).toFixed(1)+' km/h</small></td></tr>';
   return wrap('<div style="text-align:center;margin-bottom:8px"><div style="font-size:34px;font-family:\'Aptos\',sans-serif;color:var(--accent);line-height:1">'+big+'</div><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">PREDICTED MARATHON</div></div>'
     +'<table class="s1-tbl"><tbody>'+row('Easy',p.easy)+row('Marathon',p.mp)+row('Threshold',p.thr)+row('Interval',p.int)+'</tbody></table>'
+    +(fr.distKm<5?'<div class="pc-note" style="color:var(--accent3)">⚠ Based on a short run ('+fr.distKm.toFixed(1)+' km) — the Riegel model extrapolates aggressively from short efforts; log a 5 km+ run for a more reliable prediction.</div>':'')
     +'<div class="pc-note">From your '+(+fr.distKm.toFixed(1))+' km '+srcTxt+' ('+fmtPaceSec(paceSec)+'/km), via the Riegel model (exponent 1.06). Updates with each run logged.</div>');
 }
 // ── Plate & warm-up calculator ──
@@ -5244,7 +5246,7 @@ function weeklyMuscleSets(){
   PROGRAM.forEach(s=>{ if(s.type==='rest') return; const dt=sessionDate(s); if(dt<mon||dt>sun) return;
     const done=STATE.completedSessions[sessionKey(s)];
     s.exercises.forEach(e=>{ if(e.cat!=='strength') return; const p=parsePrescription(e.detail); if(!p) return;
-      const logged=(STATE.exerciseSets[e.id]||[]).map(parseFloat).filter(x=>x>0).length;
+      const logged=(STATE.exerciseSets[e.id]||[]).map(parseFloat).filter(x=>!isNaN(x)&&x>=0).length;
       const sets=logged>0?logged:(done?p.sets:0);
       if(sets>0){ const mus=muscleFor(e.name); c[mus]=(c[mus]||0)+sets; }
     });
@@ -5255,11 +5257,13 @@ function muscleCardHTML(){
   const c=weeklyMuscleSets(); const order=['Quads','Posterior chain','Chest','Back','Shoulders','Arms','Core'];
   const wrap=inner=>'<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px"><div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">WEEKLY SETS / MUSCLE</div>'+inner+'</div>';
   if(!order.some(k=>c[k]>0)) return wrap('<div class="ls-hint">Log or complete strength sets this week to see weekly volume per muscle against productive landmarks (MEV–MRV).</div>');
-  const MEV=8,MRV=20,SC=24;
-  const rows=order.map(k=>{ const v=c[k]||0; const pct=Math.min(100,v/SC*100); const col=v===0?'var(--surface3)':(v<MEV?'#5aa6ff':(v<=MRV?'#5fd6a0':'#ff6b47'));
-    return '<div class="mus-row"><div class="mus-top"><span>'+k+'</span><span>'+v+' sets</span></div><div class="mus-track"><div class="mus-fill" style="width:'+pct+'%;background:'+col+'"></div><span class="mus-mark" style="left:'+(MEV/SC*100)+'%"></span><span class="mus-mark" style="left:'+(MRV/SC*100)+'%"></span></div></div>';
+  const MEV_MAP={'Quads':10,'Posterior chain':10,'Chest':10,'Back':12,'Shoulders':10,'Arms':10,'Core':10};
+  const MRV_MAP={'Quads':20,'Posterior chain':20,'Chest':18,'Back':22,'Shoulders':16,'Arms':14,'Core':16};
+  const SC=24;
+  const rows=order.map(k=>{ const v=c[k]||0; const mev=MEV_MAP[k]||8; const mrv=MRV_MAP[k]||20; const pct=Math.min(100,v/SC*100); const col=v===0?'var(--surface3)':(v<mev?'#5aa6ff':(v<=mrv?'#5fd6a0':'#ff6b47'));
+    return '<div class="mus-row"><div class="mus-top"><span>'+k+'</span><span>'+v+' sets</span></div><div class="mus-track"><div class="mus-fill" style="width:'+pct+'%;background:'+col+'"></div><span class="mus-mark" style="left:'+(mev/SC*100)+'%"></span><span class="mus-mark" style="left:'+(mrv/SC*100)+'%"></span></div></div>';
   }).join('');
-  return wrap(rows+'<div class="pc-note">This week\u2019s hard sets per muscle. Ticks = MEV (~8 min) and MRV (~20 max). Blue = sub-maintenance, green = productive, red = over ceiling.</div>');
+  return wrap(rows+'<div class="pc-note">This week\u2019s hard sets per muscle. Ticks = MEV and MRV thresholds vary by muscle group. Blue = sub-maintenance, green = productive, red = over ceiling.</div>');
 }
 // ── Consistency ──
 function totalTonnage(){ let t=0; Object.keys(STATE.exerciseSets||{}).forEach(id=>{ t+=exVolume(id); }); return t; }
@@ -5309,7 +5313,7 @@ function exportICS(){
   const pad=n=>String(n).padStart(2,'0');
   const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN'];
   PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
-    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>e.name).join(', ')).replace(/,/g,'\\,'),'END:VEVENT');
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>e.name).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,'),'END:VEVENT');
   });
   lines.push('END:VCALENDAR');
   const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
@@ -5372,7 +5376,9 @@ function loadAdjustPct(){
   return {pct:Math.round(pct*10)/10, basis, g};
 }
 function applyAutoAdjust(){
-  const a=loadAdjustPct(); const pct=a.pct; const mult=1+pct/100; const ymd=_ymd(new Date());
+  const ymd=_ymd(new Date());
+  if(STATE._adjUndo && STATE._adjUndo.ymd===ymd){ if(typeof appToast==='function') appToast('Loads already adjusted today — undo first to re-adjust'); return; }
+  const a=loadAdjustPct(); const pct=a.pct; const mult=1+pct/100;
   let applied=0; const snap={};
   getSessionsForDate(new Date()).forEach(s=>s.exercises.forEach(e=>{
     if(e.cat!=='strength'||!isLoggableLift(e)) return;
@@ -5593,7 +5599,7 @@ function swapControlHTML(e){
   const pat=subPattern(orig);
   const alts=(pat&&SUB_LIB[pat])?SUB_LIB[pat].filter(a=>AVAILABLE_EQUIP.indexOf(a[1])>=0):[];
   if(!alts.length && cur===orig) return '';
-  const esc=s=>String(s).replace(/'/g,"\\'");
+  const esc=s=>escAttr(s);
   const norm=s=>String(s).toLowerCase().replace(/\([^)]*\)/g,'').replace(/[^a-z0-9]/g,'').replace(/s$/,'');
   const seen={}; seen[norm(orig)]=1;
   const list=alts.filter(a=>{ const k=norm(a[0]); if(seen[k])return false; seen[k]=1; return true; });
@@ -5622,7 +5628,7 @@ function exportWeekICS(){
   const pad=n=>String(n).padStart(2,'0'); const {mon,sun}=weekRange(new Date());
   const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Albert 12 Week//EN','CALSCALE:GREGORIAN']; let n=0;
   PROGRAM.forEach(s=>{ if(s.type==='rest') return; const d=sessionDate(s); if(d<mon||d>sun) return; const dt=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
-    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'wk@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>exDisplayName(e)).join(', ')).replace(/,/g,'\\,'),'END:VEVENT'); n++; });
+    lines.push('BEGIN:VEVENT','UID:'+sessionKey(s)+'wk@albert12','DTSTART;VALUE=DATE:'+dt,'SUMMARY:'+(s.name||s.type).replace(/,/g,'\\,'),'DESCRIPTION:'+((s.exercises||[]).map(e=>exDisplayName(e)).join(', ')).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,'),'END:VEVENT'); n++; });
   lines.push('END:VCALENDAR');
   if(!n){ if(typeof appToast==='function') appToast('No sessions scheduled this week'); return; }
   const blob=new Blob([lines.join('\r\n')],{type:'text/calendar'}); const url=URL.createObjectURL(blob);
@@ -5992,14 +5998,16 @@ function deloadNudgeHTML(){
   const yestRs=readinessScore((STATE.readiness&&STATE.readiness[yest])||{});
   if(todayRs==null||todayRs>=40||yestRs==null||yestRs>=40) return '';
   const wk=currentProgramWeek();
-  const alreadyDeload=STATE.deloadWeeks&&STATE.deloadWeeks[wk];
+  const alreadyDeload=STATE.deloadWeeks&&(STATE.deloadWeeks[wk]||STATE.deloadWeeks['dismiss_'+wk]);
   if(alreadyDeload) return '';
   return '<div class="soften-banner" style="border-color:rgba(255,107,71,.4);color:#ff9f80">'
     +'<strong>Low readiness 2 days running ('+todayRs+' today, '+yestRs+' yesterday)</strong> — your body is signalling under-recovery. '
     +'<button onclick="toggleDeloadWeek()" style="display:block;margin-top:8px;background:rgba(255,107,71,.2);border:1px solid rgba(255,107,71,.5);color:#ff9f80;border-radius:8px;padding:6px 14px;font-family:\'Aptos\',monospace;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em">'
     +'Apply deload to Week '+wk+' — −1 set · −10% load</button>'
+    +'<button onclick="dismissDeloadNudge()" style="display:block;margin-top:6px;background:transparent;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:4px 0">Dismiss for now</button>'
     +'</div>';
 }
+function dismissDeloadNudge(){ if(!STATE.deloadWeeks) STATE.deloadWeeks={}; const wk=currentProgramWeek(); STATE.deloadWeeks['dismiss_'+wk]=true; saveState(STATE); renderToday(); }
 function renderStats(){
   if(!_statsDirty) return; _statsDirty=false;
   // ===== TIER 2/3 FEATURE LOGIC =====
@@ -6626,7 +6634,8 @@ function _probeVideo(id){
   return new Promise(function(res){
     const img=new Image(); let done=false;
     const fin=v=>{ if(!done){ done=true; res(v); } };
-    img.onload=function(){ fin(img.naturalWidth===120 ? 'dead' : 'ok'); }; // YT serves a 120px default thumb for removed/invalid videos
+    // YT serves a 120×90px default thumb for deleted/private videos (heuristic — may change)
+    img.onload=function(){ fin(img.naturalWidth===120 ? 'dead' : 'ok'); };
     img.onerror=function(){ fin('unknown'); };
     setTimeout(function(){ fin('unknown'); }, 8000);
     img.src='https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
@@ -6774,7 +6783,10 @@ function closeDemoModal(e){
 // ─────────────────────────────────────────
 function runMinutes(detail){
   const m = (detail||'').match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*km/i);
-  if(m){ const km = m[2]?parseInt(m[2]):parseInt(m[1]); return Math.round(km*6.5); }
+  if(m){ const km = m[2]?parseInt(m[2]):parseInt(m[1]);
+    const d=(detail||'').toLowerCase();
+    const spm = d.includes('tempo')||d.includes('threshold') ? 4.5*60 : d.includes('interval')||d.includes('race-pace') ? 4*60 : 6.5*60;
+    return Math.round(km*spm/60); }
   const d=(detail||'').toLowerCase();
   if(d.includes('tempo')||d.includes('threshold')) return 25;
   if(d.includes('interval')||d.includes('race-pace')) return 30;
@@ -6818,7 +6830,7 @@ const SCAP_POOL = [
   ['Scapular pull-up','2 × 10 · depress the blades, arms straight','strength'],
   ['Prone Y-T-W raise','2 × 8 each · lower-trap activation','strength']
 ];
-function _hash(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))|0; } return Math.abs(h); }
+function _hash(str){ let h=0; for(let i=0;i<str.length;i++){ h=(Math.imul(h,31)+str.charCodeAt(i))>>>0; } return h; }
 function getOptionalExercises(s){
   const pre = exPrefix(s);
   const h = _hash(pre);
@@ -6883,7 +6895,7 @@ function runSearch(q){
     if(matches.length){
       exHtml='<div class="srch-cat">Exercises</div>'+matches.map(e=>{
         const ico=e.cat==='run'?'🏃':e.cat==='core'?'🌀':e.cat==='rest'?'🧘':'🏋️';
-        return '<div class="srch-item" onclick="searchOpenDemo(\''+e.name.replace(/'/g,"\\'")+'\',\''+e.detail.replace(/'/g,"\\'")+'\')">'
+        return '<div class="srch-item" onclick="searchOpenDemo(\''+escAttr(e.name)+'\',\''+escAttr(e.detail)+'\')">'
           +'<span class="srch-ico">'+ico+'</span>'
           +'<div><div class="srch-name">'+e.name+'</div><div class="srch-sub">'+e.detail+'</div></div></div>';
       }).join('');
@@ -7088,7 +7100,7 @@ function fmtWatch(ms){ const cs=Math.floor(ms/10)%100,s=Math.floor(ms/1000)%60,m
 function presetLbl(p){ if(p<60) return p+'s'; const m=Math.floor(p/60),s=p%60; return m+'m'+(s?(' '+s+'s'):''); }
 function openTimer(){ TM.open=true; document.getElementById('timer-sheet').classList.add('open'); tAudio(); timerRender(); }
 function closeTimer(){ TM.open=false; document.getElementById('timer-sheet').classList.remove('open'); }
-function timerMode(m){ TM.mode=m; ['rest','watch','metro'].forEach(x=>{const t=document.getElementById('tt-'+x); if(t) t.classList.toggle('active',x===m);}); timerRender(); }
+function timerMode(m){ TM.mode=m; clearInterval(TM.iv); clearInterval(TM.metroIv); TM.restRunning=false; TM.wRunning=false; TM.metroOn=false; setFabState(); ['rest','watch','metro'].forEach(x=>{const t=document.getElementById('tt-'+x); if(t) t.classList.toggle('active',x===m);}); timerRender(); }
 function setFabState(){ const f=document.getElementById('fab-timer'); if(f) f.classList.toggle('running', TM.restRunning||TM.wRunning||TM.metroOn); }
 // FAB hides while scrolling down; scroll events now come from .section.active
 (function(){
@@ -7253,6 +7265,8 @@ function importData(input){
   r.onload=function(){ const m=document.getElementById('data-msg');
     try{ const obj=JSON.parse(r.result);
       const looksOurs = obj&&typeof obj==='object'&&(obj._app==='albert12'||obj.completedSessions||obj.exerciseSets||obj.profile||obj.importedRuns);
+      const importedV = obj._v||obj._schemaVersion||0;
+      if(looksOurs && importedV > SCHEMA_VERSION+1){ if(m) m.textContent='Backup is from a newer app version — please update the app before restoring.'; return; }
       if(looksOurs){ for(const k in STATE){ delete STATE[k]; } Object.assign(STATE,obj); delete STATE._app; delete STATE._v; ensureContainers(); saveState(STATE);
         if(m) m.textContent='Backup restored ✓'; hideRestoreBanner(); if(typeof appToast==='function') appToast('Backup restored — your sessions are back ✓'); renderToday(); if(currentSection==='stats') renderStats(); if(currentSection==='progress') renderProgress(); }
       else { if(m) m.textContent='That file does not look like an Albert 12 Week backup.'; }
