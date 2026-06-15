@@ -832,7 +832,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v72</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v73</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1677,6 +1677,7 @@ input[type=number]{-moz-appearance:textfield}
       <div id="fdy-preview" style="font-size:11px;color:var(--text3);font-family:'Aptos',monospace;min-height:16px;margin-bottom:8px"></div>
       <button class="btn-complete pending" style="width:100%;padding:11px;border-radius:10px" onclick="fdyAdd()">Add to diary</button>
       <div class="pc-note" style="margin-top:8px">Select a food from the list + enter grams, or type any name and fill in the macros directly. Tap ✕ to remove entries.</div>
+      <div id="fdy-saved-wrap" style="margin-top:10px"></div>
     </div>
   </div>
 
@@ -2970,10 +2971,99 @@ const FOOD_DB={
   'Mixed nuts':{kcal:607,pro:18,cho:20,fat:54},
   'Peanuts (roasted)':{kcal:585,pro:25,cho:21,fat:49},
   'Brazil nuts':{kcal:659,pro:14,cho:12,fat:67},
+  // — Sydney / Australian foods & cafe staples —
+  'Smashed avo on sourdough (1 slice)':{kcal:310,pro:7,cho:28,fat:18},
+  'Bircher muesli (200g, cafe)':{kcal:280,pro:9,cho:42,fat:8},
+  'Acai bowl (300g, typical cafe)':{kcal:390,pro:7,cho:72,fat:10},
+  'Banana bread (1 slice, cafe)':{kcal:310,pro:5,cho:52,fat:9},
+  'Meat pie (Four\'n Twenty)':{kcal:362,pro:10,cho:34,fat:20},
+  'Chiko Roll':{kcal:254,pro:7,cho:27,fat:13},
+  'Sausage roll (Ingham\'s style, large)':{kcal:312,pro:9,cho:30,fat:18},
+  'Chicken schnitzel (pub, crumbed)':{kcal:237,pro:22,cho:13,fat:11},
+  'Fish & chips (takeaway, per serve)':{kcal:490,pro:18,cho:52,fat:22},
+  'Banh mi (Vietnamese roll)':{kcal:345,pro:16,cho:50,fat:8},
+  'Pho (beef, 600ml bowl)':{kcal:360,pro:28,cho:40,fat:8},
+  'Dumplings / gow gee (steamed, 6)':{kcal:240,pro:12,cho:28,fat:8},
+  'Char siu pork (BBQ, 100g)':{kcal:271,pro:25,cho:14,fat:12},
+  'Pad Thai (restaurant, 300g)':{kcal:480,pro:18,cho:58,fat:18},
+  'Chicken laksa (restaurant, 500ml)':{kcal:520,pro:22,cho:45,fat:24},
+  'Vietnamese rice paper rolls (2)':{kcal:145,pro:7,cho:22,fat:3},
+  'Falafel wrap (Lebanese)':{kcal:420,pro:13,cho:55,fat:16},
+  'Lamb kebab (pita, medium)':{kcal:510,pro:28,cho:48,fat:20},
+  'Kafta / kofta (grilled, 100g)':{kcal:218,pro:20,cho:4,fat:14},
+  'Chicken souvlaki wrap':{kcal:480,pro:32,cho:50,fat:14},
+  'Grill\'d burger (Simply Grill\'d)':{kcal:500,pro:36,cho:38,fat:21},
+  'Nando\'s chicken breast fillet (grilled)':{kcal:165,pro:34,cho:1,fat:3},
+  'Nando\'s peri-peri chips (regular)':{kcal:370,pro:5,cho:50,fat:17},
+  'Subway 6" Chicken Classic':{kcal:320,pro:24,cho:42,fat:6},
+  'Subway footlong Steak & Cheese':{kcal:640,pro:44,cho:78,fat:16},
+  'Oporto chicken burger':{kcal:530,pro:32,cho:48,fat:21},
+  'Oporto bondi chips (regular)':{kcal:400,pro:5,cho:53,fat:19},
+  'Jasmine rice (cooked, per cup 186g)':{kcal:242,pro:4.4,cho:53,fat:0.4},
+  'Udon noodles (cooked, 200g)':{kcal:218,pro:6.8,cho:44,fat:0.6},
+  'Rice vermicelli (cooked, 150g)':{kcal:174,pro:2.7,cho:40,fat:0.4},
+  'Soba noodles (cooked, 170g)':{kcal:196,pro:8.2,cho:40,fat:0.4},
+  'San Choy Bow (per cup, chicken)':{kcal:165,pro:14,cho:8,fat:8},
+  'Fried rice (Chinese, 250g serve)':{kcal:385,pro:12,cho:60,fat:11},
+  'Chicken congee (jook, 400ml)':{kcal:195,pro:12,cho:28,fat:4},
+  'Tom yum soup (per bowl, 400ml)':{kcal:145,pro:14,cho:10,fat:5},
+  'Beef rendang (per serve, 200g)':{kcal:380,pro:28,cho:12,fat:24},
+  'Butter chicken (per serve, 250g)':{kcal:360,pro:26,cho:18,fat:20},
+  'Naan bread (1 piece, 90g)':{kcal:260,pro:8,cho:44,fat:6},
+  'Dahl (red lentil, 200g serve)':{kcal:210,pro:12,cho:28,fat:5},
+  'Saag paneer (per serve, 200g)':{kcal:280,pro:14,cho:12,fat:19},
+  'Roti canai (1 piece, plain)':{kcal:300,pro:5,cho:40,fat:14},
+  'Sashimi salmon (100g)':{kcal:142,pro:20,cho:0,fat:7},
+  'Sashimi tuna (100g)':{kcal:108,pro:24,cho:0,fat:0.5},
+  'California roll (6 pieces)':{kcal:255,pro:9,cho:38,fat:7},
+  'Salmon avocado roll (6 pieces)':{kcal:290,pro:12,cho:36,fat:11},
+  'Teriyaki chicken bowl (350g)':{kcal:460,pro:28,cho:55,fat:12},
+  'Sydney rock oyster (1 oyster)':{kcal:10,pro:1.2,cho:0.6,fat:0.3},
+  'King prawns (BBQ, 100g)':{kcal:99,pro:21,cho:0,fat:1.4},
+  'Moreton Bay bug (cooked, 100g)':{kcal:90,pro:19,cho:0,fat:1},
+  'Barramundi fillet (baked, 200g)':{kcal:234,pro:44,cho:0,fat:6},
+  'Atlantic salmon fillet (baked, 200g)':{kcal:416,pro:40,cho:0,fat:26},
+  'Balmain bug (cooked, 100g)':{kcal:88,pro:18,cho:0,fat:1},
+  'Scallops (pan-fried, 100g)':{kcal:111,pro:20,cho:3,fat:2},
+  'Calamari (grilled, 100g)':{kcal:92,pro:18,cho:3,fat:1},
+  'Calamari (fried, 100g)':{kcal:175,pro:15,cho:8,fat:9},
+  // — Woolworths / Coles supermarket staples —
+  'Macro chicken breast (cooked, 100g)':{kcal:165,pro:31,cho:0,fat:3.6},
+  'Woolworths beef mince (lean, 100g raw)':{kcal:175,pro:20,cho:0,fat:10},
+  'Coles SmartBuy white rice (cooked, 100g)':{kcal:130,pro:2.7,cho:28,fat:0.3},
+  'Bulla cottage cheese (100g)':{kcal:98,pro:11,cho:3.4,fat:4.3},
+  'Chobani plain Greek yogurt (170g)':{kcal:100,pro:17,cho:6,fat:0.7},
+  'Farmers Union Greek yogurt (175g)':{kcal:105,pro:18,cho:6,fat:0.4},
+  'So Natural almond milk (200ml)':{kcal:34,pro:1.2,cho:0.6,fat:3},
+  'Sanitarium Weet-Bix (2 biscuits, 30g)':{kcal:105,pro:3.6,cho:20,fat:0.6},
+  'Uncle Tobys rolled oats (dry, 40g)':{kcal:156,pro:6.8,cho:26,fat:2.8},
+  'Arnott\'s Vita-Weat (4 crackers, 25g)':{kcal:98,pro:2.5,cho:18,fat:1.5},
+  // — Protein supplements common in Australia —
+  'Musashi whey protein (1 scoop, 30g)':{kcal:115,pro:24,cho:1.5,fat:1.5},
+  'Optimum Nutrition Gold Standard (1 scoop, 30g)':{kcal:120,pro:24,cho:3,fat:1},
+  'Balance protein bar (60g)':{kcal:210,pro:20,cho:20,fat:6},
+  'Aussie Bodies protein bar (65g)':{kcal:220,pro:20,cho:22,fat:5},
+  // — Cafe & restaurant meals —
+  'BLT sandwich (cafe)':{kcal:380,pro:16,cho:38,fat:18},
+  'Club sandwich (cafe)':{kcal:490,pro:28,cho:44,fat:22},
+  'Caesar salad (cafe, no croutons)':{kcal:310,pro:18,cho:6,fat:24},
+  'Chicken & avocado wrap (cafe)':{kcal:450,pro:30,cho:40,fat:18},
+  'Ham & cheese croissant (cafe)':{kcal:380,pro:14,cho:36,fat:20},
+  'Egg & bacon roll (cafe)':{kcal:460,pro:22,cho:38,fat:24},
+  'Full cooked breakfast (cafe, full)':{kcal:720,pro:36,cho:40,fat:44},
+  'Granola parfait (cafe, 300g)':{kcal:390,pro:12,cho:58,fat:14},
+  'Smoothie bowl (cafe, mango-passionfruit, 350g)':{kcal:420,pro:8,cho:78,fat:8},
+  'Green smoothie (spinach-banana-almond milk, 400ml)':{kcal:215,pro:6,cho:36,fat:6},
+  'Protein smoothie (banana-peanut butter-milk, 350ml)':{kcal:390,pro:22,cho:40,fat:14},
+  // — Pizza (common in Sydney) —
+  'Pizza Margherita (1 slice, 120g)':{kcal:270,pro:11,cho:33,fat:11},
+  'Pizza Pepperoni (1 slice, 130g)':{kcal:310,pro:13,cho:32,fat:14},
+  'Domino\'s Hawaiian (1 slice, 110g)':{kcal:255,pro:11,cho:30,fat:10},
 };
 function fdyInit(){
   const dl=document.getElementById('fdy-food-list'); if(!dl) return;
-  dl.innerHTML=Object.keys(FOOD_DB).map(k=>'<option value="'+k+'">').join('');
+  const allFoods=Object.assign({},FOOD_DB,STATE.customFoods||{});
+  dl.innerHTML=Object.keys(allFoods).sort().map(k=>'<option value="'+k+'"'+(!(FOOD_DB[k])?' title="Your saved food"':'')+'></option>').join('');
   const di=document.getElementById('fdy-date'); if(di&&!di.value) di.value=_ymd(new Date());
 }
 function fdyCalcKcal(){
@@ -2991,7 +3081,7 @@ function fdyPreview(){
   // Show macro fields as soon as food name is entered
   if(mw) mw.style.display=food?'flex':'none';
   if(!food){ if(pv) pv.textContent=''; return; }
-  const info=FOOD_DB[food]; const g=parseFloat((gi&&gi.value)||'');
+  const info=FOOD_DB[food]||(STATE.customFoods&&STATE.customFoods[food]&&!STATE.customFoods[food].flat?STATE.customFoods[food]:null); const g=parseFloat((gi&&gi.value)||'');
   if(info&&g>0){
     // Auto-fill macro fields from DB
     const calc=(v)=>Math.round(g/100*v*10)/10;
@@ -3003,8 +3093,17 @@ function fdyPreview(){
     if(pv) pv.textContent='DB match · macros auto-filled — edit if needed';
   } else if(info){
     if(pv) pv.textContent='Enter grams above to auto-fill macros, or type them directly';
+  } else if(STATE.customFoods&&STATE.customFoods[food]&&STATE.customFoods[food].flat){
+    // Flat custom entry: auto-fill saved totals
+    const cf=STATE.customFoods[food];
+    const k=document.getElementById('fdy-kcal'),p=document.getElementById('fdy-pro'),c=document.getElementById('fdy-cho'),f=document.getElementById('fdy-fat');
+    if(k) k.value=cf.kcal;
+    if(p) p.value=cf.pro;
+    if(c) c.value=cf.cho;
+    if(f) f.value=cf.fat;
+    if(pv) pv.textContent='Your saved food — macros auto-filled from last entry';
   } else {
-    if(pv) pv.textContent='Custom food — enter macros directly below';
+    if(pv) pv.textContent='New food — enter macros below (they\'ll be saved for next time)';
   }
 }
 function fdyAdd(){
@@ -3022,18 +3121,55 @@ function fdyAdd(){
   const di=document.getElementById('fdy-date'); const ymd=(di&&di.value)||_ymd(new Date());
   if(!STATE.foodDiary[ymd]) STATE.foodDiary[ymd]=[];
   STATE.foodDiary[ymd].push({food,grams:grams||null,kcal:Math.round(kcal),pro:Math.round(pro*10)/10,cho:Math.round(cho*10)/10,fat:Math.round(fat*10)/10});
+  // Save custom food to reuse library if not already in FOOD_DB
+  if(!FOOD_DB[food]){
+    if(!STATE.customFoods) STATE.customFoods={};
+    if(!STATE.customFoods[food]){
+      if(grams>0){
+        // Store per-100g values for future auto-fill
+        const per100=v=>Math.round(v/grams*100*10)/10;
+        STATE.customFoods[food]={kcal:Math.round(kcal/grams*100),pro:per100(pro),cho:per100(cho),fat:per100(fat),custom:true};
+      } else {
+        // No gram weight — store as flat entry (macros are total, not per-100g)
+        STATE.customFoods[food]={kcal:Math.round(kcal),pro:Math.round(pro*10)/10,cho:Math.round(cho*10)/10,fat:Math.round(fat*10)/10,custom:true,flat:true};
+      }
+    }
+  }
   saveState(STATE);
   // Clear all inputs
   ['fdy-food','fdy-grams','fdy-kcal','fdy-pro','fdy-cho','fdy-fat'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   const mw=document.getElementById('fdy-macros'); if(mw) mw.style.display='none';
   const pv=document.getElementById('fdy-preview'); if(pv) pv.textContent='';
   if(typeof hideRestoreBanner==='function') hideRestoreBanner();
-  renderFoodDiary();
+  renderFoodDiary(); renderFdySaved();
 }
 function fdyRemove(ymd,idx){
   if(!STATE.foodDiary||!STATE.foodDiary[ymd]) return;
   STATE.foodDiary[ymd].splice(idx,1);
   saveState(STATE); renderFoodDiary();
+}
+function renderFdySaved(){
+  const wrap=document.getElementById('fdy-saved-wrap'); if(!wrap) return;
+  const cf=STATE.customFoods||{}; const keys=Object.keys(cf);
+  if(!keys.length){ wrap.innerHTML=''; return; }
+  const rows=keys.sort().map(k=>{
+    const f=cf[k];
+    const desc=f.flat?('Total: '+f.kcal+' kcal · '+f.pro+'g P · '+f.cho+'g C · '+f.fat+'g F')
+      :('Per 100g: '+f.kcal+' kcal · '+f.pro+'g P · '+f.cho+'g C · '+f.fat+'g F');
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid rgba(58,76,117,.3)">'
+      +'<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHtml(k)+'</div>'
+      +'<div style="font-size:10px;font-family:\'Aptos\',monospace;color:var(--text3)">'+desc+'</div></div>'
+      +'<button onclick="fdyDeleteCustom(\''+escAttr(k)+'\')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:4px 6px;flex-shrink:0" aria-label="Delete saved food">✕</button>'
+      +'</div>';
+  }).join('');
+  wrap.innerHTML='<details style="margin-top:4px"><summary style="font-size:11px;font-family:\'Aptos\',monospace;color:var(--text2);cursor:pointer;list-style:none;padding:6px 0">▸ Your saved foods ('+keys.length+')</summary>'
+    +'<div style="padding-top:4px">'+rows+'</div></details>';
+}
+function fdyDeleteCustom(name){
+  if(!STATE.customFoods) return;
+  delete STATE.customFoods[name];
+  saveState(STATE); fdyInit(); renderFdySaved();
+  if(typeof appToast==='function') appToast('Removed "'+name+'" from saved foods');
 }
 function _fdyDayTarget(ymd,wt){
   // Map the scheduled session for ymd to the appropriate _NUTR_DAYS entry
@@ -3148,6 +3284,7 @@ function renderFoodDiary(){
     +'<div class="pc-note" style="margin-top:6px">Target based on '+wt+' kg · '+tgtInfo.nutrLabel+' · adjust in Daily fuel &amp; hydration card.</div>'
     +'</div>';
   el.innerHTML=html;
+  renderFdySaved();
 }
 function setFluidLog(ymd,val){
   if(!STATE.fluidLog) STATE.fluidLog={};
