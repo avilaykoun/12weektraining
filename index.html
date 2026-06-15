@@ -786,8 +786,7 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .fdy-suggest-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .fdy-suggest-item:last-child{border-bottom:none}
 .fdy-suggest-item:hover,.fdy-suggest-item.fdy-si-active{background:rgba(232,198,107,.1)}
-.fdy-suggest-name{font-size:12.5px;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fdy-suggest-mac{font-size:10px;color:var(--text3);font-family:'Aptos',monospace;flex-shrink:0;white-space:nowrap}
+.fdy-suggest-name{font-size:12.5px;color:var(--text);flex:1;min-width:0;line-height:1.4}
 .fdy-suggest-badge{font-size:9px;background:rgba(95,214,160,.15);color:#5fd6a0;border-radius:4px;padding:1px 5px;margin-left:5px;flex-shrink:0;vertical-align:middle}
 .bm-section-hd{font-size:10.5px;font-family:'Aptos',monospace;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;font-weight:600;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .pc-apply{width:100%;margin-top:10px;background:var(--accent2);color:#04101d;border:none;border-radius:10px;padding:12px;font-size:13px;font-family:'Aptos',monospace;font-weight:600;cursor:pointer}
@@ -840,7 +839,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v77</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v78</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -3194,11 +3193,10 @@ function fdySuggest(q){
     box.classList.add('open'); return;
   }
   box.innerHTML=matches.map((k,i)=>{
-    const info=allFoods[k]; const isCustom=!FOOD_DB[k];
-    const mac=info.flat?info.kcal+' kcal flat':(info.kcal+' kcal · P'+info.pro+' C'+info.cho+' F'+info.fat+' /100g');
+    const isCustom=!FOOD_DB[k];
     return '<div class="fdy-suggest-item" role="option" data-i="'+i+'" onmousedown="fdySelect(\''+escAttr(k)+'\')">'
       +'<span class="fdy-suggest-name">'+escHtml(k)+(isCustom?'<span class="fdy-suggest-badge">saved</span>':'')+'</span>'
-      +'<span class="fdy-suggest-mac">'+mac+'</span></div>';
+      +'</div>';
   }).join('');
   box.classList.add('open');
 }
