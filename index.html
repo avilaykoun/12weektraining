@@ -352,10 +352,16 @@ body{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bott
 .ex-supplementary .ex-name{color:var(--text2)}
 /* Chef recipe cards */
 .nutr-recipe-card{background:var(--surface2);border-radius:10px;padding:13px 14px;margin:10px 0}
+.nutr-recipe-card>summary{cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent}
+.nutr-recipe-card>summary::-webkit-details-marker{display:none}
 .nutr-recipe-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
 .nutr-recipe-title{font-size:13px;font-weight:600;color:var(--text);font-family:'Aptos',sans-serif}
 .nutr-recipe-time{font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);background:rgba(90,166,255,.1);border-radius:99px;padding:2px 8px;flex-shrink:0}
-.nutr-recipe-badge{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.03em;margin-bottom:10px}
+.nutr-recipe-badge{font-size:10px;font-family:'Aptos',monospace;color:var(--accent);letter-spacing:.03em}
+.nutr-recipe-exp{display:inline-block;font-size:10px;font-family:'Aptos',monospace;color:var(--accent2);margin-top:7px}
+.nutr-recipe-exp::after{content:'▾ Tap to view recipe'}
+.nutr-recipe-card[open]>summary .nutr-recipe-exp::after{content:'▴ Hide recipe'}
+.nutr-recipe-card[open]>summary .nutr-recipe-badge{margin-bottom:0}
 .nutr-recipe-sect{font-size:9px;font-family:'Aptos',monospace;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:8px 0 4px}
 .nutr-recipe-list{margin:0 0 2px;padding-left:16px}
 .nutr-recipe-list li{font-size:12px;font-family:'Aptos',sans-serif;color:var(--text2);margin-bottom:3px;line-height:1.45}
@@ -841,7 +847,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-16 · v80</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-16 · v81</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -1444,7 +1450,7 @@ input[type=number]{-moz-appearance:textfield}
   <div class="nutr-card">
     <div class="nutr-card-hd" onclick="this.nextElementSibling.classList.toggle('open');this.querySelector('.chev').style.transform=this.nextElementSibling.classList.contains('open')?'rotate(90deg)':''">
       <div class="nutr-card-icon">👨‍🍳</div>
-      <div><div class="nutr-card-title">Chef's recipes</div><div class="nutr-card-sub">Performance meals · ingredients scale to your weight</div></div>
+      <div><div class="nutr-card-title">Chef's recipes</div><div class="nutr-card-sub">Performance meals · tap any recipe to expand</div></div>
       <span class="chev" style="font-size:18px;color:var(--text3);transition:transform .2s">›</span>
     </div>
     <div class="nutr-card-body open">
@@ -3563,8 +3569,9 @@ function renderNutritionMacros(){
   renderNutrRecipes(w,goalStr);
 }
 
+var NUTR_REC_CATS=['strength','longrun','quality','rest','slowcooker'];
 function nutrShowRecipe(key,btn){
-  ['strength','longrun','quality','rest'].forEach(k=>{
+  NUTR_REC_CATS.forEach(k=>{
     const el=document.getElementById('nutr-rec-'+k); if(el) el.style.display=k===key?'':'none';
   });
   btn.closest('.nutr-rec-tabs').querySelectorAll('.nutr-rec-tab').forEach(b=>b.classList.remove('active'));
@@ -3578,66 +3585,106 @@ function renderNutrRecipes(w,goal){
   const rice=Math.round(w*1.05/5)*5;
   const chicken=Math.max(120,Math.round(mealP/0.31/10)*10);
   const longRice=Math.round(rice*1.4/5)*5;
+  const wheyG=Math.round(mealP/0.8/5)*5;
   // All recipes use ingredients available at Woolworths/Coles or Sydney Asian grocers (Chinatown, Cabramatta, Harris Farm)
   const R={
-    strength:{
-      pre:{title:'Tamago Gohan (TKG)',time:'5 min',badge:'2 hrs before session · Japanese egg rice',
+    strength:[
+      {title:'Tamago Gohan (TKG)',time:'5 min',badge:'2 hrs before session · Japanese egg rice',
         items:[`${rice}g Japanese short-grain rice (Koshihikari — Woolworths/Coles)`,'2 free-range eggs (room temp)','1 tbsp Kikkoman soy sauce','1 tsp sesame oil','2 spring onions (sliced)','½ sheet nori, torn (optional)'],
         steps:['Cook rice in rice cooker or microwave (SunRice cups, 2 min). Rice must be HOT.','Make a well in centre of rice. Crack both eggs directly in. Add soy sauce and sesame oil.','Stir vigorously for 30–45 sec — the heat cooks the egg into a silky emulsion. Top with spring onion and nori.'],
         macros:`~${Math.round(rice*3.8)}g carbs · ${Math.round(mealP*0.85)}g protein · 11g fat · high-carb, easy-digest`},
-      post:{title:'Teriyaki chicken rice',time:'12 min',badge:'Within 30 min of finishing — most important window',
+      {title:'Teriyaki chicken rice',time:'12 min',badge:'Within 30 min of finishing — most important window',
         items:[`${rice}g white rice (SunRice microwave cup = 60 sec)`,`${chicken}g chicken thigh or breast (diced)`,'1 tbsp soy sauce (Kikkoman)','1 tbsp mirin (Asian grocer or Woolworths)','1 tsp honey','100g frozen edamame or broccolini','Sesame seeds + spring onion'],
         steps:['Mix soy, mirin, honey in a small bowl — this is your teriyaki sauce.','Pan-fry chicken in a hot non-stick pan 5–6 min until cooked. Pour sauce over and toss 1 min until caramelised.','Microwave rice 60 sec. Steam veg 2 min. Plate everything, top with sesame seeds.'],
-        macros:`~${Math.round(rice*3.8+8)}g carbs · ${Math.round(chicken*0.31)}g protein · 9g fat`}
-    },
-    longrun:{
-      pre:{title:'Matcha banana oats',time:'5 min',badge:'2.5–3 hrs before the long run',
-        items:[`${longRice}g rolled oats (Woolworths Homebrand or Carman\'s)`,'1 ripe banana (sliced)','350ml full-cream or oat milk','1 tsp matcha powder (Asian grocer — Chatswood, Chinatown)','2 tbsp honey','Pinch of sea salt'],
+        macros:`~${Math.round(rice*3.8+8)}g carbs · ${Math.round(chicken*0.31)}g protein · 9g fat`},
+      {title:'Greek yogurt power bowl',time:'3 min',badge:'Anytime snack · between meals or before bed on lifting days',
+        items:['250g Greek yogurt (full-fat, Woolworths/Coles)','30g rolled oats',`1 tbsp peanut butter`,'1 tbsp honey','Handful of frozen berries (thawed)'],
+        steps:['Spoon yogurt into a bowl.','Stir through oats and peanut butter.','Top with berries and a drizzle of honey.'],
+        macros:'~45g carbs · 30g protein · 16g fat · slow + fast protein combo, good before bed'}
+    ],
+    longrun:[
+      {title:'Matcha banana oats',time:'5 min',badge:'2.5–3 hrs before the long run',
+        items:[`${oats}g rolled oats (Woolworths Homebrand or Carman\'s)`,'1 ripe banana (sliced)','350ml full-cream or oat milk','1 tsp matcha powder (Asian grocer — Chatswood, Chinatown)','2 tbsp honey','Pinch of sea salt'],
         steps:['Microwave oats + milk 3 min, stir once at 1.5 min.','Whisk in matcha powder and honey until smooth.','Top with banana and salt. Eat slowly and rest — this is your last carb load before the run.'],
-        macros:`~${Math.round(longRice*3.7+27+42)}g carbs · 14g protein · 8g fat · proven, gut-tested formula`},
-      post:{title:'Bibimbap recovery bowl',time:'15 min',badge:'Within 60 min — maximum glycogen + protein window',
+        macros:`~${Math.round(oats*3.7+27+42)}g carbs · 14g protein · 8g fat · proven, gut-tested formula`},
+      {title:'Bibimbap recovery bowl',time:'15 min',badge:'Within 60 min — maximum glycogen + protein window',
         items:[`${rice}g steamed white rice`,'150g beef mince or chicken breast (cooked)','1 medium carrot (julienned)','80g baby spinach (blanched)','2 eggs (fried, runny yolk)','1 tbsp gochujang (Korean chilli paste — Woolworths Asian aisle or H-Mart)','1 tsp sesame oil + sesame seeds'],
         steps:['Cook rice and protein separately (can use leftover rice from the fridge — microwave 90 sec).','Quickly stir-fry carrot in sesame oil 2 min. Wilt spinach in same pan 30 sec.','Build the bowl: rice base, arrange veg and protein around the edge, fried egg on top. Add a spoonful of gochujang and a drizzle of sesame oil. Mix everything together before eating.'],
-        macros:`~${Math.round(rice*3.8+10)}g carbs · ${Math.round(mealP*1.3)}g protein · 18g fat — complete recovery meal`}
-    },
-    quality:{
-      pre:{title:'Japanese rice balls (onigiri) + banana',time:'2 min (with pre-cooked rice)',badge:'90 min before intervals',
+        macros:`~${Math.round(rice*3.8+10)}g carbs · ${Math.round(mealP*1.3)}g protein · 18g fat — complete recovery meal`},
+      {title:'Soy-ginger beef noodles',time:'20 min',badge:'Night before the long run · carb-load dinner',
+        items:[`${longRice}g dried rice noodles or hokkien noodles`,'150g beef strips (rump or sirloin)','2 tbsp soy sauce','1 tbsp oyster sauce','1 tsp grated ginger','1 clove garlic','150g mixed stir-fry veg (capsicum, carrot, bok choy)','1 tbsp vegetable oil'],
+        steps:['Soak or boil noodles per packet, drain.','Stir-fry beef in hot oil 2–3 min until browned, set aside.','Add garlic, ginger and veg — stir-fry 2 min. Return beef, add noodles, soy and oyster sauce. Toss 1–2 min until coated and hot.'],
+        macros:`~${Math.round(longRice*3.7+10)}g carbs · ${Math.round(mealP*1.1)}g protein · 14g fat · tops up glycogen before tomorrow's effort`}
+    ],
+    quality:[
+      {title:'Japanese rice balls (onigiri) + banana',time:'2 min (with pre-cooked rice)',badge:'90 min before intervals',
         items:[`${Math.round(rice*1.3/5)*5}g pre-cooked Japanese white rice`,'1 ripe banana','1 umeboshi (pickled plum — Asian grocer) OR 1 tsp soy sauce + pinch of salt','1 sheet nori','200ml water'],
         steps:['Batch-cook rice Sunday. Shape into 2 balls using glad wrap — press umeboshi or soy+salt into the centre. Wrap in nori.','Refrigerate. Microwave 90 sec on the morning of training.','Eat with banana 90 min before. White rice + banana = fastest glycogen top-up with zero GI risk.'],
         macros:`~${Math.round(Math.round(rice*1.3/5)*5*3.8+27)}g carbs · 8g protein · 1g fat — maximum pre-session glycogen`},
-      post:{title:'Miso soup + chicken rice',time:'5 min',badge:'Within 30 min of finishing',
+      {title:'Miso soup + chicken rice',time:'5 min',badge:'Within 30 min of finishing',
         items:['2 sachets instant miso soup (Hikari or Marukome — Coles Asian aisle)','200ml boiling water per sachet',`${rice}g steamed white rice (microwave cup)`,`${Math.round(chicken*0.9/10)*10}g cooked chicken breast (shredded or sliced)`,'1 tbsp light soy sauce','Sliced spring onion'],
         steps:['Dissolve miso sachets in boiling water — done in 30 sec.','Microwave rice 60 sec. Add shredded chicken and a dash of soy.','Eat rice + chicken first (glycogen priority), sip miso alongside. The sodium in miso supports electrolyte recovery.'],
-        macros:`~${Math.round(rice*3.8+6)}g carbs · ${Math.round(Math.round(chicken*0.9/10)*10*0.31+4)}g protein · 4g fat — fast, warm, easy on the gut`}
-    },
-    rest:{
-      pre:{title:'Salmon teriyaki bowl',time:'15 min',badge:'Lunch or dinner — rest day omega-3 priority',
+        macros:`~${Math.round(rice*3.8+6)}g carbs · ${Math.round(Math.round(chicken*0.9/10)*10*0.31+4)}g protein · 4g fat — fast, warm, easy on the gut`},
+      {title:'Banana-honey recovery smoothie',time:'3 min',badge:"Within 15 min of finishing — when you can't face solid food",
+        items:['1 ripe banana',`${wheyG}g vanilla whey protein (~1–1.5 scoops)`,'300ml low-fat milk','1 tbsp honey','Handful of ice'],
+        steps:['Add all ingredients to a blender.','Blend 30–45 sec until smooth.','Drink within 10 min of training while your appetite is still low.'],
+        macros:`~45g carbs · ${mealP}g protein · 4g fat · fastest-digesting recovery option`}
+    ],
+    rest:[
+      {title:'Salmon teriyaki bowl',time:'15 min',badge:'Lunch or dinner — rest day omega-3 priority',
         items:[`${Math.max(150,Math.round(chicken*1.15/10)*10)}g Atlantic salmon fillet (Woolworths/Coles or Sydney Fish Market)`,'2 tbsp soy sauce + 2 tbsp mirin + 1 tbsp honey (teriyaki glaze)','80g edamame (frozen, from Woolworths freezer aisle)','80g baby spinach','1 tsp sesame oil + sesame seeds',`Steamed rice or rice noodles (${Math.round(rice*0.7/5)*5}g dry — optional on rest day)`],
         steps:['Mix teriyaki glaze. Score salmon skin and marinate 5 min (or just pour over before cooking).','Pan-fry salmon skin-down on medium-high heat 4 min. Flip, pour glaze over, cook 2 min — it caramelises fast.','Microwave edamame 2 min. Wilt spinach 30 sec in the same pan. Assemble with sesame oil + seeds.'],
         macros:`~20g carbs · ${Math.round(Math.max(150,Math.round(chicken*1.15/10)*10)*0.20)}g protein · 22g fat · DHA + EPA for tissue repair`},
-      post:{title:'Silken tofu with century egg & ginger',time:'5 min',badge:'Evening — slow protein before bed',
+      {title:'Silken tofu with century egg & ginger',time:'5 min',badge:'Evening — slow protein before bed',
         items:['300g silken tofu (Woolworths refrigerated section or Asian grocer)','1 century egg (pidan — Asian grocer, optional) OR 2 soft-boiled eggs','1 tbsp soy sauce','1 tsp sesame oil','1 tsp fresh ginger (grated)','Spring onion + dried chilli flakes'],
         steps:['Slide tofu from packet onto plate — no cooking needed. Silken tofu is eaten cold.','Slice century egg (or halve soft-boiled eggs) and arrange on top.','Mix soy + sesame oil + ginger into a dressing. Pour over, garnish with spring onion and chilli.'],
-        macros:`~4g carbs · 22g protein · 10g fat · slow-release tofu protein ideal overnight`}
-    }
+        macros:'~4g carbs · 22g protein · 10g fat · slow-release tofu protein ideal overnight'},
+      {title:'Roast veg & chickpea bowl',time:'25 min',badge:'Rest day dinner — fibre, micronutrients & gut health',
+        items:['400g tin chickpeas (drained)','1 sweet potato (diced)','1 red capsicum (sliced)','100g cherry tomatoes','2 tbsp olive oil','1 tsp cumin + 1 tsp paprika','60g Greek yogurt or hummus','Lemon wedge + parsley'],
+        steps:['Preheat oven 200°C. Toss chickpeas, sweet potato, capsicum and tomatoes with oil and spices.','Roast 22–25 min, tossing once, until sweet potato is tender and chickpeas are crisping.','Serve over greens or quinoa, dollop of yogurt/hummus, squeeze of lemon.'],
+        macros:'~48g carbs · 18g protein · 16g fat · high fibre — supports gut health on lower-training days'}
+    ],
+    slowcooker:[
+      {title:'Slow cooker beef & barley stew',time:'15 min prep · 6–7 hrs slow cook',badge:'Batch meal prep · serves 5 · heavy-training-week dinner',
+        items:['800g beef chuck or gravy beef (diced)','150g pearl barley','2 carrots (chopped)','2 celery stalks (chopped)','1 brown onion (diced)','2 cloves garlic','1.2L beef stock','2 tbsp tomato paste','1 bay leaf','Salt & pepper'],
+        steps:['Brown beef in a hot pan 3–4 min (optional, improves flavour) or add raw.','Add everything to the slow cooker and stir to combine.','Cook on LOW 7 hrs or HIGH 4 hrs, until beef is fork-tender and barley is soft.','Portion into 5 containers — fridge 4 days or freeze.'],
+        macros:'~32g carbs · 34g protein · 9g fat per serving (serves 5) · barley fibre + iron-rich beef'},
+      {title:'Slow cooker chicken congee',time:'10 min prep · 6 hrs slow cook',badge:'Batch meal prep · serves 4 · gentle on the gut — taper week or low appetite',
+        items:['4 chicken thighs (or 2 breasts)','300g jasmine rice','2L chicken stock','3 slices fresh ginger','Spring onion + sesame oil + soy sauce to serve'],
+        steps:['Add chicken, rice, stock and ginger to the slow cooker.','Cook on LOW 6 hrs (or HIGH 3–4 hrs), stirring once near the end — the rice breaks down into a thick porridge.','Shred chicken through with two forks. Season each bowl with soy sauce, sesame oil and spring onion.'],
+        macros:'~38g carbs · 26g protein · 5g fat per serving (serves 4) · classic easy-digest recovery food'},
+      {title:'Slow cooker pulled chicken',time:'10 min prep · 5–6 hrs slow cook',badge:'Batch meal prep · serves 6 · versatile protein base for the week',
+        items:['1kg chicken thighs (skinless)','250ml passata or BBQ sauce','1 tbsp smoked paprika','1 tsp garlic powder','1 tsp onion powder','Salt & pepper'],
+        steps:['Add chicken and all seasonings/sauce to the slow cooker, toss to coat.','Cook on LOW 6 hrs or HIGH 3–4 hrs until chicken shreds easily.','Shred with two forks in the cooking liquid. Portion into 6 containers with rice and veg of choice.'],
+        macros:'~2g carbs · 31g protein · 8g fat per serving before sides (serves 6) · go-to lean protein base'},
+      {title:'Slow cooker lentil & sweet potato dahl',time:'10 min prep · 6 hrs slow cook',badge:'Batch meal prep · serves 5 · vegetarian, high fibre, budget-friendly',
+        items:['300g dried red lentils (rinsed)','1 sweet potato (diced)','1 brown onion (diced)','2 cloves garlic','1 tbsp curry powder or garam masala','400ml tin coconut milk','600ml vegetable stock','100g baby spinach (stirred in at the end)'],
+        steps:['Add lentils, sweet potato, onion, garlic, spice, coconut milk and stock to the slow cooker.','Cook on LOW 6 hrs or HIGH 3 hrs until lentils are soft and creamy.','Stir in spinach for the last 5 min until wilted. Serve with rice or naan.'],
+        macros:'~42g carbs · 17g protein · 12g fat per serving (serves 5) · plant-based iron + fibre for rest days'},
+      {title:'Slow cooker beef ragu',time:'15 min prep · 7 hrs slow cook',badge:'Batch meal prep · serves 6 · make Sunday, eat the night before any long run',
+        items:['750g beef mince (or diced chuck)','2x 400g tins crushed tomatoes','1 brown onion (diced)','2 carrots (finely diced)','2 cloves garlic','1 tbsp tomato paste','1 tsp dried oregano + 1 bay leaf',`Pasta or rice to serve (${rice}g dry per person)`],
+        steps:['Brown mince in a pan 4–5 min (optional, deepens flavour) or add raw.','Add mince, tomatoes, onion, carrot, garlic, paste and herbs to the slow cooker.','Cook on LOW 7 hrs or HIGH 4 hrs, breaking up the mince once near the end.','Serve over pasta or rice the night before a long run — freezes well in single portions.'],
+        macros:`~10g carbs (sauce only) · 28g protein · 14g fat per serving (serves 6) · add ~${Math.round(rice*3.8)}g carbs from rice/pasta on long-run-eve nights`}
+    ]
   };
-  const tabs=[{k:'strength',lbl:'Strength'},{k:'longrun',lbl:'Long run'},{k:'quality',lbl:'Intervals'},{k:'rest',lbl:'Rest day'}];
+  const tabs=[{k:'strength',lbl:'Strength'},{k:'longrun',lbl:'Long run'},{k:'quality',lbl:'Intervals'},{k:'rest',lbl:'Rest day'},{k:'slowcooker',lbl:'Slow cooker'}];
   let html='<div class="nutr-rec-tabs">';
   tabs.forEach((t,i)=>{ html+=`<button class="nutr-rec-tab${i===0?' active':''}" onclick="nutrShowRecipe('${t.k}',this)">${t.lbl}</button>`; });
   html+='</div>';
   tabs.forEach((t,i)=>{
-    const r=R[t.k]; if(!r) return;
+    const recs=R[t.k]; if(!recs) return;
     html+=`<div id="nutr-rec-${t.k}" style="${i>0?'display:none':''}">`;
-    [r.pre,r.post].forEach(rec=>{
-      html+=`<div class="nutr-recipe-card">
-<div class="nutr-recipe-hd"><span class="nutr-recipe-title">${rec.title}</span><span class="nutr-recipe-time">⏱ ${rec.time}</span></div>
+    recs.forEach(rec=>{
+      html+=`<details class="nutr-recipe-card">
+<summary><div class="nutr-recipe-hd"><span class="nutr-recipe-title">${rec.title}</span><span class="nutr-recipe-time">⏱ ${rec.time}</span></div>
 <div class="nutr-recipe-badge">${rec.badge}</div>
+<span class="nutr-recipe-exp"></span></summary>
 <div class="nutr-recipe-sect">Ingredients</div>
 <ul class="nutr-recipe-list">${rec.items.map(x=>`<li>${x}</li>`).join('')}</ul>
 <div class="nutr-recipe-sect">Method</div>
 <ol class="nutr-recipe-list">${rec.steps.map(x=>`<li>${x}</li>`).join('')}</ol>
 <div class="nutr-recipe-macros">${rec.macros}</div>
-</div>`;
+</details>`;
     });
     html+='</div>';
   });
