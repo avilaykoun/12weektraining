@@ -841,7 +841,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-15 · v79</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-16 · v80</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -3872,7 +3872,6 @@ function trainingPacesTodayHTML(sessions){
 }
 let _todayOffset=0;
 function _todayNavHTML(){
-  const labels={'-1':'← Yesterday','0':'Today','1':'Tomorrow →'};
   const o=_todayOffset;
   return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
     +'<button onclick="_shiftTodayOffset(-1)" style="font-size:12px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);cursor:pointer">‹ Prev</button>'
@@ -3891,7 +3890,7 @@ function renderToday(){
   const navHTML=_todayNavHTML();
   const weatherHTML='<div id="weather-strip" style="display:none;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border-radius:10px;margin-bottom:10px;font-size:12px"></div>';
   if(sessions.length===0){
-    container.innerHTML=navHTML+weatherHTML+phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
+    container.innerHTML=navHTML+weatherHTML+phaseStripHTML()+guidanceCardHTML(today)+morningCardHTML(today)+`<div class="empty"><div class="empty-icon">📅</div><div class="empty-txt">No sessions scheduled${_todayOffset===0?' today':''}.<br><br>Plan starts ${formatDate(PLAN_START)}</div></div>`+mobilityCardHTML()+recoveryPanelHTML(today);
     if(_todayOffset===0) _fetchWeather();
     return;
   }
@@ -5498,8 +5497,7 @@ function readinessBand(score){
   if(score>=45) return ['#e8c66b','Amber — moderate','A bit run-down. Keep the session but ease the top end: trim a set or two, cap intensity ~RPE 8.'];
   return ['#ff6b47','Red — back off','Under-recovered. Make it easy / technique work, or rest. Pushing now risks injury and stalls progress.'];
 }
-function setReadiness(k,v){
-  const ymd=_ymd(new Date());
+function setReadiness(ymd,k,v){
   if(!STATE.readiness) STATE.readiness={};
   if(!STATE.readiness[ymd]) STATE.readiness[ymd]={};
   STATE.readiness[ymd][k]=(STATE.readiness[ymd][k]===v?undefined:v);
@@ -5512,7 +5510,8 @@ function setReadiness(k,v){
   }
   // Readiness-triggered deload: two consecutive days < 40
   if(rs!=null&&rs<40){
-    const yest=_ymd(new Date(Date.now()-86400000));
+    const[yy,mm,dd]=ymd.split('-').map(Number);
+    const yest=_ymd(new Date(yy,mm-1,dd-1));
     const yestRs=readinessScore((STATE.readiness&&STATE.readiness[yest])||{});
     if(yestRs!=null&&yestRs<40){
       if(!STATE.celebratedMilestone) STATE.celebratedMilestone={};
@@ -5527,7 +5526,7 @@ function setReadiness(k,v){
 }
 function readinessCardHTML(date){
   const ymd=_ymd(date); const r=(STATE.readiness&&STATE.readiness[ymd])||{}; const score=readinessScore(r);
-  const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
+  const rows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(r[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+ymd+'\',\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
   if(score==null) return '<div class="rd-card"><div class="rd-hd">DAILY READINESS</div>'+rows+'<div class="rd-hint">Tap how you feel to get a readiness score and a push/back-off call for today.</div></div>';
   const b=readinessBand(score);
   return '<details class="rd-card rd-done"'+(rdOpen?' open':'')+'><summary class="rd-sum" onclick="rdOpen=!rdOpen"><span class="rd-score-sm" style="color:'+b[0]+'">'+score+'</span><span class="rd-sum-band" style="color:'+b[0]+'">Readiness · '+b[1]+'</span><span class="rd-sum-edit">adjust</span></summary><div class="rd-open">'+rows+'</div></details>';
@@ -5998,23 +5997,23 @@ function phaseStripHTML(){ const p=phaseIntent(); return '<details class="phase-
 // ── Niggle / pain radar + mobility + morning resting HR ──
 var NIGGLE_REGIONS=['Hip','Hamstring','Knee','Low back','Calf/Achilles','Foot','Other'];
 var morningOpen=false;
-function bumpNiggle(region,d){ const ymd=_ymd(new Date()); if(!STATE.niggles) STATE.niggles={}; if(!STATE.niggles[ymd]) STATE.niggles[ymd]={}; const v=Math.max(0,Math.min(10,(STATE.niggles[ymd][region]||0)+d)); if(v===0) delete STATE.niggles[ymd][region]; else STATE.niggles[ymd][region]=v; morningOpen=true; saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); renderToday(); }
-function toggleMobility(){ const ymd=_ymd(new Date()); if(!STATE.mobilityDone) STATE.mobilityDone={}; STATE.mobilityDone[ymd]=!STATE.mobilityDone[ymd]; morningOpen=true; saveState(STATE); renderToday(); }
+function bumpNiggle(ymd,region,d){ if(!STATE.niggles) STATE.niggles={}; if(!STATE.niggles[ymd]) STATE.niggles[ymd]={}; const v=Math.max(0,Math.min(10,(STATE.niggles[ymd][region]||0)+d)); if(v===0) delete STATE.niggles[ymd][region]; else STATE.niggles[ymd][region]=v; morningOpen=true; saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); renderToday(); }
+function toggleMobility(ymd){ if(!STATE.mobilityDone) STATE.mobilityDone={}; STATE.mobilityDone[ymd]=!STATE.mobilityDone[ymd]; morningOpen=true; saveState(STATE); renderToday(); }
 function maxNiggleToday(){ const ymd=_ymd(new Date()); const n=(STATE.niggles&&STATE.niggles[ymd])||{}; let mx=0,reg=''; Object.keys(n).forEach(k=>{ if(n[k]>mx){mx=n[k];reg=k;} }); return {mx,reg}; }
 function rhrBaseline(excludeToday){ const log=STATE.restHRLog||{}; const ymd=_ymd(new Date()); const ks=Object.keys(log).sort(); const vals=ks.filter(k=>!(excludeToday&&k===ymd)).slice(-14).map(k=>log[k]); if(vals.length<3) return null; return vals.reduce((a,b)=>a+b,0)/vals.length; }
 function rhrElevated(){ const ymd=_ymd(new Date()); const log=STATE.restHRLog||{}; const today=log[ymd]; const bl=rhrBaseline(true); if(!today||!bl) return null; const delta=Math.round(today-bl); return {today,bl:Math.round(bl),delta,elevated:delta>=5}; }
-function logRestHRToday(v){ const ymd=_ymd(new Date()); v=parseInt(v,10); if(!STATE.restHRLog) STATE.restHRLog={}; if(v>0) STATE.restHRLog[ymd]=v; else delete STATE.restHRLog[ymd]; const bl=rhrBaseline(); if(bl){ STATE.profile=STATE.profile||{}; STATE.profile.restHR=Math.round(bl); } saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); }
+function logRestHRToday(ymd,v){ v=parseInt(v,10); if(!STATE.restHRLog) STATE.restHRLog={}; if(v>0) STATE.restHRLog[ymd]=v; else delete STATE.restHRLog[ymd]; const bl=rhrBaseline(); if(bl){ STATE.profile=STATE.profile||{}; STATE.profile.restHR=Math.round(bl); } saveState(STATE); if(typeof hideRestoreBanner==='function') hideRestoreBanner(); }
 function morningCardHTML(date){
   const ymd=_ymd(date);
   const rr=(STATE.readiness&&STATE.readiness[ymd])||{}; const rscore=readinessScore(rr);
   const n=(STATE.niggles&&STATE.niggles[ymd])||{}; const mob=STATE.mobilityDone&&STATE.mobilityDone[ymd]; const rhr=(STATE.restHRLog&&STATE.restHRLog[ymd])||'';
-  const rdRows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(rr[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
-  const nigRows=NIGGLE_REGIONS.map(r=>{ const v=n[r]||0; return '<div class="nig-row"><span class="nig-lbl">'+r+'</span><div class="nig-step"><button class="nig-b" onclick="bumpNiggle(\''+r+'\',-1)">−</button><span class="nig-val'+(v>=4?' hot':'')+'">'+v+'</span><button class="nig-b" onclick="bumpNiggle(\''+r+'\',1)">+</button></div></div>'; }).join('');
+  const rdRows=READINESS_Q.map(q=>'<div class="rd-row"><span class="rd-lbl">'+q.label+'</span><div class="rd-chips">'+q.opts.map(o=>'<button class="rd-chip'+(rr[q.k]===o[1]?' on':'')+'" onclick="setReadiness(\''+ymd+'\',\''+q.k+'\','+o[1]+')">'+o[0]+'</button>').join('')+'</div></div>').join('');
+  const nigRows=NIGGLE_REGIONS.map(r=>{ const v=n[r]||0; return '<div class="nig-row"><span class="nig-lbl">'+r+'</span><div class="nig-step"><button class="nig-b" onclick="bumpNiggle(\''+ymd+'\',\''+r+'\',-1)">−</button><span class="nig-val'+(v>=4?' hot':'')+'">'+v+'</span><button class="nig-b" onclick="bumpNiggle(\''+ymd+'\',\''+r+'\',1)">+</button></div></div>'; }).join('');
   const body='<div class="mc-sec">How you feel</div>'+rdRows
     +'<div class="mc-sec">Niggles &amp; recovery <span class="mc-sub">0 none → 10 sharp</span></div>'+nigRows
-    +'<div class="nig-row"><span class="nig-lbl">Mobility done?</span><button class="mob-btn'+(mob?' on':'')+'" onclick="toggleMobility()">'+(mob?'✓ Done':'Mark done')+'</button></div>'
-    +'<div class="nig-row"><span class="nig-lbl">Morning resting HR</span><div class="pc-input-row" style="width:128px"><input id="rhr-in" type="number" inputmode="numeric" placeholder="bpm" value="'+rhr+'" oninput="logRestHRToday(this.value)" style="flex:1"><span class="pc-unit">bpm</span></div></div>'
-    +'<div class="nig-row"><span class="nig-lbl">Morning HRV <span style="font-size:9px;color:var(--text3)">(ms)</span></span><div class="pc-input-row" style="width:128px"><input id="hrv-in" type="number" inputmode="numeric" min="10" max="200" placeholder="e.g. 68" value="'+((STATE.hrvLog&&STATE.hrvLog[ymd])||'')+'" oninput="logHRV(this.value)" style="flex:1"><span class="pc-unit">ms</span></div></div>';
+    +'<div class="nig-row"><span class="nig-lbl">Mobility done?</span><button class="mob-btn'+(mob?' on':'')+'" onclick="toggleMobility(\''+ymd+'\')">'+(mob?'✓ Done':'Mark done')+'</button></div>'
+    +'<div class="nig-row"><span class="nig-lbl">Morning resting HR</span><div class="pc-input-row" style="width:128px"><input id="rhr-in" type="number" inputmode="numeric" placeholder="bpm" value="'+rhr+'" oninput="logRestHRToday(\''+ymd+'\',this.value)" style="flex:1"><span class="pc-unit">bpm</span></div></div>'
+    +'<div class="nig-row"><span class="nig-lbl">Morning HRV <span style="font-size:9px;color:var(--text3)">(ms)</span></span><div class="pc-input-row" style="width:128px"><input id="hrv-in" type="number" inputmode="numeric" min="10" max="200" placeholder="e.g. 68" value="'+((STATE.hrvLog&&STATE.hrvLog[ymd])||'')+'" oninput="logHRV(\''+ymd+'\',this.value)" style="flex:1"><span class="pc-unit">ms</span></div></div>';
   const logged = rscore!=null || Object.keys(n).length>0 || mob || rhr;
   if(!logged) return '<div class="rd-card"><div class="rd-hd">MORNING CHECK-IN</div>'+body+'</div>';
   const b=rscore!=null?readinessBand(rscore):null; const mn=maxNiggleToday(); const re=rhrElevated();
@@ -8084,6 +8083,7 @@ function appToast(m){
 function _updateOnlineStatus(){const el=document.getElementById('offline-badge');if(el)el.style.display=navigator.onLine?'none':'inline-flex';}
 window.addEventListener('online',_updateOnlineStatus);
 window.addEventListener('offline',_updateOnlineStatus);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&typeof _checkMissedNotification==='function') _checkMissedNotification(); });
 
 // ── Dark/Light Mode ──
 function toggleTheme(){
@@ -8114,27 +8114,40 @@ function _updateNotifUI(){
   const ti=document.getElementById('notif-time');if(ti) ti.value=STATE.notifTime||'07:00';
 }
 let _notifTimer=null;
+function _fireTrainingNotification(){
+  try{
+    const todaySess=getSessionsForDate(new Date());
+    const body=todaySess.length&&todaySess[0].type!=='rest'?(todaySess[0].name||'Training session today'):'Rest / recovery day';
+    new Notification('Albert 12 Week — Today\'s plan',{body,icon:'./icon-192.png'});
+  }catch(e){}
+  STATE.notifLastFired=_ymd(new Date()); saveState(STATE);
+}
 function _scheduleNotification(){
   if(_notifTimer) clearTimeout(_notifTimer);
   if(!STATE.notifsEnabled||typeof Notification==='undefined'||Notification.permission!=='granted') return;
   const now=new Date(); const [h,m]=(STATE.notifTime||'07:00').split(':').map(Number);
   const next=new Date(now); next.setHours(h,m,0,0);
   if(next<=now) next.setDate(next.getDate()+1);
-  _notifTimer=setTimeout(()=>{
-    try{
-      const todaySess=getSessionsForDate(new Date());
-      const body=todaySess.length&&todaySess[0].type!=='rest'?(todaySess[0].name||'Training session today'):'Rest / recovery day';
-      new Notification('Albert 12 Week — Today\'s plan',{body,icon:'./icon-192.png'});
-    }catch(e){}
-    _scheduleNotification();
-  },next-now);
+  _notifTimer=setTimeout(()=>{ _fireTrainingNotification(); _scheduleNotification(); },next-now);
+}
+// Foreground setTimeout-based reminders don't fire while the tab/app is closed —
+// catch up on the missed reminder the next time the app is opened/foregrounded.
+function _checkMissedNotification(){
+  if(!STATE.notifsEnabled||typeof Notification==='undefined'||Notification.permission!=='granted') return;
+  const now=new Date(); const [h,m]=(STATE.notifTime||'07:00').split(':').map(Number);
+  const trigger=new Date(now); trigger.setHours(h,m,0,0);
+  const today=_ymd(now);
+  if(now>=trigger&&STATE.notifLastFired!==today) _fireTrainingNotification();
 }
 
 // ── HRV logging ──
-function logHRV(val){
+let _hrvSaveTimer=null;
+function logHRV(ymd,val){
   const v=parseInt(val); if(!(v>=10&&v<=200)) return;
   if(!STATE.hrvLog) STATE.hrvLog={};
-  STATE.hrvLog[_ymd(new Date())]=v; saveState(STATE);
+  STATE.hrvLog[ymd]=v;
+  clearTimeout(_hrvSaveTimer);
+  _hrvSaveTimer=setTimeout(()=>saveState(STATE),500);
 }
 
 // ── Injury / Illness log ──
@@ -8196,8 +8209,10 @@ function deleteMealTemplate(name){
 }
 
 // ── Live Weather ──
+let _weatherCache=null, _weatherCacheTime=0;
 async function _fetchWeather(){
   const el=document.getElementById('weather-strip');if(!el)return;
+  if(_weatherCache&&Date.now()-_weatherCacheTime<10*60*1000){ el.innerHTML=_weatherCache; el.style.display='flex'; return; }
   if(!navigator.geolocation){el.style.display='none';return;}
   navigator.geolocation.getCurrentPosition(async pos=>{
     try{
@@ -8207,7 +8222,9 @@ async function _fetchWeather(){
       const d=await r.json();const c=d.current;
       const codes={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',48:'🌫',51:'🌦',53:'🌧',55:'🌧',61:'🌧',63:'🌧',65:'🌧',71:'🌨',73:'🌨',75:'🌨',80:'🌦',81:'🌧',82:'🌧',95:'⛈',96:'⛈',99:'⛈'};
       const icon=codes[c.weathercode]||'🌡';
-      el.innerHTML='<span style="font-size:18px">'+icon+'</span><span style="font-size:12px;color:var(--text2)">'+Math.round(c.temperature_2m)+'°C feels '+Math.round(c.apparent_temperature)+'°C · '+Math.round(c.windspeed_10m)+' km/h · '+c.precipitation_probability+'% rain</span>';
+      _weatherCache='<span style="font-size:18px">'+icon+'</span><span style="font-size:12px;color:var(--text2)">'+Math.round(c.temperature_2m)+'°C feels '+Math.round(c.apparent_temperature)+'°C · '+Math.round(c.windspeed_10m)+' km/h · '+c.precipitation_probability+'% rain</span>';
+      _weatherCacheTime=Date.now();
+      el.innerHTML=_weatherCache;
       el.style.display='flex';
     }catch(e){el.style.display='none';}
   },()=>el.style.display='none',{timeout:5000});
@@ -8345,6 +8362,7 @@ window.onload=function(){
   _restoreTheme();
   _updateNotifUI();
   _scheduleNotification();
+  _checkMissedNotification();
   requestAnimationFrame(applyHdrCollapse);
   renderNutritionMacros();
   renderHub();
