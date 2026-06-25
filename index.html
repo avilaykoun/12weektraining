@@ -847,7 +847,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-16 · v81</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-25 · v82</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -4188,7 +4188,7 @@ function renderExercises(s,interactive){
     optExs.forEach(e=>{
       const done=STATE.completedExercises[e.id];
       html+='<div class="ex-row ex-supplementary">'
-        +'<div class="ex-check '+(done?'done':'')+'" onclick="toggleExercise(\''+e.id+'\',\''+sessionKey(s)+'\')"></div>'
+        +'<button class="ex-check '+(done?'done':'')+'" role="checkbox" aria-checked="'+(done?'true':'false')+'" aria-label="Mark '+escAttr(e.name)+' complete" data-ex-id="'+escAttr(e.id)+'" onclick="toggleExercise(\''+escAttr(e.id)+'\',\''+sessionKey(s)+'\')"></button>'
         +'<div class="ex-info">'
         +'<div class="ex-name" style="'+(done?'text-decoration:line-through;opacity:.5':'')+'">'+e.name+'</div>'
         +'<div class="ex-detail">'+e.detail+'</div>'
