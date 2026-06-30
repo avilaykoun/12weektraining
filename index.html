@@ -847,7 +847,7 @@ input[type=number]{-moz-appearance:textfield}
       <div>
         <div class="hdr-title">ALBERT 12 WEEK PROGRAM</div>
         <div class="hdr-sub">30 AUG 2026 — RACE DAY</div>
-        <div class="hdr-build" id="hdr-build">Build 2026-06-25 · v82</div>
+        <div class="hdr-build" id="hdr-build">Build 2026-06-30 · v83</div>
         <span id="offline-badge" style="display:none;align-items:center;gap:4px;background:rgba(232,198,107,.15);border:1px solid rgba(232,198,107,.4);color:var(--accent);border-radius:99px;padding:2px 8px;font-size:10px;font-family:'Aptos',monospace;letter-spacing:.04em;margin-top:3px">⚡ offline</span>
       </div>
       <div style="text-align:right">
@@ -4223,6 +4223,18 @@ function toggleSession(key){
   if(!body) return;
   const open=body.classList.toggle('open');
   if(chev) chev.style.transform=open?'rotate(90deg)':'';
+  if(open){
+    // Drive max-height to actual content height so tall sessions aren't clipped
+    body.style.maxHeight=body.scrollHeight+'px';
+    body.addEventListener('transitionend',function h(){
+      body.style.maxHeight='none';
+      body.removeEventListener('transitionend',h);
+    });
+  } else {
+    // Snapshot current height before collapsing so CSS transition has a real start value
+    body.style.maxHeight=body.scrollHeight+'px';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ body.style.maxHeight=''; }));
+  }
 }
 function toggleExercise(exId,sessKey){
   STATE.completedExercises[exId]=!STATE.completedExercises[exId];
